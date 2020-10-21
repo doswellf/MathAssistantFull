@@ -1,0 +1,391 @@
+\documentclass{article}
+\usepackage{relsize}
+\usepackage{sagetex}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+% to restart equation numbering with each new section
+% \@addtoreset{equation}{part}
+
+% \@addtoreset{equation}{section} 
+
+% custom equation label to the right side - requires \ddot
+% \newcommand{\dd}[1]{\mathrm{d}#1}
+
+\graphicspath{{images/}}
+
+\begin{document}
+% \maketitle{Using Maxima From Sage Published With SageTex}
+% \author{J.F. Doswell, BScH}
+\input{SageTexTutorialTitlePage.tex}
+\newpage
+
+\tableofcontents
+\newpage
+
+\title{Simple Examples Calling Maxima From Sage To Generate \LaTeX{} with \textsf{Sage\TeX}}
+
+\section{Calling Maxima From Sage}
+
+\subsection{First Block Of Sage and Maxima Code}
+
+\begin{sageblock} 
+	
+	maxima('load("/home/fraser/projects/Math/maxima/cmt_struct_sage_test_102.mac")')
+	
+	
+	finfo_pvz_latex = maxima.get("finfo_Pv_z@latex")
+	fpvz_ltx_rep = finfo_pvz_latex.replace("\\\\","\\").replace('\"','')
+	le_fpvz_ltx = LatexExpr(fpvz_ltx_rep)
+	
+	finfo_pvz_name = maxima.get("finfo_Pv_z@name")
+	vinfo_ch01_name = maxima.get("vinfo_ch01@name")	
+	
+
+	vinfo_ch01_latex_math = maxima.eval("assoc('math,vinfo_ch01@latex)")	
+	vinfo_ltx_math_rep = vinfo_ch01_latex_math.replace("\\\\","\\").replace('\"','')
+	le_vc01_ltx_math = LatexExpr(vinfo_ltx_math_rep)
+
+	af_01_A_latex=maxima.get("arr_funs[E_r_t_z_t]@latex")
+	le_af_01_A_latex_rep=LatexExpr(af_01_A_latex.replace("\\\\","\\").replace('\"',''))
+
+	af_01_B_latex=maxima.get("arr_funs[H_r_t_z_t]@latex")
+	le_af_01_B_latex_rep=af_01_B_latex.replace("\\\\","\\").replace('\"','')
+	
+	af_02_A_latex=maxima.get("arr_funs[EQ_1242_A]@latex")
+	le_af_02_A_latex_rep=LatexExpr(af_02_A_latex).replace("\\\\","\\").replace('\"','')
+
+	af_02_B_latex=maxima.get("arr_funs[EQ_1242_B]@latex")
+	le_af_02_B_latex_rep=LatexExpr(af_02_B_latex).replace("\\\\","\\").replace('\"','')
+	
+	af_02_C_latex=maxima.get("arr_funs[EQ_1243_A]@latex")
+	le_af_02_C_latex_rep=LatexExpr(af_02_C_latex).replace("\\\\","\\").replace('\"','')
+			
+	af_03_A_latex=maxima.get("arr_funs[EQ_3217_A]@latex")
+	le_af_03_A_latex_rep=LatexExpr(af_03_A_latex).replace("\\\\","\\").replace('\"','').replace('~',' ')
+
+	af_03_B_latex=maxima.get("arr_funs[EQ_3217_B]@latex")
+	le_af_03_B_latex_rep=LatexExpr(af_03_B_latex).replace("\\\\","\\").replace('\"','')
+
+	af_03_C_latex=maxima.get("arr_funs[EQ_3217_C]@latex")
+	le_af_03_C_latex_rep=LatexExpr(af_03_C_latex).replace("\\\\","\\").replace('\"','')
+
+	af_03_D_latex=maxima.get("arr_funs[EQ_3217_D]@latex")
+	le_af_03_D_latex_rep=LatexExpr(af_03_D_latex).replace("\\\\","\\").replace('\"','')
+	
+	af_03_E_latex=maxima.get("arr_funs[EQ_3217_E]@latex")
+	le_af_03_E_latex_rep=LatexExpr(af_03_E_latex).replace("\\\\","\\").replace('\"','')
+
+	af_03_F_latex=maxima.get("arr_funs[EQ_3217_F]@latex")
+	le_af_03_F_latex_rep=LatexExpr(af_03_F_latex).replace("\\\\","\\").replace('\"','')
+	
+
+\end{sageblock}
+
+
+
+\paragraph{NOTE: THE LATEX OF THE VARIABLE NAMES IS NOT BEING TRANSFERRED TO SAGE}
+
+
+\subsection{Equations From First Block Of Code}
+
+\subsubsection{Direct Structure Access}
+$ \sagestr{fpvz_ltx_rep} $ \newline
+$ \sagestr{le_fpvz_ltx} $ \newline 
+\subsubsection{Using Hash Array Access} 
+CMT Chapter One \newline
+$ \sagestr{le_af_01_A_latex_rep} $ \newline
+$ \sagestr{le_af_01_B_latex_rep} $ \newline
+$ \sagestr{le_af_02_A_latex_rep} $ \newline
+$ \sagestr{le_af_02_B_latex_rep} $ \newline 
+$ \sagestr{le_af_02_C_latex_rep} $ \newline 
+CMT Chapter Three \newline
+$ \sagestr{le_af_03_A_latex_rep} $ \newline 
+$ \sagestr{le_af_03_B_latex_rep} $ \newline
+$ \sagestr{le_af_03_C_latex_rep} $ \newline
+$ \sagestr{le_af_03_D_latex_rep} $ \newline
+$ \sagestr{le_af_03_E_latex_rep} $ \newline
+$ \sagestr{le_af_03_F_latex_rep} $ \newline
+
+\newpage
+
+\subsection{Equations From CMT Book}
+
+\subsubsection{Gathering Latex Code Of Example Equations}
+
+\paragraph{Note:}These equations are not generated, they are pure latex 
+
+\paragraph{Purpose Of These Equations}
+Once enough equations are included, latex code of their component parts
+can be stored in maxima structures. Each maxima variable, expression and 
+equation will be given an elegant latex display form. This latex is stored
+in a structure containing the variable name, value/content and a nested list of
+latex strings for display. \newline
+\paragraph{Maxima Implementation Details}
+All maxima structures are stored in a hash array.The key for each variable, 
+function,expression, lemma, axiom in it's respective
+hash array is the name of that artifact \newline
+
+\paragraph{Roadmap For Development}
+A full explanation of the system internals as well as instructions for use of the system 
+will be given in an appendix as this document evolves. \newline
+
+\newpage
+
+\subsection{Combinatorics and Statistical Formulae}
+\numberwithin{equation}{subsection}{section}
+
+\subsubsection{Combinatorics}
+\begin{equation}
+_nC_k={n \choose k}=\frac{n!}{k!(n-k)!} 
+\end{equation}
+
+\begin{equation}
+y = \frac{{n!}}{{k!\left( {n - k} \right)!}}p^k q^{n - k}  = \left( {\begin{array}{*{20}c}n  \\ k  \\ \end{array}} \right)p^k q^{n - k}
+\end{equation}
+
+
+\subsubsection{Statistics}
+
+\begin{equation}
+\sigma = \sqrt{\frac{\sum{(x-\mu)^2}}{N}} \nonumber
+\end{equation}
+
+\begin{equation}
+y = \frac{1}{{\sqrt {2\pi } }}e^{ - \frac{{z^2 }}{2}}  = .3989e^{ - 5z^2 }
+\end{equation}
+
+\begin{equation}
+P(x) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {x - \mu } \right)^2 } \mathord{\left/
+			{\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right.
+			\kern-\nulldelimiterspace} {2\sigma ^2 }}}
+\end{equation}
+
+\begin{equation}
+P\left( x \right) = \frac{{e^{ - \lambda } \lambda ^x }}{{x!}}
+\end{equation}
+
+\begin{equation}
+\Gamma \left( a \right) = \int\limits_0^\infty  {s^{a - 1} } e^{ - s} ds
+\end{equation}
+
+\begin{equation}
+\Gamma \left( x \right) = \int\limits_0^\infty  {s^{x - 1} e^{ - s} ds}
+\end{equation}
+
+\begin{equation}
+\mu _n \left( a \right) = \sum {\left( {x - a} \right)^n P\left( x \right)}
+\end{equation}
+
+\begin{equation}
+\mu  = \mu _1  = \sum {xP\left( x \right)}
+\end{equation}
+
+\begin{equation}
+\sigma ^2  = \mu _2  = \sum {\left( {x - \mu _1 } \right)^2 P\left( x \right)}
+\end{equation}
+
+\begin{equation}
+\gamma _1  = \frac{{\mu _3 }}{{\mu _2 ^{{3 \mathord{\left/
+					{\vphantom {3 2}} \right.
+					\kern-\nulldelimiterspace} 2}} }} = \frac{{\mu _3 }}{{\sigma ^3 }}
+\end{equation}
+
+\begin{equation}
+\sigma  = \sqrt {\mu _2 }
+\end{equation}
+
+\begin{equation}
+s_N  = \sqrt {\frac{1}{N}\sum\limits_{i = 1}^N {\left( {x_i  - \bar x} \right)^2 } }
+\end{equation}
+
+\begin{equation}
+s_{N - 1}  = \sqrt {\frac{1}{{N - 1}}\sum\limits_{i = 1}^N {\left( {x_i  - \bar x} \right)^2 } }
+\end{equation}
+
+\begin{equation}
+{\mathop{\rm var}} \left( {\bar x} \right) = \frac{{\sigma ^2 }}{n}
+\end{equation}
+
+\begin{equation}
+	\sigma_{M_{1}-M_{2}} =  \sqrt{\frac{\sigma_{1}^{2}}{n_{1}}+
+	\frac{\sigma_{2}^{2}}{n_{2}}}=\sqrt{\frac{\sigma^2}{n}+
+	\frac{\sigma^2}{n}}=\sqrt{\frac{2 \sigma^2}{n}}
+\end{equation}
+
+\begin{equation}
+\sigma_{M} = \frac{\sigma}{\sqrt(N)}
+\end{equation}
+
+\begin{equation}
+P(x)= \frac{N!}{x!(N-x)!} pi^{x}(1-pi)^{N-x} 
+\end{equation}
+
+
+\newpage
+
+\subsection{Quantitative Finance} 
+
+\begin{equation}
+\begin{bmatrix} 1 \\ S \left( t \right) \\ C \left( t \right) \end{bmatrix} = \begin{bmatrix} \left( 1 + r \Delta \right) & \left( 1 + r \Delta \right) \\ S_1 \left( t + \Delta \right) & S_2 \left( t + \Delta \right) \\ C_1 \left( t + \Delta \right) & C_2 \left( t + \Delta \right) \\ \end{bmatrix}\begin{bmatrix} \Psi_1 \\ \Psi_2\end{bmatrix}
+\end{equation}
+
+\begin{equation}
+\sum_{i=1}^{n} \left( \frac {t_i + t_{i-1}}{2} \right) (t_i-t_{i-1}) \rightarrow \int_{0}^{T}f(s)\,ds
+\end{equation}
+
+\begin{equation}
+\int_{0}^{T} g(s)\,df(s) \approx \sum_{i=1}^{n} g \left( \frac{t_i+t_{i-1}}{2} \right) (f(t)_i)-f(t_{i-1}))
+\end{equation}
+
+\begin{equation}
+content...
+\end{equation}
+\newpage
+	
+
+\subsection{Raw Latex Code Of Typical Equations}
+
+Latex Code has been entered manually to build a library of latex code snippets. These will stored in a database. Maxima, Sage and Sympy code will be used to perform derivations dynamically, then publish the results in latex documents. The states of derivations will also be stored as reference material for larger derivations and proofs. \newline
+
+\vspace{0.25cm}
+\small{Multifrequency Power Relations Of Lossless Waveguiding Systems (1.2.2)} \newline
+
+% 
+% TRY PUTTING THIS AT THE TOP OF THE DOCUMENT 
+%
+
+% \numberwithin{equation}{section}
+
+\begin{equation}
+	\frac{\partial}{\partial{z}}\sum_{s=-\infty}^{\infty}\sum_{p=-\infty}^{\infty}P_{s,p}~=~0
+\end{equation}
+
+\begin{equation}
+	\omega_{1}\frac{\partial}{\partial{z}}\sum_{p=-\infty}^{\infty}\sum_{s=-\infty}^{\infty} 
+	\frac{s P_{s,p}}{ s\omega_1 + p\omega_2}
+	+ 
+	\omega_2 \frac{\partial}{\partial{z}}\sum_{s=-\infty}^{\infty}\sum_{p=-\infty}^{\infty}
+	\frac{p P_{s,p}}{ s\omega_1 + p\omega_2}
+\end{equation}
+
+\begin{equation}
+	\frac{\partial}{\partial{z}}\sum_{s=-\infty}^{\infty}\sum_{p=-\infty}^{\infty}P_{s,p}~=~0
+\end{equation}
+
+\begin{equation}
+\sum_{p=-\infty}^{\infty}\sum_{s=-\infty}^{\infty}\frac{s P_{s,p}}{ s\omega_1 + p\omega_2}
+~=~ 
+2~\sum_{p=-\infty}^{\infty}\sum_{s=1}^{\infty}
+\frac{s P_{s,p}}{ s\omega_1 + p\omega_2}
+\end{equation}
+
+\begin{equation}
+\omega_{1}\frac{\partial}{\partial{z}}\sum_{p=-\infty}^{\infty}\sum_{s=1}^{\infty} 
+\frac{s P_{s,p}}{ s\omega_1 + p\omega_2}
++ 
+\omega_2 \frac{\partial}{\partial{z}}\sum_{s=-\infty}^{\infty}\sum_{p=1}^{\infty}
+\frac{p P_{s,p}}{ s\omega_1 + p\omega_2}
+~=~0
+\end{equation}
+
+\begin{equation}
+\frac{\partial}{\partial{z}}\sum_{p=-\infty}^{\infty}\sum_{s=1}^{\infty} 
+\frac{s P_{s,p}}{ s\omega_1 + p\omega_2}
+~=~0
+\end{equation}
+
+\begin{equation}
+\frac{\partial}{\partial{z}}\sum_{s=-\infty}^{\infty}\sum_{p=1}^{\infty}
+\frac{p P_{s,p}}{ s\omega_1 + p\omega_2}
+~=~0
+\end{equation}
+
+\vspace{0.5cm}
+
+Manley-Rowe Power Relations For Parametric Waveguding Systems (Textbook 1.2.3) \newline
+
+Parametric Amplitude Levels \newline 
+
+In parametric systems the amplitude of the signal input at frequency $\omega_1$ ($\omega_s$) is much less than the amplitude of the pump at frequency $\omega_2$ ($\omega_p$). The signal amplitude is so small that parametric system is linear w.r.t the signal but nonlinear w.r.t the pump. The pump modes will experience nonlinear effects while the signal modes will experience linear ones. \newline
+
+$ \mathlarger{\omega_{0,p} = p~\omega_p}$ (for s = 0) and $\mathlarger{\omega_{\pm1,p} = \pm\omega_s + p~\omega_p~}$ (for $\mathlarger{s = \pm 1}$)
+
+\newpage
+
+\paragraph{Multifrequency Parametric Systems}
+
+\begin{equation}
+\frac{\partial}{\partial{z}}\sum_{p=-\infty}^{\infty}
+\frac{P_{+1,p}}{ \omega_s + p\omega_p}
+~=~0
+\end{equation}
+
+
+\begin{equation}
+	\frac{\partial}{\partial{z}}\sum_{p=1}^{\infty}
+	p \Bigg(
+	\frac{P_{0,p}}{p\omega_p} + \frac{P_{+1,p}}{\omega_s+p\omega_p}-\frac{P_{+1,-p}}{\omega_s-p\omega_p}
+	\Bigg)
+	~=~0
+\end{equation}
+
+$ \mathlarger{s = -1, P_{-1,p} = P_{=1,-p} }$ then \newline
+
+Now the pump index p will be replaced by pump index $\nu$ \newline
+		
+$\mathlarger{\omega_s + p \omega \rightarrow \omega_s + p \omega_\nu }$ and $\mathlarger{P_{+1,p} = P_{+1,\nu} \rightarrow P^{(\nu)} }$ \newline
+
+\small{The final form of the Manley-Rowe relations for parametric systems are:}
+
+\begin{equation}
+\frac{\partial}{\partial{z}}\sum_{\nu=-\infty}^{\infty}
+\frac{P^{(\nu)}}{ \omega_{\nu}}
+~=~0
+\end{equation}
+
+\begin{equation}
+	\frac{\partial}{\partial{z}}\sum_{\nu=1}^{\infty}
+	\nu \Bigg(
+	\frac{P^{(\nu)}}{p\omega_{\nu}} + \frac{P^{-\nu}}{\omega_{-\nu}} 
+	=
+	\frac{1}{\omega_\nu}\frac{\partial{P_{pump}}}{\partial{z}}
+	\Bigg)
+\end{equation}
+
+\small{where} $P_{pump} = \sum_{p=1}^{\infty} P_{0,p} $ \small{is the total power supplied by the pump signal} \newline
+
+\paragraph{Three Frequency Parametric Systems}
+
+Where there are 3 components at frequencies $\omega_p (pump)$,$\omega_s(signal)$ and one of $ \omega_{\pm 1} = \omega_s \pm \omega_p$.The case of difference frequency $ \omega_{-1} = \omega_s - \omega_p = \omega_i $ includes the case of $\omega_{+1}= \omega_s+ \omega_p$. In order to show this re-write the general relations (1.8) and (1.9). This takes into account the presence of only three pump frequencies $\nu=0, \nu=+1, \nu=-1$. \newline
+
+\begin{equation}
+\mathlarger{\mathlarger{
+\frac{\partial}{\partial{z}}
+\Bigg(
+\frac{P^{(0)}}{\omega_0} + \frac{P^{(+)}}{\omega_{+1}} + \frac{P^{(-1)}}{\omega_{-1}}
+\Bigg)
+~=~0
+}}
+\end{equation}
+
+\begin{equation}
+\mathlarger{\mathlarger{
+\frac{\partial}{\partial{z}}
+\Bigg(
+\frac{P^{(pump)}}{\omega_p} + \frac{P^{(+1)}}{\omega_{+1}} + \frac{P^{(-1)}}{\omega_{-1}} 
+\Bigg)
+=
+\frac{1}{\omega_p}\frac{\partial{P_{pump}}}{\partial{z}}
+}}
+\end{equation}
+
+\newpage
+
+\textbf{Equation Library Parts} \newline
+
+Going forward, only the math and equations will entered - the goal is to build a large library of latex equation parts. Equations from other sources will be included here, including sources for Nonlinear Optics, Quantum Optics, Quanitative Finance, statistics and Electrodynamics. The components will be extracted and stored as above. A search of github and other sites will be made for any software that can create latex documents automatically from code meant for computer algebra systems. \newline
+
+
+\end{document}

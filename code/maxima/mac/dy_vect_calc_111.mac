@@ -1,0 +1,230 @@
+
+map('diff,[sin(x),cos(x),tan(x)])/del(x);
+trigsimp(1+tan(x)^2);
+(trigsimp((2*tan(x/2))/(1+tan(x/2)^2)),trigreduce(%%));
+(trigsimp((1-tan(x/2)^2)/(1+tan(x/2)^2)),trigreduce(%%),expand(%%));
+gradef(tan(x),1+tan(x)^2);
+gradef(sin(x),(1-tan(x/2)^2)/(1+tan(x/2)^2));
+gradef(cos(x),((-2)*tan(x/2))/(1+tan(x/2)^2));
+map('diff,[sin(x),cos(x),tan(x)])/del(x);
+load(draw);
+batch("/home/fraser/projects/Math/maxima/qdraw.mac");
+qdraw_usage():=print("
+
+
+ -------------QDRAW SYNTAX------------------------------
+
+ All arguments to qdraw are optional and can be entered in any order.
+ 
+ You can have no more than one xr(..) argument.  Likewise,
+  no more than one yr(..), one cut(..), one lw(n) (as an arg of
+   qdraw), one nticks(n) and one ipgrid(n).
+ 
+ You can have an arbitrary number of the other args in any order.
+ 
+ The complete set of possible arguments (in alphabetic order) with the
+    maximum number and type of arguments follow. In general, arguments
+    with names lc,lw,lk,fill,pc,ps,pt,pk,pj,ha,hb,hl,and ht are optional.
+
+    qdraw( arrowhead(x,y,theta-degrees,s,lc(c),lw(n) ),
+           circle(x,y,radius,lc(c),lw(n),fill(cc) ),
+           contour(expr,x,x1,x2,y,y1,y2,crange(n,min,max),options )
+              or contour(expr,x,x1,x2,y,y1,y2, cvals(v1,v2,...), options ),
+              contour options are lc(c),lw(n), add( add-options );
+                 add-options are grid,xaxis,yaxis,and xyaxes,
+           cut(cut-options);
+              cut-options are key,grid,xaxis,yaxis,xyaxes,edge,all,
+           ellipse(xc,yc,xsma,ysma,th0-deg,dth-deg,lw(n),lc(c),fill(cc) ),
+           errorbars(ptlist,dylist,lc(c),lw(n) ),
+           ex(exprlist,x,x1,x2),
+           ex1(expr,x,x1,x2,lc(c),lw(n),lk(string) ),
+           imp(eqnlist,x,xx1,xx2,y,yy1,yy2),
+           imp1(eqn,x,x1,x2,y,y1,y2,lc(c),lw(n),lk(string) ),
+           ipgrid(n),
+           key(bottom) or key(top),
+           label( [string1,x1,y1],[string2,x2,y2],...),
+           label_align(p-options); p-options are l, r, or c,
+           line(x1,y1,x2,y2,lc(c),lw(n),lk(string) ),
+           log(log-options); log-options are x, y, or xy,
+           lw(n),
+           more( any legal draw2d arguments),
+           nticks(n),
+           para( xofu,yofu,u,u1,u2,lc(c),lw(n),lk(string) ),
+           polar( roftheta,theta,th1,th2,lc(c),lw(n),lk(string) );
+                       theta, th1, and th2 must be in radians,
+           poly([ [x1,y1],[x2,y2],.,[xN,yN] ], lc(c),lw(n),fill(cc) ),
+           pts( [ [x1,y1],[x2,y2],.,[xN,yN] ],pc(c),ps(s),pt(t),pk(string) ),
+           pic( type(t), fname(string), font(string,size)  );
+                      font(..) is optional,
+           rect( x1,y1,x2,y2, lc(c),lw(n),fill(cc) ),
+           vector( [x,y],[dx,dy],lw(n),lc(c),lk(string),
+                                   ha(deg),hb(v),hl(v),ht(t) ),
+                type vector_use(); to see vector option details,
+           xr(xa,xb), 
+           yr(ya,yb),            
+           );
+           
+  ...................................................
+  QUICK PLOT FEATURES:
+               
+  For quick plots, use ex(...) and imp(...). These
+  two functions ex(...) and imp(...) use default colors, line widths,
+  and simple legend key numbers. The function ex(...) can be used either
+  with a single expression, as in ex( u^3,u,-2,2), or with a list
+  of expressions as in ex([u,u^2,u^3],u,-2,2).
+  
+  You can use any other letter instead of 'u', such as 'x', etc.
+  
+  Like wise the function imp(...), used for the implicit plots of equations,
+  can be used for one equation, as in imp(v^3=u^2,u,-2,2,v,-2,2) or for a 
+  list of equations as in imp([v=u,v^2=u,v^3=u],u,-2,2,v,-2,2).
+  
+  You can use any other letters instead of 'u' and 'v', such as 'x' and 'y'.
+   
+  The top level qdraw argument lw(n) overrides the default line_width
+   setting used for ex(...) and imp(...).
+  
+  You can have multiple ex and imp arguments.
+  ....................................................
+  
+  You recover more control, although limited to either one expression
+  or one equation, if you use ex1(...), or imp1(...), using the options
+  indicated.
+ 
+===========================================================
+the functions qdensity(expr,[x,x1,x2,dx],[y,y1,y2,dy], palette(p-options),pic(..) )
+          and wxqdensity( same args), in which
+       palette(p) and pic(type,filename) are optional;
+       palette(blue), palette(gray), palette(color), or palette(n1,n2,n3), 
+   can be used to produce a density plot. qdensity or wxqdensity is called by itself and
+   is not 'wrapped' by qdraw. 
+================================================================
+
+   To see the above again, type qdraw();
+     
+  ");
+vector_use():=disp("vector([x,y],[dx,dy],ha(thdeg),hb(v),hl(v),ht(t),lw(n),lc(c),lk(string) )
+ draws a vector with components [dx,dy] starting at [x,y]. The first two
+ list arguments are required, all others are optional and can be entered in
+ any order after the first two required arguments.
+ The default head angle is 30 deg, change to 45 deg using 
+               ha(45) for example.
+ The default 'head both' value is f for false, use hb(t) to set
+      it to true,and hb(f) to return to false.
+ The default 'head length' is 0.5, use hl(0.7) to change to 0.7.
+ The default 'head type' is 'nofilled'; use ht(e) for 'empty',
+       ht(f) for 'filled',and ht(n) to change back to 'nofilled'.           
+ The default line width is 3, use lw(5) to change to 5.
+ The default line color is black, use lc(brown) to change to brown.
+ The default is no key string. use lk(string) for example to create
+     a text string for the key.");
+print(" qdraw.mac: see Maxima by Example, Ch. 13");
+print(" qdraw(...), wxqdraw(...), qdensity(...), wxqdensity(...)");
+print(" default_colors(nwidth),  point_types()");
+print("  for  syntax info,  type:  qdraw(); ");
+qdraw1([qda]):=block([acolor,anerr,arg,ax,ay,bx,by,cc,cdv,clist,cnum,coldef,ct,ctop,ctargs,cval,drlist,dy,dyl,eex,elist,eqe,errblw,fnamelst,fnamestr,fntsize,fntstr,hlim,hvlim,ipgriddef,iq,jq,kk,klist,labadef,lab_args,le,lendr,ll,lp,lqda,lwa,lwdef,lwval,mkedge,mkgrid,labellist,mkkey,mkxaxis,mkxyaxis,mkyaxis,morelist,msg,nn,nargs,ndef,nlabel,nlw,npic,nps,nticksdef,nxr,nyr,phi,piclist,pictype,pl,pl1,pr,prlist,pstr,ptl,ptsdef,pttdef,ptsl,ptslist,qt,rl,rnglist,sa,targs,th,tlist,qtop,tp,tt,ttargs,ttop,tval,ulim,xx,x1rr,x2rr,yy,y1rr,y2rr],local(goodargs,eqncheck,doerr,qval,setnfill,setnlk,setnlw,setnpc,setoptions,inlistp),stringdisp:true,ratprint:false,lwdef:3,lwval:lwdef,coldef:blue,ptsdef:3,pttdef:7,labadef:left,nticksdef:100,ipgriddef:10,ndef:false,npic:false,nlabel:false,morelist:[],piclist:[],ptslist:[],labellist:[],drlist:[],rnglist:[],nxr:0,nyr:0,mkkey:true,mkgrid:true,mkxyaxes:true,mkedge:true,mkxaxis:true,mkyaxis:true,goodargs(arglist,msg,goodarglist):=block([aa,ii,jj,nchk],for ii thru length(arglist) do (aa:arglist[ii],if atom(aa) then (nchk:false,print(" arg ",aa," must itself have args "),return(doerr(msg))),nchk:false,for jj thru length(goodarglist) do if op(aa) = goodarglist[jj] then (nchk:true,return()),if not nchk then (print(" arg ",aa," problem"),return(doerr(msg)))),return(nchk)),anerr:false,cc:[blue,red,turquoise,brown,magenta,green,black],eqncheck(eqe):=if atom(eqe) then false else (if op(eqe) = "=" then true),doerr(msg):=(anerr:true,print("...syntax error"),print(msg),false),qval(nn):=if mod(nn,7) = 0 then 7 else mod(nn,7),setnpc(ll):=if length(ll) = 1 then (ptsl:cons(color = ll[1],ptsl),ptsl:append(ptsl,[color = coldef])) else return(doerr("use lc(red) for example ")),setnlw(ll):=if length(ll) = 1 then (ptsl:cons(line_width = ll[1],ptsl),ptsl:append(ptsl,[line_width = lwdef])) else return(doerr("use lw(5) for example ")),setnlk(ll):=if length(ll) = 1 then (ptsl:cons(key = ll[1],ptsl),ptsl:append(ptsl,[key = ""])) else return(doerr(" use lk(\"case 1\") for example ")),setnfill(ll):=if length(ll) = 1 then (ptsl:cons(fill_color = ll[1],ptsl),ptsl:cons(transparent = false,ptsl),ptsl:append(ptsl,[transparent = true])) else return(doerr("use fill(blue) for example")),setoptions(prlist):=block([jj,tt,ttop,ttargs],for jj thru length(prlist) do (tt:prlist[jj],ttop:op(tt),ttargs:args(tt),if ttop = lc then setnpc(ttargs),if ttop = lw then setnlw(ttargs),if ttop = lk then setnlk(ttargs),if ttop = fill then setnfill(ttargs))),inlistp(aaa,lll):=block([fff,xxx],fff:false,for xxx in lll do if xxx = aaa then fff:true,fff),lqda:length(qda),if lqda = 0 then (qdraw_usage(),return(false)),if not goodargs(qda,"qdraw args:arrowhead(), circle(), contour(), cut(), ellipse(), errorbars(), ex(), ex1(), imp(), imp1(),ipgrid(),key(),label(),label_align(), line(), log(), lw(n), more(),nticks(),para(),pic(),polar(), poly(), pts(), rect(),vector(), xr(), yr() ",[arrowhead,circle,contour,cut,ellipse,errorbars,pic,ex,ex1,imp,imp1,ipgrid,key,label,label_align,line,log,lw,more,nticks,para,pic,polar,poly,pts,rect,vector,xr,yr]) then return(false),for iq thru lqda do (if anerr then return(),qt:qda[iq],qtop:op(qt),targs:args(qt),if qtop = lw then (if length(targs) # 1 then return(doerr("lw  must have one and only one argument")),lwa:targs[1],if integerp(lwa) then lwval:lwa else return(doerr("lw arg must be a literal integer like 2"))),if qtop = log then (if length(targs) # 1 then return(doerr(" use log(a) where a is x, y, or xy ")),pl:targs[1],if not inlistp(pl,[x,y,xy]) then return(doerr(" use log(a) where a is x, y, or xy ")),if pl = x then loglist:[logx = true] else (if pl = y then loglist:[logy = true] else (if pl = xy then loglist:[logx = true,logy = true] else return(doerr(" use log(a) where a is x, y, or xy")))),drlist:append(drlist,loglist)),if qtop = nticks then (if length(targs) # 1 then return(doerr("nticks ex: nticks(200) ")),nticksdef:targs[1]),if qtop = ipgrid then (if length(targs) # 1 then return(doerr("ipgrid ex: ipgrid(15) ")),ipgriddef:targs[1]),if qtop = cut then (eex:targs,le:length(eex),for jq thru le do (pl:eex[jq],if not inlistp(pl,[all,edge,grid,key,xaxis,xyaxes,yaxis]) then return(doerr("cut: valid args: all,key,grid,xyaxes,xaxis,yaxis,edge ")),if pl = all then (mkkey:false,mkgrid:false,mkxyaxes:false,mkedge:false),if pl = key then mkkey:false,if pl = grid then mkgrid:false,if pl = xyaxes then mkxyaxes:false,if pl = xaxis then mkxaxis:false,if pl = yaxis then mkyaxis:false,if pl = edge then mkedge:false)),if qtop = xr then (nxr:nxr+1,if nxr = 2 then return(doerr("only one xr(xa,xb) item allowed in qdraw")),if length(targs) # 2 then return(doerr("xr must be of form xr(xa, xb)")),x1rr:float(targs[1]),if not numberp(x1rr) then return(doerr("xr(x1,x2): x1 is not a number")),x2rr:float(targs[2]),if not numberp(x2rr) then return(doerr("xr(x1,x2): x2 is not a number")),tval:xrange = [x1rr,x2rr],rnglist:cons(tval,rnglist)),if qtop = yr then (nyr:nyr+1,if nyr = 2 then return(doerr("only one yr(ya,yb) item allowed in qdraw")),if length(targs) # 2 then return(doerr("yr must be of form yr(ya, yb)")),y1rr:float(targs[1]),if not numberp(y1rr) then return(doerr("yr(y1,y2): y1 is not a number")),y2rr:float(targs[2]),if not numberp(y2rr) then return(doerr("yr(y1,y2): y2 is not a number")),tval:yrange = [y1rr,y2rr],rnglist:append(rnglist,[tval]))),if anerr then return(),for iq thru lqda do (if anerr then return(),qt:qda[iq],qtop:op(qt),targs:args(qt),if qtop = ex then (ndef:true,if length(targs) # 4 then return(doerr("ex() should have exactly four arguments")),eex:targs[1],if not listp(eex) then eex:[eex],hlim:float(rest(targs,1)),if numberp(hlim[1]) then return(doerr("ex: hlim=[x,x1,x2]: x is a number")),if not numberp(hlim[2]) then return(doerr("ex: hlim=[x,x1,x2]: x1 is not a number")),if not numberp(hlim[3]) then return(doerr("ex: hlim=[x,x1,x2]: x2 is not a number")),le:length(eex),for jq thru le do (if eqncheck(eex[jq]) then return(doerr("you have an equation in ex() ")),tlist:cons(eex[jq],hlim),tval:apply('explicit,tlist),drlist:append(drlist,[tval]))),if qtop = imp then (ndef:true,if length(targs) # 7 then return(doerr("imp() should have exactly seven arguments")),eex:targs[1],if not listp(eex) then eex:[eex],hvlim:float(rest(targs,1)),if numberp(hvlim[1]) then return(doerr("imp: hvlim=[x,x1,x2,y,y1,y2]: x is a number")),if not numberp(hvlim[2]) then return(doerr("imp: hvlim=[x,x1,x2,y,y1,y2]: x1 is not a number")),if not numberp(hvlim[3]) then return(doerr("imp: hvlim=[x,x1,x2,y,y1,y2]: x2 is not a number")),if numberp(hvlim[4]) then return(doerr("imp: hvlim=[x,x1,x2,y,y1,y2]: y is a number")),if not numberp(hvlim[5]) then return(doerr("imp: hvlim=[x,x1,x2,y,y1,y2]: y1 is not a number")),if not numberp(hvlim[6]) then return(doerr("imp: hvlim=[x,x1,x2,y,y1,y2]: y2 is not a number")),le:length(eex),for jq thru le do (if not eqncheck(eex[jq]) then return(doerr("one imp() arg is not an equation ")),tlist:cons(eex[jq],hvlim),tval:apply('implicit,tlist),drlist:append(drlist,[tval])))),if anerr then return(),if ndef then (lendr:length(drlist),clist:makelist(color = cc[qval(kk)],kk,1,lendr),if mkkey then (klist:makelist(key = string(kk),kk,1,lendr),drlist:flatten(makelist([clist[kk],klist[kk],drlist[kk]],kk,1,lendr))) else drlist:join(clist,drlist),drlist:cons(line_width = lwval,drlist),drlist:append(drlist,[color = coldef])),if mkkey then drlist:append(drlist,[key = ""]),drlist:append(drlist,[line_width = lwdef,transparent = true,point_size = ptsdef,point_type = pttdef,label_alignment = labadef,head_type = nofilled,head_angle = 30,head_length = 0.5]),for iq thru lqda do (if anerr then return(),qt:qda[iq],qtop:op(qt),targs:args(qt),if qtop = key then (if length(targs) > 1 then return(doerr("use key(bottom) or key(top) ")),tt:targs[1],if tt = bottom then ptslist:append(ptslist,[user_preamble = "set key bottom"]) else (if tt = top then ptslist:append(ptslist,[user_preamble = "set key top"]) else return(doerr("use key(bottom) or key(top) ")))),if qtop = label then (nlabel:true,for kl thru length(targs) do (lab_args:targs[kl],if length(lab_args) = 3 then labellist:append(labellist,[apply('label,[lab_args])]) else (acolor:args(lab_args[4])[1],labellist:append(labellist,[color = acolor]),labellist:append(labellist,[apply('label,[rest(lab_args,-1)])]),labellist:append(labellist,[color = black])))),if qtop = label_align then (if length(targs) > 1 then return(doerr(" use label_align(p) where p is l, r, or c ")),pl:targs[1],if not inlistp(pl,[l,r,c]) then return(doerr(" use label_align(p) where p is l, r, or c ")),if pl = l then labadef:left,if pl = r then labadef:right,if pl = c then labadef:center,labellist:append(labellist,[label_alignment = labadef])),if qtop = ex1 then (nargs:length(targs),if nargs < 4 then (print("ex1 syntax: ex1(expr,x,x1,x2,lc(c),lw(n),lk(string) ) "),print("first four args required"),return(doerr("only lc(c), lw(n), and lk(string) options can be included"))),if nargs > 7 then return(doerr("ex1: only lc(c), lw(n), and lk(string) options allowed ")),elist:rest(targs,-(nargs-4)),if listp(elist[1]) then return(doerr("ex1: first arg should not be a list")),hlim:float(rest(elist,1)),if numberp(hlim[1]) then return(doerr("ex1: hlim=[x,x1,x2]: x is a number")),if not numberp(hlim[2]) then return(doerr("ex1: hlim=[x,x1,x2]: x1 is not a number")),if not numberp(hlim[3]) then return(doerr("ex1: hlim=[x,x1,x2]: x2 is not a number")),ptsl:[apply('explicit,elist)],pr:rest(targs,4),lp:length(pr),if lp > 0 then (if not goodargs(pr,"ex1 options: lc(color), lw(n), lk(string) ",[lc,lw,lk]) then return(),setoptions(pr)),ptslist:append(ptslist,ptsl)),if qtop = imp1 then (nargs:length(targs),if nargs < 7 then return(doerr("imp1 syntax: imp1(eqn,x,x1,x2,y,y1,y2,options)")),if nargs > 10 then return(doerr("imp1: only lc(c), lw(n), and lk(string) options allowed ")),elist:rest(targs,-(nargs-7)),if listp(elist[1]) then return(doerr("imp1: first arg should not be a list")),if not eqncheck(elist[1]) then return(doerr("imp1: first arg should be an equation ")),hlim:float(rest(elist,1)),if numberp(hlim[1]) then return(doerr("imp1(eqn,x,x1,x2,y,y1,y2,options): x must be a symbol")),if not numberp(hlim[2]) then return(doerr("imp1(eqn,x,x1,x2,y,y1,y2,options): x1 must be a number")),if not numberp(hlim[3]) then return(doerr("imp1(eqn,x,x1,x2,y,y1,y2,options): x2 must be a number")),if numberp(hlim[4]) then return(doerr("imp1(eqn,x,x1,x2,y,y1,y2,options): y must be a symbol")),if not numberp(hlim[5]) then return(doerr("imp1(eqn,x,x1,x2,y,y1,y2,options): y1 must be a number")),if not numberp(hlim[6]) then return(doerr("imp1(eqn,x,x1,x2,y,y1,y2,options): y2 must be a number")),ptsl:[apply('implicit,elist)],pr:rest(targs,7),lp:length(pr),if lp > 0 then (if not goodargs(pr,"imp1 options: lc(color), lw(n), lk(string) ",[lc,lw,lk]) then return(),setoptions(pr)),ptslist:append(ptslist,ptsl)),if qtop = contour then (print("   contour working... "),nargs:length(targs),if nargs < 8 then return(doerr("contour syntax: contour(expr,x,x1,x2,y,y1,y2,cvals(v1,v2,...),options )
+                            or contour(expr,x,x1,x2,y,y1,y2, crange(n,min,max),options )")),elist:makelist(targs[jj],jj,1,7),if listp(elist[1]) then return(doerr("contour: first arg should be an expression depending on
+                            two variables ")),if eqncheck(elist[1]) then return(doerr("contour: first arg should be an expression ")),hlim:float(rest(elist,1)),if numberp(hlim[1]) then return(doerr("contour(expr,x,x1,x2,y,y1,y2,options): x must be a symbol")),if not numberp(hlim[2]) then return(doerr("contour(expr,x,x1,x2,y,y1,y2,options): x1 must be a number")),if not numberp(hlim[3]) then return(doerr("contour(expr,x,x1,x2,y,y1,y2,options): x2 must be a number")),if numberp(hlim[4]) then return(doerr("contour(expr,x,x1,x2,y,y1,y2,options): y must be a symbol")),if not numberp(hlim[5]) then return(doerr("contour(expr,x,x1,x2,y,y1,y2,options): y1 must be a number")),if not numberp(hlim[6]) then return(doerr("contour(expr,x,x1,x2,y,y1,y2,options): y2 must be a number")),pl:targs[8],if atom(pl) then return(doerr("contour eighth arg: cvals(v1,v2,...) or crange(n,min,max)")),ptsl:[],if op(pl) = cvals then (tt:args(pl),for cval in tt do (ptl:hlim,ptl:cons(first(elist) = cval,ptl),ptsl:append(ptsl,[apply('implicit,ptl)]))) else (if op(pl) = crange then (tt:args(pl),if length(tt) # 3 then return(doerr("contour last arg: cvals(v1,...) or crange(n,min,max)")),cnum:first(tt),if not integerp(cnum) then return(doerr("crange(n,min,max): n must be literal integer, like 10")),if cnum = 0 then return(doerr("crange(n,min,max): n cannot be zero ")),if not numberp(tt[2]) then return(doerr("crange(n,min,max): min must be a number")),if not numberp(tt[3]) then return(doerr("crange(n,min,max): max must be a number")),if tt[3] < tt[2] then return(doerr("crange(n,min,max): max must be greater than min ")),cdv:float(abs((tt[3]-tt[2])/cnum)),for kk thru cnum do (ptl:hlim,cval:tt[2]+(kk-1)*cdv,ptl:cons(first(elist) = cval,ptl),ptsl:append(ptsl,[apply('implicit,ptl)]))) else return(doerr("contour last arg: cvals(v1,...) or crange(n,min,max)"))),mkgrid:false,mkxaxis:false,mkyaxis:false,pr:rest(targs,8),lp:length(pr),nlw:false,if lp > 0 then (if not goodargs(pr,"contour options: lc(color), lw(n), add(options) ",[lc,lw,add]) then return(),for kk thru lp do (ct:pr[kk],ctop:op(ct),ctargs:args(ct),if ctop = lc then setnpc(ctargs),if ctop = lw then (if length(ctargs) = 1 then (nlw:true,ptsl:cons(line_width = ctargs[1],ptsl),ptsl:append(ptsl,[line_width = lwdef])) else return(doerr("use lw(5) for example "))),if ctop = add then (for ll thru length(ctargs) do if ctargs[ll] = grid then mkgrid:true else (if ctargs[ll] = xaxis then mkxaxis:true else (if ctargs[ll] = yaxis then mkyaxis:true else (if ctargs[ll] = xyaxes then (mkxaxis:true,mkyaxis:true) else return(doerr("contour: add(grid,xaxis,yaxis,xyaxes) ")))))))),if not nlw then (ptsl:cons(line_width = 1,ptsl),ptsl:append(ptsl,[line_width = lwdef])),ptslist:append(ptslist,ptsl)),if qtop = para then (nargs:length(targs),if nargs < 5 then (print("para syntax: para(xofu,yofu,u,u1,u2,lc(c),lw(n),lk(string) ) "),print("first five args are required"),return(doerr("only lc(c), lw(n), and lk(string) options can be included"))),if nargs > 8 then return(doerr("para: only lc(c), lw(n), and lk(string) options allowed ")),elist:rest(targs,-(nargs-5)),if listp(elist[1]) then return(doerr("para: first arg should not be a list")),ulim:float(rest(elist,2)),if numberp(ulim[1]) then return(doerr("para: ulim=[var,var1,var2]: var is a number")),if not numberp(ulim[2]) then return(doerr("para: ulim=[var,var1,var2]: var1 is not a number")),if not numberp(ulim[3]) then return(doerr("para: ulim=[var,var1,var2]: var2 is not a number")),ptsl:[apply('parametric,elist)],pr:rest(targs,5),lp:length(pr),if lp > 0 then (if not goodargs(pr,"para options: lc(color), lw(n), lk(string) ",[lc,lw,lk]) then return(),setoptions(pr)),ptslist:append(ptslist,ptsl)),if qtop = polar then (nargs:length(targs),if nargs < 4 then (print("polar syntax: polar(roftheta,theta,thetamin,thetamax,lc(c),lw(w),lk(string) ) "),print("first four args are required"),return(doerr("only lc(c), lw(n), and lk(string) options can be included"))),if nargs > 7 then return(doerr("polar: only lc(c), lw(n), and lk(string) options allowed ")),elist:rest(targs,-(nargs-4)),if listp(elist[1]) then return(doerr("polar: first arg should not be a list")),ulim:float(rest(elist,1)),if numberp(ulim[1]) then return(doerr("polar: ulim=[var,var1,var2]: var is a number")),if not numberp(ulim[2]) then return(doerr("polar: ulim=[var,var1,var2]: var1 is not a number")),if not numberp(ulim[3]) then return(doerr("polar: ulim=[var,var1,var2]: var2 is not a number")),ptsl:[apply('polar,elist)],pr:rest(targs,4),lp:length(pr),if lp > 0 then (if not goodargs(pr,"polar options: lc(color), lw(n), lk(string) ",[lc,lw,lk]) then return(),setoptions(pr)),ptslist:append(ptslist,ptsl)),if qtop = circle then (nargs:length(targs),if nargs < 3 then return(doerr("circle: at least three args needed")),elist:rest(targs,-(nargs-3)),pr:rest(targs,3),lp:length(pr),ptsl:[ellipse(elist[1],elist[2],elist[3],elist[3],0,360)],if lp > 0 then (if not goodargs(pr,"circle options: lc(color), lw(n), fill(color) ",[lc,lw,fill]) then return(),setoptions(pr)),if anerr then return(),ptslist:append(ptslist,ptsl)),if qtop = ellipse then (nargs:length(targs),if nargs < 6 then return(doerr("ellipse: at least six args needed")),elist:rest(targs,-(nargs-6)),pr:rest(targs,6),lp:length(pr),ptsl:[apply('ellipse,elist)],if lp > 0 then (if not goodargs(pr,"ellipse options: lc(color), lw(n), fill(color) ",[lc,lw,fill]) then return(),setoptions(pr)),if anerr then return(),ptslist:append(ptslist,ptsl)),if qtop = line then (nargs:length(targs),if nargs < 4 then return(doerr("line: at least four args needed")),elist:rest(targs,-(nargs-4)),if length(elist) # 4 then return(doerr("line: at least four args needed")),ptsl:[points([rest(elist,-2),rest(elist,2)])],pr:rest(targs,4),lp:length(pr),if lp > 0 then (if not goodargs(pr,"line options: lc(color), lw(n), lk(string) ",[lc,lw,lk]) then return(),setoptions(pr)),ptsl:cons(points_joined = true,ptsl),ptsl:cons(point_type = -1,ptsl),ptsl:append(ptsl,[points_joined = false,point_type = pttdef]),ptslist:append(ptslist,ptsl)),if qtop = vector then (nargs:length(targs),if nargs < 2 then return(doerr("vector: at least two args needed")),elist:rest(targs,-(nargs-2)),for jq thru 2 do if not listp(elist[jq]) then return(doerr("vector([x,y],[dx,dy],options )")),ptsl:[apply('vector,elist)],pr:rest(targs,2),lp:length(pr),if lp > 0 then (if not goodargs(pr,"vector options: lc(color), lw(n), lk(string), 
+                            ha(thdeg), hb(v), hl(v), ht(v) ",[lc,lw,lk,ha,hb,hl,ht]) then return(),setoptions(pr),for jq thru lp do (if anerr then return(),tt:pr[jq],ttop:op(tt),ttargs:args(tt),if ttop = ha then (if length(ttargs) # 1 then return(doerr("vector: use ha(45) for example ")),pl:float(ttargs[1]),if not numberp(pl) then return(doerr("vector: use ha(45) for example ")),ptsl:cons(head_angle = pl,ptsl)),if ttop = hb then (if length(ttargs) # 1 then return(doerr("vector: use hb(t) or hb(f) ")),pl:ttargs[1],if not inlistp(pl,[t,f]) then return(doerr("vector: use hb(t) or hb(f) ")),if pl = t then ptsl:cons(head_both = true,ptsl),if pl = f then ptsl:cons(head_both = false,ptsl)),if ttop = hl then (if length(ttargs) # 1 then return(doerr("vector: use hl(0.7) for example ")),pl:float(ttargs[1]),if not numberp(pl) then return(doerr("vector: use hl(0.7) for example ")),ptsl:cons(head_length = pl,ptsl)),if ttop = ht then (if length(ttargs) # 1 then return(doerr("vector: use ht(e), ht(f), or ht(n) ")),pl:ttargs[1],if not inlistp(pl,[e,f,n]) then return(doerr("vector: use ht(e), ht(f), or ht(n) ")),if pl = e then ptsl:cons(head_type = empty,ptsl),if pl = f then ptsl:cons(head_type = filled,ptsl),if pl = n then ptsl:cons(head_type = nofilled,ptsl)))),ptslist:append(ptslist,ptsl)),if qtop = arrowhead then (nargs:length(targs),if nargs < 4 then return(doerr("try arrowhead(0,0,45,0.3) for example ")),elist:float(rest(targs,-(nargs-4))),for jq thru 4 do if not numberp(elist[jq]) then return(doerr("arrowhead: first 4 args must be numbers")),if anerr then return(),phi:0.44,xx:elist[1],yy:elist[2],th:float((%pi*elist[3])/180),sa:elist[4],ax:sa*cos(th-phi),ay:sa*sin(th-phi),bx:sa*cos(th+phi),by:sa*sin(th+phi),ptsl:[points([[xx-ax,yy-ay],[xx,yy]]),points([[xx-bx,yy-by],[xx,yy]])],pr:rest(targs,4),lp:length(pr),if lp > 0 then (if not goodargs(pr,"arrowhead options: lc(color), lw(n)  ",[lc,lw]) then return(),setoptions(pr)),ptsl:cons(points_joined = true,ptsl),ptsl:cons(point_type = -1,ptsl),ptsl:append(ptsl,[points_joined = false,point_type = pttdef]),ptslist:append(ptslist,ptsl)),if qtop = rect then (nargs:length(targs),if nargs < 4 then return(doerr("rect: at least four args needed")),elist:rest(targs,-(nargs-4)),if length(elist) # 4 then return(doerr("rect: at least four args needed")),pr:rest(targs,4),lp:length(pr),ptsl:[rectangle(rest(elist,-2),rest(elist,2))],if lp > 0 then (if not goodargs(pr,"rect options: lc(color), lw(n), fill(color) ",[lc,lw,fill]) then return(),setoptions(pr)),if anerr then return(),ptslist:append(ptslist,ptsl)),if qtop = poly then (pl:first(targs),if not listp(pl) then return(doerr("first arg of poly:[ [x0,y0],[x1,y1],...]")),pl1:first(pl),if not listp(pl1) then return(doerr("first arg of poly:[ [x0,y0],[x1,y1],...]")),if length(pl1) # 2 then return(doerr("first arg of poly:[ [x0,y0],[x1,y1],...]")),ptsl:[polygon(pl)],pr:rest(targs),lp:length(pr),if lp > 0 then (if not goodargs(pr,"poly options: lc(color), lw(n), fill(color) ",[lc,lw,fill]) then return(),setoptions(pr)),if anerr then return(),ptslist:append(ptslist,ptsl)),if qtop = pts then (pl:first(targs),if not listp(pl) then return(doerr("first arg of pts must be a list")),if length(pl) = 2 then (if not listp(pl[1]) then pl:[pl]),ptsl:[points(pl)],pr:rest(targs),lp:length(pr),if lp > 0 then (if not goodargs(pr,"pts options: pc(color), ps(size), pk(string), pt(type), pj(lw) ",[pc,ps,pt,pj,pk]) then return(),for jq thru lp do (if anerr then return(),tt:pr[jq],ttop:op(tt),ttargs:args(tt),if ttop = pc then (if length(ttargs) = 1 then (ptsl:cons(color = ttargs[1],ptsl),ptsl:append(ptsl,[color = coldef])) else return(doerr("pts: use pc(blue) for example"))),if ttop = ps then (if length(ttargs) = 1 then (ptsl:cons(point_size = ttargs[1],ptsl),ptsl:append(ptsl,[point_size = ptsdef])) else return(doerr("pts: use ps(2) for example "))),if ttop = pt then (if length(ttargs) = 1 then (ptsl:cons(point_type = ttargs[1],ptsl),ptsl:append(ptsl,[point_type = pttdef])) else return(doerr("pts: use pt(3) for example "))),if ttop = pj then (if length(ttargs) = 1 then (if ttargs[1] # lwdef then ptsl:cons(line_width = ttargs[1],ptsl),ptsl:cons(points_joined = true,ptsl),ptsl:append(ptsl,[points_joined = false]),if ttargs[1] # lwdef then ptsl:append(ptsl,[line_width = lwdef])) else return(doerr("pts: use pj(2) for example "))),if ttop = pk then (if length(ttargs) = 1 then (ptsl:cons(key = ttargs[1],ptsl),ptsl:append(ptsl,[key = ""])) else return(doerr("pts: use pk(\"case 1\") for example "))))),if anerr then return(),ptslist:append(ptslist,ptsl)),if qtop = errorbars then (if length(targs) = 1 then return(doerr("errorbars(ptl,dyl,options")),ptl:first(targs),if not listp(ptl) then return(doerr("first arg of errorbars must be a list of points")),le:length(ptl),if le = 2 then (if not listp(ptl[1]) then ptl:[ptl]),le:length(ptl),dyl:second(targs),if not listp(dyl) then dyl:[dyl],ptsl:[points_joined = true,point_type = -1],if length(dyl) = 1 then (dy:dyl[1],for jq thru length(ptl) do ptsl:append(ptsl,[points([[ptl[jq][1],ptl[jq][2]-dy],[ptl[jq][1],ptl[jq][2]+dy]])])) else (if length(dyl) # le then return(doerr("number of errorbars must equal number of points")),for jq thru length(ptl) do ptsl:append(ptsl,[points([[ptl[jq][1],ptl[jq][2]-dyl[jq]],[ptl[jq][1],ptl[jq][2]+dyl[jq]]])])),errblw:1,if length(targs) > 2 then (pr:rest(targs,2),if not goodargs(pr,"errorbars options: lc(c), lw(n) ",[lc,lw]) then return(),lp:length(pr),for kk thru lp do (tt:pr[kk],ttop:op(tt),ttargs:args(tt),if ttop = lc then (if length(ttargs) # 1 then return(doerr("errorbars: use lc(red) for example")),ptsl:cons(color = ttargs[1],ptsl),ptsl:append(ptsl,[color = coldef])),if ttop = lw then (if length(ttargs) # 1 then return(doerr("errorbars: use lw(2) for example")),errblw:ttargs[1]))),ptsl:cons(line_width = errblw,ptsl),ptsl:append(ptsl,[points_joined = false,point_type = pttdef,line_width = lwdef]),if anerr then return(),ptslist:append(ptslist,ptsl)),if qtop = pic then (if npic then return(doerr("can only be one pic(...) arg to qdraw")),npic:true,nargs:length(targs),if nargs < 2 or nargs > 3 then return(doerr("pic args: type ,fname , font(string,size);
+                                    type and fname required, font() optional ")),pictype:targs[1],if not inlistp(pictype,[eps,eps_color,jpg,png]) then return(doerr("pic types are eps, eps_color, jpg, and png ")),if pictype = eps then pictype:eps_color,fnamestr:targs[2],if not stringp(fnamestr) then return(doerr("pic file name must be in double quotes ")),fnamelst:charlist(fnamestr),for kk thru length(fnamelst) do if fnamelst[kk] = "." then return(doerr("pic file name string cannot contain a period")),if anerr then return(),piclist:append(piclist,[terminal = pictype,file_name = fnamestr]),if nargs = 3 then (tt:targs[3],ttop:op(tt),if ttop # font then return(doerr("pic 3rd arg: font(string,size) ")),ttargs:args(tt),if length(ttargs) # 2 then return(doerr("pic 3rd arg: font(string,size)")),fntstr:ttargs[1],if not stringp(fntstr) then return(doerr("font string must be in double quotes ")),fntsize:ttargs[2],if not integerp(fntsize) then return(doerr("pic: font syntax: size must be a positive integer ")),piclist:append(piclist,[font = fntstr,font_size = fntsize]))),if qtop = more then morelist:append(morelist,targs)),if anerr then return(),drlist:cons(nticks = nticksdef,drlist),if mkgrid then drlist:cons(grid = true,drlist),drlist:cons(ip_grid_in = [ipgriddef,ipgriddef],drlist),if length(morelist) > 0 then drlist:append(drlist,morelist),drlist:append(drlist,ptslist),if mkxyaxes and mkxaxis then drlist:append(drlist,[xaxis = true,xaxis_width = 2]),if mkxyaxes and mkyaxis then drlist:append(drlist,[yaxis = true,yaxis_width = 2]),if not mkedge then drlist:append(drlist,[xtics = 'none,ytics = 'none,axis_bottom = false,axis_top = false,axis_left = false,axis_right = false]),if length(piclist) > 0 then drlist:append(drlist,piclist),if nlabel then (drlist:append(drlist,[color = black]),drlist:append(drlist,labellist)),drlist:append(rnglist,drlist),drlist);
+qdraw([qargs]):=(apply('qdraw1,qargs),if listp(%%) then apply('draw2d,%%));
+wxqdraw([qargs]):=(apply('qdraw1,qargs),if listp(%%) then apply('wxdraw2d,%%));
+qdensity([qda]):=block([ddrlist,dxx,dyy,imatrix,ii,jj,lqda,nxx,nyy,qexpr,xrdx,xx,xx1,xx2,xxlist,xyvals,yy,yy1,yy2,yrdy,yylist],lqda:length(qda),if lqda > 5 then return("qdensity(f(x,y),[x,x1,x2,dx],[y,y1,y2,dy],palette(p),pic(..)),
+                             palette and pic are optional"),if lqda < 3 then return("qdensity(f(x,y),[x,x1,x2,dx],[y,y1,y2,dy],palette(p),pic(..)),
+                             palette and pic are optional"),qexpr:qda[1],xrdx:qda[2],xx:xrdx[1],xx1:xrdx[2],xx2:xrdx[3],dxx:xrdx[4],yrdy:qda[3],yy:yrdy[1],yy1:yrdy[2],yy2:yrdy[3],dyy:yrdy[4],nxx:floor((xx2-xx1)/dxx),nyy:floor((yy2-yy1)/dyy),xxlist:float(makelist(xx1+dxx*ii,ii,1,nxx)),yylist:reverse(float(makelist(yy1+dyy*ii,ii,1,nyy))),xyvals:float(makelist(subst(yy = yylist[jj],makelist(subst(xx = xxlist[ii],qexpr),ii,1,length(xxlist))),jj,1,length(yylist))),imatrix:apply('matrix,xyvals),ddrlist:[imatrix,[xx1,xx2],[yy1,yy2]],if lqda > 3 then ddrlist:append(ddrlist,rest(qda,3)),apply('qdensity1,ddrlist),if listp(%%) then apply('draw2d,%%));
+wxqdensity([qda]):=block([ddrlist,dxx,dyy,imatrix,ii,jj,lqda,nxx,nyy,qexpr,xrdx,xx,xx1,xx2,xxlist,xyvals,yy,yy1,yy2,yrdy,yylist],lqda:length(qda),if lqda > 5 then return("wxqdensity(f(x,y),[x,x1,x2,dx],[y,y1,y2,dy],palette(p),pic(..)),
+                             palette and pic are optional"),if lqda < 3 then return("wxqdensity(f(x,y),[x,x1,x2,dx],[y,y1,y2,dy],palette(p),pic(..)),
+                             palette and pic are optional"),qexpr:qda[1],xrdx:qda[2],xx:xrdx[1],xx1:xrdx[2],xx2:xrdx[3],dxx:xrdx[4],yrdy:qda[3],yy:yrdy[1],yy1:yrdy[2],yy2:yrdy[3],dyy:yrdy[4],nxx:floor((xx2-xx1)/dxx),nyy:floor((yy2-yy1)/dyy),xxlist:float(makelist(xx1+dxx*ii,ii,1,nxx)),yylist:reverse(float(makelist(yy1+dyy*ii,ii,1,nyy))),xyvals:float(makelist(subst(yy = yylist[jj],makelist(subst(xx = xxlist[ii],qexpr),ii,1,length(xxlist))),jj,1,length(yylist))),imatrix:apply('matrix,xyvals),ddrlist:[imatrix,[xx1,xx2],[yy1,yy2]],if lqda > 3 then ddrlist:append(ddrlist,rest(qda,3)),apply('qdensity1,ddrlist),if listp(%%) then apply('wxdraw2d,%%));
+qdensity1([qda]):=block([anerr,xlim,ylim,xx1,xx2,yy1,yy2,drlist,fnamelst,fnamestr,lqda,paldef,Mxy,prb,pictype,tt,ttop,ttargs,fnamestr,fnamelst],local(doerr),doerr(msg):=(anerr:true,print("...syntax error"),print(msg),false),paldef:[1,3,8],anerr:false,lqda:length(qda),if lqda > 5 then return(doerr("qdensity1(Amatrix, [x1,x2], [y1,y2], palette(p),pic(..)), palette and pic are optional")),if lqda < 3 then return(doerr("qdensity1(Amatrix, [x1,x2], [y1,y2], palette(p),pic(..)), palette and pic are optional")),Mxy:qda[1],if not matrixp(Mxy) then return(doerr("qdensity1(Amatrix, [x1,x2], [y1,y2], palette(p),pic(..)),palette and pic are optional ")),xlim:float(qda[2]),if not listp(xlim) then return(doerr("qdensity1(Amatrix, [x1,x2], [y1,y2], palette(p),pic(..)),palette and pic are optional ")),xx1:xlim[1],xx2:xlim[2],ylim:float(qda[3]),if not listp(ylim) then return(doerr("qdensity1(Amatrix, [x1,x2], [y1,y2], palette(p),pic(..)),palette and pic are optional ")),yy1:ylim[1],yy2:ylim[2],drlist:[image(Mxy,xx1,yy1,xx2-xx1,yy2-yy1)],if lqda > 3 then (prb:rest(qda,3),for ii thru length(prb) do (tt:prb[ii],if atom(tt) then return(doerr("qdensity1 options: palette(args), pic(args) ")),if anerr then return(),ttop:op(tt),ttargs:args(tt),if ttop = palette then (if length(ttargs) = 1 then (if ttargs[1] = gray then paldef:[3,3,3] else (if ttargs[1] = color then paldef:[7,5,15] else (if ttargs[1] = blue then paldef:[1,3,8] else return(doerr("palette(gray,color,blue,or n1,n2,n3 ) "))))) else (if length(ttargs) = 3 then paldef:[ttargs[1],ttargs[2],ttargs[3]] else return(doerr("palette(gray,color,blue,or n1,n2,n3 ) ")))) else (if ttop = pic then (if length(ttargs) # 2 then return(doerr("pic(type,flname) requires two args")),pictype:ttargs[1],if pictype = eps then pictype:eps_color,fnamestr:ttargs[2],if not stringp(fnamestr) then return(doerr("pic file name must be in double quotes ")),fnamelst:charlist(fnamestr),for kk thru length(fnamelst) do if fnamelst[kk] = "." then return(doerr("pic file name string cannot contain a period")),if anerr then return(),drlist:append(drlist,[terminal = pictype,file_name = fnamestr])) else return(doerr("qdensity1 options: palette(args), pic(args) "))))),drlist:cons(palette = paldef,drlist),drlist);
+qdensity_mat([QDA]):=(apply('qdensity1,QDA),if listp(%%) then apply('draw2d,%%));
+wxqdensity_mat([QDA]):=(apply('qdensity1,QDA),if listp(%%) then apply('wxdraw2d,%%));
+show_colors(color_list,nlw):=block([Nl,qlist,xi,vi],print(" show color list = ",color_list),Nl:length(color_list),xmax:(1+Nl)/2,qlist:[xr(-xmax,xmax)],for i thru Nl do (xi:i-xmax,vi:line(xi,-1,xi,1,lc(color_list[i]),lw(nlw)),qlist:append(qlist,[vi])),qlist:append(qlist,[cut(all)]),apply('qdraw,qlist));
+default_colors(nlw):=show_colors([blue,red,turquoise,brown,magenta,green,black],nlw);
+doplot1(nlw):=show_colors([aquamarine,beige,blue,brown,cyan,gold,goldenrod,green,khaki,magenta,orange,pink,plum,purple,red,salmon,skyblue,turquoise,violet,yellow],nlw);
+doplot2():=block([cc,qlist,x1,x2,y1,y2,i,val],cc:[aquamarine,beige,blue,brown,cyan,gold,goldenrod,green,khaki,magenta,orange,pink,plum,purple,red,salmon,skyblue,turquoise,violet,yellow],print("this is doplot2 "),qlist:[xr(-3.3,3.3),yr(-3.3,3.3)],y1:1,y2:3,for i from 0 thru 5 do (x1:(-3)+i,x2:x1+1,val:poly([[x1,y1],[x2,y1],[x1,y2]],fill(cc[i+1])),qlist:append(qlist,[val])),y1:-1,y2:1,for i from 0 thru 5 do (x1:(-3)+i,x2:x1+1,val:poly([[x1,y1],[x1,y2],[x2,y2]],fill(cc[i+7])),qlist:append(qlist,[val])),y1:-3,y2:-1,for i from 0 thru 5 do (x1:(-3)+i,x2:x1+1,val:poly([[x1,y1],[x2,y1],[x1,y2]],fill(cc[i+13])),qlist:append(qlist,[val])),qlist:append(qlist,[cut(all)]),apply('qdraw,qlist));
+point_types():=qdraw(xr(-2,2),yr(-4,4),label_align(c),label(["1",-1.5,3.5],["2",-0.5,3.5],["3",0.5,3.5],["4",1.5,3.5]),pts([[-1.5,2.5]],pt(1)),pts([[-0.5,2.5]],pt(2)),pts([[0.5,2.5]],pt(3)),pts([[1.5,2.5]],pt(4)),label(["5",-1.5,1.5],["6",-0.5,1.5],["7",0.5,1.5],["8",1.5,1.5]),pts([[-1.5,0.5]],pt(5)),pts([[-0.5,0.5]],pt(6)),pts([[0.5,0.5]],pt(7)),pts([[1.5,0.5]],pt(8)),label(["9",-1.5,-0.5],["10",-0.5,-0.5],["11",0.5,-0.5],["12",1.5,-0.5]),pts([[-1.5,-1.5]],pt(9)),pts([[-0.5,-1.5]],pt(10)),pts([[0.5,-1.5]],pt(11)),pts([[1.5,-1.5]],pt(12)),label(["13",-1.5,-2.5],["14",-0.5,-2.5],["15",0.5,-2.5],["16",1.5,-2.5]),pts([[-1.5,-3.5]],pt(13)),pts([[-0.5,-3.5]],pt(14)),pts([[0.5,-3.5]],pt(15)),pts([[1.5,-3.5]],pt(16)),cut(all));
+make_xygrid(Xfunc,Yfunc,Th0,Thf,Num):=block([dTh,Xgrid,Ygrid],numer:true,dTh:float((Thf-Th0)/Num),Xgrid:makelist(Xfunc(Th0+n*dTh),n,0,Num),Ygrid:makelist(Yfunc(Th0+n*dTh),n,0,Num),makelist([Xgrid[n],Ygrid[n]],n,1,Num+1));
+fll(x):=[first(x),last(x),length(x)];
+head(mylist):=block([numL,nleft:6],numL:length(mylist),rest(mylist,-(numL-nleft)));
+tail(mylist):=block([numL,nleft:6],numL:length(mylist),rest(mylist,numL-nleft));
+declare(fll,evfun);
+ratsimp:false;
+dv(fn,var):=['diff,fn,vr];
+f(x):=x^2;
+dv(f(x),x);
+ev(%);
+ev(ev(%[2]),%[1]);
+ev(ev(%[2]),'%[1]);
+ev(ev(%[2]),ev(%[1]));
+cv:'diff(fn,v,1);
+ev(subst(fn = f(x),v = x,%));
+grind(%);
+subst(fn = f(x),%o44);
+subst([fn = f(x),v = x],%o44);
+grind(%);
+ev(%o47);
+ev(ev(%o47),diff);
+cm:matrix([i,j,k],['diff(f01,v01,1),'diff(f02,v02,1),'diff(f03,v03,1)],[f01,f02,f03]);
+grind(%);
+f(x,y,z):=3*x^2*y^3+5*y^4*z^2+(-7)*z^3*x^9;
+pickapart(f(x,y,z));
+pickapart(f(x,y,z),2);
+pickapart(f(x,y,z),1);
+cm;
+grind(%);
+cm:matrix([i,j,k],['diff(fn,x,1),'diff(fn,y,1),'diff(fn,z,1)],[fpx,fpy,fpz]);
+f(x,y,z);
+subst([fn = f(x,y,z),fpx = %t62,fpy = %t61,fpz = %t60],%o65);
+subst([fn = f(x,y,z)],%o65);
+subst([fn = f(x,y,z),fpx = %t60],%o65);
+subst([fn = f(x,y,z),fpx = %t60,fpy = %t61],%o65);
+subst([fn = f(x,y,z),fpx = %t60,fpy = %t61,fpz = %t62],%o65);
+determinant(%);
+ev(ev(%),diff);
+ratsimp(%);
+ratexpand(%);
+ratsimp(%);
+expand(%);
+ratsimp(%);
+ratsimp(%);
+ev(%,x = 5,y = 3,z = 2);
+i:[1,0,0];
+j:[0,1,0];
+k:[0,0,1];
+subst([i = i,j = j,k = k],%);
+subst([i = i,j = j,k = k],%o80);
+load(eigen);
+iv:colvec([1,0,0]);
+iv:colvect([1,0,0]);
+iv:covect([1,0,0]);
+jv:covect([0,1,0]);
+kv:covect([0,0,1]);
+subst([i = iv,j = jv,k = kv],%o80);
+iv;
+grind(%o80);
+subst(i = iv,%o80);
+subst([fn = f(x,y,z),fpx = %t60,fpy = %t61,fpz = %t62],%o65);
+subst(i = iv,%);
+iv;
+%o97[1,1] = iv;
+subst(%o97[1,1] = iv,%o97);
+subst([%o97[1,2] = jv,%o97[1,3] = kv],%o97);
+determinant(%);
+ev(ev(%),diff);
+ratsimp(%);
+grind(%);
+%o104[1,1];
+ev(x = 1,y = 2,z = 3,%104[1,1]);
+subst(x = 1,y = 2,z = 3,%104[1,1]);
+subst([x = 1,y = 2,z = 3],%104[1,1]);
+%104[1,1];
+%104;
+%o104;
+subst([x = 1,y = 2,z = 3],%o104[1,1]);
+subst([x = 1,y = 2,z = 3],%o104[1,1]);
+subst([x = 1,y = 2,z = 3],%o104[1,2]);
+subst([x = 1,y = 2,z = 3],%o104[2,1]);
+subst([x = 1,y = 2,z = 3],%o104[3,1]);
+first(%o104[1,1]);
+subst(x = 2,y = -1,z = 3,%);
+subst([x = 2,y = -1,z = 3],%o118);

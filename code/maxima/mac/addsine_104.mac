@@ -1,0 +1,57 @@
+E_1:E_10*sin(w*t);
+
+E_2:E_20*sin(w*t+delta_p);
+
+E_theta:E_10*sin(w*t)+E_20*sin(w*t+delta_p);
+
+E_theta_tz:E_theta_0*sin(w*t+phi_os);
+
+t:0;
+
+E_theta;
+
+subst(0,t,E_theta);
+
+grind(%o10);
+
+E_20*sin(t*w+delta_p)+E_10*sin(t*w)$
+
+subst(0,t,E_20*sin(t*w+delta_p)+E_10*sin(t*w));
+
+E_theta;
+
+subst(0,t,E_theta);
+
+subst(0,t,first(E_theta));
+
+grind(first(E_theta));
+
+E_theta;
+
+subst(0,t,%o19);
+
+subst([t=0], E_theta);
+
+E:[x^3,y^3];
+
+H;
+
+express(E~H);
+
+E3:[x^3,y^3,z^2];
+
+H3:[3*x^4, 2*y^2, y^5];
+
+E3 ~ H3;
+
+express(%);
+
+factor(%);
+
+H3 ~ E3 ;
+
+express(%);
+
+factor(%);
+
+
