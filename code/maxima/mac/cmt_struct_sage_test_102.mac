@@ -1,200 +1,490 @@
+/* [wxMaxima: input   start ] */
 values;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 usefastarrays:true; use_fast_arrays:true;
+/* [wxMaxima: input   end   ] */
 
-/* DEFINING INFO STRUCTURES AND TABLES [HASH ARRAYS] */
 
+/* [wxMaxima: comment start ]
+DEFINING INFO STRUCTURES AND TABLES [HASH ARRAYS]
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
 defstruct(var_info(name,value,latex));
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 defstruct(fun_info(ftyp,name,fargs,body,latex));
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 usefastarrays:true;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 defstruct(var_table(count,vars));
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 defstruct(fun_table(count,funs));
+/* [wxMaxima: input   end   ] */
 
-/* MANUAL OPERATIONS USING STRUCTURES AND HASH ARRAYS */
 
+/* [wxMaxima: comment start ]
+MANUAL OPERATIONS USING STRUCTURES AND HASH ARRAYS
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
 vinfo_ch01:new(var_info);
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 vinfo_ch01@name:P_p1_s;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 vinfo_ch01@value:0.0531;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 vinfo_ch01@latex:[['math,"P_{\\scriptscriptstyle{[+1,s]}}"],['text,"P_{[+1,s]}"]];
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 assoc('math,vinfo_ch01@latex);
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 assoc('text,vinfo_ch01@latex);
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 vch01_ltx:assoc(math,vinfo_ch01@latex);
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 vch01_ltx;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 vtab_ch01:new(var_table);
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 vtab_ch01@vars:[vinfo_ch01];
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 vtab_ch01@count:1;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_Pv_z:new(fun_info);
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_Pv_z@ftyp:"FUN";
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_Pv_z@name:P_v;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_Pv_z@fargs:[z];
+/* [wxMaxima: input   end   ] */
 
-finfo_Pv_z@body:"abs(w_v)*sum(p_m*abs(a_vm(z))^2,m,minf,inf)";
 
+/* [wxMaxima: input   start ] */
+finfo_Pv_z@body:abs(w[v])*sum(p[m]*abs(a[v,m](z))^2,m,minf,inf);
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><munder altCopy="p_m"><mrow><mi>p</mi></mrow><mrow><mi>m</mi></mrow></munder><h>*</h><msup><mrow><fn><munder altCopy="a_vm"><mrow><mi>a</mi></mrow><mrow><mi>vm</mi></mrow></munder><mrow><p><mi>z</mi></p></mrow></fn></mrow><mn>2</mn></msup><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
 finfo_Pv_z@latex:"P_\\nu(z)~=~\\left| \\omega_\\nu \\right|~\\sum_{-\\infty}^{\\infty}~p_{m}~\\left|~a_{-\\nu}~(z)\\right|^2";
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 ftab_ch01:new(fun_table);
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 ftab_ch01@count:1;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 ftab_ch01@funs:[finfo_Pv_z];
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_Pdz_z:new(fun_info);
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_Pdz_z@ftyp:"FUN";
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_Pdz_z@name:P_dz;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_Pdz_z@fargs:[z];
+/* [wxMaxima: input   end   ] */
 
-finfo_Pdz_z@body:"diff(sum(q_v*p_m*abs(a_vm(z))^2,m,minf,inf),z)";
 
+/* [wxMaxima: input   start ] */
+finfo_Pdz_z@body:diff(sum(q[v]*p[m]*abs(a[v,m](z))^2,m,minf,inf),z);;;
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><munder altCopy="p_m"><mrow><mi>p</mi></mrow><mrow><mi>m</mi></mrow></munder><h>*</h><munder altCopy="q_v"><mrow><mi>q</mi></mrow><mrow><mi>v</mi></mrow></munder><h>*</h><msup><mrow><fn><munder altCopy="a_vm"><mrow><mi>a</mi></mrow><mrow><mi>vm</mi></mrow></munder><mrow><p><mi>z</mi></p></mrow></fn></mrow><mn>2</mn></msup><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
 finfo_Pdz_z@latex:"P_{dz}(z)~= ~\\left|~\\omega_\\nu~\\right|~\\sum_{-\\infty}^{\\infty}~p_{m}~\\left|~a_{-\\nu}~(z)\\right|^2";
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_S_w0:new(fun_info); finfo_S_w0@name:'finfo_S_w0;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_S_w0;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_S_w0@body:"A* sin(w_0*t+phi)";
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_S_w0@fargs: [A,w_0,t,phi];
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_S_w0@ftyp:"SYMBOLIC";
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_S_w0;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 finfo_S_w0@latex: "S(A, \\omega_0, t, \\phi)=A \\cdot sin(\\omega_0 \\cdot t + \\phi)";
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[finfo_S_w0@name]:finfo_S_w0;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs['finfo_S_w0]@latex;
+/* [wxMaxima: input   end   ] */
 
-tf01@body;
 
+/* [wxMaxima: input   start ] */
 finfo_S_w0@body;
+/* [wxMaxima: input   end   ] */
 
-fp:[['ftyp, "SYMBOLIC"],['name,'Ak_A0_kA_z],['fargs, [A_0,k_A,z]],['body, "(A_0/z)*sin(k_a*z)*exp(-%i*z/4*%pi)"],['latex, "\\frac{A_{0}}{z}\\,sin(k_a~z)~e^{\\left( \\frac{-i~\\pi~z}{4}\\right)}"] ]  ;
 
+/* [wxMaxima: input   start ] */
+fp:[['ftyp, "SYMBOLIC"],['name,'Ak_A0_kA_z],['fargs, [A_0,k_A,z]],['body, (A_0/z)*sin(k_a*z)*exp(-%i*z/4*%pi)],['latex, "\\frac{A_{0}}{z}\\,sin(k_a~z)~e^{\\left( \\frac{-i~\\pi~z}{4}\\right)}"] ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
 assoc('latex,fp);
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs['finfo_S_w0]@latex;
+/* [wxMaxima: input   end   ] */
 
-arr_funs['Ak_A0_kAz];
 
-/* DEFINING FUNCTIONS TO ADD STRUCTURES TO HASH ARRAYS USING FUNCTION 
+/* [wxMaxima: comment start ]
+DEFINING FUNCTIONS TO ADD STRUCTURES TO HASH ARRAYS USING FUNCTION 
 
 NAME AS HASH KEY FOR LOOKUP. WORKS WELL AND SEEMS FAST ENOUGH FOR TESTING
 
 COMPILE ALL CODE TO LISP ONCE IT WORKS - BETTER PERFORMANCE RESULTS
 
 ftyp FIELD - FOR NOW USE IT FOR NUMERIC OR SYMBOLIC
- */
 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
 make_finfo(fl):=new(fun_info(''assoc('ftyp, fl),''assoc('name,fl),''assoc('fargs,fl),''assoc('body,fl),''assoc('latex,fl))) ;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 add_fun(fl):=arr_funs[assoc('name,fl)]:make_finfo(fl);
+/* [wxMaxima: input   end   ] */
 
-/* ADDING ITEMS WITH add_fun  */
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'E_r_t_z_t] , ['fargs, [r_t,z,t]] , ['body, "sum(A_k(A_0,k_A,z)*E_k(r_t)*exp(%i*ω*t-γ_k*z),k,minf,inf)"] , ['latex,  "E(r_t,z,t)~=~\\sum_{k=-\\infty}^{ \\infty}A_k(A_0,k_A,z)~E_k(r_t)~e^{ \\left( i \\omega t-\\gamma_k z\\right) }"]]);
+/* [wxMaxima: comment start ]
+Average Energy and Power For Discrete Signal
+   [wxMaxima: comment end   ] */
 
+
+/* [wxMaxima: input   start ] */
+avg_energy(x,N):=(1/N)*sum(x[n],n,0,N-1); avg_power(x,N):=(1/N)*sum(x[n^2],n,0,N-1); avg_t(x,n):=avg_power(x,n);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+ADDING ITEMS WITH add_fun 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'E_r_t_z_t] , ['fargs, [r[t],z,t]] , ['body,sum(A[k](A[0],k[A],z)*E[k](r[t])*exp(%i*ω*t-γ[k]*z),k,minf,inf)] , ['latex,  "E(r[t],z[t] ,t)~=~\\sum_{k=-\\infty}^{ \\infty}A_k(A_0,k_A,z)~E_k(r_t)~e^{ \\left( i \\omega t-\\gamma_k z\\right) }"]]);
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><s>%i</s><h>*</h><mrow><p><fn><fnm>realpart</fnm><mrow><p><fn><munder altCopy="A_k"><mrow><mi>A</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="A_0"><mrow><mi>A</mi></mrow><mrow><mi>0</mi></mrow></munder><mo>,</mo><munder altCopy="k_A"><mrow><mi>k</mi></mrow><mrow><mi>A</mi></mrow></munder><mo>,</mo><mi>z</mi></p></mrow></fn></p></mrow></fn><h>*</h><mrow><p><fn><fnm>realpart</fnm><mrow><p><fn><munder altCopy="E_k"><mrow><mi>E</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="r_t"><mrow><mi>r</mi></mrow><mrow><mi>t</mi></mrow></munder></p></mrow></fn></p></mrow></fn><h>*</h><msup><mrow><s>%e</s></mrow><mrow><mi>-</mi><mi>z</mi><h>*</h><munder altCopy="γ_k"><mrow><mi>γ</mi></mrow><mrow><mi>k</mi></mrow></munder></mrow></msup><h>*</h><fn><fnm>sin</fnm><mrow><p><mi>t</mi><h>*</h><mi>ω</mi></p></mrow></fn><mi>+</mi><fn><fnm>imagpart</fnm><mrow><p><fn><munder altCopy="E_k"><mrow><mi>E</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="r_t"><mrow><mi>r</mi></mrow><mrow><mi>t</mi></mrow></munder></p></mrow></fn></p></mrow></fn><h>*</h><msup><mrow><s>%e</s></mrow><mrow><mi>-</mi><mi>z</mi><h>*</h><munder altCopy="γ_k"><mrow><mi>γ</mi></mrow><mrow><mi>k</mi></mrow></munder></mrow></msup><h>*</h><fn><fnm>cos</fnm><mrow><p><mi>t</mi><h>*</h><mi>ω</mi></p></mrow></fn></p></mrow><mi>+</mi><fn><fnm>imagpart</fnm><mrow><p><fn><munder altCopy="A_k"><mrow><mi>A</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="A_0"><mrow><mi>A</mi></mrow><mrow><mi>0</mi></mrow></munder><mo>,</mo><munder altCopy="k_A"><mrow><mi>k</mi></mrow><mrow><mi>A</mi></mrow></munder><mo>,</mo><mi>z</mi></p></mrow></fn></p></mrow></fn><h>*</h><mrow><p><fn><fnm>realpart</fnm><mrow><p><fn><munder altCopy="E_k"><mrow><mi>E</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="r_t"><mrow><mi>r</mi></mrow><mrow><mi>t</mi></mrow></munder></p></mrow></fn></p></mrow></fn><h>*</h><msup><mrow><s>%e</s></mrow><mrow><mi>-</mi><mi>z</mi><h>*</h><munder altCopy="γ_k"><mrow><mi>γ</mi></mrow><mrow><mi>k</mi></mrow></munder></mrow></msup><h>*</h><fn><fnm>cos</fnm><mrow><p><mi>t</mi><h>*</h><mi>ω</mi></p></mrow></fn><mi>-</mi><fn><fnm>imagpart</fnm><mrow><p><fn><munder altCopy="E_k"><mrow><mi>E</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="r_t"><mrow><mi>r</mi></mrow><mrow><mi>t</mi></mrow></munder></p></mrow></fn></p></mrow></fn><h>*</h><msup><mrow><s>%e</s></mrow><mrow><mi>-</mi><mi>z</mi><h>*</h><munder altCopy="γ_k"><mrow><mi>γ</mi></mrow><mrow><mi>k</mi></mrow></munder></mrow></msup><h>*</h><fn><fnm>sin</fnm><mrow><p><mi>t</mi><h>*</h><mi>ω</mi></p></mrow></fn></p></mrow></p></mrow><mi>-</mi><fn><fnm>imagpart</fnm><mrow><p><fn><munder altCopy="A_k"><mrow><mi>A</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="A_0"><mrow><mi>A</mi></mrow><mrow><mi>0</mi></mrow></munder><mo>,</mo><munder altCopy="k_A"><mrow><mi>k</mi></mrow><mrow><mi>A</mi></mrow></munder><mo>,</mo><mi>z</mi></p></mrow></fn></p></mrow></fn><h>*</h><mrow><p><fn><fnm>realpart</fnm><mrow><p><fn><munder altCopy="E_k"><mrow><mi>E</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="r_t"><mrow><mi>r</mi></mrow><mrow><mi>t</mi></mrow></munder></p></mrow></fn></p></mrow></fn><h>*</h><msup><mrow><s>%e</s></mrow><mrow><mi>-</mi><mi>z</mi><h>*</h><munder altCopy="γ_k"><mrow><mi>γ</mi></mrow><mrow><mi>k</mi></mrow></munder></mrow></msup><h>*</h><fn><fnm>sin</fnm><mrow><p><mi>t</mi><h>*</h><mi>ω</mi></p></mrow></fn><mi>+</mi><fn><fnm>imagpart</fnm><mrow><p><fn><munder altCopy="E_k"><mrow><mi>E</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="r_t"><mrow><mi>r</mi></mrow><mrow><mi>t</mi></mrow></munder></p></mrow></fn></p></mrow></fn><h>*</h><msup><mrow><s>%e</s></mrow><mrow><mi>-</mi><mi>z</mi><h>*</h><munder altCopy="γ_k"><mrow><mi>γ</mi></mrow><mrow><mi>k</mi></mrow></munder></mrow></msup><h>*</h><fn><fnm>cos</fnm><mrow><p><mi>t</mi><h>*</h><mi>ω</mi></p></mrow></fn></p></mrow><mi>+</mi><fn><fnm>realpart</fnm><mrow><p><fn><munder altCopy="A_k"><mrow><mi>A</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="A_0"><mrow><mi>A</mi></mrow><mrow><mi>0</mi></mrow></munder><mo>,</mo><munder altCopy="k_A"><mrow><mi>k</mi></mrow><mrow><mi>A</mi></mrow></munder><mo>,</mo><mi>z</mi></p></mrow></fn></p></mrow></fn><h>*</h><mrow><p><fn><fnm>realpart</fnm><mrow><p><fn><munder altCopy="E_k"><mrow><mi>E</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="r_t"><mrow><mi>r</mi></mrow><mrow><mi>t</mi></mrow></munder></p></mrow></fn></p></mrow></fn><h>*</h><msup><mrow><s>%e</s></mrow><mrow><mi>-</mi><mi>z</mi><h>*</h><munder altCopy="γ_k"><mrow><mi>γ</mi></mrow><mrow><mi>k</mi></mrow></munder></mrow></msup><h>*</h><fn><fnm>cos</fnm><mrow><p><mi>t</mi><h>*</h><mi>ω</mi></p></mrow></fn><mi>-</mi><fn><fnm>imagpart</fnm><mrow><p><fn><munder altCopy="E_k"><mrow><mi>E</mi></mrow><mrow><mi>k</mi></mrow></munder><mrow><p><munder altCopy="r_t"><mrow><mi>r</mi></mrow><mrow><mi>t</mi></mrow></munder></p></mrow></fn></p></mrow></fn><h>*</h><msup><mrow><s>%e</s></mrow><mrow><mi>-</mi><mi>z</mi><h>*</h><munder altCopy="γ_k"><mrow><mi>γ</mi></mrow><mrow><mi>k</mi></mrow></munder></mrow></msup><h>*</h><fn><fnm>sin</fnm><mrow><p><mi>t</mi><h>*</h><mi>ω</mi></p></mrow></fn></p></mrow><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
 arr_funs[E_r_t_z_t];
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[E_r_t_z_t]@name;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[E_r_t_z_t]@ftyp;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[E_r_t_z_t]@fargs;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[E_r_t_z_t]@body;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[E_r_t_z_t]@latex;
+/* [wxMaxima: input   end   ] */
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1242_A] , ['fargs, [z]] , ['body, "sum(P_vm(z), m, minf,inf)"] , ['latex, "P_v(z)=\\sum_{m=-\\infty}^{\\infty}P_{vm}(z)"]]);
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1242_A] , ['fargs, [z]] , ['body, sum(P[v,m](z), m, minf,inf)]  , ['latex, "P_v(z)=\\sum_{m=-\\infty}^{\\infty}P_{vm}(z)"]]);
+
+/* [wxMaxima: input   end   ] */
 
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1242_B] , ['fargs, [z]] , ['body, "abs(w_v)*sum(p_m*abs(a_vm(z))^2,m,minf,inf)"] , ['latex, "P^{\\left( \\nu \\right)}(z)=\\left|w_v \\right| \\sum_{m=-\\infty}^{\\infty}p_m~\\left|a_m^{\\left(\\nu\\right)}(z)\\right|^2"]]);
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1242_B] , ['fargs, [z]] , ['body, abs(w[v])*sum(p[m]*abs(a[v,m](z))^2,m,minf,inf)] , ['latex, "P^{\\left( \\nu \\right)}(z)=\\left|w_v \\right| \\sum_{m=-\\infty}^{\\infty}p_m~\\left|a_m^{\\left(\\nu\\right)}(z)\\right|^2"]]);
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[EQ_1242_B];
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[EQ_1242_B]@ftyp;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[EQ_1242_B]@name;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[EQ_1242_B]@fargs;
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
 arr_funs[EQ_1242_B]@body;
-
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'E_r_t_z_t] , ['fargs, [r_t,z,t]] , ['body, "sum(A_k(A_0,k_A,z)*E_k(r_t)*exp(%i*ω*t-γ_k*z),k,minf,inf)"] , ['latex,  "E(r_t,z,t)~=~\\sum_{k=-\\infty}^{ \\infty}A_k(A_0,k_A,z)~E_k(r_t)~e^{ \\left( i~\\omega~t-\\gamma_k z\\right) }"]]);
-
-
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'H_r_t_z_t] , ['fargs, [r_t,z,t]] , ['body, "sum(A_k(A_0,k_A,z)*H_k(r_t)*exp(%i*ω*t-γ_k*z),k,minf,inf)"] , ['latex,  "H(r_t,z,t)~=~\\sum_{k=-\\infty}^{ \\infty}A_k(A_0,k_A,z)~H_k(r_t)~e^{ \\left( i \\omega~t-\\gamma_k z\\right) }"]]);
-
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_A] , ['fargs, [I_P,N]] , ['body, "(1/2)*avg_t(E.'diff(P,t)"] , ['latex,  "\\big\\langle~I_P~\\big\\rangle=\\frac{1}{2}~\\bigg\\langle~E\\cdot\\frac{\\partial{P}}{\\partial{t}}-P\\cdot\\frac{\\partial{E}}{\\partial{t}}\\bigg\\rangle"]]);
+/* [wxMaxima: input   end   ] */
 
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_B] , ['fargs, [I_P,N]] , ['body, "avg_t(I_P,N)=(1/2)*avg_t(E.'diff(D,t)-D.'diff(E,t),N)"] , ['latex, "\\big\\langle~I_P~\\big\\rangle = \\frac{1}{2}\\bigg\\langle~E~\\cdot \\frac{\\partial{D}}{\\partial{t}}~-~D \\cdot \\frac{\\partial{E}}{\\partial{t}}~\\bigg\\rangle"]]);
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'E_r_t_z_t] , ['fargs, [r[t],z,t]] , ['body, sum(A[k](A[0],k[A],z)*E_k(r[t])*exp(%i*ω*t-γ[k]*z),k,minf,inf)] , ['latex,  "E(r_t,z,t)~=~\\sum_{k=-\\infty}^{ \\infty}A_k(A_0,k_A,z)~E_k(r_t)~e^{ \\left( i~\\omega~t-\\gamma_k z\\right) }"]]);
+;;
+/* [wxMaxima: input   end   ] */
 
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_C] , ['fargs, [I_P,N]] , ['body, "avg_t(I_P,N)=(1/4)*'realpart('conjugate(E).(%i*ω*D)-'conjugate(D).(%i*ω*E))"] , ['latex, "\\big\\langle~I_P~\\big\\rangle~=~\\frac{1}{4}~Re~\\big\\{~E^{*}~\\cdot~\\left(i~\\omega~D~\\right)~-~D^{*}~\\cdot~\\left(~i~\\omega~E~\\right)~\\big\\}"]]);
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'H_r_t_z_t] , ['fargs, [r_t,z,t]] , ['body, sum(A[k](A[0],k[A],z)*H_k(r[t])*exp(%i*ω*t-γ[k]*z),k,minf,inf)] , ['latex,  "H(r_t,z,t)~=~\\sum_{k=-\\infty}^{ \\infty}A_k(A_0,k_A,z)~H_k(r_t)~e^{ \\left( i \\omega~t-\\gamma_k z\\right) }"]]);;;
+/* [wxMaxima: input   end   ] */
 
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_D] , ['fargs, [I_P,N]] , ['body, "avg_t(I_P,N)=(1/4)*'realpart(%i*'ω*('conjugate(E).ε_bar.E+'conjugate(E)*ξ_bar.H-E.'conjugate(ε_bar).'conjugate(E)-E.'conjugate(ξ_bar).'conjugate(H)))"] , ['latex, "\\big\\langle~I_P~\\big\\rangle~=~\\frac{1}{2}~Re~\\big\\{~i~\\omega~\\left(~\\bar{\\epsilon}^{ a}~:~EE^{*}~+~\\xi~:~HE^{*}~\\right)~\\big\\}"]]);
+/* [wxMaxima: comment start ]
+TODO: CHANGE ALL body from string to expression. Use [] instead of underscore for subscripted variables
+   [wxMaxima: comment end   ] */
 
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_E] , ['fargs, [I_P,N]] , ['body, "avg_t(I_P,N)=(1/4)*'realpart(%i*ω*('conjugate(E).(ε_bar-'conjugate(ε_bar)).E+2*'conjugate(E)-E.'conjugate(ξ_bar).'conjugate(H)))"] , ['latex, "\\big\\langle~I_P~\\big\\rangle~=~\\frac{1}{4}~Re~\\big\\{~i~\\omega~\\big[~E^{*}~\\cdot~\\left(~\\bar{\\epsilon}~-~\\bar{\\epsilon}^{\\dagger}~\\right)~\\cdot~E~+~2~E^{*}~\\cdot~\\bar{\\xi}~\\cdot~H~\\big]~\\big\\}"]]);
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_A] , ['fargs, [I_P,N]] , ['body, (1/2)*avg_t(E.'diff(P,t),N) ] , ['latex,  "\\big\\langle~I_P~\\big\\rangle=\\frac{1}{2}~\\bigg\\langle~E\\cdot\\frac{\\partial{P}}{\\partial{t}}-P\\cdot\\frac{\\partial{E}}{\\partial{t}}\\bigg\\rangle"]]);
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_F] , ['fargs, [I_P,N]] , ['body, "avg_t(I_P,N)=(1/2)*'realpart(%i*ω*('conjugate(ε_bar).E.'conjugate(E))+ε_bar.H.'conjugate(E))"] , ['latex, "\\big\\langle~I_P~\\big\\rangle~=~\\frac{1}{2}~Re~\\big\\{~i~\\omega\\left(~\\bar{\\epsilon}^{  a}~:~EE^{*}~+~\\xi~:~HE^{*}~\\right)~\\big\\}" ]]);
-
-
-add_fun([['ftyp, "SYMBOLIC"] , ['name,EQ_1243_A] , ['fargs, [z]] , ['body, "'diff(sum(q_v*p_m*abs(a_vm(z))^2,m,minf,inf),z)"] , ['latex, "P_{dz}\\left(z\\right)=\\frac{\\partial}{\\partial{z}}\\sum_{m=-\\infty}^{\\infty} q_v~p_m \\left| a_m^{\\left(\\nu\\right)}\\right|^2"]]);
+/* [wxMaxima: input   end   ] */
 
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1243_B] , ['fargs, [z]] , ['body, "w_v(q_v,w,v,w_p):=q_v*(w + v*w_p)" ] , ['latex, "\\omega_{\\nu}~\\left(~q_{\\nu},\\omega~\\right)~~=~q_{\\nu}~\\left(~\\omega~+~\\nu~\\omega_p~\\right)"]]);
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_B] , ['fargs, [I_P,N]] , ['body, avg_t(I_P,N)=(1/2)*avg_t(E.'diff(D,t)-D.'diff(E,t),N)] , ['latex, "\\big\\langle~I_P~\\big\\rangle = \\frac{1}{2}\\bigg\\langle~E~\\cdot \\frac{\\partial{D}}{\\partial{t}}~-~D \\cdot \\frac{\\partial{E}}{\\partial{t}}~\\bigg\\rangle"]]);
 
-            
-
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1244_B] , ['fargs, [q_v]] , ['body, "q_v=(w_w+v*w_p)/(abs(w+v*w_p))" ] , ['latex, "q_{\\nu}=\\frac{\\omega_{\\nu}+\\nu~\\omega_p}{\\left|\\omega+\\nu\\omega_p\\right|}"]]);
-
-
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1244_C] , ['fargs, [w_v]] , ['body, "if w_v >0 then q_v=+1" ] , ['latex, "if~w_{\\nu} > 0~then~q_{\\nu}=+1"]]);
+/* [wxMaxima: input   end   ] */
 
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1244_D] , ['fargs, [w_v]] , ['body, "if w_v < 0 then q_v=-1" ] , ['latex, "if~w_{\\nu} < 0~then~q_{\\nu}=-1"]]);
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_C] , ['fargs, [I_P,N]] , ['body, avg_t(I_P,N)=(1/4)*'realpart('conjugate(E).(%i*ω*D)-'conjugate(D).(%i*ω*E))] , ['latex, "\\big\\langle~I_P~\\big\\rangle~=~\\frac{1}{4}~Re~\\big\\{~E^{*}~\\cdot~\\left(i~\\omega~D~\\right)~-~D^{*}~\\cdot~\\left(~i~\\omega~E~\\right)~\\big\\}"]]);
+
+/* [wxMaxima: input   end   ] */
 
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1245] , ['fargs, [N_m]] , ['body, "abs(N_m)=4" ] , ['latex, "if~w_{\\nu} < 0~then~q_{\\nu}=-1"]]);
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_D] , ['fargs, [I_P,N]] , ['body, avg_t(I_P,N)=(1/4)*'realpart(%i*'ω*('conjugate(E).ε_bar.E+'conjugate(E)*ξ_bar.H-E.'conjugate(ε_bar).'conjugate(E)-E.'conjugate(ξ_bar).'conjugate(H)))] , ['latex, "\\big\\langle~I_P~\\big\\rangle~=~\\frac{1}{2}~Re~\\big\\{~i~\\omega~\\left(~\\bar{\\epsilon}^{ a}~:~EE^{*}~+~\\xi~:~HE^{*}~\\right)~\\big\\}"]]);
+
+/* [wxMaxima: input   end   ] */
 
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1246] , ['fargs, [N_m]] , ['body, "P_m(z):=p_m*abs(a_vm(z))^2" ],['latex, 
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_E] , ['fargs, [I_P,N]] , ['body, avg_t(I_P,N)=(1/4)*'realpart(%i*ω*('conjugate(E).(ε_bar-'conjugate(ε_bar)).E+2*'conjugate(E)-E.'conjugate(ξ_bar).'conjugate(H)))] , ['latex, "\\big\\langle~I_P~\\big\\rangle~=~\\frac{1}{4}~Re~\\big\\{~i~\\omega~\\big[~E^{*}~\\cdot~\\left(~\\bar{\\epsilon}~-~\\bar{\\epsilon}^{\\dagger}~\\right)~\\cdot~E~+~2~E^{*}~\\cdot~\\bar{\\xi}~\\cdot~H~\\big]~\\big\\}"]]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_3217_F] , ['fargs, [I_P,N]] , ['body, avg_t(I_P,N)=(1/2)*'realpart(%i*ω*('conjugate(ε_bar).E.'conjugate(E))+ε_bar.H.'conjugate(E))] , ['latex, "\\big\\langle~I_P~\\big\\rangle~=~\\frac{1}{2}~Re~\\big\\{~i~\\omega\\left(~\\bar{\\epsilon}^{  a}~:~EE^{*}~+~\\xi~:~HE^{*}~\\right)~\\big\\}" ]]);
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,EQ_1243_A] , ['fargs, [z]] , ['body, 'diff(sum(q[v]*p[m]*abs(a[v,m](z))^2,m,minf,inf),z) ] , ['latex, "P_{dz}\\left(z\\right)=\\frac{\\partial}{\\partial{z}}\\sum_{m=-\\infty}^{\\infty} q_v~p_m \\left| a_m^{\\left(\\nu\\right)}\\right|^2"]]);
+
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><munder altCopy="p_m"><mrow><mi>p</mi></mrow><mrow><mi>m</mi></mrow></munder><h>*</h><munder altCopy="q_v"><mrow><mi>q</mi></mrow><mrow><mi>v</mi></mrow></munder><h>*</h><msup><mrow><fn><munder altCopy="a_vm"><mrow><mi>a</mi></mrow><mrow><mi>vm</mi></mrow></munder><mrow><p><mi>z</mi></p></mrow></fn></mrow><mn>2</mn></msup><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1243_B] , ['fargs, [z]] , ['body, w[v](q,w,v,p):=q[v]*(w + v*w[p]) ] , ['latex, "\\omega_{\\nu}~\\left(~q_{\\nu},\\omega~\\right)~~=~q_{\\nu}~\\left(~\\omega~+~\\nu~\\omega_p~\\right)"]]);
+
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+TODO: FIND ANOTHER WAY TO STORE THE DIVISION OPERATOR 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1244_B] , ['fargs, [q_v]] , ['body, [['left,q[v]],['right, [(w[v]+v*w[p]), 'DIV, abs(w+v*w[p]) ]]]] , ['latex, "q_{\\nu}=\\frac{\\omega_{\\nu}+\\nu~\\omega_p}{\\left|\\omega+\\nu\\omega_p\\right|}"]]);
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1244_C] , ['fargs, [w_v]] , ['body, if w[v] >0 then q_v=+1 ] , ['latex, "if~w_{\\nu} > 0~then~q_{\\nu}=+1"]]);
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1244_D] , ['fargs, [w_v]] , ['body, if w[v] < 0 then q_v=-1 ] , ['latex, "if~w_{\\nu} < 0~then~q_{\\nu}=-1"]]);
+;;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1245] , ['fargs, [N_m]] , ['body, abs(N_m)=4 ] , ['latex, "if~w_{\\nu} < 0~then~q_{\\nu}=-1"]]);
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1246] , ['fargs, [N_m]] , ['body, P[m](z):=p_m*abs(a[v,m](z))^2],['latex, 
             "P_m \\left( z \\right) = p_m~\\left| a_m^{\\left( \\nu \\right) } \\right|^2"]]);
 
-
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1247_A] , ['fargs, [z]] , ['body, "P(z):='sum(P_m(z),m,minf,inf)" ] , ['latex, "P \\left( z \\right) = \\sum_{m=-\\infty}^{\\infty}P_m \\left(z\\right)"]]);
-
-
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1247_B] , ['fargs, [z]] , ['body, "P(z):='sum(p_m*abs(a_vm(z))^2,m,minf,inf)" ] , ['latex, "P \\left( z \\right) = \\sum_{m=-\\infty}^{\\infty}p_m \\left|a_m^{\\left( \\nu \\right)} \\right|^2 \\left( z \\right)"]]);
+/* [wxMaxima: input   end   ] */
 
 
-add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1248] , ['fargs, [z]] , ['body, "D_Pz(z):='diff(sum(p_m * abs(a_vm(z))^2,m,minf,inf),z) = 0" ] , ['latex, "D_{P_z}\\left( z \\right) = \\frac{\\partial}{\\partial{z}}\\sum_{m=-\\infty}^{\\infty}\\left| a_m^{\\left( \\nu \\right)}  \\right|^2"]]);
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1247_A] , ['fargs, [z]] , ['body, P(z):=sum(P[m](z),m,minf,inf) ] , ['latex, "P \\left( z \\right) = \\sum_{m=-\\infty}^{\\infty}P_m \\left(z\\right)"]]);
 
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1247_B] , ['fargs, [z]] , ['body, P(z):=sum(p[m]*abs(a[v,m](z))^2,m,minf,inf)] , ['latex, "P \\left( z \\right) = \\sum_{m=-\\infty}^{\\infty}p_m \\left|a_m^{\\left( \\nu \\right)} \\right|^2 \\left( z \\right)"]]);
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ_1248] , ['fargs, [z]] , ['body, D[P](z):=diff(sum(p[m]*abs(a[v,m](z))^2,m,minf,inf),z) = 0 ] , ['latex, "D_{P_z}\\left( z \\right) = \\frac{\\partial}{\\partial{z}}\\sum_{m=-\\infty}^{\\infty}\\left| a_m^{\\left( \\nu \\right)}  \\right|^2"]]);
+/* [wxMaxima: input   end   ] */
 
 
 
