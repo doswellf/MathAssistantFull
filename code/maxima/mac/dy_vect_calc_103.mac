@@ -1,0 +1,103 @@
+load(eigen);
+
+load(vect);
+
+f(x,y,z):=x*y^2-y*z;
+
+diff(f,x);
+
+depends(f,[x,y,z]);
+
+diff(f,x);
+
+ev(%,diff);
+
+f:x*y^2-y*z;
+
+diff(f,x);
+
+express(grad(f));
+
+ev(%,diff);
+
+div(f);
+
+express(grad(f));
+
+ev(%,diff);
+
+div(%);
+
+express(%);
+
+ev(%,diff);
+
+div([3*x^2,2*y,0]) ;
+
+express(%);
+
+ev(%,diff);
+
+curl(x*y^2-y*z);
+
+curl([3*x^2,2*y,0]);
+
+express(%);
+
+ev(%,diff);
+
+[3*x^2, 2*z, -x];
+
+curl(%);
+
+express(%);
+
+ev(%,diff);
+
+curl([x,y,z]);
+
+express(%);
+
+ev(%,diff);
+
+ev(express(curl[x,-y,z])),diff;
+
+[y^3,x*y,-z];
+
+ev(express(curl(%))),diff;
+
+
+[x^2,2*z,-y];
+
+ev(express(curl(%))),diff;
+
+ev(express(div([2*x^3,3*x*y,3*x^2]))),diff;
+
+ev(express(div( [x,y,z]))),diff;
+
+ev(express(curl([x^2,x*y*z,-z]))),diff;
+
+ev(express(curl([y*z, -2*x*z, x*y*z]))),diff;
+
+ev(express(curl([z,-z^2,y*z]))),diff;
+
+ev(express(curl([y*z,x*z,x*z]))),diff;
+
+ev(express(curl([y, x-z, -y]))),diff;
+
+
+ev(express(div([x, y, 0]))),diff;
+
+ev(express(div([3*x^2, -6*x*y, 0]))),diff;
+
+ev(express(div( [y^3,x*y,0]))),diff;
+
+ev(express(div([x^2,2*z, -y]))),diff;
+
+ev(express(div([(4*y)/x^2, sin(y), 3]))),diff;
+
+ev(express(div([exp(x), log(x*y), exp(x*y*z)]))),diff;
+
+ 
+
+

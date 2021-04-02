@@ -1,0 +1,979 @@
+/* [wxMaxima: comment start ]
+UTEP EMPossible - EM Analysis Using FDTD
+
+Lecture 13 - The Perfectly Matched Layer (PML)
+
+Tensors
+
+Matrix/Operator - Scales and Changes Orientation Of a Vector
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+V:[V_x, V_y, V_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Multiply Vector By Scalar - Orientation Constant
+Magnitude of V will be scaled larger or smaller
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S * V;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+A Tensor - 3x3 Matrix
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M:matrix([M_11, M_12, M_13],[M21,M_22,M_23],[M_31,M_32, M33]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Multiplication Of Tensor With Vector
+Orientation May Change
+3 rows x 3 columns
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M * V;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Dot Product Of Tensor With Vector 
+3 rows x 1 column
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M . V;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reflectance From Lossy Surface - Air ⟶ Glass 
+
+N = Complex Refractive Index
+n = Ordinary Refractive Index (Real)
+κ = extinction coefficient (Imaginary ⟶ Decay)
+** Loss contributes to reflections not transmission
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+N = n + j *κ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+R = ((1-n)^2 + κ^2)/((1+n)^2 + κ^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Fresnel Equations - Reflection, Transmission and Refraction At An Interface
+
+Isotropic Case
+θ_inc = θ_ref = θ_1
+Snell's Law : n_1 * sin(θ_1) = n_2 *sin(θ_2)
+
+TE Mode ⟶ E Vector ⟂ Plane Of Incidence
+                    E Vector May Be Parallel To Interface
+
+TE Wave Polarization (Transverse Magnetic) 
+
+η_1 = impedence of material 1 (e.g. air)
+η_2 = impedence of material 2 (e.g. glass)
+
+n_1 = refractive index of material 1
+n_2 = refractive index of material 2
+
+θ_1 = angle of incidence of incoming wave = angle of reflection in material 1
+θ_2 = angle of refraction of transmitted wave in material 2 (n_1 < n_2 for air⟶glass)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+r_TE:(η_2 * cos(θ_1) - η_1 * cos(θ_2))/(η_2*cos(θ_1) + η_1*cos(θ_2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+t_TE: ( 2 * η_2 * cos(θ_1) )/(η_2*cos(θ_1) + η_1*cos(θ_2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+TE Mode ⟶ H ⟂ k_inc and H ⟂ k_ref and H ⟂ k_trn
+                     H ∥ Plane Of Incidence
+                     H never parallel to interface
+
+k_inc = wave vector k for incident wave
+k_ref = wave vector k for reflected wave
+k_trn = wave vector k for transmitted wave
+
+NOTE: THE DIFFERENCE IN MATERIAL IMPEDENCE AT THE INTERFACE CAUSES:
+    THE CHANGE IN WAVE VELOCITY AT THE INTERFACE AND IN MATERIAL #2
+    WAVE REFLECTION BACK INTO MATERIAL #1 FROM THE INTERFACE
+    CHANGE OF DIRECTION WITH TRANSMISSION ACROSS INTERFACE INTO MATERIAL #2
+    THE IMPEDENCE CHANGE DISRUPTS AND DISTORTS THE E AND H FIELDS 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxwell's Curl Equations IN Anisotropic Media
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[E_x, E_y, E_z]; H:[H_x,H_y, H_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+PML Material is Anisotropic
+Relative Permeability μ_r and Relative Permittivity ε_r  become tensors
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r:matrix([ε_xx, ε_xy, ε_xz], [ε_yx, ε_yy, ε_yz],[ε_zx, ε_zy, ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r:matrix([μ_xx, μ_xy, μ_xz], [μ_yx, μ_yy, μ_yz],[μ_zx, μ_zy, μ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+faraday:express(curl(H) = %i*ω*ε_0 * ε_r  * E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ampere:express(curl(E)) = %i*ω*μ_0 * μ_r  * E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_curl:matrix([0, -Dz, Dy],[ Dz, 0, -Dx],[-Dy, Dx,0]) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxima doesn't natively allow partial application of the diff() function
+This section is for pedagogical purposes
+Showing Explicit Tensor-Vector Equations 
+D_z ⟶ ∂/∂z
+D_y ⟶ ∂/∂y
+D_x ⟶ ∂/∂x
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_faraday:M_curl * transpose(H) = %i * ω*ε_0* ε_r* transpose(E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_ampere:M_curl * transpose(E) = %i * ω*μ_0* μ_r*transpose(H);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Isotropic Material Tensor
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+perm_iso:matrix([ε_iso, 0,0],[0,ε_iso,0],[0,0,ε_iso]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Uniaxial Anisotropy
+ord = ordinary wave
+ext = extraordinary wave
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+perm_uniaxial_aniso:matrix([ ε_ord, 0,0],[0,ε_ord,0],[0,0,ε_ext]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Biaxial Anisotropy
+3 different permittivity values on diagonal
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+perm_biaxial_aniso:matrix([ ε_a, 0,0],[0,ε_b,0],[0,0,ε_c]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Incorporating Loss Into Maxwell's Equations
+
+Two ways to incorporate loss:
+    At low frequencies and/or for time domain the (ε_r,σ) system is used
+    ∇xH = J + j*ω*D = σ*E + j*ω*E = (σ + j*ω*ε_r_norm)*E {Used for FDTD}
+
+    At high frequencies and in the frequency domain the (ε_r', ε_r'') system is used
+    ∇ x H = j*ω*D = j*ω*ε_r*E
+
+Parameters are related using
+
+ε_r_norm = ε_r + (σ/(j*ω))
+
+Using both complex ε_r and conductivity σ does not make sense and is redundant
+
+Generalize The Matrix Equations To Incorporate Loss
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+prmt_with_loss:matrix([ε_x + σ_x_E/(%i*ω) , 0,0],[0,ε_y + σ_y_E/(%i*ω) , 0], [0,0,ε_z + σ_z_E/(%i*ω)] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+prmb_with_loss:matrix([μ_x + σ_x_H/(%i*ω) , 0,0],[0,μ_y + σ_y_H/(%i*ω) , 0], [0,0,μ_z + σ_z_H/(%i*ω)] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+faraday_lossy:M_curl*transpose(H) = j*ω*ε_0 * prmt_with_loss*transpose(E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ampere_lossy:M_curl*transpose(E) = j*ω*μ_0 * prmb_with_loss*transpose(H);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Refraction Into Diagonally Anisotropic Materials
+
+sin(θ_1) = sqrt(b*c) * sin(θ_2) where a,b,c are on the diagonal
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_101:sin(θ_1) = sqrt(b*c)*sin(θ_2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reflection from the incident surface of a diagonally anisotropic material
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(r_TE, r_TM);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_102:[ r_TE = (sqrt(a) * cos(θ_1) - sqrt(b) * cos(θ_2)) / (sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)), r_TM=(-sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)) / (sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Notes On a Single Interface
+
+Change of impedence that causes reflections (and refraction)
+Snell's Law gives only the angle of transmission
+Angle of transmission & reflection does not depend on polarization (TM,TE)
+Fresnel equations give the amount of light reflected and transmitted
+Amount of light reflected and transmitted depends on polarization
+
+The Uniaxial Perfectly Matched Layer (UPML)
+
+Don't want scattered waves to reflect back into the grid or re-enter from the other side
+Use ε_r_tilde = ε_r' + jε_r''
+Adjust loss using imaginary part jε_r'' 
+Match impedence of PML to grid (problem space) by adjusting ε_r'
+
+Fresnel equations reveal that reflections caSeparate Faradays Law Into 3 coupled PDE'sn only be prevented at
+    one frequency
+    one angle of incidence
+    one polarization (TE or TM)
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(r_TE, R_TM);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_103:r_TE = (η_2 * cos(θ_1) - η_1 * cos(θ_2)) / ( η_2 * cos(θ_1) + η_2 * cos(θ_2))   ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rte_01:subst(0, r_TE, utep_fdtd_13_103);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(rte_01, η_2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_104:r_TM = (η_2 * cos(θ_2) - η_1 * cos(θ_1)) / ( η_1 * cos(θ_1) + η_2 * cos(θ_2))   ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rtm_01:subst(0, r_TM, utep_fdtd_13_104);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(rtm_01, η_2 );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+need η_1 = η_2 for all angles, polarizations, and all frequencies
+
+Make PML anisotropic to get 0% reflection 100% transmission for all angles, frequencies, polarizatoins
+
+Math the grid impedence to the impedence of the absorbing region perfectly
+
+η = sqrt(μ/ε) at all locations on the incident interface of the PML 
+
+Ensure perfectly matched impedence matching the free-space impedence (air) 
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(μ_r,r_TE, r_TM);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_105:[s] = [μ_r], [s] = matrix([a,0,0],[0,b,0],[0,0,c]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Design Anisotropic Matrerial For Zero Reflection
+
+Set sqrt(b*c) = 1 Then
+
+sin(θ_1) = sin(θ_2) ⟶ No Refraction!
+
+Then the reflection coefficients are no longer angle-dependent
+
+Then the reflection coefficients reduce to 
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_106:[θ_1 = θ_2,r_TE = (sqrt(a) * cos(θ_1) - sqrt(b) * cos(θ_2)) / (sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)), r_TM=(-sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)) / (sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_01:subst(θ_2=θ_1, second(utep_fdtd_13_106));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_02:radcan(an_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_03:subst(θ_2=θ_1, third(utep_fdtd_13_106));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_04:radcan(an_03);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Set a = b and the reflection equations are simplified 
+Reflection is always zero for any frequency, angle of incidence or polarization!
+
+The necessary condtions for zero reflection under any conditions are:
+    sqrt(b*c) = 1
+    a = b
+
+Now set an_02 and an_04 equal to zero
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_05: subst(a,b, an_02);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_06: subst(a,b, an_04);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_07:sqrt(b*c) = 1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_08:radcan(an_07)/sqrt(c);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_09:(an_08^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now write the PML in terms of one parameter s_z
+This is a wave travelling in the +z direction hitting one interface
+s_z has 2 components, real for impedence, imaginary to cause loss
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+s_z: α-%i*β;sz:matrix([s_z,0,0],[0,s_z,0],[0,0,1/s_z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Require PML along all borders. This requires 2 other tensors for the x and y directions
+Multiply 3 directional matrices to get the full matrix for the UPML
+PML Regions will overlap in the corners
+Sx, Sy, Sz are 1 in the problem space, ≠ 1 in the PML
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(s_z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sx:matrix([1/s_x,0,0],[0,s_x,0],[0,0,s_x]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sy:matrix([s_y,0,0],[0,1/s_y,0],[0,0,s_y]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sz:matrix([s_z,0,0],[0,s_z,0],[0,0,1/s_z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+s:sx*sy*sz;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxwell's Equations Modified For UPML
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r:matrix([ε, 0,0],[0,ε,0],[0,0,ε]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r:matrix([μ, 0,0],[0,μ,0],[0,0,μ]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(E)) = k_0 * μ_r * s*H;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(H)) = k_0 * ε_r * s*E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Move s over to multiply the curl operation by the reciprocal of s
+Use the curl operator matrix in place of the curl operator itself
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sr:matrix([1/row(s,1)[1][1],0,0],[0,1/row(s,2)[1][2], 0],[0,0,1/row(s,3)[1][3]]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here Dx, Dy, Dz stand for ∂/∂x,∂/∂y,∂/∂z because maxima doesn't
+handle currying of the diff operator/function
+Note use of dot operator instead of * for standard multiplication
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cop: sr . M_curl;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The factors s_x, s_y, s_z are stretching the coordinates into complex space
+Inside the z PML s_x = s_y = 1 except at the extreme corners with overlap
+Inside the y PML s_x = s_z = 1 except at the extreme corners with overlap
+Inside the x PML s_z = s_y = 1 except at the extreme corners with overlap
+
+The UPML and SC-PML have nearly identical performance w.r.t all parameters
+
+Calculating the PML Parameters
+Introduce fictitious conductivity to assist in modelling the loss
+Inside the grid         σ_x, σ_y, σ_z = 0 (no loss)
+Outside the grid      σ_x ≠ 0, σ_y ≠ 0, σ_z ≠ 0
+Grading fictitious conductivity from zero at boundary increasing outward
+
+Borrow method of incorporting loss into complex permittivity using conductivity
+
+L_x is width of PML in x direction, x is position within pml
+x/L_x ratio will go from zero to 1 as x ⟶ boundary to outer edge of  PML
+Raising to power of 3 gives a curvature to the ratio over L_x
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ_x(x):=ε_0/(2*dt) *(x/L_x)^3; s_x(x):=1 + σ_x(x) / (%i* ω*ε_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ_y(y):=ε_0/(2*dt) *(y/L_y)^3; s_y(y):=1 + σ_y(y) / (%i* ω*ε_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ_z(z):=ε_0/(2*dt) *(z/L_z)^3; s_z(z):=1 + σ_z(z) / (%i* ω*ε_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Build σ_x and σ_y arrays with tapered loss increasing at the inner edge of the PML
+
+nx = 1,2,3, ...
+ny = 1,2,3, ...
+nz = 1,2,3,...
+
+Within PML 
+    0 < nx/NXLO ≤ 1
+    0 < ny/NYLO ≤ 1
+    0 < nz/NZLO ≤ 1
+
+x / L_x ≅ nx / NXLO = nx / NXHI
+y / L_y ≅ ny / NYLO = ny / NYXHI
+z / L_z ≅ nz / NZLO = nz / NZHI
+
+NXLO is width of PML on x-low side
+NXHI is width of PML on x-high side
+NYLO is width of PML on y-low side
+NYHI is width of PML on y-high side
+NZLO is width of PML on z-low side
+NZHI is width of PML on z-high side
+
+Maxwell's Equations In The Frequency Domain Without PML
+
+∇ x E(ω) = -jωμ_0[μ_r]H(ω)
+∇ x H(ω) = σE(ω) + jωD(ω) where D(ω) = ε_0[ε_r]E(ω)
+
+Incorporate the PML independently of actual materials modelled using  frequency-domain Maxwell's Equations
+
+∇ x E(ω) = -jωμ_0[μ_r][s]H(ω)
+∇ x H(ω) = σE(ω) + jω[s]D(ω) where D(ω) = ε_0[ε_r]E(ω)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_n: sqrt(ε_0/μ_0)*E; D_n:1/sqrt(μ_0*ε_0) * E; c_0 = 1/sqrt(μ_0*ε_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxwell's Equations with PML and Normalized Fields
+
+∇ x E_n(ω) = -jω * ([μ_r]/c_0)*[s] * H(ω)
+∇ x H(ω) = η_0 * σ* g*E_n(ω) + (jω/c_0) *[s]  * D_n(ω)
+D_n(ω) = [ε_r] * E_n(ω)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+En(ω):=[En_x(ω), En_y(ω), En_z(ω) ];H(ω):=[H_x(ω), H_y(ω), H_z(ω) ];Dn(ω):=[Dn_x(ω), Dn_y(ω), Dn_z(ω) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_curl;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r:matrix([μ_xx, μ_xy, μ_xz],[μ_yx, μ_yy, μ_yz], [μ_zx, μ_zy, μ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r:matrix([ε_xx, ε_xy, ε_xz],[ε_yx, ε_yy, ε_yz], [ε_zx, ε_zy, ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ:matrix([σ_xx, σ_xy, σ_xz],[σ_yx, σ_yy, σ_yz], [σ_zx, σ_zy, σ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+s;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+faraday_with_pml:M_curl * transpose(En(ω)) = -%i*ω*(1/c_0) * μ_r * s * transpose(H(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ampere_with_pml:M_curl * H(ω) = η_0 * σ * transpose(En(ω)) + (((%i*ω)/c_0) * s * transpose(Dn(ω)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_with_pml:transpose(Dn(ω)) = ε_r * transpose(En(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Assume Only Diagonal Tensors
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r_diag:matrix([ε_xx, 0,0],[0,ε_yy,0],[0,0,ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r_diag:matrix([u_xx, 0,0],[0,u_yy,0],[0,0,u_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ_diag:matrix([σ_xx, 0,0],[0,σ_yy,0],[0,0,σ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_diag_pml:M_curl * transpose(En(ω)) = -%i*ω*(1/c_0) * μ_r_diag * s * transpose(H(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_diag_pml:M_curl * H(ω) = η_0 * σ_diag * transpose(En(ω)) + (((%i*ω)/c_0) * s * transpose(Dn(ω)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_diag_pml:transpose(Dn(ω)) = ε_r_diag * transpose(En(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dfdp_01:M_curl . transpose(En(ω)) = (-%i*ω)*(1/c_0) . μ_r_diag . s .  transpose(H(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_pml_almost:psubst(
+        [Dy*En_z(ω)='diff(En_z(ω), y), 
+        Dz*En_y(ω)='diff(En_y(ω),z) ,
+        Dz*En_x(ω)='diff(En_x(ω),z) ,
+        Dz*En_y(ω)='diff(En_y(ω),z)  ,       
+        Dx*En_y(ω)='diff(En_y(ω),x)    ,
+        Dy*En_x(ω)='diff(En_x(ω),y),
+        Dx*En_z(ω)='diff(En_z(ω),x)
+    ] ,dfdp_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Separate Faradays Law Into 3 coupled PDE's
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_pml_x:row(lhs(far_pml_almost),1)[1][1] = %i*ω*(1/c_0) * row(part(part(part(rhs(far_pml_almost),1),2),2),1)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_pml_y:row(lhs(far_pml_almost),2)[1][1] = %i*ω*(1/c_0) * row(part(part(part(rhs(far_pml_almost),1),2),2),2)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_pml_z:row(lhs(far_pml_almost),3)[1][1] = %i*ω*(1/c_0) * row(part(part(part(rhs(far_pml_almost),1),2),2),3)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Separate Ampere's Law Into 3 coupled PDE's
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dapn_01:M_curl . H(ω) = η_0 . σ_diag . transpose(En(ω)) + (((%i*ω)/c_0) . s . transpose(Dn(ω)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+apx_01:row(lhs(dapn_01),1)[1][1] = %i*ω*(1/c_0)  . row(part(part(part(rhs(dapn_01),1),2),2),1)[1][1] + η_0*part(part(part(rhs(dapn_01),2),2),1)[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_pml_x:psubst( 
+    [Dy*H_z(ω)='diff(H_z(ω),y) ,
+    Dz*H_y(ω)='diff(H_y(ω),z)], apx_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+apy_01:row(lhs(dapn_01),2)[1][1] = %i*ω*(1/c_0)  . row(part(part(part(rhs(dapn_01),1),2),2),2)[1][1] + η_0*part(part(part(rhs(dapn_01),2),2),2)[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_pml_y:psubst( 
+    [Dz*H_x(ω)='diff(H_x(ω),z) ,
+    Dx*H_z(ω)='diff(H_z(ω),x)], apy_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+apz_01:row(lhs(dapn_01),3)[1][1] = %i*ω*(1/c_0)  . row(part(part(part(rhs(dapn_01),1),2),2),3)[1][1] + η_0*part(part(part(rhs(dapn_01),2),2),3)[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_pml_z:psubst( 
+    [Dx*H_y(ω)='diff(H_y(ω),x) ,
+    Dy*H_x(ω)='diff(H_x(ω),y)], apz_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Separate The Constitutive Relations Into 3 Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crpn_01:transpose(Dn(ω)) = ε_r_diag . transpose(En(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_x:row(lhs(crpn_01),1)[1][1] = row(rhs(crpn_01),1)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_y:row(lhs(crpn_01),2)[1][1] = row(rhs(crpn_01),2)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_z:row(lhs(crpn_01),3)[1][1] = row(rhs(crpn_01),3)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Substitute Expressions for s_x, s_y, s_z Into The Curl Equations
+Will take some work to get maxima to look like the slides
+
+They are correct mathematically but I will create equations
+that look like the slide formats below until I can simplify these properly
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_s_x:psubst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], amp_pml_x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_s_y:psubst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], amp_pml_y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_s_z:psubst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], amp_pml_z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_s_x:subst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], far_pml_x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_s_y:subst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], far_pml_y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_s_z:subst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], far_pml_z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Equations with s_x, s_y, and s_z Expressions Substituted For Variables
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_200:[ σ_x=(x^3*ε_0)/(2*L_x^3*dt),  σ_y = (y^3*ε_0)/(2*L_y^3*dt), σ_z=(z^3*ε_0)/(2*L_z^3*dt),s_x = 1 + (σ_x/(%i*ω*ε_0)) , s_y = 1 + (σ_y/(%i*ω*ε_0)), s_z=1 + (σ_z/(%i*ω*ε_0)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Turning off simplfication to get the desired presentation format
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Manual Entry To Match The Slides For Pedagogical Purposes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_x_sub: %i*ω * radcan(1/rhs(utep_fdtd_13_200[1]))  .  rhs(utep_fdtd_13_200[2]) . rhs(utep_fdtd_13_200[1]) * transpose(H(ω))  = -(c_0/μ_xx) *( 'diff(En_z(ω),y) - 'diff(En_y(ω), z) ) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_y_sub: %i*ω * rhs(utep_fdtd_13_200[1])  . radcan(1/rhs(utep_fdtd_13_200[2])) . rhs(utep_fdtd_13_200[1]) * transpose(H(ω))  = -(c_0/μ_xx) *( 'diff(En_x(ω),z) - 'diff(En_z(ω), x) )  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_y_sub: %i*ω * rhs(utep_fdtd_13_200[1])  * rhs(utep_fdtd_13_200[2]) * radcan(1/rhs(utep_fdtd_13_200[1])) * transpose(H(ω))  = -(c_0/μ_xx) *( 'diff(En_y(ω),x) - 'diff(En_x(ω),y) )  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_x_sub:%i*ω * radcan(1/rhs(utep_fdtd_13_200[1]))  .  rhs(utep_fdtd_13_200[2]) . rhs(utep_fdtd_13_200[1]) * transpose(Dn(ω))  =  c_0 *( 'diff(H_y(ω),x) - 'diff(H_x(ω), y) )  - (σ_xx/ε_0) * En_x(ω) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_y_sub:%i*ω * rhs(utep_fdtd_13_200[1])  . radcan(1/rhs(utep_fdtd_13_200[2])) . rhs(utep_fdtd_13_200[1]) * transpose(Dn(ω))  =  c_0 *( 'diff(H_x(ω),z) - 'diff(H_z(ω), x) )  - (σ_yy/ε_0) * En_y(ω) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_y_sub:%i*ω * rhs(utep_fdtd_13_200[1])  . rhs(utep_fdtd_13_200[2]) .radcan(1/ rhs(utep_fdtd_13_200[1])) * transpose(Dn(ω))  =  c_0 *( 'diff(H_y(ω),x) - 'diff(H_x(ω), y) )  - (σ_zz/ε_0) * En_z(ω) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_diag_pml;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_diag_pml_x:row(lhs(crel_diag_pml),1)[1][1]  = part(row(part(rhs(crel_diag_pml),1),1),1)[1] * row(part(rhs(crel_diag_pml),2),1)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_diag_pml_x:row(lhs(crel_diag_pml),2)[1][1]  = part(row(part(rhs(crel_diag_pml),1),2),1)[2] * row(part(rhs(crel_diag_pml),2),2)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_diag_pml_x:row(lhs(crel_diag_pml),3)[1][1]  = part(row(part(rhs(crel_diag_pml),1),3),1)[3] * row(part(rhs(crel_diag_pml),2),3)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+WARNING! PML DOES NOT HANDLE NUMERICAL BOUNDARY CONDITIONS!!!
+   [wxMaxima: comment end   ] */
+
+
+

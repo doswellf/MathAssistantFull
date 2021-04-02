@@ -1,0 +1,48 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 19.07.0 ] */
+/* [wxMaxima: comment start ]
+NPTel Nonlinear Optics Lecture 16
+Nonlinear Maxwell's Equations
+Theory Of Second Harmonic Generation
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_16_101:[D_v=ε_0*E_v+P_v,P_v=P_L_v+P_N_v,P_L_v=ε_0*Χ_1*E_v,D_v=ε_0*E_v+ε_0*Χ_1*E_v+P_N_v,D_v=ε_0*(1+ Χ_1)*E_v+P_N_v,D_v=ε*E_v+P_N_v];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_16_102:[curl(E)=-'diff(B_V,t),curl(H)='diff(D_v,t),curl(curl(E_v))=-diff(curl(B_v),t),curl(curl(E_v))=-μ_0*'diff(curl(H_v),t) ,curl(curl(E_v)=-μ_0*'diff(D_v,t,2)),grad(div(E_v))-laplacian(E_v)=-μ_0*ε*'diff(E_v,t,2)-μ_0*'diff(P_N_v,t,2),div(E_v)=0,laplacian(E_v)-μ_0*ε*'diff(E_v,t,2)=μ_0*'diff(P_N_v,t,2),D_v=ε*E_v+P_N_v ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_16_103:[laplacian(E_v_ω) - μ_0*ε*'diff(E_v_ω,t,2),laplacian(E_v)=μ_0*'diff(P_N_v_ω,t,2 ),laplacian(E_v_2ω)-μ_0*ε*'diff(E_v_2ω,t,2), laplacian(E_v_2ω)-μ0*ε*'diff(E_v_2ω,t,2),laplacian(E_v_2ω)=μ0*'diff(P_N_v_2ω,t,2) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Theory Of Second Harmonic Generation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_16_104:[E_ω=(1/2)*(E_1_norm*exp(%i*(k_1*z-ω*t+φ_1)) + C_cplx),E_ω=(1/2)*(E_1_norm*exp(%i*φ_1)*exp(%i*(k_1*z-ω*t)) + C_cplx),E_1=E_1_norm*exp(%i*φ_1) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_16_105:[E_ω=(1/2)*(E_1*exp(%i*(k_1*z-ω*t)) + C_cplx),E_2ω=(1/2)*(E_2*exp(%i*(k_2*z-2*ω*t)) + C_cplx)];
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 19.07.0"$

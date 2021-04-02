@@ -1,0 +1,165 @@
+/* STRING SUBSTITUTION WILL DO WHAT IS NEEDED HERE
+EXPRESSION SUBSTITUTION MAY EVENTUALLY WORK 
+BUT MORE CONTROL OF EXPRESSION EVALUATION IS REQUIRED
+A STEP BY STEP SUBSTITUTION FORMAT IS REQUIRED FOR PUBLISHED OUTPUT 
+MORE EXPERIMENTS WITH ACTUAL MAXIMA EXPRESSION HANDLING WILL GOT HERE 
+
+MACRO TO CREATE A FUNCTION VIA DEFINE IS WORKING
+SO FAR CAN ONLY SUBSTITUTE USING fundef and  part and pickapart 
+
+SOLUTION MAY BE TO KEEP LISTS AND HASH ARRAYS OF SMALL PARTS
+SUBSTITUTE EXPRESSIONS IN SMALL PARTS
+THEN ASSEMBLE COMPLEX EXPRESSION FROM PARTS
+
+STRING SUBSTITUTION SEEMS MUCH SIMPLER AT THIS POINT 
+USE ARRAYS, LISTS AND STRUCTURES TO HOLD SMALL PARTS 
+BUILD COMPLETE STRING FOR EQUATION THEN EVALUATE TO DECLARE MAXIMA FUNCTION
+
+MACROEXPAND MAY WORK AS WELL
+ */
+
+a_vm(v,k,z,t):=exp(%i*(k*z-v*t));
+
+Pz(m,v,k,z,t,p_m):=sum(p_m*abs(a_vm(v,k,z,t))^2,m,minf,inf);
+
+D_Pz(m,v,k,z,t,p_m):='diff(sum(p_m*abs(a_vm(v,k,z,t))^2,m,minf,inf),z);
+
+MD_Pz(m,v,k,z,t,p_m)::='diff(sum(p_m*abs(a_vm(v,k,z,t))^2,m,minf,inf),z);
+
+fundef(M_D_Pz);
+
+grind(D_Pz);
+
+pickapart(grind(D_Pz),1);"'diff(sum(p_m*abs(a_vm(v,k,z,t))^2,m,minf,inf),z)";
+
+subst(exp(%i*(k*z-v*t)), a_vm(v,k,z,t),grind(D_Pz));
+
+rhs(D_Pz(m,v,k,z,t,pm));
+
+a_vm(1/689e-9,3,2e-3,30);
+
+a_vm(v,k,z,t);
+
+part(part(a_vm(v,k,z,t),2),2);
+
+part(a_vm(v,k,z,t),1);
+
+part(a_vm(v,k,z,t),2);
+
+dispfun(a_vm);
+
+fundef(a_vm);
+
+rhs(fundef(a_vm));
+
+pickapart(a_vm(v,k,z,t),0);
+
+%t30;
+
+%t31;
+
+%t33;
+
+ratsubst(abs(rhs(fundef(a_vm))) ,a_vm(v,k,z,t),  p_m*abs(a_vm(v,k,z,t) )^2 ) ;
+
+ldisp(rhs(fundef(a_vm)));
+
+ssubst("exp(%i*(k*z-v*t))","a_vm(v,k,z,t)" , "diff(sum(p_m*abs(a_vm(v,k,z,t))^2,m,minf,inf),z" );
+
+buildq ([e: [a, b, c]], foo (x, e, y));
+
+ buildq ([e: [a, b, c]], bar (x, splice (e), y));
+
+build_eqn(arglist,bodlist)::= buildq([arglist,bodlist], define(D_Pz(splice(arglist)),splice(bodlist) ) );
+
+build_eqn([m,v,k,z,t,p_m],["'diff(sum(p_m*abs(a_vm(v,k,z,t))^2,m,minf,inf),z)"]);
+
+ev(%o4);
+
+make_eqn(nl,al,bl)::=buildq([nl,al,bl], define(splice(nl) (splice(al)) ,splice(bl) ));
+
+simp:true;
+
+/* MODAL AMPLITUDE NUMBERS MAY BE NEGATIVE BUT MAXIMA CAN'T HANDLE NEGATIVE INDICES
+CREATE ARRAYS WITH INDICES 2X RANGE AND MAP  */
+
+array(a,10,10);
+
+arrays;
+
+/* CHANGE make_eqn TO TAKE A LIST OF LISTS AS THE LAST ARGUMENT
+TRY TO PREVENT EVALUATION AND SIMPLIFICATION BY BREAKING UP THE EXPRESSION 
+IF THAT FAILS, GO BACK TO USING A STRING TO HOLD THE WORKING CODE */
+
+make_eqn([T_D_z], [m,v,k,z,t,parity],[diff(sum(parity[m]*abs(a[v,m](v,k,z,t))^2,m,minf,inf),z)] );
+
+ev(%);
+
+functions;
+
+array(parity,1);
+
+parity[0]:-1;parity[1]:1;
+
+T_D_z(1,1/689e-9, 0.74, k, 30,parity);
+
+make_eqns(lol):=(map(make_eqn,lol)) ;
+
+apply(ev,make_eqns([ [[a],[b],[c]], [[d],[e],[f]], [[m],[n],[o]] ])) ;
+
+ev(%);
+
+apply (define ,  [apply(f, [a,b]),  a+b] );
+
+
+apply(define,[apply (f, [a,b]), a+b]);
+
+apply(sum, [m^2,m,-5,5] );
+
+apsum(sl):=apply(sum, sl);
+
+map(apsum, [[m^2,m,-5,5],[n/2,n,-10,15]]);
+
+/*  */
+
+/* Robert Dodier's Fix - Use [] for subscripts instead of underscore
+Sum was asking because it thought a_vm and p_m were constant and
+did not see them as dependent on v and m */
+
+make_eqn ([T_D_z] , [a,m, v, k, z, t, p], ['diff (sum (p[m]*abs(a[v, m](v, k, z, t))^2, m, 0,1), z)]);
+
+grind(%);
+
+ev(%o74);
+
+functions;
+
+T_D_z(1,1/689e-9, 1.2, z, 30, parity);
+
+ev(%);
+
+float(%);
+
+typeof (expr) := block ([q],
+        if numberp (expr)
+        then return ('algebraic),
+        if not atom (expr)
+        then return (maplist ('typeof, expr)),
+        q: get (expr, 'type),
+        if q=false
+        then errcatch (error(expr,"is not numeric.")) else q)$
+
+
+typeof(3);
+
+typeof(m);
+
+parity[0];
+
+subvar(parity,0);
+
+p
+
+i
+
+

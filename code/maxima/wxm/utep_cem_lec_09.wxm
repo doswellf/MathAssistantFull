@@ -1,0 +1,774 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: comment start ]
+EMPossible - Computational Elecctromagnetics
+
+Lecture 9 - Finite Differences
+
+Review Of Linear Algebra
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect); load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+System Of Linear Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sleq:[    a_11*x + a_12 * y + a_13*z+ a_14*w=b_1, 
+            a_21*x + a_22 * y + a_23*z+ a_24*w=b_2,
+            a_31*x + a_32 * y + a_33*z+ a_34*w=b_3,
+            a_41*x + a_42 * y + a_43*z+ a_44*w=b_4 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Matrix Representation Of Linear Equations
+
+Ax=b ⟶ [A][x]=[b] ⟶ M_a . transpose(M_x) = b
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_a:matrix(
+        [a_11,a_12,a_13,a_14],
+        [a_21,a_22,a_23,a_24],
+        [a_31,a_32,a_33,a_34],    
+        [a_41,a_42,a_43,a_44]   
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_x:[x,y,z,w];
+b:[b_1,b_2,b_3,b_4];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+meqn:M_a*transpose(M_x)=transpose(b);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+siimp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Interpretation Of Matrices
+
+Look at rows as equations for specific variables in the equations
+This does not have a mathematical basis - used for insight here
+
+Equation for x ⟶ row #1 [a_11 a_12 A_13] 
+Equation for y ⟶ row #2 [a_21 a_22 A_23] 
+Equation for z ⟶ row #3 [a_31 a_32 A_33] 
+
+Look a columns as relation of one variable to another
+Row #1
+    Column #1 ⟶ How is something related to x? ⟶ How x is related to x
+    Column #2 ⟶ How is something related to x? ⟶ How y is related to x
+    Column #3 ⟶ How is something related to y? ⟶ How y is related to z
+
+Row #3
+    Column #2 ⟶ How is something related to y? ⟶ How y is related to x
+
+From Linear Algebra with Gilbert Strang
+
+x * [col#1] + y * [col#2] + z[col#3] = b
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_a:matrix([a_11, a_12, a_13],[a_21,a_22, a_23],[a_31,a_32,a_33]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Matrix Algebra
+
+    Commutative Laws        Associative Laws                Distributive Laws
+    AB ≠ BA                         (AB)C=A(BC)                     A(B+C)=AB + AC
+    A + B = B + A           (A+B) + c = A + (B+C)         (A+B)C = AC + BC
+
+Multiplication By Scalar                    Addition With Scalar
+    α(A+B)=αA +  αB                          α + A = ?
+α(AB) = (αA)B = A(αB)                       αI + A = α+a_nn only on diagonals
+
+Matrix Inverses and Transposes
+invert(invert(A) = A                      
+invert(A*B) = invert(B)*invert(A)
+transpose(transpose(A)) = A 
+transpose(A+B) = transpose(A) + transpose(B)
+transpose(A*B) = transpose(B) * transpose(A)
+invert(transpose(A)) = transpose(invert(A))
+
+Manipulating Matrix Equations
+
+Divide both sides by a matrix on the right
+
+(A + B) * C = D + E                                 Starting Equation
+(A+B)*C*invert(C) = (D+E)*invert(C)      Post-multiply by invert(C)
+A + B = (D + E) * invert(C)                     C*invert(C) = I
+
+Zero Matrix 
+
+0 . A = A . 0 = 0
+0 + A = A + 0 = A
+A - A = 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Z_0:matrix([0,0,0], [0,0,0] , [0,0,0]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Identity Matrix
+
+I * A = A * I = A
+invert(A) * A = A * invert(A) = I
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+I_M:diagmatrix(3,1);ident(3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Finite Differences
+
+2nd order accurate first-order derivative
+Finite Computer Memory ⟶ Store value of derivative at discrete points
+Sweet spot ⟶ points spaced enough & calculation accurate enough
+
+go from ∂f/∂x ⟶ Δf / Δx 
+
+Central Difference gives slope at point f_1.5 between f_1 and f_2
+∂f_1.5/∂x ≅ (f_2  - f_1) / Δx
+
+Backward Finite Difference      ∂f_2/∂x ≅ f_2-f_1/ Δx
+
+Forward Finite Difference     ∂f_1/∂x ≅ f_2-f_1/ Δx
+
+Generalized Finite Difference
+
+Derivative of f of any order can be approximated by a linear sum
+of known points of the function 
+
+Any linear operation on f can be approximated by a linear sum
+of known points of that function
+
+∂^n f/∂x^n = Σ_i a_i*f_i        L{F} ≅ Σ_i a_i*f_ui
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Calculate Coefficients of Finite Differences
+
+Choose the order of accuracy required
+
+Expand f in the interval where the finite-difference has to be approximated
+The function is expanded into a polynomial of order N (Think Taylor Series)
+Write polynomial for every point to be used in the difference approximation
+
+f(x_1) ≅ a_0 + a_1*x_1 + a_2*x_1^2 + ... + a_N*x_1^N
+f(x_2) ≅ a_0 + a_1*x_2 + a_2*x_2^2 + ... + a_N*x_2^N
+...
+f(x_N+1) ≅ a_0 + a_1*x_N + a_2*x_N^2 + ... + a_N*x_N^N
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Eliminate x from all equations 
+Translate the function across the grid to calculate finite difference 
+approximation at x_fd as if we are calculating over an interval
+centered at x=0
+
+Use a change of variables
+
+x'_1 = x_1 - x_fd  x'_2 = x_2 - x_fd, ... , x'N+1=x_N+1 - x_fd
+
+Convert to Matrix Equations
+
+X ⟶ Polynomials
+a ⟶ Unknown Coefficients
+F ⟶ Known Values of f(x_n)
+
+Note: maxima will not accept ellipsis '...' in equations!
+Assume '...' between 4th and 5th row, 4th and 5th column here
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+X_p_vxamp:matrix(
+    [1,xp_1, xp_1^2, xp_1^3,xp_1^N] ,
+    [1,xp_2, xp_2^2, xp_2^3,xp_2^N] ,
+    [1,xp_3, xp_3^2, xp_3^3,xp_3^N], 
+    [1,xp_4, xp_4^2, xp_4^3,xp_4^N], 
+    [1,xp_N, xp_N^2,xp_N^3,xp_N^N]     
+    );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+X_p_examp:matrix(
+    [1,(x_1-x_fd), (x_1-x_fd)^2, (x_1-x_fd)^3, (x_1-x_fd)^N], 
+    [1,(x_2-x_fd), (x_2-x_fd)^2, (x_2-x_fd)^3, (x_2-x_fd)^N],
+    [1,(x_3-x_fd), (x_3-x_fd)^2, (x_3-x_fd)^3, (x_3-x_fd)^N],
+    [1,(x_4-x_fd), (x_4-x_fd)^2, (x_4-x_fd)^3, (x_4-x_fd)^N],
+    [1,(x_N-x_fd), (x_N-x_fd)^2, (x_N-x_fd)^3, (x_N-x_fd)^N]
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all); 
+load(vect);
+load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Solve for unknown coefficients
+
+No more x values - take derivatives and get only constant coefficients
+
+f(0)  ≅ a_0
+∂/∂x f(0) ≅ a_1
+∂^2/∂x^2 f(0) ≅ 2*a_2
+...
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Example calculate 2nd order accurate O(N^2) finite difference 
+approximation for 1st and 2nd order derivatives 
+Spacing between points is Δ
+Calculate the finite difference at f_2
+
+TODO: Create a diagram and insert it here!
+
+N=2 (2nd order so 3 polynomial terms are required)
+
+f(x) = a_0 + a_1 * x + a_2 *x^2
+
+Translate x values across the grid to center difference on zero
+
+x_fd = x_2 where x_2 is 1/2 way between x_1 and x_3
+f_2 is 1/2 way between x_1 and x_3
+
+f_1 is f at x_1
+f_2 is f at x_2 (or x_fd)
+f_3 is f at x_3 
+
+After translation of x values the finite difference is centered on zero
+
+    x'_2 = x_2 - x_2
+    x'_1 = x_1 - x_2 ⟶ location is  -Δ
+    x'_3 = x_3 - x_2 ⟶ location is +Δ
+
+Build the matrix X' (X in translated coordinate system)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+X_p_v:matrix([1,xp_1, xp_1^2],[1,xp_2, xp_2^2],[1,xp_3, xp_3^2] );
+X_p_e:matrix([1,-Δ,Δ^2],[1,0,0],[1,Δ, Δ^2] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Invert X'
+
+Tried maxima's invert but it gave inaccurate symbolic results
+Manually entering inverse calculated by octave and MATLAB
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+X_p_inv:matrix([0 ,1 ,0] ,[-1/2*Δ, 0, 1/2*Δ],[1/2*Δ^2, -1/Δ^2, 1/2*Δ^2]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Extract polynomial coefficients
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+A:[a_0,a_1,a_2];
+F:[f_1, f_2, f_3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(A=X_p_inv . F,a_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxima refused to evaluate the above eqn symbolically
+Performing inner product by hand
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_0: f_2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_1:(-1/(2*Δ))*f_1 + (1/(2*Δ))*f_3;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_3: (1/((2*Δ^2))*f_1 + (-(1/Δ^2)) * f_2 + (1/(2*Δ^2)) *f_3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Back-Substitute Coefficents To Get Finite Difference Expressions
+
+f(x_2) ≅ a_0 = f_2
+
+∂/∂x f(x_2)  ≅ a_1 = (-1/(2*Δ))*f_1 + (1/(2*Δ))*f_3;
+
+∂^2/∂x^2 f(x_2) = 2*a_2 = 2 * (1/((2*Δ^2))*f_1 + (-(1/Δ^2)) * f_2 + (1/(2*Δ^2)) *f_3);
+
+So 
+
+f(x_2) ≅ f_2
+
+∂/∂x f(x_2) ≅ (f_3 - f_1)/2*Δ
+
+∂^2/∂x^2 f(x_2) ≅ (f_3 - 2*f_2 + f_1)/Δ^2
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Calculate 4th Order Accurate Finite Difference Approximations for
+the 1st and 2nd derivatives 
+
+Spacing between points is Δ
+
+Calculate approximation 1/2 way between f_2 and f_3
+
+Select the order of accuracy
+N = 3 (N is one less than required order of accuracy because of a_0 term)
+
+The polynomial is then:
+
+f(x) = a_0 + a_1*x + a_2*x^2+a_3*x^3
+
+Translate the function across the grid
+
+Original Coordinates
+
+f_1    Δ   f_2         f_3         f_4
+ o----------o----------o----------o             x_fd = (x_3 + x_2) /2
+x_1       x_2         x_3        x_4
+
+Translated Coordinates
+f_1         f_2         f_3         f_4
+ o----------o----------o----------o
+x'_1      x'_2       x'_3        x'_4
+
+x'_1 = -1.5 Δ
+x'_2 = -0.5 Δ
+x'_3 = 0.5 Δ
+x'_4 = 1.5 Δ
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+X_p_4v:matrix([1,xp_1, xp_1^2, xp_1^3],[1,xp_2, xp_2^2,xp_2^3],[1,xp_3, xp_3^2,xp_3^3] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+load(vect);
+load(eigen);
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Write the matrix equation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+X_p_e:matrix( [1,-3*Δ/2,(-((3*Δ)/2))^2, (-3*Δ/2)^3], [1, -(Δ/2), (-(Δ/2))^2, (-(Δ/2))^3],[1, (Δ/2), ((Δ/2))^2, ((Δ/2))^3],[1,(3*Δ)/2,(3*Δ/2)^2, (3*Δ/2)^3] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Invert X'
+
+From Octave Symbolic Output
+
+  ⎡-1/16  9/16  9/16  -1/16 ⎤ 
+  ⎢                                      ⎥ 
+  ⎢ 1     -9     9    -1             ⎥ 
+  ⎢────   ───   ───   ────   ⎥
+  ⎢24⋅D   8⋅D   8⋅D   24⋅D   ⎥
+  ⎢                                     ⎥       
+  ⎢ 1     -1    -1     1            ⎥
+  ⎢────   ────  ────  ──── ⎥
+  ⎢   2      2     2     2          ⎥
+  ⎢4⋅D    4⋅D   4⋅D   4⋅D     ⎥    
+  ⎢                                    ⎥
+  ⎢-1      1    -1     1           ⎥
+  ⎢────   ────  ────  ────⎥
+  ⎢   3      3     3     3         ⎥
+  ⎣6⋅D    2⋅D   2⋅D   6⋅D    ⎦
+
+Manually Entered - Based On Octave/Sympy Output
+!!!NOTE!!!
+Something is up with this script because the inversion and 
+solution of the matrix equation works perfectly in a script
+containing only X_p_e, A, F, X_p_inv
+Then solve(A=X_inv . F, a_0) worked perfectly!
+
+SOLUTION: simp was false ⟶ simp:true will fix this
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+X_p_inv:invert(X_p_e);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(a_0, a_1, a_2, a_3, f_1,f_2,f_3,f_4); 
+A:[a_0,a_1,a_2,a_3];F:[f_1,f_2,f_3,f_4];
+meqn:A = X_p_inv . F;
+solve(meqn,a_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fa_0:row(lhs(solve(A=invert(X_p_e) . F,a_0)[1]),1)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fa_1:row(lhs(solve(A=invert(X_p_e) . F,a_0)[1]),2)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fa_3:row(lhs(solve(A=invert(X_p_e) . F,a_0)[1]),3)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fa_4:row(lhs(solve(A=invert(X_p_e) . F,a_0)[1]),4)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Finite Difference Method
+
+Don't do it the way everyone else does it
+
+Translate differential equation to matrix form immediately
+Perform operations to get simplified set of matrics and equation
+Solve final matrix equation 
+
+∂f(x)/∂x - af(x) = g(x)
+
+[D_x] [f] - [a][f]= [g]
+
+[L][f] =[g]
+[L] = [D_x] - [a]
+
+           
+[f] = [L]^(-1) [g]
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Finite Difference Time Domain
+
+Single Unit Cell Δx wide by Δy high
+Δx and Δy are the grid resolution parameters
+Finer Δx and Δy give higher resolution - more calculation and time!
+
+Divide space into a grid of square cells
+Function value only defined at one point inside the cell
+
+All unknowns can be stored into a single column vector
+Map elements of square 2D grid to a single column 
+Use row-major order (row 1, row 2, row 3 row 4) 
+or 
+Use column-major order (col 1, col 2, col 3, col 4)
+
+MATLAB/Octave code
+f = F(:) results in a column vector
+and
+F = reshape(f, Nx,Ny) makes a 2D array from a column vector
+
+in this case I'm transferring elements using row-major order
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+F:matrix([f_1, f_2, f_3, f_4],[f_5,f_6, f_7,f_8], [f_9, f_10,f_11,f_12],[f_13,f_14,f_15,f_16]);
+V:columnvector([f_1, f_2,f_3, f_4, f_5, f_16, f_7, f_8, f_9, f_0,f_11,f_12,f_13,f_14,f_15,f_16]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Conventional Finite Difference Method
+
+Start with the differential equation to be solved
+This is the 'Governing Equation'
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dqn_01:'diff(f,x,2) - a * 'diff(f, x) - b*f = c;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Approximate the derivative with finite differences
+Every term in the difference equation must exist at the same point in space
+k reprsents the points along the spatial axis (k is normally associated with Z)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fdn:(f(k+1)-2*f(k) + f(k-1))/Δ^2 - a(k) * (f(k+1) - f(k-1)) /2*Δ - b(k) * f(k) = c(k);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The equation is expanded and terms are collected
+TODO: Use maxima's collectterms and other functions to do this step
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fxf:(1/Δ^2) * f(k+1) - (2/Δ^2) *f(k) + (1/Δ^2) * f(k-1) - (a(k) /(2*Δ))*f(k+1) + (a(k)/(2*Δ)) * f(l-1)  - b(k) *f(k)   =c(k);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fxc:((1/Δ^2) - a(k)/(2*Δ)) * f(k+1) - (b(k) + (2/(Δ^2))) * f(k) + ((1/Δ^2) + (a(k)/(2*Δ))) *f(k-1) = c(k);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Final Equation ⟶ Matrix Equation
+
+Spatial coefficients go into a large square banded diagonal matrix L
+Unknowns f go into the column vector f
+Input Coefficients c(k) go into matrix c on the right hand side
+[L][f] = [c]
+[f] = [L] ^-1 * c
+f = invert(L) * c
+
+This process is very tedious , more so for large systems of differential equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Direct transfer of differential equation to matrix equation
+All terms are square matrices that perform LINEAR operations on vector f
+The terms all end up as column vectors 
+
+D_x_2 * f - A * D_1_x - B*f = c
+
+L= [L] = D_2_x - A * D_1_x - B
+So
+D_x_2 - (D_1_x - B) * f  = c
+and
+f = invert(L)*c
+
+These square matrices are simple and easy to build
+Never directly touch or deal with finite differences during translation!
+
+Any matrix can always be built to represent any linear operation on
+a function that is stored in a column vector
+
+Perform point by point multiplication of Bf 
+b(x) * f(x) ⟶ Bf
+B will lbe a diagonal matrix with b's on the diagonal
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Matrix Derivative Operation
+
+Construct a square matrix that pre-multiplies a column vector 
+The result is a column vector containing the 1st order derivatives
+
+∂f(x)/∂x ⟶ D_1_x * f
+D_1_x * f = d_f
+
+Assume f_7 and f_0 are zero here for now - Dirichlet Condition
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+F:columnvector([f_1, f_2,f_3,f_4,f_5,f_6]);
+D_1_x: 1/(2*Δ_x) * matrix([0, 1, 0, 0, 0, 0],[-1,0,1,0,0,0],[0,-1,0,1,0,0],[0,0,-1,0,-1,0],[0,0,0,-1,0,1],[0,0,0,0,-1,0]  );
+df:D_1_x . F;
+d_f:columnvector([(f_2 - f_0)/(2*Δ_x),(f_3 - f_1)/(2*Δ_x),(f_4 - f_2)/(2*Δ_x),(f_5 - f_3)/(2*Δ_x) ,(f_6 - f_4)/(2*Δ_x),(f_7 - f_5)/(2*Δ_x)  ]  );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Second Order Derivative Matrix
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_x_2:1/(Δ_x^2)*matrix(
+    [-2,1, 0, 0, 0, 0],
+    [1,-2, 1, 0, 0, 0],
+    [0, 1,-2, 1, 0, 0],
+    [0, 0, 1,-2,1, 0 ],
+    [0, 0, 0,1,-2, 1 ],
+    [0, 0, 0, 0, 1,-2]    
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2_f:D_x_2 . F;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+2D Finite Differences
+
+∂f(x,y)/∂x ⟶ D_x_2*f
+f_1 through f_9 are points on a 2D grid set up as 3 x 3 locations
+
+Terms missing from the final derivative vectors are outside the grid
+Two-term entries in the derivative vectors are incomplete
+Missing entries are assumed to be zero for now ⟶ Dirichlet Boundary Condition
+This assumption is accurate if the field is confined to the center of the grid
+
+First the x terms
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+F_2: columnvector([f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9]);
+D_x_2:matrix( 
+    [-2, 1, 0 ,0, 0, 0, 0, 0, 0],
+    [ 1,-2, 1, 0, 0, 0, 0, 0, 0],
+    [ 0, 1,-2, 0, 0, 0, 0, 0, 0],
+    [ 0, 0, 0,-2, 1, 0, 0, 0, 0],
+    [ 0, 0, 0, 1,-2, 1, 0, 0, 0],
+    [ 0, 0, 0, 0, 1,-2, 0, 0, 0],     
+    [0, 0, 0, 0, 0, 0,-2, 1,  0],
+    [ 0, 0, 0, 0, 0, 0, 1,-2, 1],
+    [ 0, 0, 0, 0, 0, 0, 0, 1,-2]    
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deqn_2d:(1/Δ_x^2)*D_x_2 . F_2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now the y terms
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_y_2:matrix( 
+    [-2, 0, 0 ,1, 0, 0, 0, 0, 0],
+    [ 0,-2, 0, 0, 1, 0, 0, 0, 0],
+    [ 0, 0,-2, 0, 0, 1, 0, 0, 0],
+    [ 1, 0, 0,-2, 0, 0, 1, 0, 0],
+    [ 0, 1, 0, 0,-2, 0, 0, 1, 0],
+    [ 0, 0, 1, 0, 0,-2, 0, 0, 1],
+    [ 0, 0, 0, 1, 0, 0,-2, 0, 0],
+    [ 0, 0, 0, 0, 1, 0, 0,-2, 0],
+    [ 0, 0, 0, 0, 0, 1, 0, 0,-2]    
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dy2f:(1/Δ_y^2) * D_y_2 . F_2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+These matrices are tridiagonal with zeros in the upper and lower corners
+Sparse matrices should be used to store these values
+    or
+Use column or row vectors to store the diagonal elements 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Do we need separate matrix operators for 2nd order derivatives?
+
+∂^2/∂y^2 = ∂/∂y *∂/∂y
+
+Can  D_2 be calculated from D_1 ?
+
+D_2_y = D_1_y * D_1_y  ???
+
+Yes but this will use the grid efficiently ⟶ calculates derivative with lower resolution than is actually available
+
+Use separate matrices for 1st, 2nd, 3rd order operators
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Matrix Operator Examples
+
+For 5x5 2D grid ⟶ 25x25 difference matrix
+
+1st Order
+
+TODO: GET THESE FROM THE SLIDE SET FOR THIS LECTURE
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

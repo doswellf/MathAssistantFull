@@ -1,0 +1,85 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 18.02.0 ] */
+/* [wxMaxima: input   start ] */
+E_1:E_10*sin(w*t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_2:E_20*sin(w*t+delta_p);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_theta:E_10*sin(w*t)+E_20*sin(w*t+delta_p);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_theta:E_10*sin(w*t)+E_20*sin(w*t+delta_p)=E_θ0*sin(w*t+φ_off);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(t=0, E_theta);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(%o6,sin(φ_off));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sin_phi:rhs(first(%));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(w*t=%pi/2, E_theta);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(%o15, cos(φ_off));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cos_phi:rhs(first(%o18));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+trig1:cp^2+sp^2=1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst( [sp=sin_phi,cp=cos_phi],trig1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ratsimp(%o21);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+radcan(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+%*E_θ0^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sqrt(%);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 18.02.0"$

@@ -1,0 +1,123 @@
+defstruct(to(L1,L2,L3));
+
+defstruct(to(name,qty,eqns));
+
+defstruct(eqn(label,formula,latex));
+
+defstruct(eqns(name,qty,eqs));
+
+defstruct(eqn(label,formula,latex));
+
+lem_3_2_16:avg_t(I_J) = (1/2)*realpart(J . conjugate(E));
+
+eqn_3216:new(eqn);
+
+eqn_3216@label:"3.2.16.A";
+
+eqn_3216@formula:lem_3_2_16;
+
+eqn_3216@latex:"$$left<J cdot Eright>={{{it Re}left(Jcdot E right)} over {2}}$$";
+
+eqns_32:new(eqns);
+
+eqns_32@name:"3.2";
+
+eqn_328:new(eqn);
+
+eqn_328@label:"3.2.8";
+
+eqn_328@formula:"div(avg_t(S))=-avg_t(I_J)-avg_t(I_p)-avg_t(I_M)";
+
+/* LOOK UP LATEX FOR BRACKETS */
+
+eqn_328@latex:"$$\nabla \cdot \left< S \right> = - \left< I_\scriptscriptstyle{J} \right>-\left< I_\scriptscriptstyle{P} \right>-\left< I_\scriptscriptstyle{M} \right> ";
+
+eqns_32@name:"3.2";
+
+eqns_32@qty:4;
+
+eqns_32@eqs:[eqn_328,eqn_3216];
+
+eqns_32@eqs;
+
+eqns_32@eqs@latex;
+
+eqns_32@eqs@formula;
+
+eqns_32@eqs;
+
+eqns_32@eqs[1];
+
+(eqns_32@eqs[1])@formula;
+
+lem_3_2_16:avg_t(I_J) = avg_t(J . E);
+
+append(lems_3_2_16 . eqns_32@eqs);
+
+append(lem_3_2_16 . eqns_32@eqs);
+
+eqns_32@eqs;
+
+eqns_32@eqs[2];
+
+length(eqns_32@eqs);
+
+lem_3_2_16;
+
+tex(%,false);
+
+eqn_3216@label:"3.2.16.B";
+
+eqns_32@eqs[1];
+
+(eqns_32@eqs[1])@label;
+
+eqn_3216@label:"3.2.16.A";
+
+(eqns_32@eqs[1])@label;
+
+sconcat("xx[",3,"]:",expand((x+y)^3));
+
+ev(%);
+
+xx[3];
+
+sconcat("xx[",3,"]:",expand((x+y)^3));
+
+stringp(%);
+
+sm(x,y)::=buildq([x,y],append(x,y));
+
+5;
+
+sm(["this","that"],["the","other","thing"]);
+
+sm(["5 + "],["5"]);
+
+sm(["5 + 5"],["5"]);
+
+ev(%[1]);
+
+macroexpand(sm(["5 + 5"],[5]));
+
+ev(%);
+
+sm(["5 + 5"],[""]);
+
+sprint("5+5");
+
+ev(sprint("5+5"));
+
+sconcat("5 + ","5");
+
+ev(parse_string(%));
+
+eval_string(sconcat("5 + ","5"));
+
+x_x[3];
+
+eval_string(sconcat("xx[",3,"]:",expand((x+y)^3)));
+
+xx[3];
+
+

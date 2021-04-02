@@ -1,0 +1,77 @@
+ex:a*x^2+b*x+c;
+
+sol:solve(ex,x);
+
+define(f(x),ex);
+
+f(y);
+
+g(x):=''ex;
+
+expand(map(g,map(rhs,sol)));
+
+f(y);
+
+g(y);
+
+expand(map(g, map(rhs, sol)));
+
+depends(x,y);
+
+kill(all);
+
+depends(x,t);
+
+depends(V,x);
+
+nwtn:diff(V,x)=diff(x,t,2);
+
+integrate(nwtn,x);
+
+depends(v,t);
+
+depends(v,x);
+
+energy:m*v^2/2 - G*M*m/r;
+
+e0:energy, v=v0,r=R;
+
+efinal:limit(energy, r, inf), v=vf;
+
+v0soln:solve(efinal=e0,v0);
+
+v0soln2:v0soln[2];
+
+v02:rhs(v0soln[2]);
+
+vescape:ev(v02, vf=0);
+
+ev(vescape, [G=6.637e-11, M=5.974e24, R=6.378e6]);
+
+float(%);
+
+nwtn;
+
+V:(G*M*m)/r;
+
+depends(r,t);
+
+integrate(lhs(nwtn),t);
+
+grind(%o16);
+
+nwtn:'diff(V,r,1) = m*'diff(r,t,2);
+
+integrate(lhs(nwtn),r);
+
+integrate(rhs(nwtn),r);
+
+v0;
+
+vel:'diff(r, t);
+
+integrate(vel,t);
+
+integrate(diff(r,t), t, 0, inf);
+
+

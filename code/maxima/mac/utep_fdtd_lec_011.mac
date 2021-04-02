@@ -1,0 +1,106 @@
+/* [wxMaxima: comment start ]
+EMPossible EM Analysis With FDTD 
+
+Lecture 11 Formulation of 2D FDTD Without PML
+
+Summary of Code Development Sequence
+Source located in offset location not in center of grid
+PML will allow wave to appear to travel off to infinity
+PML will be used at top and bottom
+PBC (Periodic Boundary Conditions) used at left and right sides of grid
+Include code to calculate TF/SF, fourier transforms, reflectance, transmittance
+Use near-paraxial (almost parallel) diffraction of transmitted wave off a grating
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect); load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use Yee grid with offset axes that implicitly satisfy Maxewell's divergence equations
+Work only with the curl equations with ε and μ substituted into them
+Normalize Electric or Magnetic field using free-space impedence ratio
+More convential to normalize the electric field E
+Divide E by free-space impedence
+D must also be normalized
+Dispersion and Polarization(Displacement) current also to be normalized
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+c_0: 2.995482e8; 
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(E,H,D,B,P,J); depends([E,H,D,B,P,J],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[Ex,Ey,Ez]; H:[Hx,Hy,Hz];D:[Dx,Dy,Dz];B:[Bx,By,Bz];P:[Px,Py,Pz];J:[Jx,Jy,Jz];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+anmx_101:[express(curl(H)) = 1/c_0 * 'diff(D_n,t), express(curl(E))=diff(B,t) , express(div(B)) = 0, express(div(D))=ρ_v] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+anmx_102:[ D=ε_0*ε_r*E,B=μ_0*μ_r*H ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+z_v:sqrt(ε_0/μ_0) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Normalize E, the electric field
+Divide E by the free-space impedence
+Previously H was normalized by multiplying by the free-space impedence
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_n1:z_v*E; E_n2:1/η_0 * E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_n1:(1/sqrt(ε_0*μ_0) ) * D; D_n2:c_0 * D;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_n1:(1/sqrt(μ_0*ε_0)) * D; P_n2:c0*D;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+J_n1:(1/sqrt(ε_0*μ_0) ) * J; J_n2: c_0*J;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxwell's Equations Using Normalized fields
+
+Using only the relative permittivity ε_r in the constitutive relation for D_norm
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+anmx_103:[express(curl(H))= (1/c_0) *  'diff(D_n1 ,t), express(curl(E_n1)) = (μ_r/c_0) * 'diff(H,t) , D_n1=ε_r*E_n1 ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Expand analytical vector equations into 9 coupled 'scalar' partial differential equations
+   [wxMaxima: comment end   ] */
+
+
+

@@ -1,0 +1,194 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: comment start ]
+Modern Electrodynamics and Coupled Mode Theory: Applications To Guided-Wave Optics
+
+Appendix C
+
+Derivation of Lossless Excitation Equations from Maxwell's Equations
+
+NOTE: REMOVE QUOTES AND DEFINE FIELD VECTORS TO USE THESE EQUATIONS
+
+C.1 Initial Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+e[z]:[ex,ey,ez];e[b]:[ex,ey,ez];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E[l]:[Ex,Ey,Ez];E[b]:[Ebx,Eby,Ebz];H[l]:[Hx,Hy,Hz];H[b]:[Hx,Hy,Hz]; H[b]:[Hbx,Hby,Hbz];H:[Hx,Hy,Hz];E:[Ex,Ey,Ez];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cxe:express(e[z]~ E[l]);cxh:express(e[z]~H[l]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C1:['sum('diff(A[l],z)*cxe = -curl(E[b])-%i*ω*M[b,t]-J_m[b,t],l,1,N )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C2:['sum('diff(A[l],z)*cxh = -curl(E[b])-%i*ω*P[b,t]-J_e[b,t],l,1,N )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The orthogonal complements for P_b and M_b  (bulk currents) are:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C3:[P[b]=D[b] - ε_0 * E[b],μ_0*M[b] = B[b] - μ_0*H[b]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The longitudinal components (along the z axis) contribute to the complementary fields 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C4:[E_c[b]=e[z] *E[b], E[b] = (1/(%i*ω*ε_0) )*(J[b,z,e] + %i*ω*P[b,z])];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C5:[H_c[b] = e[z] * H[b],  H_c[b]=(1/(%i*ω*μ_0))*(J[b,z,m] + %i*ω*μ_0*M[b,z])];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+C.2 Direct Derivation
+
+Scalar multiple C.1 and C.2 by 'conjugate(H[k]) and -conjugate(E[k]) respectively then add the results
+Then integrate the result of the addition over S (cross-sectional slice of waveguide at constant z)
+Here I make A_l depend explicitly on z but this needs to be verified
+TODO: edit (C.6) HERE - NOT COMPLETE
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C6:['sum('diff(A[l](z),z)*'integrate((('conjugate(E[k])~H[l]) + (E[l]~'conjugate(H[k])))*e[z],S),l,1,N )= 'integrate('conjugate(E[k]) . curl(H[b]) - 'conjugate(H[k])* curl(E[b]),S) - 'integrate((J[b,t,e] . 'conjugate(E[kt]))  + (J[b,t,m] . 'conjugate(H[kt])) . e[z], S) - %i*ω*'integrate( (P[b,t] . 'conjugate(E[kt])) + (μ_0*M[b,t] . 'conjugate(H[kt])),S)   ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now transform the first integral on the right hand side of (C.6) as follows:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C6_A:[ ('conjugate(E[k]) . curl(H[b])) = e[z] . ('conjugate(E[k])~grad(H[b])), ('conjugate(E[k]) . curl(H[b])) = (H[b] . curl('conjugate(E[k]))) - e[z] . curl('conjugate(E[k]) * H[b]), ('conjugate(E[k]) . curl(H[b])) = %i*ω*μ_0*('conjugate(H[k])+ 'conjugate(M[k])) . H[b] - e[z] . curl('conjugate(E[k]*H[b])) ,  ('conjugate(H[k]) . curl(E[b])) = (E[b] . curl('conjugate(H[k]))) -e[z] . curl('conjugate(H[k])*E[b]), ('conjugate(H[k]) . curl(E[b])) = E[b].curl('conjugate(H[k])) -e[z] . curl('conjugate(H[k]*E[b])),  ('conjugate(H[k]) . curl(E[b])) = -%i*ω*(ε_0*'conjugate(E[k])+'conjugate(P[k])) . E[b] - e[z] . curl('conjugate(H[k])*E[b])   ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The last equations for the kth mode Eqs. (3.5.9) and (3.5.10) are used 
+The first integral in (C.6) becomes a sum of 3 integrals
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C7:['integrate('conjugate(E[k]) . curl(H[b])-'conjugate(H[k]) . curl(E[b]),S[b]) = 'integrate(curl('conjugate(H[k])*E[b]-'conjugate(E[k])*H[b]). e[z], S[b])     , 'integrate('conjugate(E[k]) . curl(H[b])-'conjugate(H[k]) . curl(E[b]),S[b]) = 'integrate((n[b] ~H[b]) *'conjugate(E[k]) - (n[b] ~ E[b]) *'conjugate(H[k]), l)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The first integral on the right side of (C.7) is altered using the Stokes Theorem
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C8:['integrate( express(curl( conjugate(H[b]) *E[b] - conjugate(E[b])*H[b]) ). e[z], S[b]) = 'integrate(conjugate(H[k])*E[b]-conjugate(E[k])*H[b] . τ[b],l) ,'integrate( express(curl( conjugate(H[b]) *E[b] - conjugate(E[b])*H[b]) ). e[z], S[b]) = 'integrate( (n[b]~H[b]).conjugate(E[k])  - (n[b] ~ E[b]) . conjugate(H[k]) ,l  )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Where n[b] and τ[b] = e[z] ~ n[b] are the unit vectors normal (outward) and tangential to contour L[b] bounding the bulk
+current cross-sectional area S[b].
+The 2nd integral on he rhs of (C.7) is transformed using (C.4) and (C.5) 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C9:[%i*ω*'integrate(conjugate(E[k] . ε_0*E[b] + conjugate(H[k]) .μ_0*H[b]),S[b]) = -'integrate(J[b,z,e]*conjugate(E[kz]) + J[b,z,m]*conjugate(H[kz]) , S[b]),%i*ω*'integrate(conjugate(E[k] . ε_0*E[b] + conjugate(H[k]) .μ_0*H[b]),S[b]) =-%i*ω*'integrate(P[bz]*conjugate(E[kz]) + μ_0*M[bz]*conjugate(H[kz]), S[b] ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Insert (C.8) and (C.9) into (C.7) to get 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C10_A:[ integrate( (conjugate(E[k]) . express(curl(H[b]))) - (conjugate(H[k]) . express(curl(E[b]))),S) = 'integrate( (n[b]~H[b])  . conjugate(E[k]) - (n[b] ~ E[b]) . conjugate(H[k]), l) - integrate(J[b,z,e] *conjugate(E[kz]) + J[b,z,m] * conjugate(H[kz]) ,S) - %i*ω*integrate(P[bz] *conjugate(E[kz]) + μ_0*M[bz] * conjugate(H[kz]) ,S ) + %i*ω*integrate(conjugate(P[k]) . E[b] + μ_0*conjugate(M[k])  . H[b],S) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The first integral on the rhs of (C.10) contains the effective surface currents defined by (3.4.30) and (3.4.31)
+    J[s,eff,e] = -n[b] x H[b]
+    J[s,eff,m] = n[b] x E[b]
+Allowing for these and useing the normalizing coefficient expression gives:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app__C10_B:[ N[k,l] = integrate(conjugate(E[k] ~ H[l] + E[l] ~ conjugate(H[k]) ) .e[z] , S)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Then substitute (C.10) into (C.6) to get
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C11_A:[  'sum(N[k,l]*'diff(A[l],z),l,1,N) = -integrate(J[b,e] . conjugate(E[k]) + J[b,m] . conjugate(H[k]),S) - integrate(J[s,eff,e] . conjugate(E[k]) + J[s,eff,m] . conjugate(H[k]),l) - %i*ω*integrate(  (P[b] . conjugate(E[k]) - conjugate(P[k]) . E[b]) + (μ_0*M[b] . conjugate(H[k])  - μ_0*conjugate(M[k]) . H[b]),S)   ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+NOTE: The constitute relations (3.2.9), (3,2,10), (3.2.14) for lossless bianisotropic media have been used below.
+
+The last integral on the rhs of (C.11) goes to zero because:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C11_B:[ ((P[b] . conjugate(E[k]) - conjugate(P[k]) . E[b]) + (μ_0*M[b] . conjugate(H[k]) - μ_0*conjugate(M[k]) . H[b]) ) = ( ( D[b] . conjugate(E[k]) - conjugate(D[k]) . E[b])  + (B[b] . conjugate(H[k])-conjugate(B[k]). H[b])),((P[b] . conjugate(E[k]) - conjugate(P[k]) . E[b]) + (μ_0*M[b] . conjugate(H[k]) - μ_0*conjugate(M[k]) . H[b]) ) = (( ε_bar - dagger_bar) . E[b] . conjugate(E[k]) + (μ_bar - μ_bar_dagger) . H[b] . conjugate(H[k])     + (ξ_bar - ζ_bar_dagger) . H[b] . conjugate(E[k]) + (ζ_bar - ξ_bar_dagger) . E[b] . conjugate(H[k])) ,((P[b] . conjugate(E[k]) - conjugate(P[k]) . E[b]) + (μ_0*M[b] . conjugate(H[k]) - μ_0*conjugate(M[k]) . H[b]) ) = 0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+From (3.2.24) for the general case of a reactive kth mode it follows that N{k,l] = N[k] δ[k_bar,l]
+Then (C.11) finally produces the excitation equation for the kth mode:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_C_C12:['diff(A[k],z) = (1/N[k]) * integrate(J[b,e] . conjugate(E[k]) + J[b,m] . conjugate(H[k]),S) - (1/N[k])*integrate(J[s,eff,e] . conjugate(E[k]) +J[s,eff,m].conjugate(H[k]),l)  ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This equation agrees with (3.5.13) which was obtained by another method.
+The absence of surface currents J[s,e,m] was not explicitly considered in (3.5.13)
+This can be viewed as implicitly including J[b,e,m] into the bulk currents.
+   [wxMaxima: comment end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

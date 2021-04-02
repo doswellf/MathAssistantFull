@@ -1,0 +1,333 @@
+/* [wxMaxima: comment start ]
+UTEP/Empossible - EM Analysis Using the FDTD Method
+
+Lecture 16 - Gratings And The Plane Wave Spectrum
+
+Modelling a periodic diffraction grating
+
+Calculate power in each of the diffracted modes and get the total
+
+Review
+
+Typical 2D FDTD Grid Layouts 
+Make sure TF/SF source is 2 cells inside PML
+Make sure TF/SF source does not cut through the device
+Fix FDTD equations on either side of the TF/SF source region
+Subtract source from curl equations on SF side of source
+Add source to curl equations on TF side of source 
+Make H field source numerically compatible wiith E field source
+Add correction terms to main FDTD loop when injecting source
+
+This Lecture - EM Theory
+Next Lecture - FDTD Code
+
+Wave Vectors
+
+Plane wave is an idealization or approximation of a wave
+Any vertical slice through the Z axis of the wave gives an x-y plane 
+The distance between 2 planes of maximum or minimum y or x size is the wavelength
+
+Wave vector direction is normal to the wavefront
+Wave vector magnitude is 2π/λ
+λ is the wavelength (spatial period) of the wave
+
+E(r) = E_0 * exp(%i*(k . r))
+
+E_0 is the initial (complex) amplitude at some start time t_0
+E_0 has both amplitude and some phase (which may be zero)
+t_0 not necessarily the initial time of creation of the wave
+
+Position Vector     r = x * x_hat + y*y_hat + z*z_hat
+|k| = (2*π)/λ = (2*π*n)/λ_0
+
+Wave Vector     k = k_x * x_hat + k_y*y_hat  k_z * z_hat
+
+Wave travelling in the +z direction is E(z) = E_0 * exp(%i*k*z)
+
+The wave vector can be complex k = β + jα
+
+Substitute this into the uniform plane wave equation 
+
+E(z) = E_0  * exp(-α*z) * exp(%i*β*z)
+
+Re(k) ⟶ phase term (oscillation) phase as fn of distance
+Im(k) ⟶ attenuation term (exponential decay)
+
+Re(k) ⟶ β = 2*π/λ = 2*π*n/λ_0 (rad/m)   radians/meter
+Im(k) ⟶ α (Np/m)                                    Niepers/meter
+
+Real K  ⟶ oscillating wave
+Imag K ⟶ decaying wave
+Complex K ⟶ oscillating with decaying amplitude
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+2D Waves with Doubly Complex k
+Can have both decay and/or oscillation in different directions
+
+Phase Matching at an Interface
+
+Dispersion Relation k_x^2 + k_y62 + k-z^2 = (k_0*n^2)
+Defines surface called the "index ellipsoid"
+Vector connecting origin to a point on the sphere is the k vector for that direction
+Dispersion relation for isotropic materials is the pythagorean theorem
+
+Index Ellipsoid in Two Different Materials
+
+k[x,1]^2 + k[y,1]^2 = |k_1|^2 = (k_0*n_1)^2
+k[x,2]^2 + k[y,2]^2 = |k_2|^2 = (k_0*n_2)^2
+
+if n1 < n2 then then λ_1 > λ_2
+
+Tangential components must be continuous (same) on the interface
+Continuity of tangential components of k = Continuity of fields at interface
+Only one angle that matches waves in material 1 to waves in material 2
+No phase matching at interface between n1 and n2 gives Total Internal Reflection
+
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+EM Behaviour At An Interface
+
+Assume purely real k_x in material 1, k_x purely real in material 2
+
+Dispersion relation must be satisified 
+
+Longitudinal component of k_2 is calculated from 
+the dispersion relation in material 2
+
+k_y will be purely real if k_0*n_2 > | k[x,2] |
+k_y will be purely imaginary if k_0*n_2 <  | k[x,2] |
+k_y imaginary means no power transmitted, total internal reflection occurs
+
+k[x,2]^2 + k[y,2]^2 = |k_2|^2 = (k_0*n_2)^2
+
+Maxima gives both solutions 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dr_2:k_x2^2 + k_y2^2 = (k_0 * n-2)^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(dr_2, k_y2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Field Across An Interface 
+Incident Field Above and Below Critical Angle 
+Ignore Reflection
+
+n1 < n2                         no critical angle, always some transmitted energy
+n1 > n2 θ_1 < θ_c         some transmission, higher near critical angle
+n1 > n2 θ_1 > θ_c         pure decay - no active transmission, evanescent only
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Waves In Periodic Material
+    
+    Not atomic scale periodicity
+    Larger-Scale periods - macro scale
+    Dielectric materials slow waves down
+    Periodic dielectric materials ⟶ waves take on periodicity of host material
+    Field is no longer a pure plane wave - wave is chopped into multiple wavefronts
+    Fourier series shows discrete modes (plane waves) leaving the material
+    Diffracted modes have angles related to the wavelength and grating period
+    Periodic material chops wave into discrete modes travelling at specific angles
+
+    Reflection 
+    n_ref * sin(θ_m) = n_inc * sin(θ_inc) - m * (λ_0/Λ_x)
+
+    Transmission
+    n_trn * sin(θ_m) = n_inc * sin(θ_inc) - m * (λ_0/Λ_x)
+
+    θ_m is the order of the reflected or diffracted mode/wave
+
+    Grating equation gives directions, but not the power of each order
+    Must use Maxwell's equations to get the power in each order
+
+Ratio  of grating period Λ to wavelength λ determines 
+    Quantity and position of modes
+    Angles of refracted modes relative to incident wave
+    Larger grating period relative to wavelength produces more modes
+    For n1 < n2, reflected modes appear later than initial refracted modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+The Plane Wave Spectrum
+
+Periodic function f(x) has period Λ
+f(x) can be expanded into a complex Fourier series
+Typically keep only a finite number of terms of the series
+Λ is the period of the function f
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f_inf(x):=sum(a_m*exp(%i*((2*%pi*n*x)/Λ)), m, inf, inf );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_m: (1/Λ) * 'integrate(f_inf(x)*exp(-%i*((2*%pi*n*x)/Λ)),x,-Λ/2,Λ/2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f_finite(x) =sum(a_m* exp(%i*((2*%pi*n*x)/Λ)), m, -M, M);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Waves in periodic structure obey Bloch's equation 
+
+Envelope A(x) is periodic with period Λ_x 
+A(x) can be expanded as a Fourier series
+A(x) has the same period as the host structure
+E(x,y) has the phase component which alters A(x)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_fn(x,y):=A(x) * exp(%i*β .r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_fourier(x,y) := exp(%i*β.r)  * sum( S_m(y) *exp(-%i*((2*%pi*m*x)/Λ_x)) , m , minf, inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+0
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S_m = integrate(A(x)*exp(-%i*((2*%pi*m*x)/Λ_x)),A,-M,M );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Rearrange the Fourier Series
+β is a vector 
+r is a vector
+k is a vector
+k(m) is a vector
+
+Define transverse wave vector component of the mth term to be
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_x(m) :=β_x - (2*%pi*m)/Λ_x;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The field can then be written as
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(x,y) := sum(S_m * %e^(%i*k_x(m) * x) * %e^(%i*β_y*y),m,minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Substitutions To Show Plane Wave Spectrum Result
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S_m = S(m);k(m) =k_x(m)*a_hat_x + β_y *a_hat_y;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The final form has the form of a sum of plane waves at various angles
+This set of waves is the plane wave spectrum
+The E field is decomposed into a plane wave spectrum 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(x,y) := sum(S(m) * %e^(%i*k(m)  . r), m , minf,inf) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Longitudinal Wave Vector Components of the Plane Wave Spectrum
+
+Wave incident on the grating can be given as 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_inc(x,y):= E_0 * %e^(%i*(k_x_inc  * x + k_y_inc * y));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_x_inc:k_0*n_inc*sin(θ_inc);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_y_inc : k_0 *n_inc*cos(θ_inc);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Phase matching into the grating interface gives this where m = ..., -2, -1, 0, 1,2, ...
+k_x(m) is always real
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_x(m) := k_x_inc - m*((2*%pi)/Λ_x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Each wave must satisfy the dispersion relation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+disp_01:k_x(m)^2 + k_y(m)^2  = (k_0*n_grat)^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Solve for the longitudinal component (y)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(disp_01, k_y(m));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This has 2 possible solutions
+    k_y purely real
+    k_y purely imaginary
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+disp_03:k_y(m) = sqrt( (k_0*n_grat)^2 - k_x(m)^2);
+/* [wxMaxima: input   end   ] */
+
+
+

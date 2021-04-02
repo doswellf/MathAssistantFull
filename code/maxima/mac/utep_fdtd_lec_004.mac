@@ -1,0 +1,386 @@
+/* [wxMaxima: comment start ]
+UTEP (Empossible) EM Analysis Using FDTD
+
+Lecture 4 Electromagnetics and -FDTD
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[Ex,Ey,Ez]; E_0:[E0x,E0y,E0z];H:[Hx,Hy,Hz]; D:[Dx,Dy,Dz]; B:[Bx,By,Bz] ;d_bar:[dbar_x,dbar_y,dbar_z];k:[kx,ky,kz];r:[rx,ry,rz];b_bar:[bx,by,bz];J:[Jx,Jy,Jz];a:[ax,ay,az];a_r:[az,ay,ax];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends([x,y,z],t);depends([Dx, Dy, Dz],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ρ_v = 0; express(div(d_bar))=0; express(div(D))=0; express(div(d_bar * exp(-%i* (k . r)))) = 0;express(div(D))=ρ_v; express(div(B)) = 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The divergence theorems force the D and B fields to be perpendicular
+to the propagation direction of the plane wave
+
+Plug the equation for a plane wave into the divergence theorem for D
+
+Break up d_bar * exp(%i*(k.r)) into 2 parts
+div(d_bar) = 0, end up with k . r = 0 because k and r are ⟂
+
+The same derviation applies to B
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(div(d_bar))=0; express(div(D))=0; express(div(d_bar * exp(-%i* (k . r)))) = 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(div(b_bar))=0; express(div(B))=0; express(div(b_bar * exp(-%i* (k . r)))) = 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Ampere's Law with Maxwell's Correction
+Maxwell's correction was the addition of the time derivative of the D field
+The J term is normally ignored in dielectric materials  
+The J term is required when analyzing lossy materials
+
+Components of the curl of H are multipled by unit vectors in the x,y,z directions
+but are not shown here yet. 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(H)) . transpose(a) =J + diff(D,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Faraday's Law of Induction
+A circulating E field induces a time-changing magnetic flux at the center of circulation.
+A time-changing magnetic flux induces a circulating electric field around it.
+B is initially a static vector as defined above.
+Make it a harmonic function and give a range of time to get a non-zero right side
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ express(curl(E)) . transpose(a)=diff(B,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Constitutive Relations 
+Required for models of interaction of EM fields with matter.
+For most materials ε and μ are tensors, not scalars
+Scalars only for Linear Isotropic Homogenous materials 
+The convolution function is defined  first:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(fft)$
+conv(a,b):=block([n : length(a) + length(b) - 1],
+inverse_fft (fft (zero_extend (a, next2(n))) * fft (zero_extend (b, next2(n)))),
+realpart (next2(n) * %%),
+rest (%%, n - next2(n)))$
+zero_extend (a, n) := makelist (if i <= length(a) then a[i] else 0, i, 1, n) $
+next2 (n) := block ([i : ilog2 (n)], if n = 2^i then n else 2^(i + 1)) $
+ilog2 (n) := block ([i : 0], while n > 1 do (n : floor (n/2), i : i + 1), i) $
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_bar(t):=conv(ε(t),E_bar(t)  ) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+B_bar(t):=conv(μ(t), H_bar(t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(x,y,z); pt: matrix([ε[x,x], ε[x,y] , ε[x,z] ], [ ε[y,x],ε[y,y],ε[y,z]],[ε[z,x], ε[z,y],ε[z,z]]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ut: matrix([μ[x,x], μ[x,y] , μ[x,z] ], [ μ[y,x],μ[y,y],μ[y,z]],[μ[z,x], μ[z,y],μ[z,z]]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pd: matrix([ε[x,x], 0, 0], [0,ε[y,y],0], [0,0,ε[z,z]]  );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(t):=[Ex(t), Ey(t), Ez(t)]; Dv(t):=pd * E(t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The components of the field vectors are time-dependent
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Dv(t_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Dx(t) := ε[x,x] * E[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Dy(t) := ε[y,y]*E[2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Dz(t):=ε[z,z] * E[3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Dz(2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Parameter Relations
+Maxwell's Equations With Substituion Of Constitutive Relations
+
+1 ≤ ε_r ≤ ∞, 1 ≤ μ_r ≤ ∞
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_0: 8.854187817e-12; ε_r: 1; ε_a: ε_0*ε_r;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(H)) = ε_a * diff(E,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_0: 1.256637061e-6; μ_r: 1; μ_a: μ_0*μ_r;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(E)) = μ*diff(H,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Refractive Index
+
+Most materials are diamagnetic (little or no magnetic response to em waves) then μ = 1
+
+Then n^2 = ε_r where ε_r is relative permittivity
+
+ε_r is also known as the dielectric constant of the material
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+n : sqrt(μ_r * ε_r);n^2 = ε_r;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Characteristic Impedence 
+
+The impedence of a material is the relation or amplitude ratio and phase difference between the electric and magnetic field of a wave moving through that material. Impedence changes in a material or at boundaries causes wave reflection and scattering. 
+
+η ≅ |E|/|H|
+
+Impedence may be given relative to free space impedence as:
+
+η=η_0 * sqrt(μ_r/ε_r) where η_0 =sqrt(μ_0/ε_0) and
+η_0 = 376.73031346177 Ω
+
+Note that theE fields is about 2 to 3 orders of magnitude bigger than the magnetic field
+
+ω=2*π*f, τ=1/f 
+
+Wavelength and Frequency Of Libht
+
+Vacuum/Free space frequency and wavelength 
+
+c_0 = f * λ_0 where c_0 = 299792458 m/s
+
+ν=c_0/n gives reduction in velocity in a material
+
+The free space wavelength λ_0 can be exchanged for the frequency f. 
+
+ν=f*λ_m λ_m = λ_0/n for wavelength in material
+
+λ without subscript 0 is often used for the wavelength in a material in literature (This is a bad practice!)
+
+k_0 = (2*π)/λ_0  (free space wave number)
+
+Sign Conventions For Wave Equations
+
+Solution    Dielectric Function     Refractive Index
+
+-βz Convention
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[E = E_0 * exp(%i*( ω*t - k*z) ), ε_n=diff(ε, t) - %i * diff(ε, t,2), N = n - %i * κ ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
++βz Convention
+E_0 is initial phase and amplitude of wave at start of 
+analysis, not start of all time. Start time ≠ t_0 is possible for steady state analysis.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[E = E_0 * exp(-%i*( ω*t - k*z) ), ε_n=diff(ε, t) + %i * diff(ε, t,2), N = n + %i * κ ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD Flow
+
+Based on curl of E then update B field based on E curl equation
+Use calculated B field to calculate H field
+Use H field to update the D field
+Update E field from the fields
+
+Loop back to step (1) and start update sequence again.
+
+Substitute constitutive relations into curl equations to simplify loop to
+two-step process. (Leap-frog algorithm)
+
+Calculate H from E using μ as the proportionality constant
+Calculate E from H using μ as the proportionality constant
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H(t) := [Hx(t), Hy(t), Hz(t)];E(t):= [Ex(t), Ey(t), Ez(t)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[express(curl(E(t))) = -μ * diff(H(t) ,t)  , express(curl(H(t) ) ) = ε*diff(E(t),t)  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Finite Difference Approximations
+2nd order accurate central finite difference approximation of
+the first derivative of function f
+Derivative exists at the mid point between x1 and x2
+f_2 = f(x2), f_1 = f(x1)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fdc(f,x1, x2):= (f(x2)-f(x1) )/ (x2-x1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Each term of a finite difference equation must exist at the same
+point in time and space
+
+∂f(x)/∂x + f(x) = 0 given f(0), f(Δx), f(2Δx) ...
+
+Problem: f(x) exists at x, difference exists at x + Δx/2
+So fd1 will not work as code
+Now fd2 will work but have to calculate f(x + Δx/2)
+Take the average of f(x+dx) and f(x)
+Then fd3 will work as code
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd1(x,dx):=((f(x+dx) - f(x))/dx) + (f(x));fd1(x,dx)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd2(x,dx) := ((f(x+dx) - f(x)) / dx) + f(x + (dx/2)) = 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd3(f, x,dx):= ((f(x + dx) - f(x)) /dx)  + ((f(x + dx) + f(x)) / 2) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x):= 3*x^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+at( fd3(f, x,dx)  , [x=3,dx=1]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Approximating the Time Derivative
+
+TODO: CREATE METHODS TO CHANGE CALCULUS TO FINITE DIFFERENCE
+Problem: rhs of these are evaluated at t + Δt/2, lhs at time t
+Solution: 
+    Offset H(t) so that it exists (is evaluated at) t + Δt/2 
+    E(t) is still evaluated at integer time steps t=1,2,3,...
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(E(t))) = -μ*((H(t+dt) - H(t) ) / dt );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(H(t))) = -μ*((E(t+dt) - E(t) ) / dt );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(E(t))) = -μ*((H(t+(dt/2))  - H(t -(dt/2) ) ) / dt );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(H( t  + (dt/2) ))) = -μ*((E(t+dt) - E(t) ) / dt );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Define the update equations used in the main FDTD loop
+These calculate the field values at the next time step 
+Derive them by solving the finite difference equations for the fields
+at future time steps.
+
+The conversion of the curl equations to finite differences is given in the next lecture but presented here to finish the transformation of the expressions above.
+   [wxMaxima: comment end   ] */
+
+
+

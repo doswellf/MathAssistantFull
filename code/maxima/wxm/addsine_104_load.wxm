@@ -1,0 +1,90 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 18.02.0 ] */
+/* [wxMaxima: input   start ] */
+E_1:E_10*sin(w*t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_2:E_20*sin(w*t+delta_p);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_theta:E_10*sin(w*t)+E_20*sin(w*t+delta_p);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_theta_tz:E_theta_0*sin(w*t+phi_os);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+t:0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_theta;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(0,t,E_theta);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(%o10);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_20*sin(t*w+delta_p)+E_10*sin(t*w)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(0,t,E_20*sin(t*w+delta_p)+E_10*sin(t*w));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_theta;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(0,t,E_theta);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(0,t,first(E_theta));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(first(E_theta));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_theta;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(0,t,%o19);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst([t=0], E_theta);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 18.02.0"$

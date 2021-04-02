@@ -1,0 +1,23 @@
+
+EQN:3*x-6 = 6*x+5;
+%+6;
+%-6;
+%o2-6*x;
+%/(-3);
+subst((-11)/3,x . rhs(EQN));
+subst((-11)/3,x,rhs(EQN));
+subst((-11)/3,x,lhs(EQN));
+solve(EQN,x);
+EQN:log(x) = sin(x);
+solve(EQN,x);
+EQN2:log(x)-sin(x) = 0;
+solve(EQN2,x);
+draw2d(grid = true,explicit(log(x)-sin(x),x,0,10));
+find_root(EQN2,0,4);
+find_root(EQN2,2,4);
+find_root(log(x)-sin(x),0,4);
+find_root(log(x)-sin(x),2,4);
+solve(2*x-5 = 0,x);
+solve([2*x-3*y = 5,3*x+y = 2],[x,y]);
+draw2d(grid = true,color = black,implicit(L1,x,-2,2,y,-2,2),implicit(L2,x,-2,2,y,-2,2),color = red,point_type = 7,points([[1,-1]]));
+draw2d(grid = true,color = black,implicit(2*x-3*y = 5,x,-2,2,y,-2,2),implicit(3*x+y = 2,x,-2,2,y,-2,2),color = red,point_type = 7,points([[1,-1]]));

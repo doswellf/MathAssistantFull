@@ -1,0 +1,74 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 19.07.0 ] */
+/* [wxMaxima: comment start ]
+CEM UTEP Matrix Transform Method
+Solution in Linear Homogenous Isotropic Medium
+
+Derive 2X2 Matrix Equation
+Start With Derivation Of 4x4 Matrix Equation
+
+Positive sign convention for wave travelling left to right
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect); load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(r):=E_0*exp(j*k*z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H(r):=H_0_norm*exp(j*k*z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cem_101:[E_k(r)=E_0*exp(j*(k.r)), E_k(r)=E_0*exp(j*k_x*x)*exp(j*k_y*y)*exp(j*k_z*z)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cem_102:[H_k_norm(r)=H_0_norm(r)*exp(j*(k.r)), H_k_norm(r)=H_0_norm*exp(j*k_x*x)*exp(j*k_y*y)*exp(j*k_z*z) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now Deriving The 2x2 Matrix Derivation 
+Write Two 2x2 Matrix Equations Instead Of One 4x4 Matrix Equation
+
+Equations In cem_2x2_501 ==> Matrix Equation In cem_2x2_502
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cem_2x2_501:['diff(E_x,z_norm)=((k_x_norm*k_y_norm)/ε_r)*H_x_norm+(μ_r-(k_x_norm^2/ε_r))*H_y_norm,'diff(E_y,z_norm)=((k_y_norm^2/ε_r)-μ_r)*H_x_norm-((k_x_norm*k_y_norm)/ε_r)*H_y_norm];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cem_2x2_502:[]
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Equations In cem_2x2_503 ==> Matrix Equation In cem_2x2_504
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cem_2x2_503:[];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cem_2x2_504:[];
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 19.07.0"$

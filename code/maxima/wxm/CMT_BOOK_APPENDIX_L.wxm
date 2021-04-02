@@ -1,0 +1,350 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: title   start ]
+Calculation  Of Coupling Coefficents and
+Cross Norms for Two-Waveguide Systems
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: comment start ]
+From:
+Modern Electrodynamics and Coupled Mode Theory 
+Barybin and Dmitriev 
+TODO: 
+    FIX UP LATEX CODE
+    ADD EQUATIONS FROM EARLIER CHAPTERS REFERENCED BY APPENDIX L
+    TRANSCRIBE ANY GREEK LETTERS TO CLOSEST ENGLISH EQUIVALENT FOR MAXIMA
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Appendix L
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Coupling Coefficients for the TE Modes
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+The TE modes of planar waveguides have the following field components (From Section 5.6.1)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Tex: $ E_z \neq 0\, H_y \neq 0\, H_z \neq 0,\, and E+y = E_z = H_z = 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+From (7.8.64) to (7.8.65) it follows that the surface contribution to the coupling coeffcients for the TE modes in planar dielectric waveguides is absent.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Tex: c_11^{surf} =c_22^{surf} = c_12^{surf} = c_21^{surf} = 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Equations (7.8.48)  to (7.8.51) and (7.8.62) to (7.8.63) yield these expressions for the self- and cross-coupling coefficients: The dielectric profiles Δε^a(y) and  Δε^b(y) are given in equations (7.8.56) and (7.8.57).
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L1: [c_11=c_mm_aa_bulk, c_11 = ((%i*ω*w)/(N_m_a))*integrate(Δε^a(y)*abs(E_mx_a(y))^2,y) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L2:[c_22 = c_nn_bb_bulk , c_22= ((%i*ω*w)/(N_n_b))*integrate(Δε^b(y)*abs(E_nx_b(y))^2,y)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L3:[c_12=c_mn_ab_bulk, c_11 = ((%i*ω*w)/(N_m_a))*integrate(Δε^a(y)*conjugate(E_mx_a(y))*E_nx_b(y) ,y) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L4: [c_22 = c_nm_ba_bulk , c_22= ((%i*ω*w)/(N_n_b))*integrate(Δε^b(y)*conjugate(E_nx_b(y))*E_mx_a(y),y)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Prior information is needed in order to make use of L1 through L4. It is necessary to know the cross-sectional field profiles (E_mx_a(y), E_nx_b)) and the norms (N_n_a,N_n_b)  for the mth mode in waveguide a and the nth mode in waveguide b. The expressions for the fields and norms are given in sections 5.6.1 and 5.7.1 for reference.
+
+The unperturbed permittivity profiles ^a(y) and ε^b(y) shown in figures 7.2 (c) and (d) are symmetric relative to the centre (y = h + a and y = -(h+b)) in both waveguides. We can then apply the expressions for even modes of symmetric waveguides. Also see equations (5.7.6),(5.7.19),(5.7.20),(5.7.22).
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+TE_m mode of waveguide a
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L5A:[E_mx_a(y)=E_m_a*cos(κ_m_a)*a*exp(-ζ_m_a*(y-(h+2*a))), y >= (h+2*a) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L5B:[E_mx_a(y)=E_m_a*cos(κ_m_a)*(y-(h+a)),  h <=y, y <= (h+2*a) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L5C:[E_mx_a(y)=E_m_a*cos(κ_m_a)*exp(-ζ_m_a*(y-h)), y <= h];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L6:[N_m_a=w*((β_m_a*d_m_a)/(ω*μ_0)) *(E_m_a)^2,d_m_a=2*(a+(1/(ζ_m_a)) )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L7:[κ_m_a=sqrt(ω^2*ε_0*μ_0-(β_m_a)^2),ζ_m_a=sqrt((β_m_a)^2-ω^2*ε_0*μ_0) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L8:[cos(κ_m_a)*a=(κ_m_a/sqrt((κ_m_a^2) + (ζ_m_a)^2)) ,  cos(κ_m_a)*a=κ_m_a/(ω*sqrt((ε_a-ε_0)*μ_0) ,  sin(κ_m_a)*a=(ζ_m_a/sqrt((κ_m_a^2) + (ζ_m_a)^2))), sin(κ_m_a)*a=ζ_m_a/(ω*sqrt(ε_a-ε_0)*μ_0) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where L8 are a result of he dispersion relation (5.6.15) for even modes. 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Replace  i*κ_y2_μ → ζ_m_a and κ_y1 → κ_m_a in ζ_m_a =κ_m_a*tan(κ_m_a)*a
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+ TEn Mode Of Waveguide b
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L9A:[E_nx_b(y)=E_n_b*cos(κ_n_b)*b*exp(-ζ_n_b*(y+h)), y >= -h ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L9B:[E_nx_b(y)=E_n_b*cos(κ_n_b)*(y+(h+b)),  -(h+2*b) <=y, y <=-h ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L9C:[E_nx_b(y)=E_n_b*cos(κ_n_b)*exp(abs(ζ_n_b)*y + (h+2*b)), y <= -(h+2*b)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L10:[N_n_b=w*((β_n_b*d_n_b)/(ω*μ_0)) *L15:[c_22=-((i*ω*w)/N_n_b)*( integrate((ε_a-ε_0)*(E_n_b*cos(κ_n_b)*b)^2 *exp(2*ζ_n_b*(y-h)),y,h,(h+2*a))+integrate((ε_a-ε_0)*(E_n_b*cos(κ_n_b)*b)^2*exp(2*ζ_n_b*(y-h)),y,-h,h)) ,c_22=((%i*ω*w)/N_n_b)*(E_n_b)^2*(cos(κ_n_b)*b)^2*((ε_a-ε_0)*J_3+(ε_2-ε_0)*J_4),c_22=-%i*((κ_n_b)^2/(β_n_b*d_n_b))*(((ε_a-ε_0)/(ε_b-ε_0))*((1-exp(-4*ζ_n_b*a))/(2*ζ_n_b))-((ε_2-ε_0)/(ε_b-ε_0))*((1-exp(-4*ζ_n_b*h))/(2*ζ_n_b))*exp(-4*ζ_n_b*h)) ] ;(E_n_b)^2,d_b_n=2*(b+(1/(ζ_n_b)) )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L11:[κ_n_b=sqrt(ω^2*ε_0*μ_0-(β_n_b)^2),ζ_n_b=sqrt((β_n_b)^2-ω^2*ε_0*μ_0) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L12:[cos(κ_n_b*b=(κ_n_b/sqrt((κ_n_b^2) + (ζ_n_b)^2))) ,  cos(κ_n_b)*b=κ_n_b/(ω*sqrt((ε_b-ε_0)*μ_0) ,  sin(κ_n_b)*b=(ζ_n_b/sqrt((κ_n_b^2) + (ζ_m_a)^2))), sin(κ_n_b)*b=ζ_n_b/(ω*sqrt(ε_b-ε_0)*μ_0) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where L12 are a result of he dispersion relation (5.6.15) for even modes. where L8 are a result of he dispersion relation (5.6.15) for even modes. 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Replace  i*κ_y2_μ → ζ_n_b and κ_y1 → κ_n_b in ζ_m_a =κ_m_a*tan(κ_m_a)*a. Replace  i*κ_y2_μ → ζ_m_a and κ_y1 → κ_m_a in ζ_n_b =κ_n_b*tan(κ_n_b)*b
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Self-Coupling Coefficients
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L14:[c_11=-((i*ω*w)/N_m_a)*('integrate((ε_b-ε_0)*(E_m_a*cos(κ_m_a)*a)^2 *exp(2*ζ_m_a*(y-h)),y,-(h+2*b),-h))+ 'integrate((ε_2-ε_0)*(E_m_a*cos(κ_m_a)*a)^2*exp(2*ζ_m_a*(y-h)),y,-h,h) ,c1_11=((%i*ω*w)/N_m_a)*(E_m_a)^2*(cos(κ_m_a)*a)^2,((_b-ε_0)*J_1+(ε_2-ε_0)*J_2),c_11=-%i*((κ_m_a)^2/(β_m_a*d_m_a))*(((ε_b-ε_0)/(ε_a-ε_0))*((1-exp(-4*ζ_m_a*b))/(2*ζ_m_a))-((ε_2-ε_0)/(ε_a-ε_0))*((1-exp(-4*ζ_m_a*h))/(2*ζ_m_a))*exp(-4*ζ_m_a*h)) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L15:[c_22=-((i*ω*w)/N_n_b)*( integrate((ε_a-ε_0)*(E_n_b*cos(κ_n_b)*b)^2 *exp(-2*ζ_n_b*(y+h)),y,h,(h+2*a))+integrate((ε_a-ε_0)*(E_n_b*cos(κ_n_b)*b)^2*exp(-2*ζ_n_b*(y+h)),y,-h,h)) ,c_22=((%i*ω*w)/N_n_b)*(E_n_b)^2*(cos(κ_n_b)*b)^2*((ε_a-ε_0)*J_3+(ε_2-ε_0)*J_4),c_22=-%i*((κ_n_b)^2/(β_n_b*d_n_b))*(((ε_a-ε_0)/(ε_b-ε_0))*((1-exp(-4*ζ_n_b*a))/(2*ζ_n_b))-((ε_2-ε_0)/(ε_b-ε_0))*((1-exp(-4*ζ_n_b*h))/(2*ζ_n_b))*exp(-4*ζ_n_b*h)) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L16:[c_12=-((i*ω*w)/N_m_a)*integrate((ε_b-ε_0)*(E_m_a*cos(κ_m_a)*a) *exp(ζ_m_a*(y-h))*E_n_b*cos(κ_n_b)*(y+(h+b)) ,y,-(h+2*b),-h) + integrate((ε_2-ε_0)*(E_m_a*cos(κ_m_a*a))*exp(ζ_m_a*(y-h))*(E_n_b*cos(κ_n_b*b))*exp(-ζ_n_b*(y+h)),y,-h,h),c_22=((%i*ω*w)/N_m_a)*(E_m_a*E_n_b)^2*(cos(κ_m_a)*a)*((ε_b-ε_0)*J_5+(ε_2-ε_0)*cos(κ_n_b)*b*J_6),c_22=-%i*((κ_m_a*κ_n_b)/sqrt(β_m_a*d_m_a*β_n_b*d_n_b))*(sqrt((ε_b-ε_0)/(ε_a-ε_0))*(((1-exp( -2*ζ_m_a*b))*ζ_m_a + (1+exp(-2*ζ_m_a*b))*ζ_m_a)/((ζ_m_a)^2+(κ_n_b)^2))-((ε_2-ε_0)/(sqrt((ε_a-ε_0)*(ε_b-ε_0)))) * ((1-exp(2*(ζ_m_a-ζ_n_b)*h)/(ζ_m_a-ζ_n_b)))) *exp(-2*ζ_m_a*h) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L17:[c_21=-((i*ω*w)/N_n_b)*( integrate((ε_a-ε_0)*(E_n_b*cos(κ_n_b)*b) *exp(-ζ_n_b*(y+h))*E_m_a*cos(κ_m_a)*(y-(h+a)),y,h,(h+2*a))+integrate((ε_2-ε_0)*(E_n_b*cos(κ_n_b)*b)*exp(-ζ_n_b*(y+h))*(E_m_a*cos(κ_m_a)*a)*exp(ζ_m_a*(y-h)),y,-h,h)) ,c_21=((%i*ω*w)/N_n_b)*(E_n_b)^2*cos(κ_n_b)*b*((ε_a-ε_0)*J_7+(ε_2-ε_0)*cos(κ_m_a)*J_6),c_21=-%i*((κ_m_a*κ_n_b)/(sqrt(β_m_a*d_m_a*β_n_d*d_n_b))*( sqrt(((ε_a-ε_0)/(ε_b-ε_0)))*((1-exp(-2*ζ_n_b*a))/(2*ζ_n_b))*ζ_n_b+(1+exp(-2*ζ_n_b*a))*ζ_m_a) / ((ζ_n_b)^2 + (κ_m_a)^2)) - ((ε_2-ε_0)/(sqrt((ε_a-ε_0)*(ε_b-ε_0)))) * ((1-exp(2*(ζ_n_n-ζ_m_a)*h) / (ζ_n_b-ζ_m_a))*exp(-2*ζ_n_b*h))  ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Coupling Coefficients For The TM Modes 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+The TM modes of planar waveguides have these field components:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+E_y ≠ 0, E_z ≠ 0, H_z ≠ 0, E_z - H_y=H_z = 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+From eqns (7.8.48)-(7.8.51),(7.8.62),(7.8.65), all coupling coefficients for the TM modes include both the bulk and surface contributions.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+The Bulk Coupling Coefficients
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L18:[c11_bulk=(c_mm_aa_bulk),c11_bulk=((%i*ω*w)/N_m_a)*integrate(Δε_a(y)*(abs(E_my_a(y))^2 + ((abs(E_my_a(y))^2)/(1+(Δε_a/ε-a) +(Δε_b/ε_b))) ),y,minf,inf) ];
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L19:[c_22_bulk=(c_nn_bb_bulk),c_22_bulk=((-%i*ω*w)/N_n_b)*'integrate(Δε_b(y)*('abs(E_ny_b(y))^2 + ((abs(E_ny_b(y))^2)/(1+ (Δε_a/ε_a) + (Δε_b/ε_b)))),y,minf,inf)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L20:[c12_bulk=(c_mn_ab_bulk),c12_bulk=((%i*ω*w)/N_m_a)*integrate(Δε_a(y)*('conjugate(E_my_a(y)*E_ny_b(y) + ( 'conjugate(E_mz_a(y))*E_nz_b(y)) /(1+(Δε_a/ε-a) +(Δε_b/ε_b)))),y,minf,inf) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L21:[c_21_bulk=(c_nm_ba_bulk),c_21_bulk=((-%i*ω*w)/N_n_b)*'integrate(Δε_b(y)*('conjugate(E_ny_b(y))*E_my_a(y) + (('conjugate(E_ny_b(y))*E_nz_b(y))/(1+ (Δε_a/ε_a) + (Δε_b/ε_b)))),y,minf,inf)];
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The Surface Coupling Coefficients
+
+This applies to a slice within a slab waveguide
+y_u is the upper interface, y_l is the lower interface  (in plane y=y_u and y=y_l)
+Outward normal vectors n_b = ±e_y
+The tangent unit vectors are τ_b ≣ e_z x n_b = ±e_x
+The dielectric perturbation Δε_a_b(y) and their relative values Δε_a_b(y)/ε_a_b(y) for a 2 waveguide system are shown in Fig  7.2
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L22:[c11_surf=(c_mm_aa_surf),c11_surf=(1/N_m_a)*'integrate( (Δε_a/ε_a)/(1+(Δε_a/ε-a) +(Δε_b/ε_b))*('conjugate(H_m_a)*τ_b_a)*E_mz-a,L,a,b),c_11_surf=(1/N_m_a)*'integrate((Δε_a/ε_a)/(1+(Δε_a/ε_a) +(Δε_b/ε_b))*(-'conjugate(H_mx_a(y_u))*E_mz_a(y_u) + 'conjugate(H_mx_a(y_l))*E_mz(y_l)),x,-w/2,w/2) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L23:[c_22_surf=(c_nn_bb_surf),c_22_surf=(1/N_n_b)*'integrate(((Δε_b/ε_b)/(1+ (Δε_a/ε_a) + (Δε_b/ε_b)))*('conjugate(H_n_b)*τ_b_b)*E_nz_b),L,a,b),c_22_surf=(-1/N_n_b)*'integrate( ((Δε_b/ε_b)/(1+(Δε_a/ε_a) +(Δε_b/ε_b)))*(-'conjugate(H_nx_b)(y_u)*E_nz_b(y_u) + 'conjugate(H_nx_b)(y_l)*E_nz_b(y_l) ) ,x,-w/2,w/2 ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L24:[c12_surf=(c_mn_ab_surf),c12_surf=(1/N_m_a)*'integrate( (Δε_a/ε_a)/(1+(Δε_a/ε-a) +(Δε_b/ε_b))*('conjugate(H_m_a)*τ_b_a)*E_nz_b,L,a,b),c_12_surf=(1/N_m_a)*'integrate((Δε_a/ε_a)/(1+(Δε_a/ε-a) +(Δε_b/ε_b))*(-'conjugate(H_mx_a(y_u))*E_mz_a(y_u) + 'conjugate(H_mx_a(y_l))*E_mz(y_l)),x,-w/2,w/2) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L25:[c_21_surf=(c_nm_ba_surf),c_21_surf=(1/N_n_b)*'integrate(((Δε_b/ε_b)/(1+ (Δε_a/ε_a) + (Δε_b/ε_b)))*('conjugate(H_nX_b)*τ_b_b)*E_mz_a,L,a,b),c_21_surf=(-1/N_n_b)*'integrate( ((Δε_b/ε_b)/(1+(Δε_a/ε_a) +(Δε_b/ε_b)))*(-'conjugate(H_nx_b)(y_u)*E_mz_a(y_u) + 'conjugate(H_nx_b)(y_l)*E_mz_a(y_l) ) ,x,-w/2,w/2 ) ];
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The mth mode of the a-guide and the nth mode of the b-guide are given by the following transverse fields
+The mth and nth mode are also specified using other relevant characteristics from equations in Chapter 5
+(5.7.25), (5.7.36)-(5.7.38)
+
+TM_m Modes Of The Waveguide a
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L26:[if y >= (h + 2*a) then H_mx_a(y)=H_m_a*cos(κ_m_a)*a*exp(-ζ_m_a*abs(y-(h+2*a))),if h <= y and y <= (h+2*a) then H_mx_a(y)=H_m_a*cos(κ_m_a)*(y-(h+a)),if y <= h then H_mx_a(y)=H_m_a*cos(κ_m_a)*a*exp(ζ_m_a*(y-h)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L27:[if y > (h + 2*a) then E_my_a(y)=(-β_m_a/(ω*ε_0))*H_m_a*cos(κ_m_a)*a*exp(-ζ_m_a*abs(y-(h+2*a))),if h < y and y < (h+2*a) then E_my_a(y)=(-β_m_a/(ω*ε_0))*H_m_a*cos(κ_m_a)*(y-(h+a)),if y < h then E_my_a(y)=(-β_m_a/(ω*ε_0))*H_m_a*cos(κ_m_a)*a*exp(ζ_m_a*(y-h)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L27:[if y >= (h + 2*a) then E_mz_a(y)=(ζ_m_a/(%i*ω*ε_0))*H_m_a*cos(κ_m_a)*a*exp(-ζ_m_a*abs(y-(h+2*a))),if h <= y and y <= (h+2*a) then E_mz_a(y)=(κ_m_a/(%i*ω*ε_0))*H_m_a*cos(κ_m_a)*(y-(h+a)),if y < h then H_my_a(y)=(-β_m_a/(%i*ω*ε_0))*H_m_a*cos(κ_m_a)*a*exp(ζ_m_a*(y-h)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L28:[N_m_a=((β_m_a*d_m_a)/(ω*ε_0)) *(H_m_a)^2 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L29:[d_m_a=2*(a + (1/ζ_m_a)*(1/q_m_a)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L30:[κ_m_a=sqrt(ω^2*ε_0*μ_0 - (β_m_a)^2),ζ_m_a=sqrt(((β_m_a)^2-ω^2*ε_0*μ_0))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L31:[cos(κ_m_a)*a=(ε_0*κ_m_a)/sqrt((ε_0*κ_m_a)^2 + (ε_a*ζ_m_a)^2), cos(κ_m_a)*a=(ε_0*κ_m_a)/sqrt(ε_a*( ε_a-ε_0)*((β_m_a)^2)-(ε_0/ε_a)*(κ_m_a)^2),sin(κ_m_a)*a=(ε_a*ζ_m_a)/sqrt((ε_0*κ_m_a)^2 + (ε_a*ζ_m_a)^2), sin(κ_m_a)*a=(ε_a*ζ_m_a)/sqrt(ε_a*( ε_a-ε_0)*((β_m_a)^2)-(ε_0/ε_a)*(κ_m_a)^2) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The expressions in L31 are a consequence of the dispersion equation given in (5.6.32) for even modes
+They are re-written using the following replacements:The expressions in L31 are a consequence of the dispersion equation given in (5.6.32) for even modes
+They are re-written using the first 2 replacements in the third expression of L31A:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L31A:[%i*κ_y2_ε=(ε_a/ε_0)*ζ_m_a, κ_y1=κ_m_a,(ε_a/ε_0)*ζ_m-a=κ_m_a*tan(κ_m_a)*a ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+TM_n Mode of Waveguide b
+L32 IS NOT CORRECT - EDIT ALL PARTS
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L32:[if y >= -h then H_nx_b(y)=H_n_b*cos(κ_n_b)*b*exp(-ζ_n_b*(y+h)),if -(h+2*b) <= y and y <= -h then H_mx_a(y)=H_m_a*cos(κ_m_a)*(y-(h+a)),if y <= h then H_mx_a(y)=H_m_a*cos(κ_m_a)*a*exp(ζ_m_a*(y-h)) ];
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

@@ -1,0 +1,151 @@
+/* [wxMaxima: title   start ]
+wxqdraw.wxm  Examples using qdraw.mac
+   [wxMaxima: title   end   ] */
+
+
+/* draw2d will load automatically if you call draw2d or wxdraw2d
+
+Our function wxqdraw calls wxdraw2d to allow inline plots, provided
+you have display2d set to true.
+
+To use wxqdraw, use the same syntax as for qdraw (as in Ch. 13 examples),
+but use the name wxqdraw instead of qdraw.
+
+You first need to load our file qdraw.mac.  The draw package loads automatically. */
+
+load("qdraw.mac");
+
+/* simplest plot of one or more expressions uses ex(...) */
+
+wxqdraw ( ex (cos(x), x, 0, 6))$
+
+wxqdraw ( ex (cos(x), x, 0, 6, lc(red)))$
+
+/* you get more control options if you use ex1(...) */
+
+wxqdraw ( ex1 (cos(x), x, 0, 6, lc(red)))$
+
+wxqdraw ( ex1 (cos(x), x, 0, 6, lc(red)),
+more (xlabel = "X", ylabel = "COS(X)", title = "single function"))$
+
+wxqdraw ( ex1 (cos(x), x, 0, 6, lc(red)),
+  line ( 0,0,6,0, lc(brown), lw(1)),
+more (xlabel = "X", ylabel = "COS(X)", title = "single function"))$
+
+wxqdraw ( ex1 (cos(x), x, 0, 6, lc(red)), yr (-1.2, 1.2),
+  line ( 0,0,6,0, lc(brown), lw(1)), 
+more (xlabel = "X", ylabel = "COS(X)", title = "single function"))$
+
+/* example of using ex(...) for three expressions */
+
+wxqdraw ( ex ( [x,x^2,x^3],x,-3,3),
+  line ( -3,0,3,0, lc(brown), lw(1)), 
+more (xlabel = "X",  title = "Using ex(..) for three functions"))$
+
+wxqdraw ( ex ( [x,x^2,x^3],x,-3,3),  yr (-2, 2),
+  line ( -3,0,3,0, lc(brown), lw(1)), 
+more (xlabel = "X",  title = "Using ex(..) for three functions"))$
+
+wxqdraw ( ex ( [x,x^2,x^3],x,-3,3),  yr (-2, 2),
+  line ( -3,0,3,0, lc(brown), lw(1)), key (bottom),
+more (xlabel = "X",  title = "Using ex(..) for three functions"))$
+
+wxqdraw ( ex ( [x,x^2,x^3],x,-3,3),  yr (-2, 2),
+  line ( -3,0,3,0, lc(brown), lw(1)), key (bottom),
+  pts ( [ [-1,-1], [0,0],[1,1] ] ),
+more (xlabel = "X",  title = "Using ex(..) for three functions"))$
+
+wxqdraw ( ex ( [x,x^2,x^3],x,-3,3),  yr (-2, 2),
+  line ( -3,0,3,0, lc(brown), lw(1)), key (bottom),
+  pts ( [ [-1,-1], [0,0],[1,1] ], ps(2), pc(magenta)),
+more (xlabel = "X",  title = "Using ex(..) for three functions"))$
+
+wxqdraw ( ex ( [x,x^2,x^3],x,-3,3),  yr (-2, 2),
+  line ( -3,0,3,0, lc(brown), lw(1)), key (bottom),
+  pts ( [ [-1,-1], [0,0],[1,1] ], ps(2), pc(magenta), pk("intersections")),
+more (xlabel = "X",  title = "Using ex(..) for three functions"))$
+
+wxqdraw ( ex ( [x,x^2,x^3],x,-3,3),  yr (-2, 2),
+  ex ( sin(3*x)*exp (x/3), x, -3, 3),  key (bottom),
+label ( ["wxqdraw fig.", -2.9, 1.5 ]),
+  pts ( [ [-1,-1], [0,0],[1,1] ], ps(2), pc(magenta)))$
+
+/* implicit plot using imp (...) */
+
+e : sin (2*x)*cos(y)$
+wxqdraw( imp ([e=0.4,e=0.7,e=0.9], x,-3,3, y,-3,3), cut (key))$
+
+/* density plots using wxqdensity starts with expression */
+
+wxqdensity ( x*y,[x,0,1,0.2], [y,0,1,0.2])$
+
+wxqdensity ( x*y,[x,0,1,0.2], [y,0,1,0.2], palette (gray))$
+
+wxqdensity ( x*y,[x,0,1,0.2], [y,0,1,0.2], palette (color))$
+
+wxqdensity ( x*y,[x,0,1,0.05], [y,0,1,0.05])$
+
+wxqdensity ( sin(x)*sin(y),[x,-2,2,0.05], [y,-2,2,0.05])$
+
+/* density plots using wxqdensity_mat starts with a matrix */
+
+mod_table : makelist( makelist(mod(x,y),x,1,30),y,1,20)$
+length(mod_table);
+M : apply ('matrix, mod_table)$
+wxqdensity_mat(M,[1,30],[1,20])$
+
+/* two examples of using ex1(...) */
+
+wxqdraw( ex1(bessel_j(0,x),x,0,20,lc(red),lw(6),lk("bessel_j ( 0, x)") ),
+          ex1(bessel_j(1,x),x,0,20,lc(blue),lw(5),lk("bessel_j ( 1, x)")),
+          ex1(bessel_j(2,x),x,0,20,lc(brown),lw(4),lk("bessel_j ( 2, x)") ),
+          ex1(bessel_j(3,x),x,0,20,lc(green),lw(3),lk("bessel_j ( 3, x)") ) )$
+
+wxqdraw(line(0,0,50,0,lc(red),lw(2) ),
+               ex1(bessel_j(0, sqrt(x)),x,0,50 ,lc(blue),
+                lw(7),lk("J0( sqrt(x) )") ) )$
+
+/* parametric plot example using para (...) */
+
+wxqdraw(xr(-3,4),yr(-1,40), para(2*cos(u),u^2,u,0,2*%pi) ,
+         pts([ [2,0] ],ps(1),pc(blue),pk("u = 0")),
+         pts( [ [0,(%pi/2)^2] ],ps(1), pc(red), pk("u = pi/2")),
+         pts([ [-2,%pi^2]],ps(1),pc(green),pk("u = pi")),
+         pts( [[0,(3*%pi/2)^2]],ps(1),pc(magenta),pk("u = 3*pi/2")),
+         more (title="parametric plot", xlabel = "2*cos(u)",ylabel = "u^2"))$
+
+/* polar plot example using polar (...) */
+
+wxqdraw( polar(10/t,t,1,3*%pi,lc(brown),lw(5)),nticks(200),
+            xr(-4,6),yr(-3,9),key(bottom) ,
+       pts( [[10*cos(1),10*sin(1)]],ps(2),pc(red),pk("t = 1 rad")),         
+     pts([[5*cos(2),5*sin(2)]],ps(2),pc(blue),pk("t = 2 rad") ),
+              line(0,0,5*cos(2),5*sin(2)) )$
+
+/* draw a rectangle using rect (...) */
+
+wxqdraw( xr(-1,2),yr(-1,2),
+            rect(0,0,1,1, lw(5), lc(brown), fill(khaki) ) )$
+
+/* draw a circle using circle (...) */
+
+wxqdraw(xr(-2.1,2.1),yr(-1.5,1.5),cut(all),
+            line(-1.5,-1.5,1.5,1.5,lw(8),lc(red) ),
+            circle(0,0,1,lw(8),lc(brown),fill(khaki)))$
+
+/* draw an ellipse using ellipse (...) */
+
+wxqdraw( xr(-5.6,5.6),yr(-4,4),ex1(x,x,-4,4,lc(blue),lw(5)),
+                  ex1(4*cos(x),x,-4,4,lc(red),lw(5) ),
+         ellipse(0,0,3,1,90,270,lc(brown),lw(5),fill(khaki)),cut(all))$
+
+/* example of using a Greek letter theta in a label */
+
+wxqdraw(xr(-5,5),yr(-2,2),label_align(c),
+         label( ["{/=48 a b c d e f g h i j k l m}",0,1.5] ),
+        label( ["{/Symbol=48 a b c d e f g h i j k l m}",0,0.5] ),
+        label( ["{/=48 n o p q r s t u v w x y z}",0,-.5] ),
+         label( ["{/Symbol=48 n o p q r s t u v w x y z}",0,-1.5] ),   
+        cut(all)), wxplot_size = [1024,768]$
+
+

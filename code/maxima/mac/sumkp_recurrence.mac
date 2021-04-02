@@ -1,0 +1,90 @@
+/* MAXIMA SOURCE CODE
+   Author: Assad Ebrahim, (assad.ebrahim@mathscitech.org)
+   License: LGPL (Lesser GPL)
+   Copyright (c) 2010, Assad Ebrahim.
+   
+   Iteratively Computing Finite Sum of P-th Powers of Integers
+   using the p-th order recurrence (10) from the paper: 
+   "Finite Summation of Integer Powers, Part 2", Assad Ebrahim, Jan 2010
+   Paper at: http://mathscitech.org/papers/ebrahim-sum-powers-2.pdf
+   Source code at: http://mathscitech.org/articles/downloads#source
+   
+/* **********************
+  USAGE INSTRUCTIONS: from within wxMaxima, run the following commands:
+   
+   load("c:\\tmp\\sumkp_recurrence.mac"); [replace with path to downloaded file]
+   SpN(p);                                [positive integer p: 1,2,...]
+   SpN_pretty(p);
+
+   NOTES:  - SpN(p) returns the closed form formula for the finite summation
+                of p-th powers of integers
+           - SpN_pretty(p) produces a prettified output as well.
+   */
+
+
+/* **********************
+   PUBLIC Function: Iteratively computes S_p(N)  
+   Input: positive integer p: 1,2,... 
+   Return: formula for S_p(N) */
+
+SpN(p) := (
+  for i:1 thru p-1 do get_next_SpN(i),
+  get_next_SpN(p)  /* return */
+)$
+
+/* **********************
+   PUBLIC Function: Iteratively computes S_p(N).  Pretty prints solution.
+   Input: positive integer p: 1,2,... 
+   Return: formula for S_p(N) */
+
+SpN_pretty(p) := (
+  print(sum(k^p,k,1,n)," = ",SpN(p))  /* pretty print */
+)$
+
+
+/* ****************************************************************
+   PRIVATE FUNCTIONS
+   **************************************************************** */
+   
+/* **********************
+   CORE COMPUTATION: p-th ORDER RECURRENCE
+   ---------------------------------------
+   PRIVATE Function: Computes p-th solution using p-th order recurrence relation 
+             of Equation (1-SOL), and prior solutions.
+   Solution in: "Finite Summation of Integer Powers, Part 2", A. Ebrahim, 1/2010
+   Paper at: http://mathscitech.org/papers/ebrahim-sum-powers-2.pdf  */ 
+
+get_next_SpN(p) := block([a,sum1,sum2],
+  
+  s[0](n) := n,                                       /* initial value */
+  c(p,j,n) := n*binomial(p-1,j) - binomial(p-1,j-1),  /* definition */
+  
+  a[p-1] : getcoeffs(s,p-1),           /* get prior solution's coefficients */
+  
+  /* compute the two summations in Equation (1-SOL) */
+  sum1 : ratsimp(sum(c(p,k,n)*s[k](n-1),k,1,p-1)),
+  sum2 : ratsimp(sum(a[p-1][k+1]*s[k](n),k,1,p-1)),
+  
+  /* compute and assign solution (1-SOL) */
+  define(s[p](n),ratsimp((1/(1+a[p-1][p+1]))*(n^2 + n^p + sum1 - sum2)))
+)$
+
+
+/* **********************
+   PRIVATE Function: get coefficients of prior solution */
+   
+getcoeffs(s,p) := (
+  v : makelist(ratcoeff(s[p](n),n,j),j,0,p+1)  /* jth coeff. <-->  n^j power*/
+)$
+
+
+/* ***********************
+   Package complete */
+print("Loading completed successfully.");
+print("Commands: SpN(p) or SpN_pretty(p).");
+
+
+/*
+   Revision History:
+   2/24/2010 - 002 - AKE - revised comments, minor streamlining
+   2/23/2010 - 001 - AKE - initial  */

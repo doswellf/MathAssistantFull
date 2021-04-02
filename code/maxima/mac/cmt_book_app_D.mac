@@ -1,0 +1,133 @@
+/* [wxMaxima: comment start ]
+Modern Electrodynamics and Coupled Mode Theory
+
+Appendix D
+
+Polarization Description of Drifting Charge Carriers in Nondegenerate Plasmas
+
+Rather than study single particles in a plasma, use a "liquid particle" as a specific particle of a continuous material.
+This liquid particle represents a physically infinitesimal  volume containing a group of charges.
+
+The volume considered needs to be small enough relative to the macroscopic dimensions of the system under study to allow for ensemble averaging. The dynamic macroscopic properties of this liquid particle quantities typical of this liquid particle.
+
+The liquid particle volume must contain a statistically large number of real particles.
+
+For plasmas the dimensions of each liquid particle cannot be smaller than the Debye length
+This size exceeds the microscopic dimensions of interatomic distance for solid lattices, free paths for mobile carriers, etc.
+
+Dynamic (macroscopic) characteristics results from motion of individual chart carriers inside the liquid particle. 
+Dynamic characteristics are:
+
+mean electron density                       n
+charge density                                  ρ=e*n
+hydrodynamic electron velocity          v
+current density                                 J = ρ*v
+electron temperature                        T
+electron pressure                            p = n*k_b*T
+
+Microscopic electron scattering processes are described by:
+momentum relaxation time            τ
+mean free path time
+energy relaxation time τ_ε
+electron-electron collision frequency ν_ee
+
+Electron temperature is a thermodynamically defined value only when ν_ee >> 1/τ_e
+When ν_ee >> τ_e frequent electron-electron collisions  create an energy distribution within the electron cloud.
+The distribution is described by a symmetrical component of the energy distribution of the electrons.
+This symmetrical component takes the form of a Maxwellian distribution with temperature T different from the lattice 
+temperature T_0 in the presence of strong electric fields.
+
+Under conditions of local thermal equillibrium in the electron cloud, there is a balance of power flow to and from the electrons. The electric field E supplies power to the electrons while the losses occur due to medium properties and other
+sinks.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect); load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[Ex,Ey,Ez]; H:[Hx,Hy,Hz];D:[Dx,Dy,Dz];B:[Bx,By,Bz];μ:1;b:μ*B;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_D_D1:[J . E  = (3/2)*n*k[B] * ((T-T[0])/τ[e])  ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The energy relaxation time τ_e(T) is a function of electron temperature
+The energy relaxation time determines the rate of chaanges in T
+The momentum relaxation time  τ(T) expresses the temperature dependence of the electron mobility
+μ(T)=(e/m)*τ(T)
+
+In the presence of magnetic induction (flux) B the current density is:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_D_D2:[J = σ*E + (J~(μ*B))  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where the conductivity of the medium is σ(T)=e*n*μ(T)
+
+Eqn (D.1) holds only when electron temperature T(r_vec,t) can follow changes in E(r_vec,t) and electron denisty n(r_vec,t).
+The ability to follow these changes over time results in local thermal equillibrium.
+The conditions for this equillibrium are given by τ_e << T_M where T_M = ε/σ
+T_M=ε/σ is the Maxwellian relaxation time that determines the time scale of changes in E and the charge distribution.
+
+Solution of (D.2) results in this expression for current density:
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_D_D3=(σ/(1+b^2))*(E + (b . E)*b + express(E ~ b));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Substitution of (D.3) into (D.1) reduces to the expression for energy balance:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_D_D4:[σ(T) *E_h^2= (3/2)*n*k[B]*((T-T[0])/τ_e(T)) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where E_h is the heating electric field
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_D_D5:[E_h=sqrt((E^2+express(b.E)^2)/(1+b^2)  )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The influence of magnetic field with arbitrary magnitude and orientation on the elecctron gas heating is 
+taken into account by the effective heating field (D.5) using b = μ*B
+Find the functional dependence T(E_h) using (D.4) with specific temperature functions for the relaxation times
+τ_e(T) and τ(T).
+
+This allows the temperature dependencies to be represented as field dependencies τ(E_h) and τ_e(E_h)
+ 
+Classical hydrodynamics provdes two approaches to describe the dynamics of liquid motion. They are the Lagrangian (L) and the Eulerian (E) descriptions. The polarization (P) description originated in the vacuum tube era. The P description was extended to deal with nondegenerate gaseous and semiconductor plasmas.
+
+The L, E, and P equations for charged media are differentiated by: 
+    The choice of liquid particle position
+    Representation of liquid particle motion 
+
+For the analysis of linear small signal systems consider two states of the carrier stream:
+    unperturbed
+    perturbed
+   [wxMaxima: comment end   ] */
+
+
+

@@ -1,0 +1,986 @@
+/* [wxMaxima: comment start ]
+CMT Chapter 4
+Generalized Theory of Mode Excitation For Space-Dispersive Media Waveguides
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+ Modal Expansion Fields With Separating Potential Fields
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: comment start ]
+Any eigenmode basis for any waveguide structure is incomplete inside the region of any sources of EM excitation. Classic CMT ignores this fact.
+
+The expansion  of the  modal fields must be supplemented with orthogonal complementary fields Eb and Hb. The complentary fields are longitudinal fields, related to the longitudinal components of the bulk exciting currents Jbzm and Jbze. [XREF: 3.4.24, 3.4.25]
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_101:[E[a]=sum(A[k]*E[k],k,-N,N-1 ),H[a]=sum(A[k]*H[k],k,-N,N-1 ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+An unknown longitudinal dependence of Ak(z)  in the 2 equations below is due to the external sources and the orthognal complementary fields Eb and Hb.
+
+The complete electromagnetic fields inside the source region have the following form:  [XREF: 3.4.9, 3.4.10]
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_421:[E(r[t],z)=E[a](r[t],z)+E[b](r[t],z), E(r[t],z)=sum(A[k](z)*E[k](r[t],z)+E[b](r[t],z),k,-N,N-1)  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_422:[H(r[t],z)=H[a](r[t],z)+H[b](r[t],z), H(r[t],z)=sum(A[k](z)*H[k](r[t],z)+H[b](r[t],z),k,-N,N-1)   ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Total fields H and E can be represented asthe sum of their curl (Ec,Hc) and potential (Ep,Hp) components, based on the Helmholtz decomposition theorem.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_422_A:[Ep=-grad(phi),Hp=-grad(psi) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Then the eigenfields of every kth mode can be represented as:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_423:[div(Ec[k])=0, div(Hc[k])=0,E[k]=Ec[k]+Ep[k],E[k]=Ec[k]-grad(phi[k]),H[k]=Hc[k]+Hp[k],H[k]=Hc[k]-grad(psi[k])];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now two sets of total eigenfields form the basis of a resulting Hilbert space, instead of just the (E[k],H[k]) eigenfields. The second set 
+consists of the quasi-static eigenpotentials (psi[k] and phi[k]) and the curl eigenfields  (Ec[k],Hc[k]). This increases the number
+of dimensions of the Hilbert space. This makes it possible to expand the complementary fields Eb and Hb in terms of the the 
+scalar basis potentials (psi[k], phi[k]).
+
+Apply the vector curl-field basis (Ec[k],Hc[k]) to expand the curl fields
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_424:[Ec(r[t],z)=sum(A[k](z)*Ec[k](r[t],z),k,-N,N-1), Hc(r[t],z)=sum(A[k](z)*Hc[k](r[t],z),k,-N,N-1)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Apply the scalar-potential basis (phi(k),psi(k)) to expand the quasi-static potentials
+Have to use fpsi and fphi because psi is part of the Gamma Functions package.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_425:[fphi(r[t],z)=sum(A[k](z)*fphi[k](r[t],z),k,-N,N-1), fpsi(r[t],z)=sum(A[k](z)*fpsi[k](r[t],z),k,-N,N-1)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+In this case the expressions for complete fields inside the source region have the following form:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_426:[E=Ec-express(grad(phi)), E=sum(A[k]*(Ec[k]-grad(phi[k])) , k,-N,N-1) -e[z]*sum('diff(A[k],z)*phi[k],k,-N,N-1), E=sum(A[k]*E[k],k,-N,N-1)-e[z]*sum('diff(A[k],z),k,-N,N-1)*psi[k] ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_427:[H=Hc-express(grad(psi)) ,H=sum(A[k]*(Hc[k]-grad(psi[k])) , k,-N,N-1) -e[z]*sum('diff(A[k],z)*psi[k],k,-N,N-1), H=sum(A[k]*H[k],k,-N,N-1)-e[z]*sum('diff(A[k],z),k,-N,N-1)*psi[k] ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_428:[Eb=-e[z]*sum('diff(A[k],z)*phi[k],k,-N,N-1)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_429:[Hb=-e[z]*sum('diff(A[k],z)*psi[k],k,-N,N-1)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+A[k] is replaced by ∂A[k]/∂z, which vanishes outside the source region. Outside the source region, A[k] is constant, making it's derivative zero.
+The Hilbert space spanned by the 2 sets of basis functions is closed w.r.t. any function that corresponds to any external source.
+
+The expressions for the curl fields and the quasi-static potentials do not contain orthogonal complements. 
+Then if the potential fields Eb and Hb are excluded, we can build a eigenmode basis that produces a modal expansion with no orthogonal complements.
+Use the scalar potentials instead of the potential field expressions, together with the curl fields Ec and Hc. 
+The appropriate sets of mode quantities  {phi[k] , psi[k]} will then be a complete basis with no orthogonal complements.
+
+This does not apply to the polarization vector and magnetic field vector. 
+Equations of motion and constitutive relations (tensors) contain the complete fields, not the curl and quasi-static parts.
+Polarization P and Magnetization M are derived from the tensors and equations of motion
+Therefore P and M are required to have orthogonal complements Pb, Mb generated by Eb and Hb.
+
+fpsi and fphi are maxima placeholders for psi and phi Total fields are given here:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch4_429_A:[E=Ec-grad(fphi),E=Ea+Eb, H=Hc-grad(fpsi), H=Ha+Hb, P=Pa+Pb, M=Ma+Mb, Ecb=0, Hcb=0, fphi_b=0, fpsi_b=0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The Quasi-Static Approximation
+
+∇ x E ≅ 0 and E ≅ Ep = -∇φ, but H = Hc  beause ∇ .  H = 0 and ∇ x H ≠ 0
+For this purpose I will introduce a new assertion using function notation.
+approx(e1, e2, [tol]) means e1 is close to e2  but may vary from e2 by tol (tolerance)
+Maxima doesn't recognize the wxmaxima approximation symbol, so I defined something that works.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+approx(curl(E),0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The Quasi-Magnetostatic Approximation 
+Useful for MSW in magnetized Ferrites 
+∇ x H ≅ 0 and H ≅ Hp = -∇ψ but E=Ec because ∇ . E = 0 and ∇ x E ≠ 0
+The consequence is that there are slow waves due to the existence of a specific potential field. 
+The curl component (fast waves) is eliminated from the approximation expression.
+
+The basic task of Coupled Mode Theory is to find the modal excitation amplitudes Ak(z) inside the region of influence of external sources. 
+The external sources are assumed to be given when starting the first stage of the analysis.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.3 Constitutive Relations and Dynamic Equations For Space-Dispersive Active Media
+
+4.3.1 Piezoelastic Properties of a Medium
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_431:[S_ij = (1/2) *( 'diff(μ_i, r_j) + 'diff(μ_j,r_i) )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+T_bar:[T_x, T_y, T_z];T_bar_Σ:[T_Σ_x,T_Σ_y,T_Σ_z ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_432: [p_m * 'diff(U_i ,t) = 'diff(T_ij,r_j), p_m * 'diff(U,t) = express(div(T_bar)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Values and Tensors Used For Piezoelectric Analysis
+Total Stress Tensor                      T_bar[Σ] = T_bar + T_bar_fr
+2nd rank stress tensor                 T_bar
+2nd rank susceptibility                Χ_bar[S]
+2nd rank  permittivity                  ε_bar[S] 
+3rd rank piezoelectric stress        e_bar_bar
+4th rank elastic stiffness             c_bar_bar[E]
+internal friction stress                 T_bar[fr]
+viscosity tensor                            η_bar
+inverse relaxation time                 τ^(-1)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_432_A:[T_bar_Σ,Χ_bar[s] , ε_bar[s] = ε_0 * (I_bar + Χ_bar[s]) , e_bar_bar, c_bar_bar[E],T_bar_fr ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_433:[P[k] = e[k,i,j] * S[i,j] + ε_0 *Χ[i,k,s] *E[i], P = e_bar_bar . S_bar + ε_0 * Χ_bar[s] . E];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_434:[ T[i,j] = c[i,j,k,l,E] * S[i,j] + ε[i,k] * E[i] , T_bar = c_bar_bar[E] . S_bar + e_bar_bar . E];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_435:[D[k] = e[ik,i,j] * S[i,j] + ε[i,k,s] * E[i], D = e_bar_bar . S_bar + ε_bar[s] . E];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_436:[T_fr[i,j] =η_[i,j,k,l] * 'diff(S[k,l] , t), T_bar_fr = η_bar_bar . S_bar_dot ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_437:[F_fr[i] = -τ[i,j]^-1 * ρ_m * U[i], F_fr = -τ^-1 . ρ_m * U ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Allowing for (4.3.6) and (4.3.7) ,re-write (4.3.1) and (4.3.2) as 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_438:['diff(S[i,j] ,t) = (1/2) *  ('diff(U[i],r[j]) + 'diff(U[j],r[i]))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_439:[ρ_m * 'diff(U,t) = express(div(T_bar_Σ )) + F_fr ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For Pure Harmonic Processes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4310:[U = U[1], U[1]  = 'diff(u[1], t) , ρ_m =ρ_m[0] + ρ_m[1]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.3.2 Ferrimagnetic Properties of a Medium
+
+External static magnetic field H[0,e] 
+Saturation Magnetization            M[0] 
+Total magnetization vector          M
+Effective Magnetic Field              H_eff
+External DC Field                        H_0_e
+Maxwellian Field                         H
+Crystal anisotropy                       H_c = -N_bar[c] . M
+Demagnetizing Field                   H[d] = N_bar[d]  . M
+Exchange Field                           H[ex] = λ[ez] * ∇^2 M
+Net Tensor                                 N_bar = N_bar[c] + N_bar[d]
+Relaxation Term                         R
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H_eff:[Heff_x, Heff_y, Heff_z];M:[M_x, M_y, M_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4311:[ γ = abs(e) / m[0],'diff(M, t) = -γ*μ_0 * (express(M ~ H_eff)) + R ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4312:[H_eff = H[0,e] + H - N_bar . M + λ[ez] * express(laplacian(M))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4313:[ α=ΔH/H[0],R = α*((M/M_0) + 'diff(M,t))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4314:[  M = M_0 + M_1, abs(M_1) < abs(M_0) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4315:[ H_0 = H[0,e] - Ν_bar . M_0, H_eff = H_0 + H_1 - N_bar . M_1 + λ[ez] * express(laplacian(M_1 ))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+(4.3.3) Drifting Charge Carriers in a Medium (Plasmas)
+
+Hydrodynamic Force Equation
+Effective electron mass        m
+Free electron mass              m_0
+τ_e                                     energy relaxation time 
+T_M = ε/σ = ε*m/e^2*n*τ   Maxwellian relaxation time
+τ_e determines rate of electron perturbations
+T_M determines time scale of signal changes in the electric field and charge distribution
+
+τ_e ≪ T_M 
+
+This condition means the temperature keeps pace with signal changes in the electric field
+This provides a local relationship between T and E. 
+This allows the momentum relaxation time τ to be considered a function of E
+E is found from measuring the field dependence of 
+    mobility μ(E) = (e/m)*τ(E)
+    diffusion D(E) = v_T^2 *τ(E)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+B:[B_x,B_y,B_z];v:[v_x, v_y, v_z];r_1:[r1_x, r1_y, r1_z]; r_0:[r0_x, r0_y, r0_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4316:[ 'diff(v,t) + (v . express(div(v))) = (e/m) * (E + express(v ~ B) - express(grad((n*k[B] * T)/(m*n))))- (v/τ)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4316_A:[express(grad(p)) = (m*v_T^2)*express(grad(n))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ(E):= (e/m)*τ(E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D(E) := v_T^2 *τ(E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For Plasmas in a magnetic field B the electron heating is the result of an
+electric field called the effective heating field (Appendix D.5)
+b takes into account an influence of the magnetic fields on the heating effect
+τ,μ, D now depend on E_h
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4317:[b = μ*B,E_h = sqrt(E^2 + ((b_vec. E)^2)/(1+b^2)) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Small Signal Analysis: All signal values with subscript 1 << those with subscript 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4317_B:[ E=E_0 + E_1, B= B_0+B_1, E_h = E_h0 + E_h1, τ(E_h) = τ(E_h0) + 'diff(τ,E), E_h1= τ_0 + τ_1, τ_0 = τ(E_h0) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4317_C:[(τ-1/τ_0) = 'diff(log(τ), log(E)) *(E_h1/E_h0), τ_1/τ_0 =(κ_0-1)*(E_h1/E_h0) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4318:[ τ_1/τ_0 = (κ_0-1) * (F_0/E_0) . ((E_1 + v_0~B_1)/E_0) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4319:[b_0 = μ_e*B_0, F_0= ( (1+ b_0^2) * (E_0 + (b_0 . E_0) * b_0))/ (  (1+κ_0*b_0^2) + ((1+b_0^2) + (1-κ_0) ) * (b_0 . E_0 )^2/E_0^2 ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4320:[E=E[k,0], μ_d = 'diff(μ(E)*E,E) , μ_e = μ(E[h,0]), μ_e = (e/m)*τ(E[h,0]), μ_e = (e/m)*τ_0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Electron displacement vector, a function of the unperturbed position vector r_0
+The trajectory of liquid (virtual) particle motion is replaced by the E field description.
+Now deal with vector field of electron displacement r_1(r_0,t) 
+r_1 is identical to the field of the lattice particle displacement μ(r_0,t) 
+μ(r_0,t) is a term from elasticity theory
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4321:[r_1(r_0,t) = r(t) - r_0(t)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Total instaneous velocity v(r,t) of a group of charges satisfying (4.3.16) is:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4322:[v(r_vec,t) = v_0(r_vec)  + u_1(r_vec,t) , v(r_vec,t) = v_0(r_0) + v_1(r_0,t)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Barybin uses (r . ∇) v_0 but maxima won't accept that operator
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4322_A:[v_1 = u_1 + (r_1 . express(grad(v_0)))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Polarization vector v_1 obeys the equation of motion obtained from (4.3.22) as follows:
+Again Barybin uses (r_1 . ∇) v_0 for example, but maxima won't accept this directly
+Will have to use apply/define/makefun/buildq and macros to make it work.
+
+Using E_1 as a small signal field vector
+Using E[1,p] as a symbolic placeholder for E[1,+] for entry into maxima
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4323:[ τ_0 = τ(E_h0), 'diff(v1,t) + (v_0 . express(grad(v1))) = (e/m)*(E_1 + r_1 . express(grad(E_0)) + v_1 ~ B_0 + v_0 ~ B_1 + v_0 ~ (r_1 . express(grad(B_0)))) + (v_T^2/ρ_0) * ( ρ_0* express(grad(express(div(r_1)))) + express(grad(r_1)) . express(grad(ρ_0))) - (v_1/τ_0) + (v_0/τ_0) * ((τ_1 + (r_1 . express(grad(τ_0)))) / τ_0)  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4324:[v_1 = 'diff(r_1,t) + (v_0 . express(grad(r_1)))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+J_1: [J1_x, J1_y,J1_z];p_1:[p1_x, p1_y, p1_z];v_0:[v0_x,v0_y,v0_z];E_1: [E1_x, E1_y,E1_z];D_1: [D1_x, D1_y,D1_z];H_1: [H1_x, H1_y,H1_z]; B_1: [B1_x, B1_y,B1_z]; M_1: [M1_x, M1_y,M1_z]; P_1: [P1_x, P1_y,P1_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4325:[ 'diff(ρ_1,t) + express(div(J_1) = 0)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4326:[ρ_1 = -express(div(p_1))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4327:[J_1 = 'diff(p_1, t) + express(curl(p_1 ~ v_0))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.3.4 Electrodynamic Formulations For Active Polarized Media
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4328:[express(curl(E_1)) = -'diff(B_1,t)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4329:[express(curl(H_1)) = 'diff(D_1,t) + J1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4330:[express(div(D_1)) = ρ_1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4331:express(div(B_1)) = 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4332:[D_1 = (ε_0 * E_1) + P_1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4333:[H_1 = ((1/μ_0) * B_1) - M_1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+n[s,p]:[n_sp_x, n_sp_y, n_sp_z];n[s,m]:[n_sm_x, n_sm_y, n_sm_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The field vectors at the boundaries are also plus or minus (outward or inward) 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_1_p: [E1_p_x, E1_p_y,E1_p_z];E_1_m: [E1_m_x, E1_m_y,E1_m_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H_1_p: [H1_p_x, H1_p_y,H1_p_z];H_1_m: [H1_m_x, H1_m_y,H1_m_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_1_p: [D1_p_x, D1_p_y,D1_p_z];D_1_m: [D1_m_x, D1_m_y,D1_m_z];H_1P:[H_1P_x, H_1P_y, H_1P_z];D_1P:[D_1P_x, D_1P_y, D_1P_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+B_1_p: [B1_p_x, B1_p_y,B1_p_z];B_1_m: [B1_m_x, B1_m_y,B1_m_z];M_net:[Mnet_x, Mnet_y, Mnet_z];P_net:[Pnet_x, Pnet_y, Pnet_z];v_o:[v0_x , v0_y,  v0_z]; B_0:[B0_x, B0_y, B0_z];r:[r_x, r_y, r_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4334:[ express(n[s,p] ~ E_1_p) + express(n[ s,m] ~ E_1_m)  = 0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4335:[ express(n[s,p] ~ H_1_p) + express(n[ s,m] ~ H_1_m)  = J[s,eq]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4336:[ express(n[s,p] ~ D_1_p) + express(n[ s,m] ~ D_1_m)  =ρ[s,eq]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4337:[ express(n[s,p] ~ B_1_p) + express(n[ s,m] ~ B_1_m)  = 0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4338:[p_eq[s] = p_0*(n . r_1) , p_eq[s]= n . p_1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4339:[J_eq[s] = p_eq[s] * v_0 , J_eq[s] = (n . p-1) * v_0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4340:[P_net = P_1 + p_1, M_net = M_1 + m_1, M__net = approx(M_1 + (P_1 ~ v_0))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4341:ρ_P = -express(div(P_net)) , J+P = 'diff(P_net,t), J_M = express(curl(M_net));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Chu Formulation Of Maxwell's Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4342:[express(curl(E_1)) = 'diff(B_1,t)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4343:[express(curl((1/μ_0) * B_1)) = ε_0 * 'diff(E_1,t) + (J_P + J_M)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4344:[express(div(E_1)) = (1/ε_0) * ρ_P];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4345:[express(curl(B_1)) = 0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Minkowski Formulation Of Maxwell's Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4346:[D_1_P = ε_0 * E_1 + P_net];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4347:[H_1_P = (1/μ_0) * B_1 - M_net];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4348:[express(curl(E_1)) = 'diff(B_1,t)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4349:[express(curl(H_1P)) = 'diff(D_1_P ,t)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4350:[express[div(D_1P)]= 0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4351:[express(div(B_1))=0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4352:[D_1P = D_1 + p_1, H_1P = H_1 +  express(v_0 ~  p_1)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use express() here once the E and n vectors are defined properly
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4353:[n[s,p] ~ E[1,p]  + n[s,m] ~ E[1,m] = 0] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4354:[n[s,p] ~ H[1, p,p]  + n[s,m] ~ H[1,p,m] = 0] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4355:[n[s,p] ~ D[1,p,p]  + n[s,m] ~ D[1,p,m] = 0] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Removing B to allow for use of symbolic placeholder 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(B);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4356:[n[s,p] ~ B[1,p,p]  + n[s,m] ~ B[1,p,m] = 0] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+B:[B_x, B_y, B_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.4 General Power-Energy Relations for Space-Dispersive Active Media
+
+4.4.1 Generalized Poynting's Theorem For SDAM
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[E_x,E_y, E_z];H:[H_x,H_y,H_z];D:[D_x,D_y, D_z];S:[X_x,S_y, S_z];p_1:[p1_x, p1_y, p1_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_441:[express(curl(E) = - 'diff(B,t))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_442:[express(curl(H)) = 'diff(D,t) + J];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Scalar Multiply 4.4.1 by H, 4.4.2 by -E and add results.
+This gives the instanteous Poynting theorem
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_443:['diff(((E . D)/2) +  ((H.B)/2),t)  + express(div(E ~ H)) = -I_P - I_m - I_J];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_444:[ (1/2) *  ((E . 'diff(D,t)) - (D . 'diff(E,t))) = (1/2) * ((E . 'diff(P,t)) - (P . 'diff(E,t))) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_445:[I_M = (1/2)*((H . 'diff(B,t)) - (B . 'diff(H,t)), I_M = (1/2) *  (H . 'diff(μ_0*M.t)) - μ_0*M . 'diff(H,t))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_446:[I_J = J  . E];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4477:[D = ε_0 * E + P , B = μ_0 * (H+M)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_448:[w_em = (E . D) / 2 + (H . B) /2 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_449:[S_em = express(E ~ H)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4410:['diff(w,t) + express(div(S) + q = 0)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4411:[div(avg_t(S) + avg_t(q) = 0)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4412:[w_add = w_el + w_fm + w_pl];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4413:[S_add = S_el + S_fm + S_pl];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4414:[q_add = q_el + q__fm + q_pl];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.4.1.1         Contribution From Piezoelastic Properties of a Medium
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4415:[I_P=(1/2) * (E . 'diff(P,t) - P . 'diff(E,t) ), I_P = 'diff(w_el.t) + div(S_el) + q_el ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The author uses a colon : instead of dot between T_bar and S_bar
+T_bar and S_bar are tensors in this context
+The : operator is a double dot product given by 
+
+Σ_j Σ_i (a_i . d_j) * (b_i . c_j)
+    or
+Σ_j Σ_i (a_i . c_j) * (b_i . d_j)
+
+Load the following package to get mattrace (trace) of a matrix 
+dd(A,B) gives the proper result for a double dot product (:)
+TODO: RETROFIT CHAPTERS 2-3 WITH THIS DEFINITION
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load ("nchrpl");
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dd(A,B):=mattrace(A * transpose(B));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+T_bar:matrix([T_11, T_12, T_13],[T_21,T_22, T_23],[T_31, T_32, T_33]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S_bar:matrix([S_11, S_12, S_13],[S_21,S_22, S_23],[S_31, S_32, S_33]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+η_bar:matrix([η_11, η_12, η_13],[η_21,η_22, η_23],[η_31, η_32, η_33]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S_bar_dot:matrix(['diff(S_11,t), 'diff(S_12,t), 'diff(S_13,t)] ,['diff(S_21,t), 'diff(S_22,t), 'diff(S_23,t)] ,['diff(S_31,t), 'diff(S_32,t), 'diff(S_33,t)] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4416:[w_el = (1/2) * p_m * U^2 + (1/2) * dd(T_bar, S_bar)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Assuming dot over bar means ordinary derivative of matrix elements with time 
+TODO: Check on matrix differentiation rules for this
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4417:[S_el = (1/2) * p_m * U^2 *Y - T_bar^2 . U];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4418:[q_el = dd(dd(S_bar_dot, η_bar),S_bar_dot)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4419:[w_el = (1/2) * p_m0 * U_1^2 + (1/2) * dd(T_bar[1] , S_bar[1])];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4420:[S_el = -T[1,Σ] . U_1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4421:[q_el = dd(dd(S_bar_dot[1] , η_bar),S_bar_dot) + p_m0 * U_1 . τ_bar[-1] . U_1 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.4.1.2     Contribution From Ferrimagnetic Properties of a Medium
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S_fm:[S_fm_x, S_fm_y, S_fm_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4422:[I_M = (1/2) * (H . 'diff(μ_0*M,t) - μ_0*M . 'ddiff(H,t)), I_M = 'diff(w_fm,t) + express(div(S_fm)) + q_fm];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4423:[w_fm = w_z + w_md + w_an+ w_ex];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4424:[w_z=-μ_0*M . H_0[e]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4435:[w_md=(-μ_0/2) * M . H];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4426:[w_an(-μ_0/2) * M . H_an, w_an = (μ_0/2)*M . N_bar . M];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4427:[w_ez=(-μ_0/2) * M . H_ez, H_ex = λ_ex * express(laplacian(M)),w_an = -λ_ez * (μ_0/2) * express(laplacian(M))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4428:[S_fm= λ_ex * (μ_0/2) * ( M . 'diff(express(grad(M)) ,t)  - express(grad(M)) . 'diff(M,t)) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4429:[q_fm = α* (μ_0/w_M) * ('diff(M,t) . 'diff(M,t))] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_30:[w_z = μ_0*M . H_0, w_z=-μ_0*H_0*M_z, w_z=-μ_0*H_0*sqrt(M_0^2 - M_1^2), w_z=-μ_0*H_0*M_0 + (μ_0/2) *(H_0/M_0) * (M_1 . M_2)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4431:[w_fm = (μ_0/2) * ( ( (H_0/M_0) * M_1 - H_1) . M_1 + M_1 . N_bar . M_1 - λ_ex * express(laplacian(M_1) . M_1)  )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4432:[S_fm = λ_ex * (μ_0/2) * (M_1 . diff(express(grad(M1)),t) - express(grad(M_1)) . diff(M_1,t) ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4433:[q_fm = α*(μ_0/w_M) * ('diff(M_1,t) . 'diff(M_1,t))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.4.1.3 Contribution Of Drifting Charge Carriers in a Medium
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4434:[I_J= J_1 . E_1 , I_J =   (1/2) * 'diff(  (E_1 . p_1 - B_1 . express(p_1  ~ v_0)) -express(div(  express(E_1 ~ express(p_1 ~  v_0))))  ,t)  ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4435: ['diff(  ((E_1. D_1) / 2) + ((H_1 . B_1) / 2),t), 'diff( ((E_1 . D_1_p)/2) + ((H_1_p . B_1) / 2)   , t)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4336:[express(div(express(E_1 ~ H_1))), express(div(express(E_1 ~ H_1)))  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4337:[w_pl = W_ek, w_pl = (m/(2*c)) * (v_1_p . 'diff(p_1,t) - p_1 . 'diff(v_1_p,t))  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4338:[S_pl = S_ek + Sth, S_pl = (m/(2*e)) * v_0 * (v_1_p . 'diff(p_1,t) - p_1 . 'diff(v_1_p,t))+ (m/(2*e)) * (v_τ^2/p_0)  * p_1 * 'diff( express(div(p_1)),t) - express(div(p_1))*'diff(p_1,t) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4339:[q_pl = (1/τ_0) * (m/(2*e)) * ( (v_1 . 'diff(p_1,t)) - p_1 . 'diff(v_1,t)) - ( f_1 *'diff(p_1,t) - p_1 * 'diff(f_1,t) ) . v_0, f_1 = (τ_1 +  r_1 . express(grad(τ_0))) /τ_0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4440:[w_L = -(e/(2*m)) * B_0,v_1_p = v_1 - (e/(2*m)) * express(r ~ B_0) , v_1_p = v_1 +  express(r_1 ~ ((e/(2*m)) * B_0)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.4.1.4 Small-signal power theorem for generalized space-dispersive active media
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4441:['diff(w_em + w_el + efm + w_pl,t ) + express(div( S_em + S_el + S_fm + S_pl )) + (q_el + q_fm + q_pl) = 0  ]   ;
+/* [wxMaxima: input   end   ] */
+
+
+

@@ -1,0 +1,84 @@
+
+kill(all);
+
+A(z):=exp(%i * w_z * t);
+
+g_k:a_k+%i*b_k;
+
+g_k;
+
+E_k(r_t):='f(r_t[1], r_t[2]);
+
+H_k(r_t):='f(r_t[1],r_t[2]);
+
+E_k(r_t,z):=E_k(r_t) * exp(-g_k * z);
+
+H_k(r_t, z):=H_k(r_t)*exp(-g_k * z);
+
+A_k^E;
+
+A_E[k](z):=f_z;
+
+A_H[k](z):=f_z;
+
+E_k(r_t,z,t):=A_E[k](z) * E_k(r_t) * exp(%i * w * t - g_k * z);
+
+H_k(r_t,z,t):=A_H[k](z) * H_k(r_t) * exp(%i * w * t - g_k * z);
+
+cn:5+%i*3;
+
+re(cn);
+
+realpart(cn);
+
+a(t):=realpart(a(w) * exp(%i* w * t));
+
+a_e(w):=A_E[k](z) * exp(%i * w* t);
+
+a_h(w):=A_H[k](z) * exp(%i * w* t);
+
+a_e[f](t):=1/2 * ((a_e(w) * exp(%i * w * t) + a_e(-w) * exp(-%i * w * t)));
+
+a_h[f](t):=1/2 * ((a_h(w) * exp(%i * w * t) + a_h(-w) * exp(-%i * w * t)));
+
+pcc:a_e[k](w)=conjugate(a_e[k](w));
+
+load(eigen);
+
+colvect([1,2,3]);
+
+cv:covect([1,2,3]);
+
+rowvect([1,2,3]);
+
+rv:transpose(covect([1,2,3]));
+
+type(rv);
+
+propvars(rv);
+
+subst(Dz=d/dz, Dz   );
+
+ssdz:subst(Dz=d/dz, Dz);
+
+sv:[f_x,f_y,f_z];
+
+scm:"matrix([0,-d/dz,d/dy],[d/dz,0,-d/dx],[-d/dy,d/dx,0])";
+
+string(scm);
+
+cm:matrix([0,-d/dz,d/dy],[d/dz,0,-d/dx],[-d/dy,d/dx,0]);
+
+fv:[f_x,f_y,f_z];
+
+cm . fv;
+
+express(%);
+
+load(vect);
+
+express(%o58);
+
+subst(fv[1]=x^2, fv);
+
+

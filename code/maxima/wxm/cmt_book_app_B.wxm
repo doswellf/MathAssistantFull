@@ -1,0 +1,481 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: input   start ] */
+load(vect); load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Modern Electrodynamics and CMT Appendix B
+Basic Relations Of Functional Analysis 
+    and
+Their Electrodynamic Analogs
+
+The countable set of functions ψ_1(x), ψ_2(x), ... is quadratically Lebesque integrable on a set S of points (x). 
+
+The class L2(S) of these functions (vectors) isi an infinite-dimensional unitary functional (vector) space
+if this space has an inner product of ψ_k(x) and ψ_l(x);  as well as two binary operations, 
+vector sum and complex scalar-vector product
+
+Vector sum                      ψ_k(x) + ψ_l(x)
+Scalar-Vector Product       α_k*ψ_k(x)
+
+The weighting function γ(x) is a real non-negative function quadratically Lebesque integrable on S. 
+The value of γ(x) may be one. γ(x)≣1
+
+The inner product of ψ_k(x) and ψ_l(x) is given by:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B1:[ (ψ_k . ψ_l)='integrate('conjugate(ψ_k(x))*γ(x)*ψ_l(x),x) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Gram's determinant may be built using the inner products given by (B.1) as [(ψ_k,ψ_l)]
+If Gram's determinant ≠ 0 (not singluar) the functions ψ_k(x) with k =1,2,... are linearly independent on L.
+Then the functions ψ_k(x) may be selected as the basis of a unitary functional space.
+The mutual orthogonality of the functions (vectors) is not necessarily required in this case to form a valid basis.
+The set of functions ψ_k9x) spans a linear manifold consisting of all linear combinations of ψ_1(x),ψ_2(x),...
+
+Compose a partial sum of the nth order (scalar coefficient a[k,n] not yet defined )
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B2:[s[n](x)='sum(a[k,n]*ψ[k](x),k,1,n)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+If ψ(x) belongs to the linear manifold spanned by ψ_1(x),ψ_2(x),... then the coefficients can be found.
+The requirement for finding the coefficients is that the weighted mean-square difference between
+s[n](x) and ψ(x) below is at the minimum possible value.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B3:[D[n]='integrate(γ(x)*'abs(s[n](x)-ψ(x))^2,x)   ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use equation (B.2) D[n] takes the following form:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B4:[D[n]='integrate( 'sum('conjugate(a[j,n]*'conjugate(ψ[k](x))-'conjugate(ψ)) ,k,1,n ) *γ(x) * ('sum( a[l,n]*ψ[l](x)  -ψ(x),l,1,n)),x,1,N) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The condtions necessary for the minimality of (B.4) w.r.t the set of coefficients a[k,n] are given by:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B5:['diff(D[n],'conjugate(a[k,n])) ='integrate('conjugate(ψ[k](x))*γ(x)*sum(a[l,n]*ψ[l](x)-ψ(x),l,1,n),x) ,'diff(D[n],'conjugate(a[k,n])) =0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+TODO: FIX UP THIS PARTIAL 2ND DERIVATIVE 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B5:[  'diff(D[n],'conjugate(a[k,n])*a[k,n],2)='integrate('conjugate(ψ[k](x))*γ(x)*ψ[k](x),x,1,N),'diff(D[n],'conjugate(a[k,n])*a[k,n],2) # 0  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Eqn (B.6) obeys the requirement of quadratic integrability imposed on ψ_k(x) 
+Eqn (B.5) gives a system of equations used to find a[k,n]
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B7:['sum(N[k,l]*a[l,n],l,1,n) =R[k]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B8:[N[k,l]='integrate('conjugate(ψ[k](x))*γ(x)*ψ[l](x),x,1,N), N[k,l]=(ψ[k] . ψ[l]) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B9:[R[k]='integrate('conjugate(ψ[k](x))*γ(x)*ψ(x),x,1,N), R[k]=(ψ[k] . ψ)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Convergence in L2 is convergence in the mean of the sequence of partial sums s[n](x).
+The terms have coefficients a[k,n] from (B.7)
+The sequence converges to ψ(x) as n→∞  (i.e. s[n](x) ⟶ψ(x)) 
+This convergence occurs only if and only if 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B10_A:[ if n = ∞ then D[n]='integrate(γ(x)*'abs(s[n](x)-ψ(x))^2,x,1,N) and D[n]=0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Currently the condition will evaluate to false because the variables have not yet been given actual values
+
+Use (B.7) through (B.9) and the fact that N[k,l]='conjugate(N[k,l]) to transform (B.4)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B10_B:[D[n]='sum('sum(N[k,l]*'conjugate(a[k,n]) *a[l,n],l,1,n),k,1,n) - 'sum(R[k]*'conjugate(a[k,n]),k,1,n) -'sum('conjugate(R[l])*a[k,n],l,1,n) + 'integrate(γ(x)*'abs(ψ(x))^2,x,1,N) , D[n]=-1 * 'sum(sum(N[k,l]*'conjugate(a[k,n])*a[l,n],l,1,n),k,1,n) + 'integrate(γ(x)*'abs(ψ(x))^2,x)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the limiting case (B.10) when a[k,n] ⟶ a[k](z) as n ⟶ ∞ it follows that
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B11:[(ψ . ψ) = 'integrate('conjugate(ψ(x))*γ(x)*ψ(x),x),(ψ . ψ) = 'sum('sum(N[k,l]*'conjugate(a[k])*a[l],l,1,n),k,1,n)  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This is true only for convergence in the mean
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B12:[ψ(x)='sum(a[k]*ψ[k](x),k,1,∞) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Linear independence and completeness of a set of basis functions (vectors) ψ_k(x) 
+are fundamental properties of the basis. 
+Mutual orthogonality of the functions (vectors) is not a mandatory requirement.
+But Mutual Orthogonality facilitates the search for expansion coefficients a_k. 
+
+TODO: CHANGE OUT # WITH notequal(a,b) TO GET VALUE INEQUALITY NOT SYNTACTIC INEQUALITY
+For the orthogonal basis
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B13:[(ψ[k] . ψ[l])='integrate('conjugate(ψ[k](x))*γ(x)*ψ[l](x),x, 1,N) , if is(notequal(k,l)) then (ψ[k] . ψ[l]) = 0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+So That
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B14:[N[k,l]=N[k]*δ[k,l], N[k] ='integrate('conjugate(ψ[k](x))*ψ[k](x),x) ,N[k]= norm(ψ[k])^2  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The norm of ψ_k(x) = ||ψ_k|| = √(ψ_k . ψ_k = √N_k 
+The function  of this term is extended to N[k,l]
+    With the self-norm as N_k = N[k,k] for l = k
+    With the cross-norm as N[k,l] for l ≠ k
+
+Then for the special case of an orthogonal basis that satisfies (B.14)
+
+(i) (B.7) can be separated into multiple equations giving
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B15:[a[k]=R[k]/N[k], a[k] = (ψ[k] . ψ) / (ψ[k] . ψ[k]) , a[k] = 1/N[k]*'integrate('conjugate(ψ[k](x))*γ(x)*ψ(x),x)   ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The completeness relation (B.11) then gives the conventional Parseval Identity
+Note that without a[k] and N[k] fully defined, the sum never converges and maxima asks for
+the sign of the value of this product.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B16:[(ψ . ψ) = 'integrate('conjugate(ψ(x))*γ(x)*ψ(x),x), (ψ . ψ) = 'sum(N[k] * 'abs(a[k])^2,l,1,inf)];
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><munder><mrow><mi>N</mi></mrow><mrow><mi>k</mi></mrow></munder><h>*</h><ie><mrow><mi>a</mi></mrow><mrow><mi>k</mi></mrow><mn>2</mn></ie><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: comment start ]
+Prove that the difference c(x)=f(x)-ψ(x) ⟂ ψ[k](x) for all k 
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B17:[N[k,l]=(ψ[k] . ψ[l]),R[k]=(ψ[k] . f), (ψ[k] . c) = (ψ[k] . (f-ψ)), (ψ[k] . c)=(ψ[k] . f) - 'sum((ψ[k] . ψ[l]) * a[l], l, 1,N), (ψ[k].c) = R[k] - 'sum(N[k,l ]*a[l],l,1,N), (ψ[k].c)=0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Any arbitrary function f(x) that does not belong completely to the Hilbert space can take the form:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B18:[f(x)=ψ(x) + c(x), f(x) = 'sum(a[k]*ψ[k](x),k,1,N) + c(x)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+ψ(x) is written as a series expansion in terms of basis functions 
+ψ(x) is tangential to the Hilbert space 
+ψ(x) is the projection of f(x) onto the Hilbert space
+c(x) is a function orthogonal to the Hilbert space
+c(x) is the orthogonal complement of ψ[k] because (ψ_k . c) = 0
+The generalized Bessel inequalit applies to f(x) instead of the generalized Parseval identity (B.11)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B19:[ (f . f)= norm(ψ+c)^2, (f . f) = 'integrate('conjugate(f(x))  * γ(x) * f(x), x), (f . f) >= 'sum('sum(N[k,l]*'conjugate(a[k])*a[l],l,1,inf),k,1,inf), (f . f) >= 'sum(N[k]*'abs(a[k])^2, k,1,inf)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Where the last single sum represents the orthogonal basis
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+B.2 Electrodynamic Treatment (In Notation Of Reference [2] of Appendix B)
+
+Consider an infinite set of eigenfunctions (vector-valued) defined on the cross-section S of a waveguide.
+These are eigenfunctions of a boundary-value problem defined on S 
+The transverse radius vector is r[t] and the longitudinal axis is Z
+Any eigenfunction Ψ[k](r[t]) and it's adjoint (hermitian conjugate) Ψ_dagger[k](r[t]) are given in two-vector notation
+The eigenfunction is given as a column vector and the adjoint is given as a row vector
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B20:[Ψ[k](r[t]) = matrix([E_hat[k](r[t] )],[H_hat[k](r[t])] ),Ψ_dagger[k](r[t])=matrix(['conjugate(E_hat[k](r[t])),'conjugate(H_hat[k](r[t]))])];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+By analogy with (B.1) the inner product of 2 eigenfunctions Ψ[k](r[t]) and Ψ[l](r[t]) can be defined as:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B21:[(Ψ[k] . Ps[l]) = 'integrate(Ψ_dagger[k](r[t]) . Γ_hat . Ψ[l](r[t]), r[t])];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where S is a cross-sectional slice of the waveguide ⟂ the z (longitudinal) axis and r[t] is a vector with components x and y
+The weighting function Γ_hat is given as a dyadic (matrix or tensor) operator
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B22:[Γ_hat = matrix([0, -e[z] ~ Id2])];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+e[z] is the unit vector of the z axis
+I_bar is the unit tensor (dyadic) where (e[z] x I_hat) . a = -a . (I_hat x e[z]) = e[z] x a for any vector a
+Weighting tensor Γ_hat causes the scalar product inside the integral 
+in (B.21) equal to the 2nd expression below
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B22_A: [ (Ψ_dagger[k]  . Γ_hat . Ψ[l]) = Ψ_dagger[k] . ( Γ_hat . Ψ[l]) ,(Ψ_dagger[k]  . Γ_hat . Ψ[l]) = (Ψ_dagger[k] . Γ_hat) . Ψ[l] ,(Ψ_dagger[k]  . Γ_hat . Ψ[l]),(Ψ_dagger[k]  . Γ_hat . Ψ[l])  = Γ_hat . Ψ[l] . Ψ_dagger[k] ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B22_B: [('conjugate(E_hat[k]) ~ H_hat[l])  + (E_hat[l] ~ 'conjugate(H_hat[k] ))  ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Using x and y separately as the transverse axis to integrate here, but this applies to x and y
+So this should be a multivariable integration using r[t]
+Also using r[t] explicitly in B.24 to get an independent variable for the  indefinite integration
+The cross-norm N[k,l] and the self-norm  N[k,k] (≣N[k]) for the kth mode are given by:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B23:[N[k,l] =  (Ψ[k] . Ψ[l]),N[k,l] =  'integrate(Ψ_dagger[k](x) . Γ_hat . Ψ[l](x), x), N[k,l] =  (Ψ[k] . Ψ[l]),N[k,l] =  'integrate(Ψ_dagger[k](y) . Γ_hat . Ψ[l](y), y), N[k,l]='integrate( ('conjugate(E_hat[k](r[t])) ~  H_hat[l](r[t]) )  + (E_hat[l](r[t]) ~ 'conjugate(H_hat[k])) , r[t]) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B24:[N[k] = (Ψ[k] . Ψ[l]), N[k] = 'integrate(('conjugate(E_hat[k]) ~ H_hat[k]) . e[z], S), N[k] = Re( 'integrate( 'conjugate(E_hat[k](r[t])) ~ H_hat[k](r[t]) . e[z], r[t])) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+A quadratically integrable function F(r[t],z) on S can be expressed as the sum of a modal expansion Ψ(r[t],z).
+The function is given in terms of eigenfunctions Ψ[k](r[t]) and the orthogonal complement  C(r[t],z).
+The eigenfunctions are projection of F(r[t],z) tangent to a Hilbert space and convergent in the mean
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ cmt_app_B_B25:[F(r[t],z) = Ψ(r[t],z) + C(r[t],z), F(r[t],z) = 'sum(a[k](z)*Ψ[k](r[t]),k,1,N) + C(r[t],z) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where the functions are defined as:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B26:[(Ψ[k] . C) = 'integrate(Ψ_dagger[k] . Γ_hat . C(r[t],z), S),(Ψ[k] . C) = 'integrate( ('conjugate(E_hat[k]) ~ H[b]) + (E[b] ~ 'conjugate(H_hat[k])) . e[z], S)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Apply equations (B.25) and (B.26) so that the fields can be represented in this form:
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B27:[E(r[t],z) = E[a](r[t],z) + E[b](r[t],z),E(r[t],z)='sum(a[k](z)*E_hat[k](r[t]) + E[b](r[t],z),k,1,N) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B28:[H(r[t],z) = H[a](r[t],z) + H[b](r[t],z),H(r[t],z)='sum(a[k](z)*H_hat[k](r[t]) + H[b](r[t],z),k,1,N) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The orthogonal complementary fields E_b(r_t,z) and H_b(r_t,z) and mode amplitudes a_k(z) need to be determined
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B29:[E[a](r[t],z)='sum(a[k](z)*E_hat[k](r[t]),k,1,N) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B30:[H[a](r[t],z)='sum(a[k](z)*H_hat[k](r[t]),k,1,N) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the non-orthogonal basis the amplitudes a_k are found from equations similar to (B.7) 
+For the orthogonal basis the amplitudes a_k are found from equations similar to (B.5)
+NOTE: THE SURFACE OF INTEGRATION S (SLICE AT SOME CONSTANT Z) IS NOT DEFINED YET
+R_k is obtained using the following expression:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B31:[R[k] = (Ψ[k],Ψ) , R[k] = (Ψ[k] . F) , R[k] = 'integrate(Ψ_dagger[k] . Γ_hat . F, S), R[k]='integrate(Ψ_dagger[k] . Γ_hat . F, S), R[k] ='integrate( ('conjugate(E[k]) ~ H) + (E ~ 'conjugate(H_hat[k])). e[z], S) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+By analogy with (B.15): 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B32:[a[k]=R[k]/N[k], a[k]=(Ψ[k] . F)/(ψ[k] .Ψ[k]),a[k]=1/N[k] * 'integrate( ('conjugate(E[k]) ~ H) + (E ~ 'conjugate(H_hat[k])). e[z], S)  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This procedure also allows for the use of the series expansion of Ψ(r_t,z) using a finite sum of eigenmodes of nth order
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B33:[S[n](r[t],z)='sum(a[k,n](z)*Ψ[k](r[t]),k,1,N)]   ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This is similar to (B.2) and yields the least mean-squared error
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B34:[D[n] = 'integrate( ((S_dagger[n](r[t],z) - Ψ_dagger(r[t],z)) . Γ_hat . (S[n](r[t],z) -Ψ(r[t],z))) ,S)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This general approach can be extgended to the EM basis of eigenfunctions.
+Then the generalized Parseval Theorem and Bessel Inequality take this form:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B35:[(Ψ . Ψ) = norm(Ψ)^2 * 'integrate(Ψ_dagger . Γ_hat . Ψ,S), (Ψ. Ψ) = 'integrate( ('conjugate(E[a]) ~ H[a]) + (E[a] ~'conjugate(H[a])). e[z], S) , (Ψ . Ψ) = 'sum('sum(N[k,l]*'conjugate(a[k])*a[l], l,1,inf),k,1,inf), (Ψ .Ψ) = 'sum(N[k] *'abs(a[k])^2, l,k,inf) ];
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><munder><mrow><mi>N</mi></mrow><mrow><mi>k</mi></mrow></munder><h>*</h><ie><mrow><mi>a</mi></mrow><mrow><mi>k</mi></mrow><mn>2</mn></ie><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: comment start ]
+and 
+NOTE: EDIT BELOW TO FINISH CHAPTER! 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_app_B_B36:[(F . F) = norm(Ψ+C)^2 * 'integrate(F_dagger . Γ_hat . F,S), (F. F) = 'integrate( ('conjugate(E) ~ H) + (E ~ 'conjugate(H)) . e[z], S) , (F . F) >= 'sum('sum(N[k,l]*'conjugate(a[k])*a[l], l,1,inf),k,1,inf), (F .F) >= 'sum(N[k] *'abs(a[k])^2, l,k,inf) ];
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><munder><mrow><mi>N</mi></mrow><mrow><mi>k</mi></mrow></munder><h>*</h><ie><mrow><mi>a</mi></mrow><mrow><mi>k</mi></mrow><mn>2</mn></ie><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: comment start ]
+where the last single sum is for the orthogonal basis.
+The basis functions are not required to be mutually orthogonal
+Orthogonal basis functions make the determination of the expansion coefficients a_k(z).
+The property of orthogonal basis functions is inherent in lossless materials and systems.
+Losses in other systems destroy the "pure" orthogonality
+Systems with losses are quasi-orthogonal.
+   [wxMaxima: comment end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

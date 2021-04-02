@@ -1,0 +1,27 @@
+
+i:matrix([1],[0],[0]);
+j:matrix([0],[1],[0]);
+k:matrix([0],[0],[1]);
+vect:x*i+y*j+z*k;
+transpose(vect);
+vm:sqrt(x^2+y^2+z^2);
+diff(vect,x);
+diff(vm,x);
+depends([f,g],x);
+diff(f/g,x);
+simp:false;
+diff(f/g,x);
+simp:true;
+ratsimp(%o10);
+(vect*diff(vm,x)-diff(vect,x)*vm)/vm^2;
+ratsimp(%);
+diff(vect/vm,x);
+diff(vect,x);
+diff(vm,x);
+diff(vect,x);
+diff(1/sqrt(x^2+y^2+z^2));
+subst(del(x) = dx,%);
+subst([del(x) = dx,del(y) = dy,del(z) = dz],%o21);
+diff((x*i+y*j+k*z)/sqrt(x^2+y^2+z^2),x);
+diff((x*i+y*j+k*z)/sqrt(x^2+y^2+z^2),y);
+diff((x*i+y*j+k*z)/sqrt(x^2+y^2+z^2),z);

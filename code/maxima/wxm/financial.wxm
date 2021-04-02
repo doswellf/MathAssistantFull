@@ -1,0 +1,2132 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 19.05.7 ] */
+/* [wxMaxima: title   start ]
+financial.wxm: inside financial.mac functions
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Ted Woollett, September, 2020.  
+Maxima by Example, Ch. 15, Financial Mathematics
+
+financial.mac is a rewrite of the current contributed package finance.mac.
+
+financial.mac includes major changes in notation, major code improvements,  
+and brief examples of use, and also extra utility functions. 
+
+This worksheet,  financial.wxm,  is primarily a pedagogical approach to both 
+Maxima code development and to the meaning of current finance jargon, aiming 
+to "derive" (or give references to easily available derivations, or at least make 
+plausible via numerical comparisons) the  Maxima functions present in financial.mac.
+
+I have placed financial.mac in my work folder: c:\work5\, declared in my maxima-init.mac file;
+  maxima-init.mac is a file in the folder:
+
+ c:\Users\Wooll\maxima\ 
+
+which contains the lines:
+
+maxima_userdir: "c:/work5" $     
+maxima_tempdir : "c:/work5"$
+file_search_maxima : append(["c:/work5/###.{mac,mc}"],file_search_maxima )$
+file_search_lisp : append(["c:/work5/###.lisp"],file_search_lisp )$
+
+(among other lines).
+
+The current Maxima package finance.mac is in .../share/finance/ and was written by 
+Nicolas Guarin Zapata.
+
+On my Windows 10 computer the location is:
+
+c:\maxima-5.43.0\share\maxima\5.43.0\share\finance\
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+This shows the default working folder Maxima looks in first.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+maxima_userdir;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+display2d;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Rounding floats to a specified number of decimal places
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: comment start ]
+We can round floating point numbers to a specified number of decimal places as follows, using 
+the function rnddp(expr,dp) found at the webpage:
+
+https://stackoverflow.com/questions/29322006/how-to-approximate-a-number-to-a-n-number-of-decimal-places, 
+
+found via the google search: maxima round decimal places robert dodier
+
+dp stands for "decimal places".
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp(expr,dp):= if floatnump (expr) then float((round(expr*10^dp)/10^dp)) else expr$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here are examples of use of rnddp:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (3456.6789,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (3456.6789,4);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+I have included the function rnddp in my file financial.mac.
+
+Another function available is rnd_listdp(alist,dp) which rounds a
+list of floats.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnd_list_dp(alist,dp) := map (lambda([xx], rnddp(xx, dp)), alist)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+here is an example of this second function:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnd_list_dp(  [12.3456, 23.4567, 34.5678], 2 );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+A third available function is rnd_matrix_dp(amatrix,dp)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnd_matrix_dp(%Amatrix,dp) := matrixmap (lambda([xx], rnddp(xx, dp) ), %Amatrix)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here is an example of the use of rnd_matrix_dp:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ma : matrix([a, b, c],[1.2345,2.3456,3.4567],[4.5678,5.6789,6.7891]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnd_matrix_dp(ma,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here is a way to print the elements of a matrix
+as a (crude) ordinary table: (also defined in financial.mac)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+print_matrix (AA) := map (lambda([xx], apply ('print,xx)), args(AA))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+General References
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: comment start ]
+Long listing of finance formulas:
+https://financeformulas.net/Alphabetical_A-C.html
+
+
+88 videos financial math tutorial on YouTube:
+https://www.youtube.com/watch?v=vaIqxP437bs&list=PLIYnk9FMYcksTDanxOE6LOoMhJvpz9SN3
+Module 2, Sec 1, P1 is the start of a general discussion of annuities (this is video 25 of the above set):
+https://www.youtube.com/watch?v=vIQKtXXGqhc&list=PLIYnk9FMYcksTDanxOE6LOoMhJvpz9SN3&index=25
+
+A good brief collection of definitions and formulas is:
+https://en.wikibooks.org/wiki/Financial_Math_FM/Formulas
+
+Project math pdf:
+https://www.projectmaths.ie/documents/modulars/4/FinancialMathsExtraQuestions.pdf
+
+A good introduction to the time value of money and discounted cash flows is
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/PVPrimer/pvprimer.htm
+
+A 2016 course at the Univ. of Fla. is at:
+http://users.stat.ufl.edu/~rrandles/sta4183/4183lectures/index.html
+
+Basic annuities are covered in:
+http://users.stat.ufl.edu/~rrandles/sta4183/4183lectures/chapter03/chapter03R.pdf
+
+Examples of annuities including payments in both arithmetic and geometric
+progression can be found in
+http://users.stat.ufl.edu/~rrandles/sta4183/4183lectures/chapter04/chapter04R.pdf
+
+Amortization schedules are covered in:
+http://users.stat.ufl.edu/~rrandles/sta4183/4183lectures/chapter05/chapter05R.pdf
+
+
+
+A YouTube module on arithmetic annuities can be found at:
+https://www.youtube.com/watch?v=WvSA2xBfIg8
+This is Module 2, Sec. 6, P1 by Prof. Stephen Paris.
+
+Chapter 2, Annuities, from the book Financial Mathematics for Actuaries
+(First Ed.) by Wai-Sum Chan and Yiu-Kuen Tse can be found at:
+http://www.mysmu.edu/faculty/yktse/FMA/S_FMA_2.pdf
+
+Discussion of "net present value":
+https://www.investopedia.com/terms/n/npv.asp
+https://www.accountingtools.com/articles/how-to-calculate-npv.html
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Time Value of Money
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Valuation of a future payment or a past payment.
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+We begin with the article: https://en.wikipedia.org/wiki/Time_value_of_money,
+and we quote (with some editing) from sections of that article.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+The time value of money is the idea that there is greater benefit to receiving a sum of money
+now rather than an identical sum later. It is founded on time preference. The time value of money 
+is the reason why interest is paid or earned: interest, whether it is on a bank deposit or debt, 
+compensates the depositor or lender for the time value of money. It also underlies investment. 
+Investors are willing to forgo spending their money now only if they expect a favorable return 
+on their investment in the future, such that the increased value to be available later is sufficiently 
+high to offset the preference to spending money now.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Time value of money problems involve the net value of cash flows at different points in time. 
+In a typical case, the variables might be: a balance (the real or nominal value of a debt or a 
+financial asset in terms of monetary units), a periodic rate of interest, the number of periods,
+and a series of cash flows. (In the case of a debt, cash flows are payments against principal 
+and interest; in the case of a financial asset, these are contributions to or withdrawals from 
+the balance.) More generally, the cash flows may not be periodic but may be specified individually. 
+Any of these variables may be the independent variable (the sought-for answer) in a given problem. 
+For example, one may know that: the interest is 0.5% per period (per month, say); the number of 
+periods is 60 (months); the initial balance (of the debt, in this case) is 25,000 units; and the final 
+balance is 0 units. The unknown variable may be the monthly payment that the borrower must pay.
+For example, $100 invested for one year, earning 5% interest, will be worth $105 after one year; 
+(100 * 0.05 = 5).  Therefore, $100 paid now and $105 paid exactly one year later both have the same 
+value to a recipient who expects 5% interest (per year) assuming that inflation would be zero percent. 
+That is, $100 invested for one year at 5% interest has a future value of $105 under the assumption 
+that inflation would be zero percent.
+This principle allows for the valuation of a likely stream of income in the future, in such a way that 
+annual incomes are discounted and then added together, thus providing a lump-sum "present value" 
+of the entire income stream; all of the standard calculations for time value of money derive from the 
+most basic algebraic expression for the "present value" PV of a future sum FV, "discounted" to the present 
+by an amount equal to the time value of money. 
+For example, the "future value" sum FV to be received  in one year is "discounted" at the rate of interest 
+i to give the "present value" sum PV:
+     PV  = FV / ( 1 + i ),   Example:  $105/(1 + 0.05) = $100
+     "future value" is "discounted" to "present value" ==>  PV < FV
+    and of course we can rearrange eqn. to write FV = PV * (1 + i) > PV.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+In a later section we define FVA and PVA as the future value (accumulated value) (t = n)
+and the present value (t = 0) of a stream of payments for an ordinary annuity immediate.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+An important note is that the interest rate i is the interest rate for the relevant period. For an "annuity"
+(see below) that makes one payment per year, i will be the annual interest rate. For an income or payment stream 
+with a different payment schedule, the interest rate must be converted into the relevant periodic interest 
+rate. For example, a monthly rate for a mortgage with monthly payments requires that the (annual) interest rate 
+be divided by 12.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Some standard calculations based on the time value of money are:
+1. Present value: The current worth of a future sum of money or stream of cash flows, given a specified rate of return. 
+        Future cash flows are "discounted" at the discount rate; the higher the discount rate, the lower the present value 
+        of the future cash flows. Determining the appropriate discount rate is the key to valuing future cash flows
+        properly,   whether they be earnings or obligations.
+2. Present value of an annuity (PVA): An "annuity" is a series of equal payments or receipts that occur at evenly s
+         paced intervals. Leases and rental payments are examples. The payments or receipts occur at the end of 
+         each period for an "ordinary  annuity immediate" while they occur at the beginning of each period for an 
+        "ordinary annuity due".
+ 
+3. Present value of a perpetuity is an infinite and constant stream of identical cash flows.
+4. Future value: The value of an asset or cash at a specified date in the future, based on the value of that asset 
+         in the present.
+5. Future value of an annuity (FVA): The future value of a stream of payments (annuity), assuming the payments
+          are invested at a given rate of interest. 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+pv (rate, future-payment, num)
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+The present value pv  of a payment made num compounding periods in the future
+in a financial environment in which investment oportunities are available which 
+yield a rate of interest "rate" is gotten by "discounting" the future payment by
+num factors of the "discount factor" v = 1/(1+rate).
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pv(rate,future_payment,num):=future_payment/(1+rate)^num$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+examples assuming 5% interest rate:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pv(0.05,105,1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pv(0.05,105,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pv(0.05,110,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+fv (rate, past_payment, num)
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+The future value fv  of a payment made num compounding periods in the past
+in a financial environment in which investment oportunities are available which 
+yield a rate of interest "rate" is gotten by compounding the past payment by
+num factors of the compounding factor (1+rate).
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fv(rate, past_payment, num) := past_payment*(1+rate)^num$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Examples with 5% interest rate:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fv(0.05,100,1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fv(0.05,100,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pv(0.05,110.25,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Net Present Value NPV Concept
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+A reference is
+https://www.investopedia.com/terms/n/npv.asp
+We quote (with some serious editing) some of their introduction here:
+Net present value (NPV) is the difference between the present value of cash inflows 
+and the present value of cash outflows over a period of time. NPV is used in capital 
+budgeting and investment planning to analyze the profitability of a projected investment or project.
+NPV = TVECF − TVIC
+where:
+TVECF=Today’s value of the expected cash flows
+TVIC=Today’s value of invested cash
+​ A positive net present value indicates that the projected earnings generated by a 
+project or investment - in present dollars - exceeds the anticipated costs, also in 
+present dollars. It is assumed that an investment with a positive NPV will be profitable, 
+and an investment with a negative NPV will result in a net loss. This concept is the 
+basis for the Net Present Value Rule, which dictates that only investments with 
+positive NPV values should be considered.
+Here is a fairly simple example:
+Imagine a company can invest in equipment that will cost $1,000,000 and is expected 
+to generate $25,000 a month in revenue for five years. The company has the capital 
+available for the equipment and could alternatively invest it in the stock market for 
+an expected return of 8% per year. The managers feel that buying the equipment or 
+investing in the stock market are similar risks.
+Step One: NPV of the Initial Investment
+Because the equipment is paid for up front, this is the first cash flow included in the 
+calculation. There is no elapsed time that needs to be accounted for so today’s outflow 
+of $1,000,000 doesn’t need to be discounted.
+Identify the number of periods (n)
+The equipment is expected to generate a monthly cash flow and last for five years, 
+which means there will be 60 cash flows and 60 periods included in the calculation.
+Identify the periodic discount rate (i)
+The alternative investment is expected to pay 8% per year. However, because the 
+equipment generates a monthly stream of cash flows, the annual discount rate needs 
+to be turned into a periodic or monthly rate. Using the following formula, we find that 
+the periodic discount rate is 0.64%.
+monthly (periodic) discount rate = (1 + 0.08)^(1/12) -1  =  0.006434 = 0.64%
+Another way to write this is (1 + 0.08)^(1/12)  = ( 1 + 0.006434 ) = 1/v
+v = 1 / (1 +  0.006434) = 0.9936 = discount factor per month to use in discounting
+future cash flows to a present value.
+Step Two: NPV of Future Cash Flows
+Assume the monthly cash flows are earned at the end of the month, with the first payment 
+arriving exactly one month after the equipment has been purchased. This is a future 
+payment, so it needs to be adjusted for the time value of money.  To illustrate the 
+concept, the discounted values of the first five payments are displayed in the table below.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+We want (1+rate)^12 = (1+0.08)  so 1+rate = (1+0.08)^(1/12), rate = (1+0.08)^(1/12) - 1
+and v = 1/(1+rate). Let Maxima do 16 digit arithmetic as usual here.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+(1 + 0.08)^(1/12) -1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+1 + %;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+v : 1/%;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+CF : 25000;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Discounted values of first five payments:
+The first payment at the *end* of the first month (m=1) is discounted to CF/(1+rate) = CF*v
+We only round after all the arithmetic has been done.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+for m thru 5 do 
+   print ( m,"    ",  rnddp( CF*v^m, 2))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+"Today's value of the expected cash flows" is TVECF, which requires a summation over
+all 60 months in the 5 years.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+TVECF :  rnddp( sum (CF*v^m, m, 1, 60), 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The discounted value of the expected cash flows is $1,241,122.58.
+Today's value of invested cash is TVIC = $1,000,000.00
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+TVIC : 10^6;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We can now compute the NPV, using the definition:
+NPV = TVECF − TVIC
+where:
+TVECF=Today’s value of the expected cash flows
+TVIC=Today’s value of invested cash
+We round after the subtraction.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+NPV : rnddp (TVECF - TVIC, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The NPV is $241,122.58.
+In this case, the NPV is positive; the equipment should be purchased. If the present value 
+of these cash flows had been negative because the discount rate was larger, or the net cash 
+flows were smaller, the investment should have been avoided.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+npv function
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+We adapt Zapata's npv function with some coding improvements.
+npv (rate, flowValues) assumes flowValues is a list of cash flows
+which includes as the first element the cash flow at t = 0.
+
+npv then returns the net present value at t = 0 of this stream of
+cash flows, with the rest of the cash flows occurring at the ends
+of a compounding period.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+npv (%rate, %flowValues) := 
+sum ( pv (%rate, %flowValues[k], k-1), k, 1,length (%flowValues) )$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We first apply this npv function to a simple 6 element list which we check
+by hand.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cfL : [0, 100, 500, 323, 124, 300];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+npv (0.25, cfL );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+calculate this by hand as a check
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+v : 1/(1 + 0.25);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sum (cfL [k]*v^(k-1), k, 2, 6);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now apply the  npv function to the 60 month investment cash flow scenario above.
+We need to make the list used with npv have as its first element -10^6.
+We first use makelist to create a 60 element list, each element being a
+positive cash flow of $25,000.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cfL : makelist (25000, j, 1, 60)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We next use append ( list1, list2 ) to get a 61 element list.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cfL : append ([ -10^6 ], cfL )$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+length (cfL);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We can use the rest function to look at the first few elements.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rest (cfL, -58);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+we require (1 + monthly-rate)^(12) = (1 + yearly-rate) to solve for the monthly
+rate using 16 digit arithmetic.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rate : (1 + 0.08)^(1/12) -1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+npv (rate, cfL);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (%, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+which agrees with our calculation above: $241,122.58
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+irr ( rate, cash_flow_list, IO)  Internal Rate of Return  IRR
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+References:
+
+https://www.investopedia.com/terms/i/irr.asp
+
+from which we quote:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+The "internal rate of return" (IRR) is a metric used in financial analysis to estimate the profitability
+ of potential investments. The internal rate of return is a discount rate that makes the net 
+present value (NPV) of all cash flows equal to zero in a discounted cash flow analysis. 
+IRR calculations rely on the same formula as NPV does.
+
+KEY TAKEAWAYS
+
+IRR is the annual rate of growth an investment is expected to generate.
+IRR is calculated using the same concept as NPV, except it sets the NPV equal to zero.
+IRR is ideal for analyzing capital budgeting projects to understand and compare potential 
+         rates of annual return over time.
+
+The value of IRR comes from using the formula
+
+0 = NPV = sum (C[k] / (1 + IRR)^k, k, 1, n) - C[0]
+
+where C[k] is the net cash inflow at the end of the compound
+period k, and C[0] is the total initial (t=0) investment costs.
+
+Generally speaking, the higher an internal rate of return, the more 
+desirable an investment is to undertake. IRR is uniform for investments 
+of varying types and, as such, IRR can be used to rank multiple 
+prospective investments or projects on a relatively even basis. 
+In general, when comparing investment options, the investment 
+with the highest IRR would probably be considered the best.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Our Maxima function irr (flowValues, IO) returns the internal rate of return (IRR) 
+based on a cash flow list of signed values, with the first element of the list
+representing t = 0, and also based on a possibly separate accounting of an 
+initial investment (IO)  made at t = 0.
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+irr(flowValues,I0):= block([rr, asum, realonly: true],
+	asum : npv (rr, flowValues) - I0,
+   algsys ([asum = 0], [rr]),
+   rhs ( %%[1][1]))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+In this first example, we assume an initial (t = 0) investment of
+$5,000, and we choose to place the number (-5000) into the
+first slot (the t=0 slot) of the flowValues list (the "cash values
+list" and set the second argument (IO) equal to zero. In a second
+example below we set IO = 5000, and set the first element of
+the flowValues list equal to zero, and get the same internal rate
+of return (IRR).
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+irr ([-5000, 0, 800, 1300, 1500, 2000], 0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We can check the internal rate of return (3%) returned by irr by calling npv
+and expect to get a number numerically close to zero.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+npv (%, [-5000, 0, 800, 1300, 1500, 2000]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp(%, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+so indeed the 3% value of the IRR says that this cash flow list has zero net present value.
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Instead of including the $5,000 t = 0 investment
+as a negative value in the first element of the cash
+flow list, we can substitute 0 as the first list element
+and substitute 5000 for the the argument  IO.
+
+Since the irr formula calls our npv function, and
+our npv function assumes the first element of the 
+cash flow list occurs at t = 0, we need to either have
+0 or some other number present to represent t=0.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+irr ([0, 0, 800, 1300, 1500, 2000], 5000);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+An example from our reference:
+
+Here is a simple example of an IRR analysis with cash flows that are known and annually 
+periodic (one year apart). Assume a company is assessing the profitability of Project X. 
+Project X requires $250,000 in funding and is expected to generate $100,000 in after-tax 
+cash flows the first year and grow by $50,000 for each of the next four years.
+
+The initial investment is always negative because it represents an outflow. 
+Each subsequent cash flow could be positive or negative, depending on the 
+estimates of what the project delivers in the future. In this case, the IRR 
+is 56.72%, which is quite high.
+
+Keep in mind that the IRR is not the actual dollar value of the project. 
+It is the annual return that makes the net present value equal to zero.
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+irr ([-250000, 100000, 150000, 200000, 250000, 300000], 0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+npv (%, [-250000, 100000, 150000, 200000, 250000, 300000]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (%,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+benefit_cost (rate, CFin, CFout)   Benefit Cost Ratio
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+The function benefit_cost (rate, CFin, CFout) calculates  the 
+Benefit/Cost ratio where  "Benefit" is the Net Present Value (NPV)
+of the cash flow in, and "Cost" is the Net Present Value (NPV) of the cash
+flow out.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+benefit_cost (rate, CFin, CFout) := 
+	if length (CFin) # length (CFout)
+   	then error("CFin & CFout lists must have the same length")
+	   else  rnddp ( npv (rate, CFin) / npv (rate, CFout), 2)$
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here is an example:
+
+CFin =   cash flow in list = [0,300,500,150] where first list element applies to t = 0 (k = 0).
+
+ CFout =   cash flow out list = [100,320,0,180] where first list element applies to t = 0.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+benefit_cost(0.24,[0,300,500,150],[100,320,0,180]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+plot_CF (cash_flow_list, lineWidth)
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+If you load financial.mac,  the draw package will be automatically
+loaded and you should never reload draw in a given session. Since
+we have not loaded financial.mac, we must now load the draw package.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(draw)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+plot_CF  (cash_flow_list,  lineWidth) makes a histogram with blue vectors
+on the top side for positive entries, and red vectors on the bottom side
+for negative vectors. 
+
+cash_flow_list can have two forms:
+
+1.  if the list looks like
+               [100, -50, 200, 300, -100]
+     for example, then a positive cash flow is assumed to occur at t = 0 (k = 0), 
+        a negative cash flow occurs at k = 1 (the end of the first compounding period),
+        and so on, with a negative cash flow (-100) at k = 4 (the end of the fourth
+        compounding period).
+
+2.  If, instead, the list looks like
+              [ [0.5,100], [1,-50], [2,200], [2.5,300], [4,-100] ]
+         for example, then a positive cash flow (100) occurs at k = 0.5
+         (halfway thru the first compounding period), a negative cash
+         flow (-50) occurs at k = 1 (the end of the first compounding period),
+         and so on, with cash flow (-100) at k = 4 (the end of the 4th
+         compounding period).
+
+ The adjustable width of the vectors is lineWidth, a positive integer, say 4 - 6.
+ 
+This fancy function (a modification of the plot function in Zapata's finance.mac) 
+makes use of draw2d.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+plot_CF(CFL, lineWidth) :=
+block([vectors, options], 
+    if listp (CFL[1]) then  /* assume each element of CFL is a two element list */
+       vectors: flatten(makelist([color = if CFL[k][2] < 0 then 'red else
+                   'blue, vector ( [CFL[k][1], 0], [0, CFL[k][2]] ) ], k,1, length(CFL)))
+    else
+       vectors: flatten(makelist([color = if CFL[k]<0 then 'red else
+                   'blue, vector ( [k-1, 0], [0, CFL[k]] ) ], k,1, length(CFL))),
+    
+    options: [head_length=0.05,
+           line_width = lineWidth,
+            xaxis=true,
+            yaxis=false,
+            xrange=[-1,length(CFL) ]],
+    apply(draw2d,append(options,vectors)))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here we try this function out with both types of lists.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+myList : [100, -50, 200, 300, -100];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+plot_CF (myList, 6)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+myList2 : [ [0.5,100],[1,-50],[2,200],[2.5,300],[4,-100] ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+plot_CF (myList2, 6)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Ordinary Annuities (Annuities-Immediate) Formulas
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here we assume a constant payment A is made at the end of each of n
+compounding periods (at m = 1, 2, ..., n).
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+FV_stream (i, A, n)   future value of an ordinary annuity
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+Derivation of FVA (future value of an ordinary annuity stream of payments)
+
+Assume  n compounding periods, with a payment A at the end of each period, the "term" of the annuity
+begins at time m = 0, the first payment occurs at time  m = 1, and the last payment A occurs at time m = n 
+with future value A. The next to last payment A occurs at time m = n-1 with the future value A*(1+i). 
+The payment A at time m = n-2 has a future value at time m = n-1 equal to A*(i+1), and we then increase 
+the future value again by another factor of (1+i) to get the future value at time  m = n. So the payment 
+A at time m = n-2 has future value A*(1+i)^2, and so on. Each compounding period increases the future 
+value by another factor of (1+i).
+
+Then a single payment A at the time m has the future value FV at the future time n, given by
+FV = A * (1+i)^(n-m). We now add up these future values of each payment, starting at m = 1 and
+ending at m = n:
+
+FVA = sum( A * (1+i)^(n-m),m,1,n) = A* sum ( (1+i)^k, k,0,n-1 ) ; here we have changed the summation
+variable m --> k = n-m, so when m = 1, k = n-1 and when m = n, k = 0.
+
+Let Maxima symbolically compute the finite sum.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sum( (1+i)^k,k, 0,n-1), simpsum;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Hence we have the result
+FVA = A * ( (1+i)^n - 1)/ i
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+FV_stream (rate,payment,num) := payment*( (1+rate)^num -1) / rate$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+ Here is an example of use:
+  
+Consider a series of five $1,000 deposits made at regular intervals: at the end of
+year 1, end of year 2,...end of year 5.
+
+Because of the time value of money—the concept that any given sum is worth more now than
+it will be in the future because a payment can be invested immediately upon receipt—
+the first $1,000 deposit  (payment 1) is  worth more than the second, and so on. So, let's 
+assume that you invest $1,000 at the end of every year for the next five years, at 5% annual 
+interest. How much will you have at the end of the  five-year period?
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+FV_stream (0.05, 1000, 5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (%,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The accumulated value (the future value of this stream of deposits) is $5,525.63.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+annuity_fv (i, FV, n)  =  constant payment as a function of FV
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+The formula for FVA can be solved for the periodic payment A, given FVA, i, and n:
+A = FVA*i / ( (1+i)^n - 1)
+
+and we define the latter (the periodic payment A) as a Maxima function "annuity_fv"
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+annuity_fv(%rate, %FV_stream, %num) := %FV_stream*%rate/((1+%rate)^%num-1)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here is a webpage on calculating annuities where a very explicit example is given:
+https://www.investopedia.com/retirement/calculating-present-and-future-value-of-annuities/
+
+Consider, for example, a series of five $1,000 payments made at regular intervals: at the end of
+year 1, end of year 2,...end of year 5.
+
+Because of the time value of money—the concept that any given sum is worth more now than
+it will be in the future because a payment can be invested immediately upon receipt—
+the first $1,000 deposit  (payment 1) is  worth more than the second, and so on. So, let's 
+assume that you invest $1,000 at the end of every year for the next five years, at 5% annual 
+interest. How much will you have at the end of the  five-year period?
+
+The future value (at the end of five years) of the payments can be calculated as
+
+n = 5, A = $1,000, i = 5%:
+
+t=0 ==> k=0  NO CASH FLOW HERE
+k=1: payment 1:  A*(1+i)^4 = $1000*(1+0.05)^4 = $1,215.51, n-k = 4
+k=2: payment 2:  A*(1+i)^3 = $1000*(1+0.05)^3 = $1,157.63, n-k = 3
+k=3: payment 3:  A*(1+i)^2 = $1000*(1+0.05)^2 =  $1,102.5, n-k = 2
+k=4: payment 4   A*(1+i)^1 = $1000*(1+0.05)^1 =  $1,050.0, n-k = 1
+k=5: payment 5   A*(1+i)^0 = $1000*(1+0.05)^0 =  $1,000.0, n-k = 0
+Adding these future values, which are approximate since
+we have rounded them, we get the approximate sum of $5,525.64
+
+Using 16 digit arithmetic, Maxima now gives:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+FV_stream (0.05, 1000, 5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We can use the Maxima function annuity_fv(rate,FV_stream,num) defined above to go from this total future
+value of a stream of deposits in an ordinary annuity immediate to get the required periodic payment A:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+annuity_fv(0.05, %, 5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+which agrees with our example.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+saving (rate, Amount, num)  Savings Accumulation Tables
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+references
+https://www.thecalculatorsite.com/finance/calculators/savings-goal-calculator.php
+
+savingA (rate, Amount, num) assumes first savings deposit occurs at k  = 1, and
+last occurs at k = num to reach savings goal.
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+savingA (rate, Amount, num) :=
+block ([MM, %payment],
+	if num < 0 then error ("num must be a positive value")
+	else MM : genmatrix (a, num + 2, 4),
+	%payment :  annuity_fv (rate, Amount, num),
+	MM[1] : [k, Balance, Interest, Payment],
+	MM[2] : [0, 0, 0, 0],
+    
+	for k : 3 thru num+2  do(
+		MM[k, 4] :  %payment,
+		MM[k, 1] : k - 2,
+		MM[k, 3] : MM[k - 1, 2]*rate,
+		MM[k, 2] : MM[k - 1, 2] + MM[k, 3] + MM[k, 4]	),
+    rnd_matrix_dp (MM, 2))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+savingA (0.05, 1000, 6);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+savingB (rate, Amount, num) assumes you make first
+savings deposit at t = 0 and immediately start making
+interest
+If A is the constant periodic mayment, and i is the periodic interest rate, 
+and the first savings deposit is made at t = 0 then the future value at k = n
+of the stream of deposits made at k = 0, 1, 2,..., n-1  is
+
+A (1+i)^n + A (1+i)^(n-1) + A (1+i)^(n-2) + .... + A (1+i)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mysum : sum ((1+i)^k,k,1,n), simpsum;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We use this result in the definition of %payment in savingB:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+savingB (rate, Amount, num) :=
+block ([MM, %payment],
+	if num < 0 then error ("num must be a positive value")
+	else MM : genmatrix (a, num + 2, 4),
+	%payment :  rate*Amount / ( (1+rate)^(num+1) -rate -1),
+	MM[1] : [k, Balance, Interest, Payment],
+	MM[2] : [0, %payment, 0, %payment],  /* t = 0 */
+    
+	for k : 3 thru num+2  do(
+		MM[k, 4] :  %payment,
+		MM[k, 1] : k - 2,
+		MM[k, 3] : MM[k - 1, 2]*rate,
+		MM[k, 2] : MM[k - 1, 2] + MM[k, 3] + MM[k, 4]	),
+    rnd_matrix_dp (MM, 2))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+savingB (0.05, 1000, 6);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+PV_stream (i, A, n)  present value of an ordinary annuity
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+Let the payments A at the end of each period: k = 1, 2, 3, ... be labelled A1,A2,A3,...
+Then the present value of A1 (in our 5 period example above) deposited at k = 1
+is PV(A1) = A1/(1+i). Likewise PV(A2) = A2/(1+i)2, and so on.
+For n compounding periods (and for a simple annuity) we then have
+PVA = A*sum(1/(1+i)^k, k, 1, n). We let v = 1/(1+i) and call v the "discount factor".
+Then PVA = A*sum(v^k, k, 1, n). Let's work on just the sum, using the symbolic
+powers of Maxima.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sum (v^k, k, 1, n), simpsum, factor;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+v/(1-v), v = 1/(1+i), ratsimp;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+So we get PVA = A*(1 - v^n)/i, a simple closed form. Using this formula,
+we define the Maxima function PV_stream (rate, payment, num) which
+is the t = 0 valuation of a stream of constant payments A made at the end
+of each of n periods with assumed interest rate per period i with the "discount 
+factor" v = 1/(1+i)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_stream (rate,payment,num) :=block ([vv : 1/(1+rate)],  payment * (1-vv^num) / rate )$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+As an example assume a 5% interest rate per compounding period, and $1,000
+payments made at the ends of  5 periods.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_stream (0.05, 1000, 5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (%, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Thus the $5000 in payments over the five periods has a present value (t = 0)
+of $4,3329.48.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+annuity_pv (i, PV, n)  =  constant payment as a function of PV
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+Solving for the constant periodic payment, we get
+    A = PVA * i / (1 - v^n) 
+which we define as a  Maxima function  "annuity_pv(rate,PV_stream,num)" ,
+which is the constant payment made at the  end of each compounding period,
+given the assumed interest rate, the number of compounding periods, and the 
+total value of the stream of payments at t = 0.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+annuity_pv(%rate, %PV_stream, %num) := 
+           block ([ %vv : 1/(1+%rate)], %PV_stream*%rate/ (1 - %vv^%num) )$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Using the same 5 period example as used with our FVA discussion above:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pv_example : PV_stream (0.05, 1000, 5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+annuity_pv (0.05, pv_example, 5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fv_example : FV_stream (0.05, 1000, 5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We should have PVA = FVA * v^n since the valuation of the stream at t = n
+needs to be discounted with the factor v for each compounding period
+separating t = n from t  = 0. We will numerically look at the difference
+between v^n*FVA and PVA (which should be 0.0).
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+v_example : 1/(1+0.05);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+v_example^5 * fv_example - pv_example;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (%,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+and indeed we get numerical agreement.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+amortization (i,PV,n): Constant Payment Schedule for Paying Off a Loan 
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+The function amortization can be used to create an amortization matrix which can be 
+used to generate an amortization table (schedule) showing how each successive
+payment divides into payment of interest on the principal balance, and a portion
+which reduces the principal balance itself.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+Interactive schedule design for a simple example
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the simple example of a n = 3 period 5% ordinary annuity
+for a loan of $56,000 at t = 0, we first calculate the corresponding
+constant payment:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+payment : annuity_pv (0.05,56000, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We keep all 16 digit arithmetic results unrounded until the very end.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Let rate be bound to the decimal value of the  interest rate in this example.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rate : 0.05;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use m or k as integers to specify the time of the ends of compounding
+periods. For n periods, we create a matrix with n+2 rows, with 
+row k = 3 describing the state at the end of the first compounding
+period.
+   
+genmatrix (aa, nrow, ncol) creates a matrix with nrow rows
+and ncol columns, where aa is an undefined two dimensional array.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+For our simple example, we need five rows and 5 columns.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M : genmatrix (aa, 5, 5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+row k = 1 is to have column headings:
+ m    Prin_balance    Interest_portion    Principal_portion      Payment
+
+row k = 2 is to have the  starting values  (t = 0)
+  0         56000                           0                                   0                          0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M[1] :  [m, Prin_balance, Interest_portion, Principal_portion, Payment]$
+M[2] :  [0,0,0,0,0]$
+M[2,2] :  56000$
+M;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now work on row k = 3.  
+
+Column 1 should have value 1 = k - 2.
+Column 5 should have the constant payment.
+Column 3 is the interest paid (2800) on 56000 for one compounding
+period at 5% interest. 
+Column 4 = the amortization (the part of the payment
+used to pay down the loan principal) is the constant payment
+minus the interest paid. 
+Column 2 = the new principal balance is then
+the starting balance (56000) minus the amortization.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k : 3$
+M[k, 1] : k - 2$
+M[k, 5] : payment$
+M[k, 3] : rate * M[k-1, 2]$
+M[k, 4] : payment - M[k, 3]$
+M[k, 2] :  M[k-1, 2] - M[k, 4]$
+M;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+now for rows 4 and 5, we repeat this pattern of filling up the matrix
+elements.  Used inside a do loop, k acts like a purely local variable.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+for k:4 thru 5 do  (
+     M[k, 1] : k - 2,
+     M[k, 5] : payment,
+    M[k, 3] : rate * M[k-1, 2],
+    M[k, 4] : payment - M[k, 3],
+    M[k, 2] :  M[k-1, 2] - M[k, 4])$
+M;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We finally round the results using rnd_matrix_dp (amatrix, dp)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M : rnd_matrix_dp (M, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We don't need to keep the global binding of k to 3 made above,
+so we use kill(k) here.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(k);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+General Case Function: amortization (rate, Amount, num)
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+We put together the design elements above to handle a
+general amortization schedule for arbitrary interest rate,
+loan amount (PV) and number of compounding intervals.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amortization (rate, Amount, num) := 
+block ([%payment, MM],
+    %payment : annuity_pv (rate, Amount, num), 
+    MM : genmatrix(a, num + 2, 5), 
+    MM[1] : [m, Prin_balance, Interest_portion, Principal_portion, Payment],
+    MM[2] : [0,0,0,0,0],
+    MM[2,2] : Amount,
+    for k : 3 thru num + 2 do (
+        MM[k,1] : k - 2,
+        MM[k,5] : %payment,    
+        MM[k,3] : rate * MM[k-1, 2],  /* interest paid */
+        MM[k,4] :  %payment - MM[k,3],   /* amortization */
+        MM[k,2] : MM[k-1,2]  - MM[k,4] ),   /* new balance */
+    rnd_matrix_dp (MM,2 )  )$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+aM : amortization (0.05,56000,3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The Maxima function grind(result) produces a pure text form of the result.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(aM)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+which reproduces the interactive calculation.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Our print_matrix function does a crude job of printing the
+elements of the matrix as an ordinary table; the matrix form
+gives more clarity.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+print_matrix (aM)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Arithmetic Increasing Annuity Formulas
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: comment start ]
+We assume an "increasing annuity immediate" in which the payments occur at the
+end of each compounding period.
+
+See pdf p 24, "annuity-immediate with general arithmetic progression
+payment amounts" in a section of R. Randles Univ. of Fla. statistics course:
+http://users.stat.ufl.edu/~rrandles/sta4183/4183lectures/chapter04/chapter04R.pdf
+
+A YouTube discussion is by Prof Stephen Paris (Module 2, Section6, Part 1)
+called "Arithmetic Annuities" can be found at:
+https://www.youtube.com/watch?v=WvSA2xBfIg8
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+PV_arith (i, R, Q, n)  brute force calculation
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+For interest rate i, number of compounding interest periods n, first payment = R, 
+second payment = R + Q, third payment = R + 2*Q, etc, nth payment = R + (n-1)*Q.
+Let PV_arith_bf (i, R, Q, n) calculate the present value (t = 0 valuation) of this stream of payments.
+
+One can do this using "brute force" via the Maxima sum function.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_arith (i, R, Q, n) := block ([v:1/(1+i)],    
+     R*sum (v^k,k,1,n) + Q*sum( (k-1)*v^k,k,2,n))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here is a simple example:  R = 1, Q = 2, i = 5%, n = 3.
+The first payment is 1, the second payment is 3, the third and last
+payment is 5.
+
+Doing this by hand first:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+v:1/(1+0.05);
+v + 3*v^2 + 5*v^3;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+and now using our "brute force" function
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_arith (0.05,1,2,3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+PV_AI_stream (i, R, Q, n)  present value arithmetic increasing annuity
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+R. Randles writes down a formula for the present value (t=0) of a
+stream of arithmetic increasing payments which are made at the
+end of each compounding period, beginning with the payment
+R, then R+Q, then R+2*Q, etc. Here, R is the first payment, and
+Q is the constant increment.  We use this as the basis for the
+following Maxima function PV_arith
+
+In this formula we use abn to stand for  "a bracket n" and 
+this stands for the sum
+
+abn  = v + v^2 + v^3 + ... + v^n  
+         =  (1-v^n)/i,  
+
+where v = 1/(1+i) is the "discount factor" and i is the interest rate
+per compounding period.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_AI_stream (rate, R, Q, num) := block ([vv:1/(1+rate), abn],    
+    abn : (1-vv^num)/rate,
+     R*abn + (Q/rate)*(abn - num*vv^num))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_AI_stream (0.05, 1,2,3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+which gives the same result as both our hand and brute force calculations.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+AI_annuity_pv (i, PV, Q, n)  = first payment
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+We solve the PV_AI_stream formula for the first payment in terms of the
+ present value (the "Amount"), the interest rate,  the number of compounding
+ periods, and the constant  increment in the periodic payment made at the 
+ end of each compounding  period:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+AI_annuity_pv (%rate, %Amount, %increment, %num) := 
+     block ([vv:1/(1+%rate), abn], 
+      abn : (1 - vv^%num)/%rate,
+       /*  print(" %rate = ",%rate," vv = ",vv,"  abn = ",abn),   */
+      (%Amount/abn) - (%increment/%rate)*(1 - (%num*vv^%num) / abn))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here is an example of use with i = 5%, n = 3, payments 1,3,5.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+AI_annuity_pv (0.05,7.99265738041266, 2, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (%, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+amortization_arith (i, PV, Q, n)   matrix 
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+amortization_arith (i, PV, Q, n) returns a matrix display (table) of the amortization schedule
+for an increasing arithmetic annuity immediate.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amortization_arith(rate, Amount, increment, num):=
+block([MM,%payment],    
+     if num < 0 then error("num must be a positive value")
+       else MM : genmatrix(a, num+2, 5),      
+    %payment : AI_annuity_pv(rate, Amount, increment, num),
+    MM[1] : [m, prin_balance, int_portion, prin_portion,Payment],
+    MM[2] : [0,0,0,0,0],
+    MM[2,2] : Amount,
+    MM[3,5] : %payment,
+    for k:4 thru num+2 do (MM[k,5]:MM[k-1,5] + increment),
+    for k:3 thru num+2 do (
+        MM[k,1] : k-2,
+        MM[k,3] : MM[k-1,2]*rate,
+        MM[k,4] : MM[k,5] - MM[k,3],
+        MM[k,2] : MM[k-1,2] - MM[k,4]),
+rnd_matrix_dp (MM,2) )$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here is the amortization table for the simple case discussed above
+with i = 5%, n = 3, payments 1,3,5.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amortization_arith (0.05, 7.992657380412481, 2, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(%)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+A second example with 5% interest rate, payment increment
+of $1,000, initial loan amount of $56,0000, and 3 payments.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amortization_arith (0.05 , 56000 , 1000 , 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+future value of arithmetic increasing stream of payments
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Growing Annuity ("Geometric Increasing") Formulas
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: comment start ]
+A growing (geometric increasing) annuity refers to ordinary annuities
+in which payment [k + 1] = (1 + g) * payment [k], and the constant
+parameter g is called the "growth rate".
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+present value PV of a growing (geometric increasing) annuity
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reference:
+  https://financeformulas.net/Present_Value_of_Growing_Annuity.html
+
+From which we quote:
+
+"The present value of a growing annuity formula calculates the present day value of a 
+series of future periodic payments that grow at a proportionate rate. A growing annuity may 
+sometimes be referred to as an increasing annuity. A simple example of a growing annuity 
+would be an individual who receives $100 the first year and successive payments increase
+ by 10% per year for a total of three years. This would be a receipt of $100, $110, and $121, respectively."
+
+"The present value of a growing annuity formula relies on the concept of time value of money. 
+The premise to this concept is that a specific quantity of money is worth more today than at a future time."
+
+"Like all financial formulas that involve a rate, it is important to correlate the rate per period to the number 
+of periods in the present value of a growing annuity formula. If the payments are monthly, then the rate 
+would need to be the monthly rate."
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+Sum of a finite geometric series
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+The sum of the finite geometric series having x = "common ratio":
+1 + x + x^2 + ... + x^(n-1)   =   (1 - x^n) / (1 - x)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sum ( x^k, k, 0, n - 1), simpsum;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+PV_geom(i, g, R, n)  brute force calculation of present value
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+PV_geom (i, g, R, n) calculates the present value (t = 0) of a stream of future
+payments made at the ends of n equal periods, assuming an interest rate i,
+first payment R, and each succeeding payment is (1+g) times larger than
+the previous payment.  We can use the Maxima function fundef to see the
+definition:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Let R be the first payment at the end of the first compounding period, 
+i be the interest rate per period, let v = 1/ (1+i) = "discount factor",
+let g be the "growth rate", such that the second payment is R*(1+g),  
+the third payment is R*(1+g)^2, etc. Let the number of payments be n. 
+
+Then using the discount factor to get the present value of each payment, we get:
+present value = PV = R*v + R*v^2 *(1+g)  + R*v^3*(1+g)^2 +....
+   ... + R*v^n*(1+g)^(n-1)
+or
+
+PV = R*v * [1 + x + x^2 + .... + x^(n-1) ],  where  x = common ratio  = v*(1+g),
+
+then use the geometric series formula to get
+
+PV = R*v* (1 - v^n*(1+g)^n) / (1 - v*(1+g))
+
+   now use v = 1/(1 + i) to write the denominator as
+     1 - (1+g)/(1+i) = (1+i - (1+g) ) / (1+i) = (i - g)*v, to get
+
+PV = ( R / (i-g) ) *  ( 1 -   ( (1+g)/(1+i) )^n  )
+
+This last formula is used to create the function PV_GI_stream below.
+
+For now we use the explicit sum version to define PV_geom.
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_geom (i, g, R, n) := block ([v : 1/(1+i) ],    
+    R*v* sum ( ( v*(1+g) )^k, k, 0, n-1 ))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We use a 3 payment example (n=3), assuming 5%  interest rate
+per period (i = 0.05), the first payment R = $100, and we assume 
+a 10% growth rate in payments so g = 0.1.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_geom (0.05, 0.1, 100, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (%, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+PV_GI_stream (i, g, R, n) 
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+GI stands for "geometic increasing" (rather than arithmetic increasing).
+
+i is the interest rate (in decimal form) per compounding period.
+n is the number of payments, each made at the end of a compounding period.
+R is the first payment at the end of the first compounding period, 
+The second payment at the end of the second period is R*(1+g),
+where g is the growth rate in decimal form.
+
+Here we make use of the geometric series summation formula.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_GI_stream (i, g,R, n) :=   R * (1 - ( (1+g)/(1+i) )^n ) / (i - g)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+And repeat the example used above:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_GI_stream (0.05, 0.1,100, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (%, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+GI_annuity_pv (i, g, PV, n)  ==  first payment
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+We solve the formula used for PV_GI_stream for the first payment R
+to get the definition of GI_annuity_pv (i, g, PV, n),
+
+This function returns the first payment of a geometric increasing stream of
+payments, given the desired present value PV, the periodic interest rate i, the
+payment growth rate g, and the number n of compounding periods.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+GI_annuity_pv (rate,growing_rate,PV,num) :=  
+  PV*(rate - growing_rate)/(1 - (1 + growing_rate)^(num)/((1 + rate)^num))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Apply this function to the previous example:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+GI_annuity_pv(0.05, 0.1, 299.54, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (%, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+amortization_geom (i, g, PV, n) matrix
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+amortization_geom (i, g, PV, n) returns a matrix table display of
+the amortization schedule for a geometic increasing ordinary
+annuity, assuming interest rate i, payment growth rate g, PV
+(value at t = 0), and n payment periods.
+
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amortization_geom (rate, growing_rate, Amount, num) :=
+block([MM, %payment],
+    if num<0 then error("num must be a positive value")
+    else    MM : genmatrix(a, num + 2, 5),
+    %payment : GI_annuity_pv (rate, growing_rate, Amount, num),
+    MM[1] : [ k,  Balance, Interest, Amortization,Payment],
+    MM[2] : [0, Amount, 0, 0, 0],
+    MM[3, 5] : %payment,
+    for k : 4 thru num+2 do MM[k, 5] : MM[k - 1, 5]*(1+growing_rate),
+    for k : 3 thru num+2 do (
+        MM[k, 1] : k - 2,
+        MM[k, 3] : MM[k - 1, 2]*rate,
+        MM[k, 4] : MM[k, 5] - MM[k, 3],
+        MM[k, 2] : MM[k - 1, 2] - MM[k, 4]  ),
+    rnd_matrix_dp (MM, 2))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The payoff schedule for a $56,000 loan at t = 0, with 3 periodic payments
+subject to a 5% interest rate and a payment growth rate of 3% is then
+given by:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amortization_geom (0.05, 0.03, 56000, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+future value FV of a growing (geometric increasing) annuity
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+
+The future value of a stream of growing (geometric increasing) ordinary annuity
+payments is the value of that stream of payments at the time of the last payment,
+and FV = (1+i)^n * PV  for n periodic payments and interest rate per period i.
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+reference:
+
+https://financeformulas.net/Future-Value-of-Growing-Annuity.html
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+. A growing annuity may sometimes be referred to as an increasing annuity. A
+simple example of a growing annuity  would be an individual who receives $100 
+the first year and successive payments increase  by 10% per year for a total 
+of three years. This would be a receipt of $100, $110, and $121, respectively.
+
+The future value of a growing annuity formula relies on the concept of time value 
+of money.  The premise to this concept is that a specific quantity of money is worth
+more today than at a future time.
+
+Like all financial formulas that involve a rate, it is important to correlate the rate per 
+period to the number  of periods in the future value of a growing annuity formula. 
+If the payments are monthly, then the rate  would need to be the monthly rate."
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Above we derived the formula for the present value of a growing annuity in which the
+first payment is R when k = 1, the second payment is R(1+g) when k = 2, the third payment
+is R(1+g)^2 when k = 3, etc.  The periodic interest rate is i.
+Then:
+                       PV = ( R / (i-g) ) *  ( 1 -   ( (1+g)/(1+i) )^n  )
+
+We can obtain the formula for the future value (k = n) of this stream of payments by
+multiplying PV by (1+i)^n.
+
+We can then simplify and obtain:
+                     FV = ( R / (i-g) ) * ( (1+i)^n - (1+g)^n )
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+brute force calculation FV_geom(i, g, R, n)
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+In this brute force calculation we simply used the Maxima function
+sum, without using the finite sum geometric sum formula.  
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+FV_geom (i, g, R, n) :=   R*sum ( (1+g)^(k-1) * (1+i)^(n-k), k, 1, n)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We use a 3 payment example (n=3), assuming 5%  interest rate
+per period (i = 0.05), The first payment R = $100, a 10% growth rate in payments
+so g = 0.1.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+FV_geom (0.05, 0.1, 100, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+We can transform this into the present value (t=0 value PV) by dividing by (1+i)^n:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rnddp (% / (1+0.05)^3, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+and as another check:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+PV_geom (0.05, 0.1, 100, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+FV_GI_stream (i, g, R, n) 
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+GI stands for "geometic increasing" (rather than arithmetic increasing).
+
+i is the interest rate (in decimal form) per compounding period.
+n is the number of payments, each made at the end of a compounding period.
+R is the first payment at the end of the first compounding period, 
+The second payment at the end of the second period is R*(1+g),
+where g is the growth rate in decimal form.
+
+Here we make use of the  formula derived above:
+
+ FV = ( R / (i-g) ) * ( (1+i)^n - (1+g)^n )
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+FV_GI_stream (i, g,R, n) :=   R * ( (1+i) ^n - (1+g)^n ) / (i - g)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+FV_GI_stream (0.05, 0.1, 100, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsubsect start ]
+GI_annuity_fv (i, g, FV, n)  ==  first payment
+   [wxMaxima: subsubsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+This formula give the first payment (at k = 1) of a geometric increasing stream of
+payments, given the  future value FV (at k = n), the interest rate i, the growth rate g,
+and the number n of compound interest periods.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+GI_annuity_fv (i, g, FV, n) :=  
+  FV*(i - g)/( (1 + i)^n - (1 + g)^n )$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Again using our simple n = 3 example:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+GI_annuity_fv (0.05, 0.1, 346.7500000000005, 3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+which recovers the first payment R.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Displaying rows of a matrix with many rows
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here is a simple example of displaying some of the rows of a 
+matrix with many rows ( which will also return a large number
+for the length of the matrix).
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+MM : matrix ( [a,b,c],[d,e,f],[g,h,i],[j,k,l],[m,n,o],[p,q,r],[s,t,u],[v,x,y] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+MM[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+for j thru 3 do print ( j, MM[j])$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+length(MM);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+for j: 5 thru 8 do print (j, MM[j] )$
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 19.05.7"$

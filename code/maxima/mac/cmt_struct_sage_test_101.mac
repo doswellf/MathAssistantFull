@@ -1,0 +1,104 @@
+/*     Need functions to create variable and function entries 
+    and place them in tables. 
+    Also need tables for expressions, axioms, environment 
+    i.e. givens, values, initial and boundary conditions
+    Tracking and control of substitution and derivation of equations is needed */
+
+defstruct(var_info (name,value,latex));
+
+defstruct(fun_info (ftyp, name, args, body, latex));
+
+defstruct(var_table (count,vars));
+
+defstruct(fun_table (count, funs));
+
+/* ftyp is FUN for function, MAC for macro */
+
+vinfo_ch01:new(var_info);
+
+vinfo_ch01@name:P_p1_s;
+
+vinfo_ch01@value:0.0531;
+
+vinfo_ch01@latex:[['math, "P_{\\scriptscriptstyle{[+1,s]}}"], ['text, "P_{[+1,s]}"]];
+
+assoc('math, vinfo_ch01@latex);
+
+assoc('text, vinfo_ch01@latex);
+
+vtab_ch01:new(var_table);
+
+vtab_ch01@vars:[vinfo_ch01];
+
+vtab_ch01@count:1;
+
+finfo_Pv_z:new(fun_info);
+
+finfo_Pv_z@ftyp:"FUN";
+
+finfo_Pv_z@name:P_v;
+
+finfo_Pv_z@args:[z];
+
+finfo_Pv_z@body:"abs(w_v)*sum(p_m*abs(a_vm(z))^2,m,minf,inf)";
+
+finfo_Pv_z@latex:"P_\\nu(z) = \\left| \\omega_\\nu \\right| \\sum_{-\\infty}^{\\infty} p_{\\scriptscriptstyle{-}} \\left| a_{\\scriptscriptstyle{-\\nu}} (z)\\right|^2";
+
+ftab_ch01:new(fun_table);
+
+ftab_ch01@count:1;
+
+ftab_ch01@funs:[finfo_Pv_z];
+
+finfo_Pdz_z:new(fun_info);
+
+finfo_Pdz_z@ftyp:"FUN";
+
+finfo_Pdz_z@name:P_dz;
+
+finfo_Pdz_z@args:[z];
+
+finfo_Pdz_z@body:"diff(sum(q_v*p_m*abs(a_vm(z))^2,m,minf,inf),z)";
+
+finfo_Pdz_z@latex:"P_{\\scriptscriptstyle{dz}}(z)=\\frac{\\partial}{\\partial{z}} \\sum_{m=-\\infty}^{\\infty} ~ q_\\nu ~ p_{\\scriptscriptstyle{-}} \\left| a_{-\\nu} (z) \\right|^2";
+
+/* The test functions defined here are for:
+    lemma_1242_B:P_v(z):=abs(w_v)*sum(p_m*abs(a_vm(z))^2,m,minf,inf);
+
+    lemma_1243:P_dz(z):='diff(sum(q_v*p_m*abs(a_vm(z))^2,m,minf,inf),z); */
+
+/* 
+Use of string_eval to create a macro from a string of maxima code
+
+TODO:
+The string evaluates and produces a macro expansion
+But it is creating a missing end of line
+The script needs another semicolon somewhere in this section
+
+mps:"mprint([x]) ::= buildq([u:x] , if (debuglevel>3) then print (splice (u)));";
+eval_string(mps);
+mprint ("matrix is", mat, "with length", length(mat));
+mat:matrix([1,2,3],[4,5,6],[7,8,9])
+
+
+length(mat) does not evaluate here
+
+mprint ("matrix is", mat, "with length", length(mat));
+
+
+length(mat) does alone evaluate here
+
+length(mat); */
+
+mshow ([l]) ::= block ([ans:[], n:length(l)],
+    for i:1 thru n do
+        (ans: append (ans, buildq ([u: l[i]], ['u, "=", u])),
+        if i < n then
+            ans: append (ans, if i < n-1 then [","] else [", and"])),
+    buildq ([u:ans], print (splice(u))));
+
+foo (x,y,z) := mshow (x, y, z);
+
+foo(1,2,3)$
+
+

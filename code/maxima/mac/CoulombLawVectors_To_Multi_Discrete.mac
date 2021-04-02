@@ -1,0 +1,336 @@
+%pi;
+
+E^stat(x):=x;
+
+v3d[mag](x,xp):=sqrt( (x[1]-xp[1] )^2 + (x[2]-xp[2] )^2 + (x[3]-xp[3] )^2 );
+
+E[stat](x):=x;
+
+E[stat](q,qp,x,xp):=(qp/(4*%pi*e0))  * ((x-xp)/(v3d[mag](x,xp))^3);
+
+invmag:1/v3d[mag](x,xp);
+
+load(vect);
+
+express(grad(invmag));
+
+diff(invmag,x);
+
+ratsimp(%);
+
+invmag;
+
+diff(invmag,x);
+
+diff(invmag,y);
+
+diff(sqrt( (x[1]-xp[1])^2 + (x[2]-xp[2])^2 + (x[3]-xp[3])^2),x[1]);
+
+diff(sqrt( (x[1]-xp[1])^2 + (x[2]-xp[2])^2 + (x[3]-xp[3])^2),x[2]);
+
+diff(sqrt( (x[1]-xp[1])^2 + (x[2]-xp[2])^2 + (x[3]-xp[3])^2),x[3]);
+
+diff(sqrt( (x[1]-xp[1])^2 + (x[2]-xp[2])^2 + (x[3]-xp[3])^2),x[2]);
+
+
+v3d[mag];
+
+vx:makematrix([1,2,3]);
+
+vx;
+
+vx:matrix( [1,2,3]);
+
+vx:columnvector([1,2,3]);
+
+vx:columnvector([x[1],x[2],x[3]]);
+
+vxp:columnvector([xp[1],xp[2],xp[3]]);
+
+load(eigen);
+
+v3d[mag](vx,vxp);
+
+express(grad(%));
+
+diff(v3d[mag](vx,vxp),x[1]);
+
+diff(v3d[mag](vx,vxp),x[2]);
+
+diff(v3d[mag](vx,vxp),x[3]);
+
+grind(%o25);
+
+kill
+
+diff( sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 ),x[3]);
+
+diff( sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 ),x[2]);
+
+diff( sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 ),x[1]);
+
+xp[3];
+
+xp;
+
+vxp;
+
+vxp[1];
+
+diff(vxp,xp[1]);
+
+vxp;
+
+vx;
+
+kill(all);
+
+diff( sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 ),x[1]);
+
+diff( sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 ),x[2]);
+
+ratsimp(%);
+
+
+diff( sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 ),x[3]);
+
+
+load(vect);
+
+load(eigen);
+
+express(grad(sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 )));
+
+diff( sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 ),x[1]);
+
+subst(%o8, 'diff( sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 ),x[1]), %o7    );
+
+%o7[1];
+
+ev(%o7[1]);
+
+ratsimp(%);
+
+fullratsimp(%);
+
+expand(%);
+
+factor(%);
+
+kill(all);
+
+grind(%o16);
+
+express(grad(sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 )));
+
+load(vect); load(eigen);
+
+express(grad(sqrt( (x[3]-xp[3])^2+ (x[2]-xp[2])^2+(x[1]-xp[1])^2 )));
+
+express(grad(sqrt( (x-xp)^2+ (y-yp)^2+(z-zp)^2 )));
+
+ev(grind(%));
+
+grind(%o6);
+
+ev('diff(x^2,x));
+
+ev(%i10[1]);
+
+%o6;
+
+express(diff(sqrt( (x-xp)^2+ (y-yp)^2+(z-zp)^2 )));
+
+ratsimp(%);
+
+expand(%);
+
+ratsimp(%);
+
+fullratsimp(%);
+
+kill(all);
+
+depends(vx, [vxx,vxy,vxz]);
+
+depends(vxp, [vxpx, vxpy, vxpz]);
+
+vx:columnvector([vxx,vxy,vxz]);
+
+load(eigen);
+
+vx;
+
+vxp;
+
+depends(V, [vx[1],vx[2],vx[3]]);
+
+depends (Vp, [vpx[1],vpx[2], vpx[3]]);
+
+diff(V, vx[1]);
+
+i^hat;
+
+i_hat;
+
+load(vect);
+
+load(eigen);
+
+i_hat:columnvector([1,0,0]);
+
+j_hat:columnvector([0,1,0]);
+
+k_hat:columnvector([0,0,1]);
+
+
+??;
+
+i_hat;
+
+j_hat;
+
+k_hat;
+
+V;
+
+vx;
+
+vx[1];
+
+V;
+
+V:vx[1]*i_hat + vx[2]*j_hat + vx[3]*k_hat;
+
+Vp:vp[1]*i_hat + vp[2]*j_hat + vp[3]*k_hat;
+
+psubst([vp[1]=5,vp[2]=6,vp[3]=7]  , Vp)  ;
+
+Vp;
+
+Vx;
+
+V;
+
+subst(6, vx[2], V);
+
+V[1];
+
+V[2];
+
+V;
+
+V-Vp;
+
+V_mag:sqrt(V[1]^2+V[2]^2+V[3]^3);
+
+kill(V_mag);
+
+depends(V_mag, [first(V[1]) ,first(V[2]),first(V[3]) ]);
+
+V_mag:sqrt(V[1]^2+V[2]^2+V[3]^2);
+
+diff(V_mag, first(V[2])  );
+
+diff(V_mag, first(V[1]));
+
+diff(V_mag, first(V[3]));
+
+V[3];
+
+first(V[3]);
+
+scalefactors(  [ first(V[1]) , first(V[2]) , first(V[3])  ]    );
+
+express(grad(V_mag));
+
+ev(%);
+
+grind(%);
+
+ev(''%o81);
+
+diff(sqrt( vx[3]^2+ vx[2]^2+vx[1]^2),vx[1],1);
+
+(ev(%o82, diff));
+
+ev(%o82,diff)[3];
+
+express(grad(1/V_mag));
+
+ev(%, diff);
+
+%[1];
+
+first(%[1]);
+
+grind(%);
+
+%o98[2];
+
+%o98[3];
+
+rhs(%o98[3]);
+
+lhs(%o98[3]);
+
+first(lhs(%o98[3]));
+
+first(%o98[3]);
+
+first(%o98[1]);
+
+first(%o98[2]);
+
+gm:%o98;
+
+E_stat:(qp/(4*%pi*e0)) * (''ev(gm));
+
+gm;
+
+V_mag;
+
+Vp;
+
+Vp_mag:sqrt(Vp[1]^2+Vp[2]^2+Vp[3]^2);
+
+(V[1]-Vp[1]);
+
+i_hat;
+
+%o130*%o131;
+
+(5-2)*i_hat;
+
+V_nm:sqrt((V[1]-Vp[1])^2 + (V[2]-Vp[2])^2 + (V[3]-Vp[3])^2);
+
+V_nhat:transpose(V)/V_mag;
+
+E_stats: (qp/(4*%pi*e0)) * (''V_nhat) * (1/V_nm)^2;
+
+V_nhat;
+
+E_stats;
+
+first(V_nhat[1]);
+
+pickapart(V_nhat[1],1);
+
+V_nhat[1];
+
+first(V_nhat[1]);
+
+second(V_nhat[1]);
+
+third(V_nhat[1]);
+
+sum (1/3^i, i, 1, inf);
+
+E_mstat:(qp[i]/(4*%pi*e0))*(''V_nhat)*(1/V_nm)^2;
+
+ratsimp(%);
+
+fullratsimp(E_mstat);
+
+
+

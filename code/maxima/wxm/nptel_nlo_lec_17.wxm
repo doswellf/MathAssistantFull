@@ -1,0 +1,94 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 19.07.0 ] */
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+NPTel Introduction To Nonlinear Optics and Applications
+
+Lecture 17 Theory Of Second Harmonic Generation
+
+Solution Of Monlinear Maxwell's Equation For Fundamental Wave
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_17_101:[laplacian(E_v_ω)-μ_0*ε*'diff(E_v_ω,t,2) = μ_0*'diff(P_N_v_ω,t,2),E_ω=(1/2)*(E_1*exp(%i*(k_1*z-ω*t)) + C_cplx),P_N_ω=((ε_0*d)/2)*(2*'conjugate(E_1)*E_2*exp(%i*((k_2-k_1)*z-ω*t)) + C_cplx) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_17_102:[laplacian(E_v_2ω)-μ_0*ε*'diff(E_v_2ω,t,2) = μ_0*'diff(P_N_v_2ω,t,2),E_2ω=(1/2)*(E_2*exp(%i*(k_2*z-2*ω*t)) + C_cplx),P_N_2ω=((ε_0*d)/2)*(E_1^2*exp(2*%i*(k_1*z-ω*t)) + C_cplx) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_17_103:[laplacian(E_v_2ω)-'diff(E_v_2ω,t,2)=μ_0*'diff(P_N_v_2ω,t,2), E_2ω=(1/2)*(E_2*exp(%i*(k_2*z-2*ω*t)) +C_cplx)   ,laplacian(E_2ω)='diff(E_2ω,z,2), laplacian(E_2ω)= (1/2)*(E_2(z)*exp(%i*(k_2*z-2*ω*t))+C_cplx),laplacian(E_2ω)=(1/2)*('diff(E-2,z,2)+2*%i*k_2*'diff(E_2,z)-k_2^2*E_2)*exp(%i*(k_2*z-2*ω*t))+C_cplx ]   ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Slowly Varying Approximation 2nd derivative of E_2 w.r.t z <<  1st derivative of E_2 w.r.t. Z
+But maxima doesn't like the Approximation symbol (≅) in equations
+Set to equal for now, use delta-epsilon type of setup for approximations?
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_17_104:[laplacian(E_2ω)=(1/2)*('diff(E_2,z,2)+2*%i*k_2*'diff(E_2,z)-k_2^2*E_2)*exp(%i*(k_2*z-2*ω*t))+C_cplx,'abs('diff(E_2,z,2))<'abs('diff(E_2,z)),laplacian(E_2ω)=(1/2)*(2*%i*k_2*'diff(E_2,z) - k_2^2*E_2)*exp(%i*(k_2*z-2*ω*t)) + C_cplx];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_17_105:[ laplacian(E_v_2ω)-μ_0*ε*'diff(E_v_2ω,t,2)=μ_0*'diff(P_v_N_2ω,t,2),E_2ω=(1/2)*(E_2*exp(%i*(k_2*z-2*ω*t)) +C_cplx) ,laplacian(E_2ω)=(1/2)*(2*%i*k_2*'diff(E_2,z)-k_2^2*E_2)*exp(%i*(k_2*z-2*ω*t)) + C_cplx,'diff(E_2ω,t,2)=-1*((4*ω^2)/2)*E_2*exp(%i*(k_2*z-2*ω*t)) + C_cplx ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_17_106:[laplacian(E_v_2ω)-μ_0*ε*'diff(E_v_2ω,t,2)=μ0*'diff(P_v_N_2ω,t,2) ,P_N_2ω=((ε_0*d)/2)*(E_1^2*exp(2*%i*(k_1*z-ω*t))+C_cplx),'diff(P_N_2ω,t,2)=((-4*ω^2)/2)*ε_0*d*E_1^2*exp(2*%i*(K_1*z-ω*t))+ C_cplx ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Summary Of Steps To Derive SHG Formulae
+Again, the 2nd equation here uses ≅ but maxima can't process that, so using equals for now
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_17_107:[ laplacian(E_2ω)-μ_0*ε*'diff(E_2ω,t,2)=μ_0*'diff(P_N_2ω,t,2),laplacian(E_2ω)=(1/2)*(2*%i*k_2*'diff(E_2,z) - k_2^2*E_2)*exp(%i*(k_2*z-2*ω*t))+C_cplx,'diff(E_2ω,t,2)=-((4*ω^2  )/2) * E_2  * exp(%i*(k_2*z-2*ω*t)) + C_cplx,'diff(P_N_2ω,t,2)=-((4*ω^2)/2)*ε_0*d*E_1^2*exp(%i*2*(k_1*z-ω*t)) + C_cplx,(2*%i*k_2*'diff(E_2,z)-k_2^2*E_2-μ_0*ε*(-4*ω^2)*E_2)*exp(%i*k_2*z)=μ_0*ε_0*d*E_1^2*(-4*ω^2)*exp(2*%i*k_1*z) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_17_108:[laplacian(E_2ω)-μ0*ε*'diff(E_2ω,t,2)=μ_0*'diff(P_N_2ω,t,2) ,k_2^2=(2*ω/c)^2*n_2^2,k_2^2=4*ω^2*μ0*ε_0*ε_r,k_2^2=4*ω^2*μ0*ε,(2*%i*k_2*'diff(E_2,z)-k_2^2*E_2-μ_0*ε*(-4*ω^2)*E_2)*exp(%i*k_2*z)=μ0*ε_0*d*E_1^2*(-4*ω^2)*exp(2*%i*k_1*z),2*%i*k_2*'diff(E_2,z)=μ_0*ε_0*d*E_1^2*(-4*ω^2)*exp(2*%i*k_1*z),2*%i*k_2*'diff(E_2,z)=((-4*ω^2*d)/c^2)*E_1^2*exp(%i*(k_2-2*k_1)*z),'diff(E_2,z)=%i*((4*ω^2*d)/(2*k_2*c^2))*E_1^2*exp(-%i*(k_2-2*k_1)*z), 'diff(E_2,z)=%i*((4*ω^2*d)/(2*k_2*c^2))*E_1^2*exp(-%i*(k_282*k_1)*z), Δk=k_2-2*k_1,'diff(E_2,z)=%i*((ω^2*d)/(c*n_2))*E_1^2*exp(-%i*Δk*z)  ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Show evolution of E_1 and E_2 using evolution equations of E_1 and E_2
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_17_HW:['diff(E_2,z)=%i*((ω*d)/(c*n_2)*E_1^2*exp(-%i*k*z)),'diff(E_1,z)=%i*((ω*d)/(c*n_1))*'conjugate(E_1)*E_2*exp(%i*Δk*z)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 19.07.0"$

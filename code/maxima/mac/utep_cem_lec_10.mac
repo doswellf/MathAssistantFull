@@ -1,0 +1,656 @@
+/* [wxMaxima: comment start ]
+EMPossible Computational Electromagnetics
+
+Lecture 10 - Maxwell's Equations on a Yee Grid
+
+3D Grid looks like a stack of cubes
+
+One 3d cube is one 'unit cell' 
+
+Cube dimensions are Δx, Δy,  Δz (aka grid resolution parameters)
+Cube side dimensions can be different but are usually similar
+Grid dimensions are N_x, N_y, N_z
+
+N_x ⟶ qty of cubes along X axis
+N_y ⟶ qty of cubes along Y axis
+N_z ⟶ qty of cubes along Z axis
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Where to locate E_x, E_y, E_z, H_x, H_y, H_z?
+Naive approach is to use a co-located grid
+
+Instead use an offset grid
+Stagger position of each component within the grid cell
+Components are in unit cell parallel to their axis (e.g. E_z ∥ Z axis)
+But field vectors don't start at the same origin - each has their own origin
+
+This makes the Yee Grid divergence-free
+Physical boundary conditions are naturally satisfied
+Elegant setup enables sane approach to approximation of the curl equations
+
+Can reduce 3D ⟶ 2D ⟶ 1D
+
+Modes for 1D        Modes for 2D        Modes for 3D  
+    E_x mode            E_z mode                No decoupling of modes
+    E_y mode            H_z mode 
+
+1D Modes 
+* These 2 are numerically the same for isotropic materials
+E_x mode ⟶ E_x and H_y components
+E_y mode ⟶ E_y and H_x components
+
+E_z mode ⟶ E_z, H_x and H_y components (top plane of 3D cell)
+H_z mode ⟶ H_z, E_x and E_y components (bottom plane of 3D cell)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+The field components are all at physically different positions
+The consequences of this are:
+
+ε_xx multiplies E_x ⟶ ε_xx and E_x should be forced to exist at the same place
+ε_yy multiplies E_x ⟶ ε_yy and E_y should be forced to exist at the same place
+ε_zz multiplies E_x ⟶ ε_zz and E_z should be forced to exist at the same place
+ 
+ε_xx, ε_yy, ε_zz are unique everywhere on the grid 
+The ε_xx, ε_yy, ε_zz arrays must actually be separate arrays in the code
+
+Field components in the same grid cell will be out of phase (slightly)
+This affects source definitions and post-processing of field data
+
+The use of a discrete grid causes 'numerical dispersion'
+Waves move slower across the grid and an actual wave through similar material.
+
+Finite Difference Approximation Of Maxwell's Equations on a Yee Grid
+
+Diagonally Anisotropic material tensors to allow for PML Boundary
+
+PML = Perfectly Matched Layer (boundary condition)
+
+The constitutive relations have been used to eliminate D and B
+B = μ*H and D = ε*E
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r:matrix([ε_xx, 0,0],[0,ε_yy,0],[0,0,ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r:matrix([μ_xx, 0,0],[0,μ_yy,0],[0,0,μ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[E_x,E_y,E_z];H:[H_x,H_y,H_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_far:express(curl(E)) = k_0 * μ_r * H;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_far_x:first(lhs(eqn_far)) = first(first(rhs(eqn_far)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_far_y:second(lhs(eqn_far)) = second(second(rhs(eqn_far)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_far_z:third(lhs(eqn_far)) = third(third(rhs(eqn_far)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_amp:express(curl(H)) = k_0 * ε_r * E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_amp_x:first(lhs(eqn_amp)) = first(first(rhs(eqn_amp)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_amp_y:second(lhs(eqn_amp)) = second(second(rhs(eqn_amp)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_amp_z:third(lhs(eqn_amp)) = third(third(rhs(eqn_amp)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Normalize spatial coordinates 
+This moves the k_0 term into the spatial derivatives
+
+x_norm = k_0 * x    y_norm = k_0 * y z_norm = k_0 * z
+
+Simplifies Maxwell's equations to the following form:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Hn_x:H[1]/k_0;Hn_y: H[2]/k_0; Hn_z:H[3]/k_0;
+H_norm:[Hn_x, Hn_y,Hn_z];
+En_x:E[1]/k_0;En_y: E[2]/k_0; En_z:E[3]/k_0;
+E_norm:[En_x, En_y,En_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+NOTE: H is normalized here - divided by k_0 
+TODO: find a way to tag it with a norm suffix
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_far_x_norm:subst(H_norm[1], H[1], eqn_far_x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_far_y_norm:subst(H_norm[2], H[2], eqn_far_y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_far_y_norm:subst(H_norm[3], H[3], eqn_far_z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_amp_x_norm:subst(E_norm[1], E[1], eqn_amp_x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_amp_y_norm:subst(E_norm[2], E[2], eqn_amp_y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_amp_z_norm:subst(E_norm[3], E[3], eqn_amp_z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Translate to Finite Difference Equations
+
+Finite Difference Equation for H_x
+Using H_x_n because Hn_x is giving odd results
+Difference is between components on the same axis
+Between same component in next cell and component in current cell
+Direction of component and difference direction need not be the same
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_E_zy:(E_z[i,j+1,k] - E_z[i,j,k]) / dy;
+D_E_yz:(E_y[i,j,k+1] - E_y[i,j,k])/dz;
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_hx_3d:D_E_zy - D_E_yz = μ_xx[i,j,k] * H_x_n[i,j,k];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_E_xz:(E_x[i,j,k+1] - E_x[i,j,k]) / dz;
+D_E_zx:(E_z[i+1,j,k] - E_z[i,j,k]) / dx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_hy_3d:D_E_xz - D_E_zx = μ_yy[i,j,k] * H_y_n[i,j,k];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_E_yx:(E_y[i+1,j,k] - E_y[i,j,k]) / dx;
+D_E_xy:(E_x[i,j+1,k] - E_x[i,j,k]) / dx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_hz_3d:D_E_yx - D_E_xy = μ_zz[i,j,k] * H_z_n[i,j,k];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_H_zy:(H_z[i,j,k] - E_y[i,j-1,k]) / dy;
+D_H_yz:(H_y[i,j,k] - E_y[i,j,k-1]) / dz;
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_amp_ex_3d:D_H_zy - D_H_yz = ε_xx[i,j,k] * E_x[i,j,k];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_H_xz:(H_x[i,j,k] - H_x[i,j,k-1]) / dz;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_H_zx:(H_z[i,j,k] - E_y[i-1,j,k]) / dx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_amp_ey_3d:D_H_xz - D_H_zx = ε_yy[i,j,k] * E_y[i,j,k];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_H_yx:(H_y[i,j,k] - H_y[i,j-1,k]) / dx;
+D_H_xy:(H_x[i,j,k] - H_x[i,j-1,k]) / dy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_amp_ez_3d:D_H_yx- D_H_xy = ε_zz[i,j,k] * E_z[i,j,k];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Assume
+        Structure is uniform in the z direction
+        Propagation is restricted to the x-y plane
+
+All derivatives of z go to zero (∂/∂z=0)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_hx_2d:subst(D_E_yz=0, fd_far_hx_3d);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_hy_2d:subst(D_E_xz=0, fd_far_hy_3d);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_hz_2d:fd_far_hz_3d;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_amp_ex_2d:subst(D_H_yz=0, fd_amp_ex_3d);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_amp_ey_2d:subst([D_H_xz=0], fd_amp_ey_3d);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_amp_ez_2d:fd_amp_ez_3d;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxwell's equations split into 2 groups of independent equations
+The two sets of equations have no field components in common
+H Mode ⟶ Hz, E_x, E_y
+E Mode ⟶ E_z, H_x, H_y
+
+H Mode Equations    ∇ x E = [μ] H
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H_mode:[fd_far_hz_2d, fd_amp_ex_2d, fd_amp_ey_2d];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+E Mode Equations    ∇ x H = [ε] E
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_mode:[fd_amp_ez_2d, fd_far_hx_2d, fd_far_hy_2d ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Matrix Form of Maxwell's Equations
+Avoids writing 600+ simultaneous equations for one FDTD grid
+
+E and H field vectors for 1D, 2D,  3D systems all fit into column vectors
+Transfer rows or columns of 2D field components into a 1D column vector
+
+There are 6 field components
+Each component will be stored in a 1D array of length 
+    1D ⟶ N_x or N_z depending longitudinal axis of 1D grid
+    2D ⟶ N_x * N_y  giving all grid cells for the 2D x-y plane 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_v_1d:columnvector([E_1, E_2, E_3, E_4, E_5]);
+E_v_2d:matrix([E_1, E_5, E_9, E_13],[E_2, E_6, E_10, E_14],[E_3, E_7, E_11, E_15],[E_4, E_8, E_12, E_16]);
+E_v_21d:col(E_v_2d,1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_cv_2d:columnvector(flatten([flatten(args(col(E_v_2d,1))) ,flatten(args(col(E_v_2d,2))), flatten(args(col(E_v_2d,3))), flatten(args(col(E_v_2d,4)))]));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Store operations on fields in large square 2D matrices 
+Multiply fields by operators to get field solutions
+
+For the E Fields 
+
+ε_r * e = C
+e = E_cv_2d above 
+C = column vector of actual field amplitudes ε_[r,i] . E_i
+ε_[r,i] . E_i where the dot product is used in maxima
+Can store diagonal values of tensor [ε_r] in a column vector 
+Then build the matrix using the column vector
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r:matrix([ε_r1, 0, 0, 0, 0],[0,ε_r2, 0, 0, 0],[0 ,0, ε_r3, 0, 0],[0, 0, 0, ε_r1, 0],[0, 0, 0, 0, ε_r5]   );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+∂E/∂x [i+1/2] ≅ (E[i+1]-E[i])/Δx
+Extract 1/Δx from the whole matrix to simplify the matrix 
+Boundary condition issue on high side for E fields
+E[i+1] is assumed zero (Dirichlet Boundary Condition)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_x_e: matrix([-1,1, 0,0,0], [0,-1,1,0,0],[0,0,-1,1,0],[0,0,0,-1,1],[0,0,0,0,-1] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+C: columnvector(['diff(E_15, x), 'diff(E_25,x), 'diff(E_35,x), 'diff(E_45,x) , 'diff(E_55, x)]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+meqn_ex:(1/Δx) * D_x_e . E_v_1d = C;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the H Fields 
+
+μ_r * h = G 
+
+∂H/∂x [i-1/2] ≅ (H[i]-H[i-1])/Δx
+Extract 1/Δx from the whole matrix to simplify the matrix 
+Boundary condition issue on the low side for H
+H[i-1] element is assumed zero (Dirichlet boundary conditions)
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r:matrix([μ_r1, 0, 0, 0, 0],[0,μ_r2, 0, 0, 0],[0 ,0, μ_r3, 0, 0],[0, 0, 0, μ_r1, 0],[0, 0, 0, 0, μ_r5]   );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+0
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+h:columnvector([H_1, H_2, H_3, H_4, H_5]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_x_h: matrix([1,0, 0,0,0], [-1,1,0,0,0],[0,-1,1,0,0],[0,0,-1,1,0 ],[0,0,0,-1,1] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+G:columnvector(['diff(H_05, x), 'diff(H_15, x), 'diff(H_25, x), 'diff(H_35, x), 'diff(H_45, x)]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+meqn_hx:(1/Δx) * D_x_h . h = G;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Boundary Conditions
+
+Dirichlet E_6 = 0, H_0 = 0
+Periodic E_6 = E_1, H_0 = H_6
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D_x_e_periodic: matrix([-1,1, 0,0,0], [0,-1,1,0,0],[0,0,-1,1,0],[0,0,0,-1,1],[1,0,0,0,-1] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Derivative Operators On a 2D 3x3 Grid 
+Only 2 Diagonals 
+Create uniform diagonals first
+Then apply boundary condition corrections after diagonal construction
+
+TODO: CREATE DERIVATIVE MATRICES FOR 3x3 and 4x4 GRIDS FROM SLIDES
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Relationship Between  Derivative Operators 
+Derivatives for Electric and Magnetic fields are related
+Use transpose to derive DHy and DHx
+Construct derivative operators only for the E field derivative operators
+Then  use transpose to derive the H field derivative operators
+
+Octave
+DHy = -DEy' ;  or   DHy = transpose(DEy)
+DHx = -DEx';  or    DHx = transpose(DEy);
+
+Maxima
+DHx : transpose(DEx) ; DHy:transpose(DEy)
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+On a yee grid multiplying 2 1st order derivative matrices
+to get a 2nd order derivative matrix works efficiently
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Matrix equations translate well to Octave/Matlab code 
+The matrix equations become the update code almost directly
+No need to write 1000's of statements performing individual finite differences
+
+Matrix form of Finite Difference Approximation of Maxwell's  Equations
+
+D_e_y . e_z - D_e_z . e_y = μ_xx . h_x_norm
+D_e_z . e_x - D_e_x . e_z = μ_yy . h_y_norm
+D_e_x . e_y -  D_e_y . e_x = μ_zz . h_z_norm
+
+D_h_y . h_z  - D_h_z . h_z = ε_xx . e_x
+D_h_z . h_x  - D_h_x . h_z = ε_yy . e_y
+D_h_x . h_y  - D_h_y . h_x = ε_zz . e_z
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Summary of FDTD Development for Maxwell's Equations So Far
+
+Maxwell's Equations in free space, no charges
+Normalize H field
+Normalize grid parameters (x,y) 
+Assume diagonal permittivity and permeability tensors
+Translate to finite difference approximation equations
+Translate equations to matrix form of Maxwell's Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Numerical Dispersion 
+
+Isotropic Material
+
+Says that the magnitude of the wave vector is constant
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(μ_r, ε_r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+numdis_iso:(ω/c)^2*μ_r*ε_r = k_x^2 + k_y^2 + k_z^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Frequency Domain Dispersion Relation - Yee Grid
+Grid is filled with material with properties μ_r and ε_r
+v is used in place of c_0 below because the velocity changes across the grid
+This effect is due to numerical dispersion, not physical dispersion
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+numdis_yee:(ω/v)^2 *μ_r*ε_r = ( (2/Δ_x) * sin((k_x*Δ_x)/2))^2 +  ( (2/Δ_y) * sin((k_y*Δ_y)/2))^2 +  ( (2/Δ_z) * sin((k_z*Δ_z)/2))^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Discrete grids cause high anisotropic dispersion of EM fields
+Solve the numerical dispersion equation for velocity v in the grid
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+disp_v:v = ω*sqrt(μ_r*ε_r) * (1/sqrt(  ((2/Δ_x) * sin((k_x*Δ_x)/2))^2 +  ( (2/Δ_y) * sin((k_y*Δ_y)/2))^2 +  ( (2/Δ_z) * sin((k_z*Δ_z)/2))^2)  );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Define compensating factor γ to reduce effects of numerical dispersion
+v = c_0 in the absence of grid dispersion 
+On the yee grid waves slow down by a factor γ
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+γ:(c_0/(ω*sqrt(μ_r*ε_r))) * sqrt( ( (2/Δ_x) * sin((k_x*Δ_x)/2))^2 +  ( (2/Δ_y) * sin((k_y*Δ_y)/2))^2 +  ( (2/Δ_z) * sin((k_z*Δ_z)/2))^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+v = c_0/γ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Write a simpler useful expression for γ
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_0 = (2*%pi)/λ_0;
+n:sqrt(μ_r*ε_r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+γ:(1/(k_0*n))  * sqrt( ( (2/Δ_x) * sin((k_x*Δ_x)/2))^2 +  ( (2/Δ_y) * sin((k_y*Δ_y)/2))^2 +  ( (2/Δ_z) * sin((k_z*Δ_z)/2))^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Wave slows by γ in the direction of k
+Compensate by speeding the wave up
+
+Decrease values of μ_r and ε_r by γ across the whole grid
+
+μ'_r = μ_r/γ      ε'_r = ε_r/γ   
+
+1. Can only compensate for dispersion in one direction 
+2. Can only compensate for dispersion at one value of μ_r and ε_r
+3. Best to select average or more frequent values for μ_r and ε_r
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Fully Anisotropic Materials
+
+Forced to interpolate off-diagonal terms so they exist at the same positions 
+as the other terms in the finite difference equations.
+
+Use rotation matrices to handle interpolation of off-diagonal terms
+
+The matrix equations also become more complex
+
+    TODO: FILL IN FROM SLIDES - A LOT OF ALGEBRA TO WORK ON
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Alternative Grids 
+
+Uniform grids are easy to work with
+Do not work well with arbitrary structures and geometries
+Causes excessive anisotropic dispersion
+Value averaging can work on a structured grid
+
+Unstructured grids work better with arbitrary structures
+More complex and harder to implement
+
+Hexagonal yee cell will minimize anisotropic dispersion
+
+Nonuniform orthogonal grids - simpler to implement than nonuniform
+
+Curvilinear coordinates - using spherical or cylindrical coordinates
+
+Structured oblique grids  - good for non-orthogonal geometries
+
+Irregular Nonorthogonal grids - simulate everthing but harders to implement
+
+   [wxMaxima: comment end   ] */
+
+
+

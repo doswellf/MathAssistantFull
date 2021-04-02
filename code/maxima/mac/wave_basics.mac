@@ -1,0 +1,213 @@
+/* [wxMaxima: input   start ] */
+k[f,1]:ω  *sqrt(μ*ε);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ω:2*%pi*f;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+λ[1]:(2*%pi)/(ω*sqrt(μ*ε));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+λ[2]:1/(f*sqrt(μ*ε));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+λ[3]:(2*%pi)/k;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k[m,1]:2*%pi*n*(ν/c);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k[m,2]:(2*%pi)/λ[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k[m,3]:(2*%pi)/λ[2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k[m,4]:(2*%pi)/λ[3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x,t):=4*t^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+y_s(x,t):=A(t)*sin(k*x)    ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+A(4);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+float(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Equation for a plane wave with an initial phase φ_0 travelling right (forward in the +x direction) along the x axis with speed c
+The kx-ωt means a single point on the wave will move to the right with increasing time.
+This applies to functions that depend on space and time, not just space
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+y[0](x,t,A,k,ω,φ_0):=A(t)*sin(k*x-ω*t + φ_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+A(t):=''sin(180/(%pi*(t+1)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Initial phase φ_0 = 0 so at kx = ωt amplitude y = 0
+x = ct where c = ω/k
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+φ_0:0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+A(3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kk;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+xx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+AA;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+B;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+yy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Wave derivations assume constant amplitude for the pulse, height is the same from t=0 ⟶ t=tn
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+yy(xx,tt):=A(tt) *sin(kk*xx -ww*tt + φ_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+t0:0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+x0:0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+yy(x0,t0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+yy(x_1,1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(yy(x_1,1)=0,x_1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Therefore x is now ω/k at t 
+Therefore kx-wt means that one point on the pulse will move right with increasing time
+This applies to all functions of space and time, but is used mainly with harmonic wave equations
+
+Dimensionally this works out to meters
+
+                 ω (radians/s)
+time (s) x -------------------------------  s x rad/s = rad, rad/rad = 1, 1/1/meter = meter, then x is in meters
+                 k (radians/meter)
+
+Maxima loses some solutions but we only need the real one here anyways.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+yy(x_2,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(yy(x_2,2)=0,x_2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Solve for a point on the wave at y = 1
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(yy(x_3,2)=1,x_3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Some further wave parameter relations
+
+ω   angular (temporal) frequency = 2πν = 2π/τ
+V   velocity (meters/second) = νλ
+ν   frequency 1/s or Hz (think of cycles/second)
+λ   wavelength (meters)
+k   propagation number = 2*π/λ (radians/meter)
+τ   period (seconds) = λ/V
+κ   wave "number" 1/λ (1 per meter )
+
+   [wxMaxima: comment end   ] */
+
+
+

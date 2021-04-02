@@ -1,0 +1,34 @@
+/* CEM UTEP Matrix Transform Method
+Solution in Linear Homogenous Isotropic Medium
+
+Derive 2X2 Matrix Equation
+Start With Derivation Of 4x4 Matrix Equation
+
+Positive sign convention for wave travelling left to right */
+
+load(vect); load(eigen);
+
+E(r):=E_0*exp(j*k*z);
+
+H(r):=H_0_norm*exp(j*k*z);
+
+cem_101:[E_k(r)=E_0*exp(j*(k.r)), E_k(r)=E_0*exp(j*k_x*x)*exp(j*k_y*y)*exp(j*k_z*z)];
+
+cem_102:[H_k_norm(r)=H_0_norm(r)*exp(j*(k.r)), H_k_norm(r)=H_0_norm*exp(j*k_x*x)*exp(j*k_y*y)*exp(j*k_z*z) ];
+
+/* Now Deriving The 2x2 Matrix Derivation 
+Write Two 2x2 Matrix Equations Instead Of One 4x4 Matrix Equation
+
+Equations In cem_2x2_501 ==> Matrix Equation In cem_2x2_502 */
+
+cem_2x2_501:['diff(E_x,z_norm)=((k_x_norm*k_y_norm)/ε_r)*H_x_norm+(μ_r-(k_x_norm^2/ε_r))*H_y_norm,'diff(E_y,z_norm)=((k_y_norm^2/ε_r)-μ_r)*H_x_norm-((k_x_norm*k_y_norm)/ε_r)*H_y_norm];
+
+cem_2x2_502:[]
+
+/* Equations In cem_2x2_503 ==> Matrix Equation In cem_2x2_504 */
+
+cem_2x2_503:[];
+
+cem_2x2_504:[];
+
+

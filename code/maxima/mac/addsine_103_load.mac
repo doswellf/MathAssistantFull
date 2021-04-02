@@ -1,0 +1,25 @@
+/* Adding Sines - The Limit Of Equal Amplitudes */
+
+lemma_01: [E_10=E_20,E_10=E_θ0, E_θ0=E_20];
+
+assume(E_θ0>0);
+
+E_θ0:sqrt(E_10^2+e_20^2+2*E_10*E_20*cos(δ));
+
+E_θ0=E_10;
+
+E_0=E_10;
+
+E_10=E_20;
+
+E_θ0:sqrt(E_10^2+E_20^2+2*E_10*E_20*cos(δ));
+
+subst([E_10=E_0,E_20=E_0], E_θ0);
+
+cos(δ/2)^2=(1/2)*(1+cos(δ));
+
+factor(%o8);
+
+subst(cos(δ)+1=2*cos(δ/2)^2,%o11) ;
+
+

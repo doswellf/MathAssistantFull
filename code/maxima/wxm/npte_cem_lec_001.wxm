@@ -1,0 +1,61 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 19.07.0 ] */
+/* [wxMaxima: input   start ] */
+load("vect"); load("eigen");
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Review Of Vector Calculus
+
+Chain Rule Of Differentiation
+
+Calculate small change in f(x,y,z)  ∂f
+x ⟶ x + ∂x, y ⟶ y + ∂y, z ⟶ z + ∂z 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+npc_001_101:[df='diff(f(x,y,z),x)*dx+'diff(f(x,y,z),y)*dy+'diff(f(x,y,z),z)*dz];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gf:matrix(['diff(f(x,y,z),x), 'diff(f(x,y,z),y),'diff(f(x,ty,z),z)]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vcf:[dx,dy,dz];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+tdf:gf . vcf;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Working with the gradient
+
+Compact way to write the change ∂f= grad(f) . dl_vec
+
+Want the total change going from a_vec to b_vec
+
+TODO: ADJUST THIS CODE TO SHOW INTEGRAL SIGN
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+npc_001_102:['integrate(grad(f).dl_v,l_v,a_v,b_v)=f(b_v)-f(a_v)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Corollary: Path integral of grad(f) . dl_v = 0
+   [wxMaxima: comment end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 19.07.0"$

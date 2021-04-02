@@ -1,0 +1,1720 @@
+/* [wxMaxima: comment start ]
+1D FDTD - Lecture 7 Through 11
+Symbolic ⟶ Numeric Derivation 
+All Steps For 1D FDTD Are Combined Here
+
+Load packages to handle vector calculus and matrices
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Yee Grid satisfies Maxwell's divergence equations implicitly with offset axes.
+
+Proof of Normalization Of Magnetic Field 
+
+The E field is 3 orders of magnitude larger than the H field
+Normalize the H field to get more accurate FDTD calculations. 
+|E| = η * |H| where η ≅ 300 Ω
+Hn = η*N
+|E| ≅ |Hn|
+Use free-space impedence η_0 because we don't know material impedence yet
+
+See utep_fdtd_lec_007.wxmx for proof of normalization of H field
+Isolate the proof and clean it up. Then load() it here 
+The steps show how to get the normalized form using  substitutions
+They start with [ε] and [μ] and end up with [ε_r]/c_0 and [μ_r]/c_0 using η_0 and c_0=1/sqrt(μ_0*ε_0)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Give time and space dependencies of symbolic field vectors
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends([E_x, E_y, E_z],t);depends(E, [E_x, E_y, E_z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends([H_x, H_y, H_z],t);depends(H, [H_x, H_y, H_z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+NOTE: NOT USING Hn NOW BECAUSE IT WORKED ONE DAY 
+THEN GLITCHED OUT THE NEXT DAY
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends([Hn_x, Hn_y, Hn_z],t);depends(H_n, [Hn_x, Hn_y, Hn_z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends([D_x, D_y, D_z],t);depends(D, [D_x, D_y, D_z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends([B_x, B_y, B_z],t);depends(B, [B_x, B_y, B_z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[E_x, E_y, E_z] ; H:[H_x, H_y, H_z];H_n:[Hn_x,Hn_y,Hn_z]; B:[B_x, B_y, B_z]; D:[D_x,D_y,D_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Analytic Form Of Maxwell's Curl Equations - Faradays Law, Ampere's Law 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Define symbolic permittivity and permeability tensors
+Using diagonally anisotropic materials only
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r:matrix([μ_xx,0,0],[0, μ_yy,0],[0,0,μ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r:matrix([ε_xx,0,0],[0, ε_yy,0],[0,0,ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Normalized Forms Of Maxwell's Curl Equations 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+full_sym_curl_H:express(curl(H))=ε_r /c_0 * diff(E,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Assume Infiinite extent & Homogenous Isotropic Non-Dispersive Material 
+Slabs In X and Y directions extend to infinity 
+Derivatives w.r.t. X and Y go to zero because fields do not change in X and Y directions
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+full_sym_curl_E:express(curl(E))=μ_r /c_0 * diff(H,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdcd_sym_curl_E:psubst(['diff(E_z,y)=0, 'diff(E_z,x)=0, 'diff(E_y,x)=0,'diff(E_x,y)=0], full_sym_curl_E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdcd_sym_curl_H:psubst(['diff(H_z,y)=0, 'diff(H_z,x)=0, 'diff(H_y,x)=0, 'diff(H_x, y)=0 ], full_sym_curl_H);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Break the curl equations into 6  coupled partial differential equations
+Labels reflect the variable to be solved for in the final update equation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ceqn_Hx:part(lhs(rdcd_sym_curl_E),1) = row(rhs(rdcd_sym_curl_E),1)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ceqn_Hy:part(lhs(rdcd_sym_curl_E),2) = row(rhs(rdcd_sym_curl_E),2)[1][2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ceqn_Hz:part(lhs(rdcd_sym_curl_E),3) = row(rhs(rdcd_sym_curl_E),3)[1][3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(ceqn_Hz, H_z)[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ceqn_Ex:part(lhs(rdcd_sym_curl_H),1) = row(rhs(rdcd_sym_curl_H),1)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ceqn_Ey:part(lhs(rdcd_sym_curl_H),2) = row(rhs(rdcd_sym_curl_H),2)[1][2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ceqn_Ez:part(lhs(rdcd_sym_curl_H),3) = row(rhs(rdcd_sym_curl_H),3)[1][3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cq_01:solve(ceqn_Ez, E_z)[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cq_02:psubst( ['diff(H_x,y,1)=0, 'diff(H_y,x,1)=0], cq_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxwell's Equations Decouple Into Two Independent Modes Ex/Hy and Ey/Hx
+
+The longitudinal field components Ez and Hz are always zero
+
+The equations have separated into 2 independent pairs.
+
+The modes propagate independently but numerically the results are the same in
+isotropic material. 
+
+Therefore we only need to solve one of these sets of equations to get update expressions
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Ey_Hx:[ ceqn_Ey, ceqn_Hx];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Ex_Hy:[ceqn_Hy, ceqn_Ex];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_hx:Ey_Hx[2];eqn_ey:Ey_Hx[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_ex:Ex_Hy[2]; eqn_hy:Ex_Hy[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Convert Analytic Expressions To Finite Difference Expressions
+
+The 4 subfunctions and 4 main functions cover all cases of leading minus signs
+This brute force approach is not in the spirit of lisp or maxima but will do for now
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Don't need i and j array indices (d/dx = d/dy = 0 above) in 1D update equations
+Trim the templates down to include index k only
+TODO: Generalize This In One or Two Functions Later
+
+LATER: Add SX1, SX2, TX1,TX2 for space index and time index to the templates
+Then add a 2nd arg for the qty of space  dimensions
+The 1D Ey field spatial finite difference is  E_y[k+1,t] - E_y[k,t] / dz (for example)
+The 1D Hx field spatial finite difference is  H_x[k,t] - H[k-1,t]  / dz
+The 1D Hx field time finite difference is -((H_x[k,t+dt/2]-H_x[k,t-dt/2]) * (μ_xx[k]/c_0))
+
+Create sub_templates for the indices and select based on 2nd arg
+tpd:(FLD_SX1_TX1 - FLD_SX2_TX2 )/DIF
+
+Ey/Hx Mode 
+
+For 1D Ey spatial derivative w.r.t z
+    sx11:[k+1,t] 
+    sx12:[k,t]
+
+For 1D Hx time derivative w.r.t. t
+    tx11:[k,t+dt/2]
+    tx12:[k,t-dt/2]
+
+For 1D Hx spatial derviative w.r.t z
+    sx11:[k,t+dt/2] 
+    sx12:[k-1,t+dt/2]
+
+For 1D Ey time derivative w.r.t. t
+    tx11:[k,t+dt]
+    tx12:[k,t]
+
+Ex/Hy Mode
+
+For 1D Hy spatial derviative w.r.t z
+    sx11:[k,t+dt/2] 
+    sx12:[k-1,t+dt/2]
+
+For 1D Ex time derivative w.r.t. t
+    tx11:[k,t+dt]
+    tx12:[k,t]
+
+For 1D Ex spatial derivative w.r.t z
+    sx11:[k+1,t] 
+    sx12:[k,t]
+
+For 1D Hy time derivative w.r.t. t
+    tx11:[k,t+dt/2]
+    tx12:[k,t-dt/2]
+
+H field tiime derivatives have the same space and time indices
+E field spatial derivatives have the same space and time indices
+H field spatial derivatives have the same space and time indices
+E field time derivatives have the same space and time derivatives
+
+Ex and Hx 1D equations start with unary minus 
+Ey and Hx 1D equations start with the derivative
+All H field derivatives are calculated at 1/2 time steps
+
+TODO: USE MAXIMA'S CODE GENERATOR TO BUILD FDTD  EQUATIONS
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+d2d_ey_spc_1d(dqn):=block( 
+    tpd:(FLD[k+1,t] - FLD[k,t]) / DIF, 
+    p0:lhs(dqn),
+    p1:part(p0,1),
+    p2:part(p0,2),
+    psubst([FLD=p1, DIF=concat(d,p2)] ,tpd)
+)$
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+This will extract the Hx Space Derivative from the lhs of eqn_ey (the Ey update equation to-be)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_ey_spc_1d(dqn):=block( 
+    tpd:(FLD[k,t+dt/2] - FLD[k-1,t+dt/2 ]) / DIF, 
+    p0:lhs(dqn),
+    p1:part(p0,1),
+    p2:part(p0,2),
+    psubst([FLD=p1, DIF=concat(d,p2)] ,tpd)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This function extracts Ey from the rhs of eqn_ey (the Ey update equation to-be)
+d2d_ey_time_1d(dqn):=block(
+     tpd:(FLD[k,t+dt] - FLD[k,t]) / DIF, 
+    p0:rhs(dqn),
+    p1:num(p0),
+    p2:part(p1,1),
+    p3:part(part(p1,1),1),
+    p4:part(part(p1,1),2),
+    p5:part(p1,2),
+    p6:1/denom(p0),
+    (p5*p6)*psubst([FLD=p3, DIF=concat(d,p4)], tpd)
+)$
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_ey_time_1d(dqn):=block(
+     tpd:(FLD[k,t+dt] - FLD[k,t]) / DIF, 
+    p0:rhs(dqn),
+    p1:num(p0),
+    p2:part(p1,1),
+    p3:part(p2,1),
+    p4:part(p2,2),
+    p5:part(p1,2),
+    p6:1/denom(p0),
+    (p5*p6)*psubst([FLD=p3, DIF=concat(d,p4)], tpd)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ drv2dif_ey_1d(dqn):= d2d_ey_spc_1d(dqn) = d2d_ey_time_1d(dqn);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Raw FDTD Update Equation For Ey
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fdu_ey_1d:drv2dif_ey_1d(eqn_ey);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Then solve for the variable Ey at the future time step to get it alone on the left hand side
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upd_ey_1d:solve(fdu_ey_1d, E_y[k, t+dt]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+d2d_hx_spc_1d(dqn):= block(
+    tpd:(FLD[k+1,t] - FLD(k, t])/DIF,
+    p0:lhs(eqn_hx),
+    p1:part(p0, 0),
+    p2:part(p0,1),
+    p3:part(p2,1),
+    p4:part(p2,2);
+    p1*psubst([FLD=p3, DIF=concat(d,p4)], tpd)
+ )$
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_hx_spc_1d(dqn):=block( 
+    tpd:(FLD[k+1,t] - FLD[k, t])/DIF,
+    p0:lhs(dqn),
+    p1:part(p0, 0),
+    p2:part(p0,1),
+    p3:part(p2,1),
+    p4:part(p2,2),
+    p5:p1 * psubst([FLD=p3, DIF=concat(d,p4)], tpd)
+   )$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+d2d_hx_time_1d(dqn):= block( 
+     tpd:(FLD[k,t+dt] - FLD[k,t]) / DIF, 
+    p0:rhs(dqn),
+    p1:num(p0),
+    p2:part(p1, 0),
+    p3:part(p1,1),
+    p4:part(p3,1),
+    p5:part(p4,1),
+    p6:part(p4,2),
+    p7:part(p3,2),
+    p8:1/denom(p0),
+    (p2*p7*p8)*psubst([FLD=p5, DIF=concat(d,p6)], tpd)
+)$
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_hx_time_1d(dqn):= block( 
+     tpd:(FLD[k,t+dt/2] - FLD[k,t-dt/2]) / DIF, 
+    p0:rhs(dqn),
+    p1:num(p0),
+    p2:part(p1, 1),
+    p3:part(p2,1),
+    p4:part(p2,2),
+    p5:part(p1,2),
+    p6:1/denom(p0),
+    (p5*p6)*psubst([FLD=p3, DIF=concat(d,p4)], tpd)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+drv2dif_hx_1d(dqn):=d2d_hx_spc_1d(dqn)=d2d_hx_time_1d(dqn);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fdu_hx_1d:drv2dif_hx_1d(eqn_hx);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Then solve for the variable to be updated  to get it alone on the left hand side
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upd_hx_1d:solve(fdu_hx_1d, H_x[k,t+dt/2]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+d2d_ex_spc_1d(dqn):=block(
+    p0:lhs(dqn),
+    p1:part(p0, 0),
+    p2:part(p0,1),
+    p3:part(p2,1),
+    p4:part(p2,2);
+
+ )$
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_ex_spc_1d(dqn):=block(
+    tpd:SGN ((FLD[k,t+dt/2] - FLD[k-1,t+dt/2 ]) / DIF), 
+    p0:lhs(dqn),
+    p1:part(p0,1),
+    p2:part(p1,1),
+    p3:part(p1,2),
+    p4:part(p0,0),
+    psubst([SGN=p4,FLD=p2, DIF=concat(d,p3)] ,tpd)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+d2d_ex_time_1d(dqn):=block(
+    tpd:((FLD[k1,t+dt] - FLD[k-1,t]) / DIF), 
+    p0:rhs(dqn),
+    p1:num(p0),
+    p2:part(p1,1),
+    p3:part(p2,1),
+    p4:part(p2,2),
+    p5:part(p1,2),
+    p6:1/denom(p0),
+    (p5*p6)*psubst([FLD=p3, DIF=concat(d,p4)] ,tpd)
+)$
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_ex_time_1d(dqn):=block(
+    tpd:((FLD[k,t+dt] - FLD[k,t]) / DIF), 
+    p0:rhs(dqn),
+    p1:num(p0),
+    p2:part(p1,1),
+    p3:part(p2,1),
+    p4:part(p2,2),
+    p5:part(p1,2),
+    p6:1/denom(p0),
+    (p5*p6)*psubst([FLD=p3, DIF=concat(d,p4)] ,tpd)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+drv2dif_ex_1d(dqn) := d2d_ex_spc_1d(dqn)=d2d_ex_time_1d(dqn);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fdu_ex_1d:drv2dif_ex_1d(eqn_ex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Then solve for the variable to be updated to get it alone on the left hand side
+TODO: FACTOR OUT THE UPDATE COEFFCIENTS e.g.  mEx:(c_0 * dt) / ε_r (whole array of ε)
+            UPDATE COEFFICIENTS ARE CALCULATED BEFORE MAIN FDTD LOOP
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upd_ex_1d:solve(fdu_ex_1d, E_x[k,t+dt]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+d2d_hy_spc_1d(dqn):=block( 
+    tpd:((FLD[k,t+dt/2] - FLD[k-1,t+dt/2]) / DIF), 
+    p0:lhs(dqn),
+    p1:part(p0,1),
+    p2:part(p0,2),
+    psubst([FLD=p1, DIF=concat(d,p2)] ,tpd)
+)$
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_hy_spc_1d(dqn):=block( 
+    tpd:((FLD[k+1,t] - FLD[k,t]) / DIF), 
+    p0:lhs(dqn),
+    p1:part(p0,1),
+    p2:part(p0,2),
+    psubst([FLD=p1, DIF=concat(d,p2)] ,tpd)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+  d2d_hy_time_1d(dqn):= block( 
+        tpd:(FLD[k,t+dt/2] - FLD[k,t-dt/2]) / DIF, 
+        p0:rhs(dqn),
+        p1:num(p0),
+        p2:part(p1,1),
+        p3:part(p2,1),
+        p4:part(p2,2),
+        p5:part(p1,2),
+        p6:1/denom(p0),
+        (p5*p6)*psubst([FLD=p3, DIF=concat(d,p4)], tpd)
+)$
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+  d2d_hy_time_1d(dqn):= block( 
+        tpd:(FLD[k,t+dt/2] - FLD[k,t-dt/2]) / DIF, 
+        p0:rhs(dqn),
+        p1:num(p0),
+        p2:part(p1,1),
+        p3:part(p2,1),
+        p4:part(p2,2),
+        p5:part(p1,2),
+        p6:1/denom(p0),
+        (p5*p6)*psubst([FLD=p3, DIF=concat(d,p4)], tpd)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+drv2dif_hy_1d(dqn):=d2d_hy_spc_1d(dqn) = d2d_hy_time_1d(dqn);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fdu_hy_1d:drv2dif_hy_1d(eqn_hy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Then solve for the variable to be updated  to get it alone on the left hand side
+May have to do this manually to get the format required for code generation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upd_hy_1d:solve(fdu_hy_1d, H_y[k,t+dt/2]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxima gives the desired format by shutting off simplification. 
+But solve won't work with simp:false
+
+Try to build the equations using the short forms mEy,  C_x_E, etc
+Built this equation manually and got the correct format 
+But this needs to be generated by maxima 
+Or
+The parts have to be factored and/or extracted from maxima output and 
+inserted into a list or re-assembled with simp:false in effect to maintain the format
+
+Use C_E_x, C_H_y, C_E_y, C_H_x idea from the 2D fdtd lectures to simplify the equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false; 
+mHy: (c_0 * dt)/ μ_yy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_hy_1d_fmt: H_y[k,t+dt/2]  = H_y[k,t-dt/2] + mHy *  ((E_x[k+1,t] - E_x[k,t])/dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Then solve for the variable to be updated  to get it alone on the left hand side
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+C Code Generation - Load the gentran package
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(gentran);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+GenTran Fortran generation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentran(x:y+t, if y=true then x:t else t:y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+GenTran C Language and RatFor Generation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentranlang : c$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentran(x:y+t, if y=true then x:t else t:y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentranlang: ratfor;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentran( for i:1 thru n do
+                     for j:i+1 thru n do
+                     (
+                         x[j,i] : x[i,j],
+                         y[j,i] : y[i,j]
+                     )                    );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentranlang: c;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentran( for i:1 thru n do
+                     for j:i+1 thru n do
+                     (
+                         x[j,i] : x[i,j],
+                         y[j,i] : y[i,j]
+                     )                    );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentran( for i:1 thru n do v[i]:0.0 );
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxima is solving this correctly but is putting all rhs values over a common denominator
+TODO: Stop maxima from putting all values over a common denominator 
+separate the values for the update coefficient from the finite difference on the rhs
+
+These are symbolic fdtd update equations to serve  as templates for procedural code construction
+
+Compute the form of the sub-expressions  (e.g. update equation, finite differences) 
+Rather than store the whole equation,  store the parts as a list of the sub-expressions 
+Then loop through the list using the parts to build parts of the code 
+Also use the list to build latex and guide the tex() command or generate custom latex
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upd_ey_1d;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upd_hx_1d;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upd_ex_1d;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upd_hy_1d;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mEy: (c_0 * dt )/ ε_yy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mHx: (c_0*dt/ μ_xx);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mEx:(c_0*dt)/ε_xx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mHy:(c_0*dt)/μ_yy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mEz:(c_0*dt)/ε_zz;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mHz:(c_0*dt)/μ_zz;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p001:inpart(upd_hy_1d[1],2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p002:inpart(denom(inpart(upd_hy_1d[1],2)),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p003:num(inpart(upd_hy_1d[1],2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p004:subst([c_0=1],   num(inpart(upd_hy_1d[1],2)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p005:subst(H_y[k,t-dt/2]=0, p003 );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p006:factor(p005);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p007:part(p006,3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p008:part(part(p003, 1),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p009:part(denom(p001),1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Building the correct format by hand - can this be obtained more automatically with 
+flags, radcan, ratsimp, etc?
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false; upd_hy_1d_fmt:lhs(lhs(upd_hy_1d)[1])=p008 + mHy * (p007/p009);simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+With simp:false the maxima code is in the correct order for translation to C or Octave/MATLAB
+
+With simplification turned back on - still better than solve result but mashed together
+
+The parts can be stored in a list and iterated through to build the code.
+That way simplifcation won't interfere with the format of the equations
+Tex output can be built the same way
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upd_hy_1d_fmt;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Parsing will be required although using [i,j,k,t] index is just a list 
+
+Also will have to specify the dimension of the simulation 1D, 2D or 3D
+This will determine how many indices are found after the E or H field array name
+
+Also will have to specify the mode to be simulated EyHx or ExHy
+This will specify the field names to be used for the arrays, 
+    relevant material properties/constitutive relations
+    
+These index expressions are already close enough to code to be inserted into the final code.
+By Using CEx, mEx,etc to hold the sub-expressions, most of the code is ready to use.
+
+At the start of code generation arrays will have to be generated based on the modes used
+array(H_y, Nx, Ny) or array(H_y, X_GRID_SIZE, Y_GRID_SIZE)
+
+The list for fdtd code generation will contain [ H_y, [k+1,t], H_y, [k, t], mHy, dif_Ex]  
+Now the order of terms for code generation is fixed and properly formatted
+The term p007 above will have to be pulled apart to get the pieces shown here
+May have to use lisp or other finer-grained tokenizer to detect all parts of symbolic fdtd equations
+
+Saving the final expressions to a file as a list in order will create basic MATLAB/Octave code
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lst_hy:[H_y,[k,t+dt/2], H_y, [k,t-dt/2], dz, mHy, E_x ,[k+1,t],E_x,  [k,t]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+part(lhs(upd_hy_1d_fmt),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+length (lhs(upd_hy_1d_fmt));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ fldH:first(lst_hy); lst_hy_tail: rest(lst_hy);fldE:lst_hy[7];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+buildq ([e: [a, b, c]], splice (e) + splice (e));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lst_hy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+xpr_hy: apply(fldH,lst_hy[2]) =  apply(fld, lst_hy[4]) + lst_hy[6]  *  ((apply(fldE, lst_hy[8]) - apply(fldE, lst_hy[10]) ) / lst_hy[5]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(xpr_hy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+oct_xpr_hy:uhy=rhs(xpr_hy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lst_fn_hdr: "function uhy = hy(k,t,dt)" ;fn_ftr:endfunction;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+print(lst_fn_hdr);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+TURN OFF 2D DISPLAY TO WRITE OCTAVE/MATLAB CODE TO FILE
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+display2d:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+with_stdout("/tmp/XPR_HY_WSO.m", print(lst_fn_hdr), print(oct_xpr_hy), print(fn_ftr) );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+printfile("/tmp/XPR_HY_WSO.m");
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mHx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mHx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mHy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mEx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mEy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true; display2d:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Transform update equation to format used for octave/matlab
+    - extract update coefficient
+    - separate E_x from H_y finite difference
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fdu_hy_1d;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p0:lhs(fdu_hy_1d);
+p1:rhs(fdu_hy_1d);
+p01:num(p0);
+p02:denom(p0);
+p11:num(p1);
+p12:denom(p1);
+p13:part(p11,1);
+p14:part(p11,2);
+p15:part(p12,1);
+p16:part(p12,2);
+p17:part(p13,1);
+p18:part(p13,2);
+p19:part(p18,1)
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This gives the desired format but requires manual re-assembly of the expression
+No mathematical work here - just syntactic change
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fdu_hy_1d_fmt:p17 = p19 + ((p15*p16)/p14) * (p01/p02);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Naive Octave/Matlat Code Generation 
+Collect list of terms and use apply to build octave/maxima array expressions with round parens
+This assumes explicit use of t as an index
+For the UTEP FDTD 1D code, 1D arrays are used and the time indices are for the lessons only.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p020:part(p01,1);
+p021:part(p01,2);
+p022:part(p020, 0);
+p023:part(p020,1);
+p024:part(p020,2);
+p025:part(part(p021,1),0);
+p026:part(part(p021,1),1);
+p027:part(part(p021,1),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p120:part(p17,0);
+p121:part(p17,1);
+p122:part(p17,2);
+p123:part(p19,0);
+p124:part(p19,1);
+p125:part(p19,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+oct_hy_1d: apply( p120, [p121,p122])  = apply(p120, [p124, p125]) + ((p15*p16)/p14) * (( apply(p022, [p023,p024]) - apply(p022, [p026,p027 ]) ) /  p02) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(oct_hy_1d);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This is the array format used by the UTEP 1D FDTD code 
+Display of fdtd analysis is done on-the-fly, results from previous time step are not saved in 2D array
+See above for file storage of generated code 
+Require a template or generator function to assemble octave/matlab code 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+oct_hy_1d_spc: apply( p120, [p121])  = apply(p120, [p124]) + ((p15*p16)/p14) * (( apply(p022, [p023]) - apply(p022, [p026]) ) /  p02) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(oct_hy_1d_spc);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Ey_Hx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_hx;eqn_ey;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+d2d_ex_spc_1d_lst(dqn):=block(
+    p0:lhs(dqn),
+    p1:part(p0,1),
+    p2:part(p1,1),
+    p3:part(p1,2),
+    p4:part(p0,0),
+    [p2,p3,p4]
+)$
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_ey_spc_1d(eqn_ey);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_ey_time_1d(eqn_ey);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_ex_spc_1d(eqn_ex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Using lists to build the finite difference equations for Octave/Matlab by hand 
+Shutting of simplification with simp:false
+This is easier to control than using solve and trying to undo it's work.
+
+Simplification is good for actual math, but this is code generation
+
+This format allows for (c_0*dt/ε_xx) et al to be calculated before the main fdtd loop starts
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_ex_spc_1d_lst(dqn):=block(
+    p0:lhs(dqn),
+    p1:part(p0,1),
+    p2:part(p1,1),
+    p3:part(p1,2),
+    p4:part(p0,0),
+    p5:concat(d, p3),    
+    [p4,p2,k,t+dt/2,p2, k-1,t+dt/2,p5 ]
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+t01:d2d_ex_spc_1d_lst(eqn_ex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d_ex_time_1d_lst(dqn):=block(
+    p0:rhs(dqn),
+    p1:num(p0),
+    p2:part(p1,1),
+    p3:part(p2,1),
+    p4:part(p2,2),
+    p5:part(p1,2),
+    p6:denom(p0),
+    [p3,k,t+dt,p3,k,t, (p6*concat(d, p4) /p5) ]    
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+t02:d2d_ex_time_1d_lst(eqn_ex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+t01[1] ( (apply(t01[2], [t01[3],t01[4]]) - apply(t01[5], [t01[6],t01[7] ]) ) /t01[8] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+final_upd_ex_1d_with_time:apply(t02[1], [t02[2],t02[3]]) = apply(t02[4], [t02[5], t02[6] ])  -  t02[7]  * ( (apply(t01[2], [t01[3],t01[4]]) - apply(t01[5], [t01[6],t01[7] ]) ) /t01[8] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(final_upd_ex_1d_with_time);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+final_upd_ex_1d_no_time:apply(t02[1], [t02[2]]) = apply(t02[4], [t02[5] ])  -  t02[7]  * ( (apply(t01[2], [t01[3]]) - apply(t01[5], [t01[6] ]) ) /t01[8] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(final_upd_ex_1d_no_time);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Separate Analytic Equation Components Into Their Own Variables
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true; display2d:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Full Curl Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+curl_of_E:express(curl(E));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+full_cex:curl_of_E[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+full_cey:curl_of_E[2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+full_cez:curl_of_E[3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+curl_of_H:express(curl(H));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+full_chx:curl_of_H[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+full_chy:curl_of_H[2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+full_chz:curl_of_H[3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reduced Curl Equations (Diagonally Anisotropic Materials)
+Derivatives w.r.t  X and Y are zero
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdcd_cex:subst(['diff(E_z,y,1) = 0], full_cex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdcd_cey:subst(['diff(E_z,x,1) = 0], full_cey);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdcd_cez:subst(['diff(E_x,y,1)=0, 'diff(E_y,x,1)=0], full_cez);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdcd_chx:subst(['diff(H_z,y,1) = 0], full_chx);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdcd_chy:subst(['diff(H_z,x,1) = 0], full_chy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdcd_chz:subst(['diff(H_x,y,1)=0, 'diff(H_y,x,1)=0], full_chz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Creating lists to contain the equation components
+This will keep the components separate to simplify code generation
+Otherwise maxima will simplify them and mix the pieces together.
+This becomes even more critical with 2D and 3D simulations and PML equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mEx; mEy; mEz;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mHx;mHy;mHz;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dExT:diff(E_x,t);dEyT:diff(E_y,t);dEzT:diff(E_z,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dHxT:diff(H_x,t);dHyT:diff(H_y,t);dHzT:diff(H_z,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lst_upd_ex:[rdcd_chx, mEx, dExT];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lst_upd_ey:[rdcd_chy, mEy, dEyT ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lst_upd_Hx:[rdcd_cex, mHx, dHxT];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lst_upd_Hy:[rdcd_cey, mHy, dHyT ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Functions to generate boilerplate Octave/Matlab Code
+These will use the lists above 
+Will try to make more general transform functions  than the ones above
+
+Generate Ey/Hx Update Code
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gen_oct_eyhx(dqn):=dqn;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Generate Ex/Hy Update Code
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gen_oct_exhy(dqn):=dqn;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(gentran);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentranlang:c;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+(gentran '(((msetq) p ((mplus) ((mtimes) a ((mexpt) x 2))
+                                    ((mtimes) b x)
+                                    c))) ())
+(gentran '(((msetq) p ((mplus) ((mtimes) a ((mexpt) x 2))
+                                    ((mtimes) b x)
+                                    c))) ())
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+:lisp (gentran '(((msetq) p ((mplus) ((mtimes) a((mexpt) x 2)) ((mtimes) b x)  c))) ());
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentranlang:ratfor;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentran( subroutine(f(x,y)),
+              body( y:abs(x^2-y^2) ) )$
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentranlang:c;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentran(  function ("float" , cex(efn, hfn)) ,  body( cex:efn * hfn) )$
+          
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentranlang:c;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentran( function("float", loop_example(n,y)), body( n:5+6, for n:1 thru 100 do y = 5 + n ,if (n < 5) then break() , return(n)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Another way to get old-school C function syntax
+TODO: Add support for C++ cout, class, symengine, etc.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+gentran( fac(n) := block (type (int, fac, n, i, f), 
+    f: 1,
+    for i:2 thru n do
+        f : f * i,
+    return(f)  )  );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lst_upd_ex;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(lst_upd_ex[1]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+chys:subst( ['diff=diff], lst_upd_ex[1] ) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+tmp_ex_spc: d2d_ex_spc_1d(chys);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dext:subst(['diff=diff], lst_upd_ex[3]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff_ex_time_1d(dqn):= block(
+    tpl:(FLD[k,t+dt] - FLD[k,t])/DIF,
+    p1:part(dqn,1),
+    p2:part(dqn,2),    
+    x01:subst([FLD=p1, DIF=concat(d,p2)], tpl )    
+    )$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff_ex_time_1d(dext);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+td01:diff_ex_time_1d(dext);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ex_fut:E_x[k,t+dt]; ex_pst:[k,t];hy_fut:H_y[k,t+dt/2];hy_pst:H_y[k,t-dt/2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+tdex:solve(diff_ex_time_1d(lst_upd_ex[3]), E_x[k,t+dt]) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p200:lhs(tdex[1]);p201:rhs(tdex[1]);
+p202:part(p200,0);p203:part(p200,1);p204:part(p200,2);
+p205::part(p201,0);p206:part(p201,1);p207:part(p201,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p100:num(tmp_ex_spc);
+p101:part(p100,1); p102:part(p100,2);
+p103:part(p102,1);p104:part(p102,2);
+p105:part(p103,0);p106:part(p103,1);p106a:part(p103,2);
+p107:part(part(p104,1),0);p108:part(part(p104,1),1);p108a:part(part(p104,1),2);
+p110:denom(tmp_ex_spc);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This list contains all parts required to build an octave/matlab update statement
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lst_df_ex_fin:[ p202, p203, p204,p205,p206,p207, mEx, p105, p106, p106a, p107, p108, p108a, denom(tmp_ex_spc)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use a template for the resulting octave/matlab program
+The update coeffiicents and other components must be defined at the top
+The final update code will reference the pre-defined components
+Pre-defined components
+    Physical constants
+    Conversion and Normalization expressions
+    Curl expressions
+    Difference expressions
+    Update coefficients
+    Pulse sources
+    PML or ABC or PBC definitions
+    
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Take out the time index since the octave/matlab code doesn't require it.
+Maxima will only pattern match on the whole field expression
+Have difference translation build a list of parts analogous to the analytic list
+Then the index expressions can be altered with simpler code
+Work with string functions to finish the octave/matlab code generation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sdhy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(sdhy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst([ H_y[k,t+dt/2]=H_y[k] , H_y[k,t+dt/2]=H_y[k]],sdhy );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+idx_ef_spce: [[k+1,t], [k,t]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+idx_ef_time:[[k,t+dt],[k,t]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+idx_hf_time:[[ k,t+dt/2],[k,t-dt/2] ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+idx_hf_spce:[[k,t+dt/2],[k-1,t+dt/2]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+first(idx_hf_spce[2]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sconcat(H_y, [first(idx_hf_spce[2])] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sdhy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Extracting only field and space index from fdtd expression 
+Assemble the parts into a final string containing matlab/octave code
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(lhs(sdhy));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p01:part(lhs(sdhy),0);p02:part(lhs(sdhy),1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p11:part(rhs(sdhy),0);p12:part(rhs(sdhy),1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p21:sconcat(p01, [p02]);p22:sconcat(p11, [p12]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p30:diff_ex_time_1d(lst_upd_ex[3]);p31:part(num(p30),1);p32:part(num(p30),2);
+p41:part(p31,0);p42:part(p31,1);
+p43:part(p32,1);p44:part(p43,0);p45:part(p43,1);
+p46:denom(p30); p47:
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Or use apply to generate round brackets for octave/matlab
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p51:apply(p01, [p02] ); p52:apply(p11, [p12] );
+p53:apply(p41,[p42]); p54:apply(p44, [p45]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mEx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lst_df_ex_fin;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The update runs in a time-stepping loop so Ex[k] will get overwritten by the
+value from the next time step
+To sweep the changes, make the matrix 2x2 and save the grid values for
+each time step. More space, but results can be analyzed more efficiently after the fact
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pf01:apply(lst_df_ex_fin[1], [lst_df_ex_fin[2]] );
+pf02:apply(lst_df_ex_fin[8],[lst_df_ex_fin[9]]);
+pf03:apply(lst_df_ex_fin[11],[lst_df_ex_fin[12]]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+oct_upd_fin:pf01=pf01 + (lst_df_ex_fin[7]) * ((pf02 - pf03)/ last(lst_df_ex_fin));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+display2d:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(stringproc);
+/* PROJ_ROOT:"/home/fraser/projects/CEM/UTEP/" */
+PROJ_ROOT:"/tmp/" ;
+FILE_NAME:"test001.txt";
+CNAME:sconcat(PROJ_ROOT, FILE_NAME);
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+swt: openw(CNAME);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+printf(swt, string(oct_upd_fin));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+close(swt);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+printfile(CNAME);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+TO ADD TO TEMPLATE FILE SET appendfile:true
+BETTER: Create separate templates for each part of
+the matlab/octave script
+
+Use shell command 'cat' to join them together
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+appendfile;
+/* [wxMaxima: input   end   ] */
+
+
+

@@ -1,0 +1,82 @@
+ F(x):=1/(x^2);
+ (
+	print("x "," "," "," f"),
+	for i:1 thru 10 do
+		(x: 1/(10^i),
+		f: F(x),
+		print(x,"","",f)
+	)
+);
+	
+
+( 
+	print("x "," "," ", " f"),
+	for i:1 thru 10 do
+		(x:float(2-1/(10^i)),
+		sx:2-(1/(10^i)),
+		f:float(F(x)),
+		g:F(sx),
+		print(x,"","",f,"","",g)
+	)
+)
+	
+(
+	print("x "," "," "," f"),
+	for i:1 thru 10 do
+		(x:(10^i),
+		f: float(F(x)),
+		printf(false,"%16d ~t~t %b ~%",x,f)
+	)
+);
+
+wxdraw2d(
+	xaxis=true,
+	yaxis=true,
+	grid=true,
+	xrange=[-10,10],
+	yrange=[-1,9],
+	title="f(x)=1/x^2",
+	color=black,
+	explicit(F(x), x, -10,10) 
+	);
+	
+(
+	print("x "," "," "," f"),
+	for i:1 thru 20 do
+		(
+		x:float(0,21-.01*i),
+		f: float(F(x)),
+		printf(false,"%16d ~t~t %b ~%",x,f)
+	)
+);
+
+(
+	print("x "," "," "," f"),
+	for i:1 thru 20 do
+		(x:float(10^2*i),
+		(f:float(F(x)),
+		print(x, " ", " ", f)
+	)
+);
+
+wxdraw2d(
+	xaxis=true,
+	yaxis=true,
+	grid=true,
+	xrange=[-10,10],
+	yrange=[-1,1],
+	title="f(x)=sin(1/(2x))",
+	color=black,
+	explicit((F(x)),x,-10,10)
+);
+
+wxdraw2d(
+	xaxis=true,
+	yaxis=true,
+	grid=true,
+	xrange=[0,0.1],
+	yrange=[-1,1],
+	title="f(x)=sin(1/(2x))",
+	color=black,
+	explicit((F(x)),x,-10,10)
+);

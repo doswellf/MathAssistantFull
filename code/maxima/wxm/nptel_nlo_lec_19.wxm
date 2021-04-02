@@ -1,0 +1,126 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 19.07.0 ] */
+/* [wxMaxima: comment start ]
+NPTEL Introduction  To NonLinear Optics And Applications
+
+Lecture 19 - Theory Of  Second Harmonic Generation
+
+Gain-Bandwidth Calculation
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_19_101:['diff(E_2,z)=%i*((ω*d)/(c*n_2))*E_1^2*exp(-%i*Δk*z),'diff(E_1,z)=%i*((ω*d)/(c*n_1))*'conjugate(E_1)*E_2*exp(%i*Δk*z) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Phase Matchin Condition
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_19_102:[ Δk=0, k_2-2*k-1=0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+As Δk → 0, η(z) → P_2(z)/P1 with P_2(z) affected by Δk→ 0 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_19_103:['diff(E_2,z)=%i*((ω*d)/(c*n-2))*E_1^2*exp(-%i*Δk*z),'diff(E_1,z)=%i*((ω*d)/(c*n_1))*'conjugate(E_1)*E_2*exp(%i*Δk*z),η(z)=P_2(z)/P_1, η(z)=(2/(ε_0*n_2*c^3*A))*((dω)/n1)^2*P1*((sin((Δk*z)/2)^2)/(Δk/2^2)),Δk=0, η(z)=P_2(z)/P_1, η(z)=(2/(ε_0*n_2*c^3*A))*((d*ω)/n_1)^2*P_1*z^2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Conversion efficiency is low, consider E_1 to be constant
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_19_104:['diff(E_2,z)=%i*((ω*d)/(c*n_2)) * E_1^2*exp(-%i*Δk*z),'diff(E_1,z)=%i*((ω*d)/(c*n_1))*'conjugate(E_1)*E_2*exp(%i*Δk*z)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+P_N_2ω and E_2ω are out of phase at z = L_c.
+After  L_c ω will be generated from 2ω and efficiency will fall off.
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_19_105:[E_2ω=(1/2)*(E_2*exp(%i*(k_2*z-2*ω*t))+C_cplx),P_N_2ω=((ε_0*d)/2)*(E_1^2*exp(2*%i*(k_1*z-ω*t)) +C_cplx),Φ_P_N_2ω=k_2*z-2*ω*t,Φ_E_2ω=2*(k_1*z-ω*t), ΔΦ=Φ_P_N_2ω-Φ_E_2ω, ΔΦ=(k_2-2*k_1)*z, ΔΦ=Δk*z,  ΔΦ_z=L_c, ΔΦ=(k_2-2*k_1)*L_c, ΔΦ_z=Δk*L_c, ΔΦ_z=Δk*(%pi/Δk), ΔΦ_z=%pi ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Two photons at frequency ω merge to make a single photon at frequency 2*ω
+The expressions below are Energy Conservation,  Momentum Conservation, Phase Matching Condition
+The type of Phase Matching is Collinear
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_19_106:[h*ω+h*ω=2*h*ω=h*(2*ω), h*k_1 + h*k_1=h*k_2, 2*k_1=k_2]
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Gain Bandwidth 
+Uncertainty of momentum gives efficiency even if Δk ≠ 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_19_107:[η(z)=P_2(z)/P_1, η(z)=(2/(ε_0*n_2*c^3*A)) * ((d*ω)/n1)^2*P1*((sin((Δk*z)^2)/(Δk/2)^2)) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Build a Taylor Series from Δk  where Χ=Wavelength, Angle or Temperature
+The derivative is taken at Χ=Χ_0, series actually continues to N terms
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_19_108:[Δk=k_2-2*k_1, Δk=2*%pi*( (n_2(λ_2,θ,T)/λ_2) -2*(n_1(λ_1,θ,T)/λ_1)),Δk( Χ_0+ΔΧ)=Δk(Χ_0) + 'diff(Δk,Χ)*ΔΧ + (1/Χ)*'diff(Δk,Χ,2) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Exact Phase Matching
+Efficiency drops 50% from the maximum
+NOTE: approx used to replace ≅ in maxima
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_19_109:[Δk(Χ_0+ΔΧ) = Δk(Χ_0) + 'diff(Δk, Χ)*ΔΧ +  R_N, approx(Δk(Χ_0+ΔΧ) ,'diff(Δk,Χ)*ΔΧ),η(Δk,L)=η_max*((sin((Δk*L)/2)^2)/((Δk*L)/2)^2) ,'abs(Δk) = 0.886*(%pi/L)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The derviative is taken at Χ=Χ_0
+The absolute value of ΔΧ in the last equation is taken at FHWM i.e at(|ΔΧ|,FHWM)
+TODO: find out what FWHM means
+Derivative in last equation taken at x = Χ_0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_19_110:['abs(Δk)=0.886*(%pi/L), approx(Δk(Χ_0+ΔΧ) ,'diff(Δk,Χ)*ΔΧ), 'abs(ΔΧ)=0.886*(%pi/(L*('abs('diff(Δk,Χ))))),'abs(ΔΧ)=0.886*((2*%pi))/(L*('abs(at('diff(Δk,x),[x=Χ_0])))) ];  
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 19.07.0"$

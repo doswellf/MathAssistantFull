@@ -1,0 +1,667 @@
+/* [wxMaxima: comment start ]
+UTEP/EMPossible  EM Analysis Using FDTD
+
+Lecture 17 - Power Flow and PML Placement
+
+Review Of Lecture 16
+Total Power By Integrating Poynting Vector
+Total Power By Plane Wave Spectrum
+Example Of Diffraction Grating
+PML Placement
+What could possibly go wrong, go wrong, go wrong, go wrong?
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Wave Vector k
+    Direction Normal To Wavefronts
+    Magnitude proportional to wavelength λ
+    
+Position Vector r is the position vector
+
+λ Wavelength In Material (not air or vacuum)
+λ_0 Wavelength in Vacuum
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+%k_w:2*%pi/λ;k_n:(2*%pi*n)/λ_0;k_vec(x,y,z):=k_x*x_hat + k_y*y_hat +k_z * z_hat;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(r):=E_0 * %e^(%i* (k . r));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+r(x,y,z):=x * x_hat + y* y_hat + z* z_hat;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Complex Wave Vectors
+    Purely real k 
+        uniform  amplitude 
+        oscillations actually transport energy
+        analyzed as a propagating wave
+
+Purely imaginary k
+    decaying amplitude over distance and time
+    no oscilations 
+    no energy transport
+    analyzed as an evanescent mode
+
+Complex k (real and imaginary components)
+        decaying amplitude
+        oscillations transport energy
+        analyzed as a propagating wave
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Evanescent Fiels In 2D
+
+    Propagating Wave
+    n_1 < n_2
+    No critical angle
+
+    Propagating Wave
+    n_1 > n_2
+    θ_1 < θ_c (θ_c = critical angle)
+
+    Evanescent Mode
+    n_1 > n_2
+    θ_1 > θ_2 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+The Plane Wave Spectrum
+Period structure ⟶ wave takes on period of structure
+Period field analyzed as infinite sum of plane waves at various angles
+This set of plane waves is the "plane wave specturm" of the field
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(x,y):= sum(S(m)*%e^(%i*(k_x(m)*m  + k_y(m)*y)), m, minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The Plane Wave Spectrum is calculated as follows.
+Each incident wave must be phase matched into 
+the 'target' medium with refractive index n_2
+
+Periodic wave moves into grating
+Structure of grating causes infinite expansion of transverse wave vector  component
+Lower-order refracted waves propagate but higher-order waves do not
+Waves with higher k vector (fast oscillation) are cut off therefore evanescent
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(x,y) := S(m) * %e^(%i*k(m).r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k(m):=k_x(m) + k_y(m) + k_z(m);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_x(m):= k_x_inc  - ((2*%pi*m)/Λ_x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_y(m):= sqrt((k_0*n_2)^2 - k_x(m)^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Total Power Obtained By  Integrating The Poynting Vector
+
+Poynting Vector is instantaneous flow of power
+Integrate the Poynting Vector to get total power out of grid at an instant
+S is a cross-sectional plane across the grid
+Integral is a single integral for a 2D grid
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(t):=[E_x(t), E_y(t), E_z(t)];H(t):=[H_x(t),H_y(t),H_z(t)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P(t):= ''express(E(t) ~ H(t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P(s) :=integrate(integrate(P(t), x),y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Only interested in the normal component of the Poynting Vector
+Other components carry power within the device, not away from it.
+The other components can be ignored
+
+When power is flowing into z-axis interfaces, only power in z direction is important
+E_x * H_y ⟶ Power Flowing in +Z direction
+E_y * H_x ⟶ Power Flowing in -Z direction
+
+Must reverse sign when calculating transmitted vs reflected power
+Reverse the sign to calculate reflected power
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(E(t) ~ H(t))[2] * z_hat;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+2D Grid is defined to be in the X-Y plane
+To be consistent with our convention, power leaves the device in the y direction
+The E_z mode does not have E_x or H_z so the Poynting vector is 
+P_y = E_z*H_x
+
+Must interpolate E_z and H_x at a common point to calculate Poynting vector!
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_rms = (1/2) * realpart(E ~ conjugate(H)) , P_rms = -(1/(2*η_0)) * realpart(%i* (E ~ conjugate(H)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P= 'integrate( 'integrate(P_rms, x),y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Power Flow On 2D Yee Grid
+E_z and H_x are at different locations on the grid
+Interpolate Hn_x to exist at the same points as E_z
+<Hn[i,j,x]> = (Hn[i,j-1,x] + Hn_x[i,j,x]) / 2
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P[i,j,y] = (1/(2*η_0)) * realpart(  %i*E[i,j,z] * conjugate(H_n[i,j,x]));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P[i,j,y] = (1/2*η_0) * realpart( %i*E[i,j,z] * ((Hn[i,j-1,x] + Hn_x[i,j,x]) / 2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reflectance And Transmittance
+
+P_inc ∝ cos(θ_inc) *N_x/η_inc
+P_ref ∝ sum(P[i,j_ref,y],i,1,N_y)
+P_trn ∝ sum(P[i,j_trn,y], i,1,N_y)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+R = (P_ref/P_trn) ; T = P_trn/P_inc;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Total Power By Plane Wave Spectrum
+
+Calculate power in modes on transmitted and reflected sides then add them together.
+
+EM Power Flow 
+
+Instantaneous direction and intensity of power flow at any point in space is 
+given by the Poynting Vector
+
+P(r,t) = E(r,t) x H(r,t)
+
+RMS power flow is
+
+P(r,ω) = (1/2) * realpart(E(r,ω) x conjugate(H(r,ω)))
+
+This is written in the frequency domain as:
+
+P = (1/2) * realpart(E x conjugate(H))
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Power Flow In Linear Harmonic Isotropic Materials
+
+E,H,k are all perpendicular to each other in LHI materials outside of a grating
+
+E ⟂ H ⟂ k   P/|P| = k /|k|
+
+Now the expression for RMS power becomes
+
+P = (1/2) * realpart(E ~ conjugate(H))
+
+P = (1/2) * realpart(k/abs(k) . abs(E) . abs(H))
+
+|E| . |H| is the magnitude of the cross product
+k/|k| is the direction of the cross product
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Eliminate The Magnetic Field
+
+The field magnitudes in LHI materials are related
+through the material impedence η
+
+|E|/|H| = η
+
+Given η H can be eliminated from the RMS power flow expression
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mag(v):= sqrt(v[1]^2 + v[2]^2+v[3]^3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+η:mag(E)/mag(H);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_1 : (1/2) * realpart((k/mag(k))  .mag(E) . mag(H)) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_2=(1/2) * realpart( (k/mag(k)) . (mag(E)^2/η ));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Power Flow Away From The Grating
+
+Only the Z component of the Poynting Vector is considered
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P = (1/2) * realpart( (k_z/mag(k))  * (mag(E)^2/η));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+RMS Power Of Diffracted Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_x(m) := k_x_inc - (2*%pi*m)/Λ_x;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_z(m):= sqrt( (k_0*n)^2 - k_x(m)^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(x,z):=sum(  S(m) * %e^(-%i*k_z(m) * z) ,m,minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The term S(m) is the amplitude and polarization of the mth diffracted harmonic
+The power flow away from the grating due to the mth diffracted order is
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_z = (1/2) * realpart((k_z/mag(k)) * (mag(E)^2/η)    )   ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The S(m) term takes the place of E in the expression for diffracted modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_z(m) := (1/2)*realpart( (k_z(m) / mag(k(m))) * (mag(S(m))^2 /η) );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Power In The Incident Wave
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_inc: (1/2)*realpart( (k_z[inc] /mag(k[inc]) * mag(S[inc])^2/η_inc));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Diffraction Efficiency
+
+Power in a specific diffraction order divided by the incident power applied
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+DE(m) := P_z(m) / P_z[inc];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Assume materials have no loss or gain, conservation of energy requires that
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+1 = sum(DE_ref(m) , m, minf,inf)  + sum(DE_trn(m) , m, minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+General Case  
+< 1 materials have loss
+= 1 materials have no loss
+> 1 materials have gain
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Conservation Of Power
+
+Power entering into the device must go somewhere
+Incident power can be reflected, absorbed or transmitted
+
+P_src   = P_Ω + P_ref + P_trn
+P_Ω     = absorbed power
+P_ref   = reflected power
+P_trn   = transmittted power
+
+Normalize the power equation ⟶ divide by P_src
+Parameters are normalized to the power of the source
+
+1 = A + R + T
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Putting It All Together
+
+Expressions derived for the incident power and 
+power in the spatial harmonics
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_z[inc]:  (1/2)*realpart( (k_z[inc]  /mag(k[inc]) * mag(S[inc])^2/η_inc));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p_z[ref](m) := P_inc: (1/2)*realpart( (k_z[ref](m) /mag(k[ref](m)) * mag(S[inc](m))^2/η_inc));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_z[trn](m):= (1/2)*realpart( (k_z[trn](m) /mag(k[trn](m)) * mag(S[trn](m))^2/η_inc));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+DE(m):=P_z(m)/P_z[inc];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now expressions for the diffraction efficiencies of the spatial harmonics
+can be derived by combining the above expressions
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pml_01:[DE_ref(m) = (P_z[ref](m)/P_z[inc]) , DE_ref(m) = mag(S_ref(m))^2/mag(S_inc)^2, DE_trn(m) = (P_z[trn] (m) / P_z[inc] ), DE_trn(m) = mag(S_trn(m))^2 / mag(S_inc)^2 * realpart( (k_z[trn](m)/mag(k_trn(m))) * (μ_r[ref]/μ_r[trn]) ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Diffraction Efficiency for Magnetic Fields
+
+Efficiency equations above are for the E field only
+
+S_m = E field amplitude of the mth spatial harmonic
+
+U_m is the field amplitude of the mth spatial harmonic
+
+Maxwell's equations are sometimes solved for the magnetic fields H
+The diffraction efficiency equations for H are
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[DE_ref[mag](m)  = P_z[ref](m) / P_z[inc], DE_ref[mag](m) = mag(U_ref(m))^2 / mag(U_inc)^2 *  realpart( k_z[ref](m)/k_z[inc]) ,DE_trn[mag] = P_z[trn](m) / P_z[inc] , DE_trn[mag](m) = mag(U_trn(m) )^2/mag(U_inc)^2 * realpart( (k_z[trn](m)/k_z[inc]) * (ε_r[ref]/ε_r[inc]) ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Calculating Power Flow In FDTD
+
+Calculate Transmittance and Reflectance
+
+1. Perform FDTD simulation
+    a)  Calculate the steady-state field in reflected and transmitted recording planes
+
+2. For each frequency to be analyzed
+    a) Calculate the wave vector components of the spatial harmonics
+    b) Calculate the complex amplitude of the spatial harmonics
+    c) Calculate the diffraction efficiency of the spatial harmonics
+    d) Calculate overall reflectance and transmittance
+    e) Calculate energy conservation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Calculate Wave Vector Components
+Performed separately for every frequency of interest
+ Grid is N_x points across = Λ_x (spatial period )
+
+Transverse Components
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_x(m) = -(2*%pi*m)/Λ_x;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+N_x: 50;m_eg:makelist(m, m, -floor(N_x/2), floor(N_x/2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Longitudinal Components
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_y[ref](m):= sqrt( (k_0*n_ref)^2 - k_x(m)^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_y[trn](m):=  sqrt( (k_0*n_trn)^2 - k_x(m)^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Calculate Amplitudes Of Spatial Harmonics
+
+Performed separately for every frequency of interest
+
+FFT of Sampled Frequency = [S[-M] , ... , S[-2],S[-1],S[0], S[1], S[2], ... ,S[M] ]
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(x,y):= sum(S(m) * exp(%i * ( k_x(m)*x + k_y(m) * y)), m , minf,inf );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Calculate Diffraction Efficiencies
+
+Performed separately for every frequency of interest
+
+NOTE: 
+    |S_inc| = amplitude of source obtained by fft(g(t)) where g(t) is the source functio
+        
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pml_01:[DE_ref(m) = (P_z[ref](m)/P_z[inc]) , DE_ref(m) = mag(S_ref(m))^2/mag(S_inc)^2, DE_trn(m) = (P_z[trn] (m) / P_z[inc] ), DE_trn(m) = mag(S_trn(m))^2 / mag(S_inc)^2 * realpart( (k_z[trn](m)/mag(k_trn(m))) * (μ_r[ref]/μ_r[trn]) ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reflectance and Transmittance
+
+Performed separately for every frequency of interest
+
+Reflectance = total fraction of power reflected from a device
+Reflectance = sum of all reflected modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+R(f) := sum(DE_ref(m,f), N_x, 1,M);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Transmittance = total fraction of power transmitted through a device
+Transmittance = sum of all transmitted modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+T(f) := sum(DE_trn(m,f), N_x, 1, M);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Calculate Power Conservation
+
+Performed separately for every frequency of interest
+
+Assuming no loss or gain included in simulation
+Then R(f) + T(f) = 100%
+
+Always calculate this total to check for conservation of energy
+
+Total energy ≠ 100% when
+    Energy still remains on the grid and more iterations are required
+    Boundary conditions are not working properly and need to be fixed
+    Rounding errors are too severe and greater grid resolution is required
+    You have included loss or gain in your materials using σ (conductivity)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD ⟶ FFT ⟶ Steady  ⟶ FFT ⟶ Spatial         ⟶ Diffraction   ⟶ Reflectance
+                           State                     Harmonics        Efficiencies        Transmittance
+
+FDTD results are fourier transformed t ⟶ f to get frequency-domain fields                  
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Procedure For FDTD 
+1. Simulate the device using FDTD 
+    Calculate the stead-state fields at the reflection and transmission recording planes
+    E_ref(x,f), E_trn(x,f) and E_src(f)
+
+2. Calculate the incident wave vector k_y[inc] = k_0 * n_inc
+
+3. Calculate periodic expansion of the transverse wave vector (x and y)
+    k_x(m) = -2*%pi*m/L_x, m = -floor(N_x/2) ⟶ floor(N_x/2)
+
+4. Calculate Longitudinal wave vector components in reflection and transmission regions
+    k_y[ref](m) = sqrt( (k_0*n_ref)^2 - k_x(m)^2)
+    k_y[trn] = sqrt( (k_0 * n_trn)^2 - k_x(m)^2)
+
+5. Normalize the stead-state fields to the source
+    E_hat[ref](x,f) = E_ref(x,f) / E_src(f) E_hat[trn](x,f) = E_trn(x,f) / E_src(f)
+
+6. Calculate complex amplitudes of the spatial harmonics
+    S_ref(m,f) = FFT{E_hat[ref](x,f) } S_trn(m,f) = FFT{E_hat[trn](x,f)}
+
+7. Calculate the diffraction efficiencies of the spatial harmonics
+    DE_ref(m,f) = |S_ref(m,f)|^2 * Re( k_y[ref](m) / k_y[inc])
+    DE_trn(m,f) = |S_trn(m,f)|^2 * Re( (k_y[trn](m) / k_y[inc])  * (μ_ref/μ_trn))
+
+8. Calculate reflectance, transmittance and conservation of energy
+    R(f) = Σ_m DE_ref(m,f) T(f) = Σ_m DE_trn(m,f), C(f) = R(f) + T(f)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+MATLAB Code for Calculating Power
+% INITIALIZE REFLECTANCE AND TRANSMITTANCE
+REF = zeros(1,NFREQ);
+TRN = zeros(1,NFREQ);
+% LOOP OVER FREQUENCY
+for nfreq = 1 : NFREQ
+    % Compute Wave Vector Components
+    lam0  = c0/FREQ(nfreq);                      %free space wavelength
+    k0    = 2*pi/lam0;                                 %free space wave number
+    kyinc = k0*nref;                                  %incident wave vector
+    m     = [-floor(Nx/2):floor(Nx/2)]';         % spatial harmonic orders
+    kx=  - 2*pi*m/Sx;                                % wave vector expansion
+    kyR   = sqrt((k0*nref)^2 - kx.^2);      %ky in reflection region
+    kyT   = sqrt((k0*ntrn)^2 - kx.^2);      %ky in transmission region
+
+    % Compute Reflectance
+    ref = Eref(:,nfreq)/SRC(nfreq);                 %normalize to source
+    ref = fftshift(fft(ref))/Nx;                          %compute spatial harmonics
+    ref = real(kyR/kyinc) .* abs(ref).^2;        %compute diffraction eff.
+    REF(nfreq) = sum(ref);                           %compute reflectance% Compute Transmittance
+    trn = Etrn(:,nfreq)/SRC(nfreq);                %normalize to source
+    trn = fftshift(fft(trn))/Nx;                        %compute spatial harmonics
+    trn = real(kyT/kyinc) .* abs(trn).^2;       %compute diffraction eff.
+    TRN(nfreq) = sum(trn);                          %compute transmittanceend
+    % CALCULATE CONSERVATION OF ENERGY
+    CON = REF + TRN;
+
+
+   [wxMaxima: comment end   ] */
+
+
+

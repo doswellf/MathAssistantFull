@@ -1,0 +1,408 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: comment start ]
+EMPossible - Computational Electromagnetics
+
+Lecture 10 - Finite Difference Analysis of Waveguides
+
+Dielectric Materials Assumed
+
+Electromagnetic Waveguides
+Formulation of Rigorous Full-Vectorial Waveguide Analysis
+Formulation of Quasi-Vectorial Analysis 
+Formulation of Slab Waveguide Analysis
+Implementation in Octave/Matlab
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Critical Angle and Total Internal Reflection
+
+Wave incident on a material with lower refractive index 
+Wave is totally reflected back into the current medium 
+The angle of incidence must be greater than the critical angle
+
+θc = asin(n2/n2)
+
+e.g. critical angle from air into fused silica (glass)
+n1 = 1.0 (air) n2 = 1.5 (glass)
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+θ_c: asin(1.0/1.5)  * 180/3.14158258;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Slab Waveguide
+
+Sandwich material between 2 materials with higher refractive index
+top slab           ⟶ refractive index n_1
+middle slab      ⟶ refractive index n_2
+bottom slab     ⟶ refractive index n_3
+
+n_2 > n_1  and  n_2 > n>3
+
+Send wave/beam in at greater than the critical angle of incidence
+
+Wave bounces off of top and bottom interfaces due to total internal reflection
+
+Round trip phase is phase between 2 identical points in successive periods
+e.g. top to top or bottom to bottom and all intermediate points
+
+Round-trip phase = m(2π) where m is an integer
+
+β is the propagation constant of γ = β + jα
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[β = k_0 * n_eff , β = k_0 * n * sin(θ)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Require maxwell's equations to analyze mode shapes and amplitudes rigorously.
+
+Slab waveguides confine energy in only one transverse direction
+e.g. if Z is vertical, x is longitudinal, y is sideways, x and y are not constrained
+        modes are confined in the Z direction at the interfaces
+
+Channel waveguides confine energy in both transverse directions
+e.g. if Z is longitudinal, then fields are confined in the X and Y directions
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Formulation of Rigorous Full-Vectorial Waveguide Analysis
+
+Start with 6 coupled curl equations - separate the 2 curl equation components
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+i_hat:columnvector([1,0,0]);
+j_hat:columnvector([1,1,0]);
+k_hat:columnvector([0,0,1]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This is what the vectors start to look like - will use symbolic values instead
+Will use this later to perform actual calculations with actual vector-valued fields
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k_0: (2*%pi)/λ_0;
+x_norm:k_0 * x * i_hat; y_norm:k_0*y * j_hat; z_norm:k_0 * z;
+E_x:E_0 * x_norm; E_y:E_0*y_norm; E_z: E_0*z_norm;
+E:[E_x, E_y, E_z];
+H_x:H_0 * x_norm;H_y:H_0 * y_norm; H_z:
+H_x_norm:-%i*η_0 * H_x; H_y_norm:-%i*η_0*H_y; H_z_norm:-%i*η_0*H_z;
+H_norm:[H_x_norm, H_y_norm, H_z_norm];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all); 
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Assume normalized H, x, y, z as above
+Assume diagonally anistropic materials 
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[E_x, E_y, E_z];
+H:[H_x, H_y, H_z];
+μ_r:matrix([μ_xx,0,0],[0,μ_yy,0],[0,0,μ_zz]);
+ε_r:matrix([ε_xx,0,0],[0,ε_yy,0],[0,0,ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_faraday:express(curl(E)) = μ_r * H;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_ampere:express(curl(H)) = ε_r * E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Separate the 2 equations into 6 equations 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_far_x:first(lhs(eqn_faraday)) = row(rhs(eqn_faraday),1 ) [1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_far_y:second(lhs(eqn_faraday)) = row(rhs(eqn_faraday),2)[1][2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_far_z:third(lhs(eqn_faraday)) = row(rhs(eqn_faraday),3 ) [1][3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_amp_x:first(lhs(eqn_ampere)) = row(rhs(eqn_ampere),1 ) [1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_amp_y:second(lhs(eqn_ampere)) = row(rhs(eqn_ampere),2) [1][2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_amp_z:third(lhs(eqn_ampere)) = row(rhs(eqn_ampere),3 ) [1][3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Modal Solution For Waveguides
+
+E(x,y,z) = A_0(x,y) * e^(γ*z)
+
+A_0(x,y) is a complex amplitude dependent only on transverse components
+γ = α + jβ is the propagation constant giving the accumulation of phase along Z
+
+Assume the amplitude profile of the mode never changes
+Then the problem is solved by analyzing only the x-y plane (cross-section) 
+This reduces the solution to a 2D problem if guide is isotropic in the Z direction
+
+The fields have the following form
+
+E(x', y',z' ) = Ax(x',y') * exp( (γ*z)'/k_0)
+H(x', y',z' ) = Bx(x',y') * exp( (γ*z)'/k_0)
+
+Substitute the general form the mode above into Maxwell's equations
+
+x_n, y_n, z_n are x/k_0, y/k_0, z/k_0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+prop_const: γ=α+%i*β;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_z(x_n,y_n,z_n) := A(x_n,y_n) * exp(γ*z/k_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_y(x_n,y_n,z_n) := A(x_n,y_n) * exp(γ*z/k_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H_x(x_n,y_n,z_n) := B(x_n,y_n) * exp(z*x/k_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+modal_eqn_hx:psubst( [E_z=E_z(x_n, y_n, z_n), E_y=E_y(x_n,y_n,z_n), H_x=H_x(x_n,y_n,z_n) ],  eqn_far_x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Take derivative of E_y
+Simplify derivatives by moving constants outside of them
+Eliminate exp(γ*z/k_0) from both sides of the equation
+For analytic display, don't show explicit functional arguments
+
+TODO: GET Maxima to do the algebra instead of doing it manually!
+
+After some algebra this results in the following form:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+modal_eqn_hx:'diff(A_z(x_n,y_n) , y_n) * exp(γ*z_n/k_0)  - (γ/k_0) * A_y(x_n,y_n)  * exp(γ*z_n/k_0) = μ_xx * B(x_n,y_n) * exp(γ*z_n/k_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+After eliminating exp(γ*z_n/k_0) the eqn becomes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+modal_eqn_hx: 'diff(A_z(x_n,y_n) , y_n)  - (γ_n /k_0) * A_y(x_n,y_n)   = μ_xx * B_x(x_n,y_n) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Simplified Analytic Form
+
+∂/∂y' A_z - (γ/k_0) * A_y = μ_xx * B_x
+
+This process applies to the other curl equations as well
+
+Normalize the propagation constant  γ' = γ/k_0 = %i * n_eff, n_eff = n + %i*κ
+
+Write the rest of the equations in an analogous manner:
+
+E_x ⇔ A_x, E_y ⇔ A_y, E_z ⇔ A_z, Hn_x ⇔ B_x, Hn_y ⇔ B_y, Hn_z ⇔ B_z
+
+∂/∂z' ⇔ γ/k_0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+γ_n:γ/k_0; 
+modal_eqn_hy:γ_n*A_x(x_n,y_n,z_n)  - 'diff(A_z, x_n) = μ_yy*B_y(x_n,y_n);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+modal_eqn_hz:'diff(A_y, x_n) - 'diff(A_x, y_n) = μ_zz * B_z(x_n,y_n);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+modal_eqn_ex:'diff(B_z(x_n,y_n) , y_n)  - (γ_n /k_0) * B_y(x_n,y_n)   = ε_xx * A_x(x_n,y_n) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+modal_eqn_ey:γ_n*B_x(x_n,y_n,z_n)  - 'diff(B_z, x_n) = ε_yy*A_y(x_n,y_n);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+modal_eqn_ez:'diff(B_y, x_n) - 'diff(B_x, y_n) = ε_zz * A_z(x_n,y_n);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+As in the last lecture translate the analytic equations to matrix form
+Finite differences are 'hidden behind the curtain' of this method
+
+Using Dirichlet boundary conditions for these derivatives
+Valid ⟶ modal energy  confined to the center of the grid
+
+D_y_e . a_z - γ_n . a_y = μ_xx . b_x
+γ_n . a_x - D_x_e . a_z = μ_yy . b_y
+D_x_e . a_y - D_y_e . a_x = μ_zz . b_z
+
+D_y_h . b_z  - γ_n . b_y = ε_xx . a_x
+γ_n . b_x - D_x_h . b_z = ε_yy . a_y
+D_x_h . b_y - D_y_h . b_x = ε_zz . a_z
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Solve the 3rd and 6th equations for the z components 
+
+Substitute back into the first 2 equations for E_x and E_y (a_x and a_y)
+b_z = 1/μ_zz * (D_x_e.a_y - D_y_e . a_x)
+
+Substitute back into the first 2 equations for H_x and H_y (b_x and b_y)
+a_z = 1/ε_zz * (D_x_h . b_y - D_y_h . b_x)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Get 4 equations containing no Z components, only transverse (X,Y) components
+These only involve E_x, E_y, H_x, H_y
+
+D_y_e . (1/ε_zz) * (D_h_x . b_y - D_h_y . b_x) - γ_n . a_y = μ_xx . b_x
+γ_n * a_x = D_x_e . (1/ε_zz) . (D_x_h . b_y - D_y_h . b_x) = μ_yy . b_y
+
+D_y_h . (1/μ_zz) . (D_x_e . a_y = D_y_e . a_x) = ε_xx . a_x
+γ_n * b_x - D_x_h . (1/μ_zz) . (D_x_e . a_y -  D_y_e . a_x) = ε_yy . a_y
+
+Swap the order of the 2 equations in the sets
+Expand, collect and re-arrange terms
+
+- D_x_e.(1/ε_zz).D_y_h.b_x + (D_x_e.(1/ε_zz).D_x_h + μ_yy).b_y) = γ_n * a_x 
+-(D_y_e.(1/ε_zz).D_y_h + μ_xx).b_x + D_y_e.(1/ε_zz).D_x_h.b_y = γ_n * a_y
+
+- D_x_h.(1/μ_zz).D_y_e.a_x + (D_x_h.(1/μ_zz).D_x_e + ε_yy).a_y) = γ_n * b_x 
+-(D_y_h.(1/μ_zz).D_y_e_+ ε_xx).a_x + D_y_h.(1/μ_zz).D_x_E.a_y = γ_n * b_y
+
+TODO: CREATE THE ACTUAL MATRICES AND CREATE REAL MATRIX EQUATIONS
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Create block matrix equations from the above matrix equations
+Each element of these is itself a matrix expression!!!
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+op_far:matrix([-D_x_e * (1/ε_zz) * D_y_h, D_x_e * (1/ε_zz) * D_x_h + μ+yy],[-(D_y_e *  (1/ε_zz) * D_y_h)+ μ_xx, D_y_e * ( 1/ε_zz) * D_x_h ] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mat_far:op_far . columnvector([b_x,b_y]) = γ_n * columnvector([a_x,a_y]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+op_amp:matrix([-D_x_h * (1/μ_zz) * D_y_e, D_x_h * (1/μ_zz) * D_x_e + ε_yy ], [-(D_y_h * (1/μ_zz) * D_y_e + ε_xx) , D_y_h * (1/μ_zz) * D_x_e   ] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mat_amp:op_amp . columnvector([a_x, b_y]) = γ_n * columnvector([b_x,b_y]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Represent op_far as P, op_amp as Q
+Q . a = γ_n * b
+
+Solve the first equation for b
+b = Q . a * (1/ γ_n)
+
+Substitute expression for b into 2nd equation
+
+P * ((1/γ_n) * Q * a) = γ_n * a
+
+PQa = γ_n_2 * a
+
+Ω^2 = PQ
+
+Ω^2 * a = γ_n^2 * a
+
+This is in the form of a standard eigen-value problem
+
+Ax = λx
+A= Ω^2 
+λ = γ_n^2
+
+   [wxMaxima: comment end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

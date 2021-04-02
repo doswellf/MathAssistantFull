@@ -1,0 +1,862 @@
+/* [wxMaxima: input   start ] */
+f(x):=sin(x)/x;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[f(1),f(2), f(1+h), f(x+h)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+limit(f(x),x,0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+limit((sin(x+h)-sin(x))/h, h, 0);
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><fn><fnm>sin</fnm><mrow><p><mi>x</mi></p></mrow></fn><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+g(x):=if x > 0 then 1 else -1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[g(-%pi/3), g(%pi/3)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+plot2d(sin(x), [x,0,4*%pi]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x):=sqrt(x-1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+algebraic:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff_quot: (f(x+h)-f(x))/h;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simplified_diff_quot:1/ratsimp(1/diff_quot);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+limit(simplified_diff_quot, h,0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(f(x),x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ plot2d([f(x),diff(f(x),x)],[x,1.1,2]);
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends(f,x); depends(g,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+drv_of_quot:diff(f/g);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ratsimp(drv_of_quot);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+g(x):=x^(1/2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+h(x):=1 + x^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ans:diff(g(x)/h(x),x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+factor(ans);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ratsimp(ans);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rootscontract(ans);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pickapart(part(ans,1),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pickapart(part(ans,2),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(%t44,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(%t45,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(%t46,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(3*x^2-1,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Derivatives Of Trig Functions
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(sin(x)/(1 + cos(x)),x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+factor(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+trigsimp(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cos(x)^2 + 2*sin(x)^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+trigsimp(cos(x)^2 + 2*sin(x)^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+trigreduce(cos(x)^2 + 2*sin(x)^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The Chain Rule
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x):=x^3;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends(x,u);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(f(x),u);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+remove([u,x], dependency);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+x: sin(u);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(f(x),u);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+g(x):=sin(x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(f(g(u)), u);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Implicit Differentiation - Higher Derivatives
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn:x^2 + y^2 =25;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends(y,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+drv_of_eqn:diff(eqn,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(drv_of_eqn,'diff(y,x));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(x^n,x,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Related Rates
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+area: a = %pi*r^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends([a,r],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+drv_of_area: diff(area,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(drv_of_area);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(['diff(r,t,1)=60, r=120 ], drv_of_area);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Linear Approximations and Differentials
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L:taylor(sin(x), x,%pi/3,1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+error1:float(subst([x=1.1],L)) - float(subst([x=1.1],sin(x)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+error2:float(subst([x=1.4],L)) - float(subst([x=1.4],sin(x)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+plot2d([L,sin(x)], [x,%pi/3-0.5, %pi/3+0.5]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maximum and Minimum Values
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x):=x^(3/5) * (4-x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+drv_of_f:diff(f(x),x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pickapart(factor(drv_of_f),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve([%t23=0],x) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Using Lambda Definition
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(f,g,h);f: lambda([x], x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+MVT(f,a,b):=block( 
+    [deriv, aver,c],
+    aver:(f(b)-f(a))/(b-a)  , 
+    deriv:diff(f(x),x),
+    c:solve(deriv=aver,x),
+    print(c));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+g:lambda([x], x^2)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+MVT(g, 0, 1)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+g: lambda([x],x^2)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+MVT(g,0,1)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+h: lambda([x],x^3)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+MVT(h,0,1)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Graph Sketching
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all); 
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+expr:x^2 - 4;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(-3,x,expr);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(0,x,expr);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(3,x,expr);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst( [u=x-2],  expr);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ratsubst(u, x-2, expr);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Limits At Infinity and One-Sided Limits
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f: (3*x^2 - x-2)/(5*x^2 +4*x +1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+limit(f,x,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+g:abs(x)/x;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+limit(g(x),x,-inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+limit(ratsubst(1/t,x,g),t,-inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+h:1/x;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+limit(ratsubst(1/t,x,h),t,-inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Plotting Of Vertical Asymtopes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+plot2d(x^2/(x^2-1), [x,-4,4]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+plot2d(max(min(x^2/(x^2-1),10),-10), [x,-4,4]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Optimization - Computing Derivatives Of Functions Subject To Constraints
+Window of Perimeter P
+Semicircle on top of a a rectangle 
+r = radius of semi-circle
+2*r = base of rectangle 
+h = height of rectangle
+C = perimeter of a circle  = 2πr 
+P includes on 1/2 the perimeter of a circle = 1/2 * C = 1/2 * 2*%pi * r = %pi*r
+P = 2*h + 2*r + 1/2 * (2*%pi*r)
+L = amount of light per unit area = 1 for rectangle, 1/2 for semicircle 
+Area of semicircle = (1/2) * %pi*r^2
+Light transmitted by semicircle =(1/2) * (1/2) * %pi^2
+Area of rectangle = 2*r*h
+L = 2*h*r  + %pi*r/2
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Eqn:P = 2*r + 2*h + %pi*r;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L: 2*r*h + %pi*r^2/4;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+soln_h:solve(Eqn,h);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+h_is: rhs(first(soln_h));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L_fcn_r:ratsubst(h_is,h, L);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv_L:diff(L_fcn_r, r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+soln_r:solve(deriv_L = 0, r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+r_is:rhs(first(soln_r));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+h_is_now:ratsubst(r_is, r, h_is);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ratio_finally: ratsimp(r_is / h_is_now);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Differentiate The Constraint Equation Instead
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Eqn:P = 2*r + 2*h + %pi*r;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends(h,r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+L: 2*r*h + %pi*r^2/4;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv_eqn:diff(Eqn, r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv_h:rhs(first(solve(deriv_eqn, 'diff(h,r))));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv_L:diff(L,r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv_L_is:ratsubst(deriv_h, 'diff(h,r), deriv_L);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(deriv_L_is=0, r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Newton's Method
+
+Loading Library Programs 
+Recursive Functions 
+Initial Conditions
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all) ; load(newton);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f:x^2 - 2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fpprec: 100; newton(f, 1.5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a: 6*t+4;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+v:integrate(a,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+c_val:solve(subst(0,t,v+c)=-6,c);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+v2:v+rhs(first(c_val));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+s:integrate(v2,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+c_val_2: solve(subst(0, t,s+c)=9, c);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+s+rhs(first(c_val_2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Limits Of Riemann Sums - The Definite Integral
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+r_sum:(3/n) * sum((2+3*i/n)^4, i,1,n);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simpsum:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+r_sum_simp:ratsimp(r_sum);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+limit(r_sum_simp,n,\inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Fundamental Theorem Of Calculus
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+s: lambda( [x], integrate(cos(t), t, 0, x));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(s(x), x);
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><mi>x</mi><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(s(x^3), x);
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><mi>x</mi><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: comment start ]
+Indefinite Integrals Using ode2
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eq: 'diff(y,x) = sqrt(1/x^4-1/x^5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ode2(eq,y,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Areas Between Curves, Finding Intersections
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eq1:y = x-1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eq2:y^2 = 2*x+6;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve([eq1,eq2],[x,y]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Volumes By Slicing
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a: (sec(x))^2 - 1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+b: trigsimp(a);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+integrate(b, x, -1,1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Volumes By Cylindrical Shells - Using trigreduce and trigexpand
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+2*%pi * integrate( y*(1/cos(y)),y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+%pi * integrate((cos(x)^2) ,x,0,%pi/2 );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+%pi/2 * integrate( 1 + cos(2*x),x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+(expand(trigsimp(%)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a:cos(x)^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+b:trigreduce(a);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+c:trigexpand(b);
+/* [wxMaxima: input   end   ] */
+
+
+

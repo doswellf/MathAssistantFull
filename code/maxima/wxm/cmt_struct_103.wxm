@@ -1,0 +1,203 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 18.02.0 ] */
+/* [wxMaxima: input   start ] */
+parse_string("integrate(5*x^2,x,-10,10)");
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+parse_string("integrate(5*x^(2),x,-50,50)");
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+parse_string("integrate(5*x^(2),x,0,-10)");
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%);
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: answer  start ] */
+negative;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+parse_string("integrate(5*x^(-2),x,1,10)");
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+parse_string("integrate(5*x^2,x,-5,10)");
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+defstruct(env(initial,boundary,constant,other));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+env_start:new(env);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+env_start@initial:[[A0,0.0],[E0,0.9],[x0,0.0],[y0,0.0],[z0,0.0],[r0,0.0],[phi0,0],[theta0,0.0],[rho0,0.0],[phase_E1,0],[phase_E2,0],[phase_E3,0],[phase_E4,0],[phase_E5,0],[phase_E6,0],[phase_E7,0],[phase_E8,0]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+assoc(E0,env_start@initial);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+exstr:"E_k(E0,k,z,w,t,phase):=E0*exp(%i*(k*z-w*t + phase))";
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+prstr:parse_string(exstr);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(prstr);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_k(2.3,23,55,11,1e-3,1.33);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+exstr2:"E_k(E0,k,z,w,t,phase):=E0*exp(%i*(k*z-w*t + phase))";
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+prstr2:parse_string(exstr2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_k(0.9,(2*%pi)/6.95E-7,0.001,1/6.95E-7,0.01,0.23);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+float(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+0.9*exp(%i*(2*%pi*6.95E-7-0.53*0.001+0.23));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+0.9*float(%e);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+env_start;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+defstruct(var_table(name,value,latex));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+new(var_table);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vartab_ch01:new(var_table);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vartab_ch01@name:P_p1_s;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vartab_ch01@value:0.0531;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vartab_ch01@latex:"$$ Pscriptscriptstyle{[+1,s]}";
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vartab_ch01@latex:[['math,"P_{scriptscriptstyle{[+1,s]}}"],['text,"P_{textsubscript{[+1,s]}}"]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+assoc('math,vartab_ch01@latex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+assoc('text,vartab_ch01@latex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vartab_ch01@latex:[['math,"P_{\\scriptscriptstyle{[+1,s]}}"],['text,"P_{\\textsubscript{[+1,s]}}"]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+assoc('math,vartab_ch01@latex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+assoc('text,vartab_ch01@latex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vartab_ch01@latex:[['math,"$$ P_{\\scriptscriptstyle{[+1,s]}} $$"],['text,"$P_{\\textsubscript{[+1,s]}}$"]];
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 18.02.0"$

@@ -1,0 +1,2137 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: comment start ]
+UTEP EMPossible - EM Analysis Using FDTD
+
+Lecture 15 - Implementation Of 2D FDTD
+
+TODO: 
+
+For Symbolic Code
+    Generate small parts of the analytic equations
+    Keep the small parts in lists
+    Create lists of fdtd code and ancillary parts (e.g. update coefficients)
+    Use append/concat and string fns with the lists to build octave/maxima code 
+    Insert or append statements into template strings and store in final octave/matlab file
+
+Review Of Lecture 13 and 14
+
+Tensors
+
+Matrix/Operator - Scales and Changes Orientation Of a Vector
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+V:[V_x, V_y, V_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Multiply Vector By Scalar - Orientation Constant
+Magnitude of V will be scaled larger or smaller
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S * V;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+A Tensor - 3x3 Matrix
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M:matrix([M_11, M_12, M_13],[M21,M_22,M_23],[M_31,M_32, M33]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Multiplication Of Tensor With Vector
+Orientation May Change
+3 rows x 3 columns
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M * V;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Dot Product Of Tensor With Vector 
+3 rows x 1 column
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M . V;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reflectance From Lossy Surface - Air ⟶ Glass 
+
+N = Complex Refractive Index
+n = Ordinary Refractive Index (Real)
+κ = extinction coefficient (Imaginary ⟶ Decay)
+** Loss contributes to reflections not transmission
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+N = n + j *κ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+R = ((1-n)^2 + κ^2)/((1+n)^2 + κ^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Fresnel Equations - Reflection, Transmission and Refraction At An Interface
+
+Isotropic Case
+θ_inc = θ_ref = θ_1
+Snell's Law : n_1 * sin(θ_1) = n_2 *sin(θ_2)
+
+TE Mode ⟶ E Vector ⟂ Plane Of Incidence
+                    E Vector May Be Parallel To Interface
+
+TE Wave Polarization (Transverse Magnetic) 
+
+η_1 = impedence of material 1 (e.g. air)
+η_2 = impedence of material 2 (e.g. glass)
+
+n_1 = refractive index of material 1
+n_2 = refractive index of material 2
+
+θ_1 = angle of incidence of incoming wave = angle of reflection in material 1
+θ_2 = angle of refraction of transmitted wave in material 2 (n_1 < n_2 for air⟶glass)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+r_TE:(η_2 * cos(θ_1) - η_1 * cos(θ_2))/(η_2*cos(θ_1) + η_1*cos(θ_2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+t_TE: ( 2 * η_2 * cos(θ_1) )/(η_2*cos(θ_1) + η_1*cos(θ_2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+TE Mode ⟶ H ⟂ k_inc and H ⟂ k_ref and H ⟂ k_trn
+                     H ∥ Plane Of Incidence
+                     H never parallel to interface
+
+k_inc = wave vector k for incident wave
+k_ref = wave vector k for reflected wave
+k_trn = wave vector k for transmitted wave
+
+NOTE: THE DIFFERENCE IN MATERIAL IMPEDENCE AT THE INTERFACE CAUSES:
+    THE CHANGE IN WAVE VELOCITY AT THE INTERFACE AND IN MATERIAL #2
+    WAVE REFLECTION BACK INTO MATERIAL #1 FROM THE INTERFACE
+    CHANGE OF DIRECTION WITH TRANSMISSION ACROSS INTERFACE INTO MATERIAL #2
+    THE IMPEDENCE CHANGE DISRUPTS AND DISTORTS THE E AND H FIELDS 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxwell's Curl Equations IN Anisotropic Media
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[E_x, E_y, E_z]; H:[H_x,H_y, H_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+PML Material is Anisotropic
+Relative Permeability μ_r and Relative Permittivity ε_r  become tensors
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r:matrix([ε_xx, ε_xy, ε_xz], [ε_yx, ε_yy, ε_yz],[ε_zx, ε_zy, ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r:matrix([μ_xx, μ_xy, μ_xz], [μ_yx, μ_yy, μ_yz],[μ_zx, μ_zy, μ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+faraday:express(curl(H) = %i*ω*ε_0 * ε_r  * E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ampere:express(curl(E)) = %i*ω*μ_0 * μ_r  * E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_curl:matrix([0, -Dz, Dy],[ Dz, 0, -Dx],[-Dy, Dx,0]) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxima doesn't natively allow partial application of the diff() function
+This section is for pedagogical purposes
+Showing Explicit Tensor-Vector Equations 
+D_z ⟶ ∂/∂z
+D_y ⟶ ∂/∂y
+D_x ⟶ ∂/∂x
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_faraday:M_curl * transpose(H) = %i * ω*ε_0* ε_r* transpose(E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_ampere:M_curl * transpose(E) = %i * ω*μ_0* μ_r*transpose(H);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Isotropic Material Tensor
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+perm_iso:matrix([ε_iso, 0,0],[0,ε_iso,0],[0,0,ε_iso]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Uniaxial Anisotropy
+ord = ordinary wave
+ext = extraordinary wave
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+perm_uniaxial_aniso:matrix([ ε_ord, 0,0],[0,ε_ord,0],[0,0,ε_ext]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Biaxial Anisotropy
+3 different permittivity values on diagonal
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+perm_biaxial_aniso:matrix([ ε_a, 0,0],[0,ε_b,0],[0,0,ε_c]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Incorporating Loss Into Maxwell's Equations
+
+Two ways to incorporate loss:
+    At low frequencies and/or for time domain the (ε_r,σ) system is used
+    ∇xH = J + j*ω*D = σ*E + j*ω*E = (σ + j*ω*ε_r_norm)*E {Used for FDTD}
+
+    At high frequencies and in the frequency domain the (ε_r', ε_r'') system is used
+    ∇ x H = j*ω*D = j*ω*ε_r*E
+
+Parameters are related using
+
+ε_r_norm = ε_r + (σ/(j*ω))
+
+Using both complex ε_r and conductivity σ does not make sense and is redundant
+
+Generalize The Matrix Equations To Incorporate Loss
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+prmt_with_loss:matrix([ε_x + σ_x_E/(%i*ω) , 0,0],[0,ε_y + σ_y_E/(%i*ω) , 0], [0,0,ε_z + σ_z_E/(%i*ω)] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+prmb_with_loss:matrix([μ_x + σ_x_H/(%i*ω) , 0,0],[0,μ_y + σ_y_H/(%i*ω) , 0], [0,0,μ_z + σ_z_H/(%i*ω)] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+faraday_lossy:M_curl*transpose(H) = j*ω*ε_0 * prmt_with_loss*transpose(E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ampere_lossy:M_curl*transpose(E) = j*ω*μ_0 * prmb_with_loss*transpose(H);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Refraction Into Diagonally Anisotropic Materials
+
+sin(θ_1) = sqrt(b*c) * sin(θ_2) where a,b,c are on the diagonal
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_101:sin(θ_1) = sqrt(b*c)*sin(θ_2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reflection from the incident surface of a diagonally anisotropic material
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(r_TE, r_TM);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_102:[ r_TE = (sqrt(a) * cos(θ_1) - sqrt(b) * cos(θ_2)) / (sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)), r_TM=(-sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)) / (sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Notes On a Single Interface
+
+Change of impedence that causes reflections (and refraction)
+Snell's Law gives only the angle of transmission
+Angle of transmission & reflection does not depend on polarization (TM,TE)
+Fresnel equations give the amount of light reflected and transmitted
+Amount of light reflected and transmitted depends on polarization
+
+The Uniaxial Perfectly Matched Layer (UPML)
+
+Don't want scattered waves to reflect back into the grid or re-enter from the other side
+Use ε_r_tilde = ε_r' + jε_r''
+Adjust loss using imaginary part jε_r'' 
+Match impedence of PML to grid (problem space) by adjusting ε_r'
+
+Fresnel equations reveal that reflections caSeparate Faradays Law Into 3 coupled PDE'sn only be prevented at
+    one frequency
+    one angle of incidence
+    one polarization (TE or TM)
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(r_TE, R_TM);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_103:r_TE = (η_2 * cos(θ_1) - η_1 * cos(θ_2)) / ( η_2 * cos(θ_1) + η_2 * cos(θ_2))   ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rte_01:subst(0, r_TE, utep_fdtd_13_103);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(rte_01, η_2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_104:r_TM = (η_2 * cos(θ_2) - η_1 * cos(θ_1)) / ( η_1 * cos(θ_1) + η_2 * cos(θ_2))   ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rtm_01:subst(0, r_TM, utep_fdtd_13_104);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(rtm_01, η_2 );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+need η_1 = η_2 for all angles, polarizations, and all frequencies
+
+Make PML anisotropic to get 0% reflection 100% transmission for all angles, frequencies, polarizatoins
+
+Math the grid impedence to the impedence of the absorbing region perfectly
+
+η = sqrt(μ/ε) at all locations on the incident interface of the PML 
+
+Ensure perfectly matched impedence matching the free-space impedence (air) 
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(μ_r,r_TE, r_TM);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_105:[s] = [μ_r], [s] = matrix([a,0,0],[0,b,0],[0,0,c]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Design Anisotropic Matrerial For Zero Reflection
+
+Set sqrt(b*c) = 1 Then
+
+sin(θ_1) = sin(θ_2) ⟶ No Refraction!
+
+Then the reflection coefficients are no longer angle-dependent
+
+Then the reflection coefficients reduce to 
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_106:[θ_1 = θ_2,r_TE = (sqrt(a) * cos(θ_1) - sqrt(b) * cos(θ_2)) / (sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)), r_TM=(-sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)) / (sqrt(a) * cos(θ_1) + sqrt(b) * cos(θ_2)) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_01:subst(θ_2=θ_1, second(utep_fdtd_13_106));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_02:radcan(an_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_03:subst(θ_2=θ_1, third(utep_fdtd_13_106));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_04:radcan(an_03);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Set a = b and the reflection equations are simplified 
+Reflection is always zero for any frequency, angle of incidence or polarization!
+
+The necessary condtions for zero reflection under any conditions are:
+    sqrt(b*c) = 1
+    a = b
+
+Now set an_02 and an_04 equal to zero
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_05: subst(a,b, an_02);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_06: subst(a,b, an_04);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_07:sqrt(b*c) = 1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_08:radcan(an_07)/sqrt(c);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+an_09:(an_08^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now write the PML in terms of one parameter s_z
+This is a wave travelling in the +z direction hitting one interface
+s_z has 2 components, real for impedence, imaginary to cause loss
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+s_z: α-%i*β;sz:matrix([s_z,0,0],[0,s_z,0],[0,0,1/s_z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Require PML along all borders. This requires 2 other tensors for the x and y directions
+Multiply 3 directional matrices to get the full matrix for the UPML
+PML Regions will overlap in the corners
+Sx, Sy, Sz are 1 in the problem space, ≠ 1 in the PML
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(s_z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sx:matrix([1/s_x,0,0],[0,s_x,0],[0,0,s_x]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sy:matrix([s_y,0,0],[0,1/s_y,0],[0,0,s_y]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sz:matrix([s_z,0,0],[0,s_z,0],[0,0,1/s_z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+s:sx*sy*sz;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxwell's Equations Modified For UPML
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r:matrix([ε, 0,0],[0,ε,0],[0,0,ε]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r:matrix([μ, 0,0],[0,μ,0],[0,0,μ]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(E)) = k_0 * μ_r * s*H;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(H)) = k_0 * ε_r * s*E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Move s over to multiply the curl operation by the reciprocal of s
+Use the curl operator matrix in place of the curl operator itself
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sr:matrix([1/row(s,1)[1][1],0,0],[0,1/row(s,2)[1][2], 0],[0,0,1/row(s,3)[1][3]]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here Dx, Dy, Dz stand for ∂/∂x,∂/∂y,∂/∂z because maxima doesn't
+handle currying of the diff operator/function
+Note use of dot operator instead of * for standard multiplication
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cop: sr . M_curl;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The factors s_x, s_y, s_z are stretching the coordinates into complex space
+Inside the z PML s_x = s_y = 1 except at the extreme corners with overlap
+Inside the y PML s_x = s_z = 1 except at the extreme corners with overlap
+Inside the x PML s_z = s_y = 1 except at the extreme corners with overlap
+
+The UPML and SC-PML have nearly identical performance w.r.t all parameters
+
+Calculating the PML Parameters
+Introduce fictitious conductivity to assist in modelling the loss
+Inside the grid         σ_x, σ_y, σ_z = 0 (no loss)
+Outside the grid      σ_x ≠ 0, σ_y ≠ 0, σ_z ≠ 0
+Grading fictitious conductivity from zero at boundary increasing outward
+
+Borrow method of incorporting loss into complex permittivity using conductivity
+
+L_x is width of PML in x direction, x is position within pml
+x/L_x ratio will go from zero to 1 as x ⟶ boundary to outer edge of  PML
+Raising to power of 3 gives a curvature to the ratio over L_x
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ_x(x):=ε_0/(2*dt) *(x/L_x)^3; s_x(x):=1 + σ_x(x) / (%i* ω*ε_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ_y(y):=ε_0/(2*dt) *(y/L_y)^3; s_y(y):=1 + σ_y(y) / (%i* ω*ε_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ_z(z):=ε_0/(2*dt) *(z/L_z)^3; s_z(z):=1 + σ_z(z) / (%i* ω*ε_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Build σ_x and σ_y arrays with tapered loss increasing at the inner edge of the PML
+
+nx = 1,2,3, ...
+ny = 1,2,3, ...
+nz = 1,2,3,...
+
+Within PML 
+    0 < nx/NXLO ≤ 1
+    0 < ny/NYLO ≤ 1
+    0 < nz/NZLO ≤ 1
+
+x / L_x ≅ nx / NXLO = nx / NXHI
+y / L_y ≅ ny / NYLO = ny / NYXHI
+z / L_z ≅ nz / NZLO = nz / NZHI
+
+NXLO is width of PML on x-low side
+NXHI is width of PML on x-high side
+NYLO is width of PML on y-low side
+NYHI is width of PML on y-high side
+NZLO is width of PML on z-low side
+NZHI is width of PML on z-high side
+
+Maxwell's Equations In The Frequency Domain Without PML
+
+∇ x E(ω) = -jωμ_0[μ_r]H(ω)
+∇ x H(ω) = σE(ω) + jωD(ω) where D(ω) = ε_0[ε_r]E(ω)
+
+Incorporate the PML independently of actual materials modelled using  frequency-domain Maxwell's Equations
+
+∇ x E(ω) = -jωμ_0[μ_r][s]H(ω)
+∇ x H(ω) = σE(ω) + jω[s]D(ω) where D(ω) = ε_0[ε_r]E(ω)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_n: sqrt(ε_0/μ_0)*E; D_n:1/sqrt(μ_0*ε_0) * E; c_0 = 1/sqrt(μ_0*ε_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxwell's Equations with PML and Normalized Fields
+
+∇ x E_n(ω) = -jω * ([μ_r]/c_0)*[s] * H(ω)
+∇ x H(ω) = η_0 * σ* g*E_n(ω) + (jω/c_0) *[s]  * D_n(ω)
+D_n(ω) = [ε_r] * E_n(ω)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+En(ω):=[En_x(ω), En_y(ω), En_z(ω) ];H(ω):=[H_x(ω), H_y(ω), H_z(ω) ];Dn(ω):=[Dn_x(ω), Dn_y(ω), Dn_z(ω) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M_curl;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r:matrix([μ_xx, μ_xy, μ_xz],[μ_yx, μ_yy, μ_yz], [μ_zx, μ_zy, μ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r:matrix([ε_xx, ε_xy, ε_xz],[ε_yx, ε_yy, ε_yz], [ε_zx, ε_zy, ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ:matrix([σ_xx, σ_xy, σ_xz],[σ_yx, σ_yy, σ_yz], [σ_zx, σ_zy, σ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+s;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+faraday_with_pml:M_curl * transpose(En(ω)) = -%i*ω*(1/c_0) * μ_r * s * transpose(H(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ampere_with_pml:M_curl * H(ω) = η_0 * σ * transpose(En(ω)) + (((%i*ω)/c_0) * s * transpose(Dn(ω)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_with_pml:transpose(Dn(ω)) = ε_r * transpose(En(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Assume Only Diagonal Tensors
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r_diag:matrix([ε_xx, 0,0],[0,ε_yy,0],[0,0,ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_r_diag:matrix([u_xx, 0,0],[0,u_yy,0],[0,0,u_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ_diag:matrix([σ_xx, 0,0],[0,σ_yy,0],[0,0,σ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_diag_pml:M_curl * transpose(En(ω)) = -%i*ω*(1/c_0) * μ_r_diag * s * transpose(H(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_diag_pml:M_curl * H(ω) = η_0 * σ_diag * transpose(En(ω)) + (((%i*ω)/c_0) * s * transpose(Dn(ω)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_diag_pml:transpose(Dn(ω)) = ε_r_diag * transpose(En(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dfdp_01:M_curl . transpose(En(ω)) = (-%i*ω)*(1/c_0) . μ_r_diag . s .  transpose(H(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_pml_almost:psubst(
+        [Dy*En_z(ω)='diff(En_z(ω), y), 
+        Dz*En_y(ω)='diff(En_y(ω),z) ,
+        Dz*En_x(ω)='diff(En_x(ω),z) ,
+        Dz*En_y(ω)='diff(En_y(ω),z)  ,       
+        Dx*En_y(ω)='diff(En_y(ω),x)    ,
+        Dy*En_x(ω)='diff(En_x(ω),y),
+        Dx*En_z(ω)='diff(En_z(ω),x)
+    ] ,dfdp_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Separate Faradays Law Into 3 coupled PDE's
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_pml_x:row(lhs(far_pml_almost),1)[1][1] = %i*ω*(1/c_0) * row(part(part(part(rhs(far_pml_almost),1),2),2),1)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_pml_y:row(lhs(far_pml_almost),2)[1][1] = %i*ω*(1/c_0) * row(part(part(part(rhs(far_pml_almost),1),2),2),2)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_pml_z:row(lhs(far_pml_almost),3)[1][1] = %i*ω*(1/c_0) * row(part(part(part(rhs(far_pml_almost),1),2),2),3)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Separate Ampere's Law Into 3 coupled PDE's
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dapn_01:M_curl . H(ω) = η_0 . σ_diag . transpose(En(ω)) + (((%i*ω)/c_0) . s . transpose(Dn(ω)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+apx_01:row(lhs(dapn_01),1)[1][1] = %i*ω*(1/c_0)  . row(part(part(part(rhs(dapn_01),1),2),2),1)[1][1] + η_0*part(part(part(rhs(dapn_01),2),2),1)[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_pml_x:psubst( 
+    [Dy*H_z(ω)='diff(H_z(ω),y) ,
+    Dz*H_y(ω)='diff(H_y(ω),z)], apx_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+apy_01:row(lhs(dapn_01),2)[1][1] = %i*ω*(1/c_0)  . row(part(part(part(rhs(dapn_01),1),2),2),2)[1][1] + η_0*part(part(part(rhs(dapn_01),2),2),2)[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_pml_y:psubst( 
+    [Dz*H_x(ω)='diff(H_x(ω),z) ,
+    Dx*H_z(ω)='diff(H_z(ω),x)], apy_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+apz_01:row(lhs(dapn_01),3)[1][1] = %i*ω*(1/c_0)  . row(part(part(part(rhs(dapn_01),1),2),2),3)[1][1] + η_0*part(part(part(rhs(dapn_01),2),2),3)[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_pml_z:psubst( 
+    [Dx*H_y(ω)='diff(H_y(ω),x) ,
+    Dy*H_x(ω)='diff(H_x(ω),y)], apz_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Separate The Constitutive Relations Into 3 Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crpn_01:transpose(Dn(ω)) = ε_r_diag . transpose(En(ω));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_x:row(lhs(crpn_01),1)[1][1] = row(rhs(crpn_01),1)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_y:row(lhs(crpn_01),2)[1][1] = row(rhs(crpn_01),2)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_z:row(lhs(crpn_01),3)[1][1] = row(rhs(crpn_01),3)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Substitute Expressions for s_x, s_y, s_z Into The Curl Equations
+Will take some work to get maxima to look like the slides
+
+They are correct mathematically but I will create equations
+that look like the slide formats below until I can simplify these properly
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_s_x:psubst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], amp_pml_x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_s_y:psubst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], amp_pml_y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_s_z:psubst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], amp_pml_z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_s_x:subst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], far_pml_x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_s_y:subst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], far_pml_y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_s_z:subst([s_x=s_x(x), s_y=s_y(y), s_z=s_z(z)], far_pml_z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Equations with s_x, s_y, and s_z Expressions Substituted For Variables
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+utep_fdtd_13_200:[ σ_x=(x^3*ε_0)/(2*L_x^3*dt),  σ_y = (y^3*ε_0)/(2*L_y^3*dt), σ_z=(z^3*ε_0)/(2*L_z^3*dt),s_x = 1 + (σ_x/(%i*ω*ε_0)) , s_y = 1 + (σ_y/(%i*ω*ε_0)), s_z=1 + (σ_z/(%i*ω*ε_0)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Turning off simplfication to get the desired presentation format
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maxwell's Equations In  Frequency Domain  With PML
+Manual Entry To Match The Slides For Pedagogical Purposes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_x_sub: %i*ω * radcan(1/rhs(utep_fdtd_13_200[1]))  .  rhs(utep_fdtd_13_200[2]) . rhs(utep_fdtd_13_200[1]) * transpose(H(ω))  = -(c_0/μ_xx) *( 'diff(En_z(ω),y) - 'diff(En_y(ω), z) ) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_y_sub: %i*ω * rhs(utep_fdtd_13_200[1])  . radcan(1/rhs(utep_fdtd_13_200[2])) . rhs(utep_fdtd_13_200[1]) * transpose(H(ω))  = -(c_0/μ_xx) *( 'diff(En_x(ω),z) - 'diff(En_z(ω), x) )  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_y_sub: %i*ω * rhs(utep_fdtd_13_200[1])  * rhs(utep_fdtd_13_200[2]) * radcan(1/rhs(utep_fdtd_13_200[1])) * transpose(H(ω))  = -(c_0/μ_xx) *( 'diff(En_y(ω),x) - 'diff(En_x(ω),y) )  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_x_sub:%i*ω * radcan(1/rhs(utep_fdtd_13_200[1]))  .  rhs(utep_fdtd_13_200[2]) . rhs(utep_fdtd_13_200[1]) * transpose(Dn(ω))  =  c_0 *( 'diff(H_y(ω),x) - 'diff(H_x(ω), y) )  - (σ_xx/ε_0) * En_x(ω) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_y_sub:%i*ω * rhs(utep_fdtd_13_200[1])  . radcan(1/rhs(utep_fdtd_13_200[2])) . rhs(utep_fdtd_13_200[1]) * transpose(Dn(ω))  =  c_0 *( 'diff(H_x(ω),z) - 'diff(H_z(ω), x) )  - (σ_yy/ε_0) * En_y(ω) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_y_sub:%i*ω * rhs(utep_fdtd_13_200[1])  . rhs(utep_fdtd_13_200[2]) .radcan(1/ rhs(utep_fdtd_13_200[1])) * transpose(Dn(ω))  =  c_0 *( 'diff(H_y(ω),x) - 'diff(H_x(ω), y) )  - (σ_zz/ε_0) * En_z(ω) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_diag_pml;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_diag_pml_x:row(lhs(crel_diag_pml),1)[1][1]  = part(row(part(rhs(crel_diag_pml),1),1),1)[1] * row(part(rhs(crel_diag_pml),2),1)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_diag_pml_x:row(lhs(crel_diag_pml),2)[1][1]  = part(row(part(rhs(crel_diag_pml),1),2),1)[2] * row(part(rhs(crel_diag_pml),2),2)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_diag_pml_x:row(lhs(crel_diag_pml),3)[1][1]  = part(row(part(rhs(crel_diag_pml),1),3),1)[3] * row(part(rhs(crel_diag_pml),2),3)[1][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+WARNING! PML DOES NOT HANDLE NUMERICAL BOUNDARY CONDITIONS!!!
+
+Lecture 14 Starts Here
+
+1. Conversion Of Equations From Frequency To Time Domain
+2. Numerical Approximations 
+3. Derivation Of Update Equations
+4. Summary Of All Update Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Conversion To Time Domain
+
+Assume No Loss Due To Devices - Only In PML
+
+Inverse Fourier Transform Required
+
+Common Fourier Transforms
+
+F{g(t)} = G(ω)
+F{a*g(t)} = a*G(ω)
+        a
+    d
+F{----- g(t) } = (j*ω)^a * G(ω)
+     a  
+  dt
+     t                      1
+F{∫ (g(τ) dτ } = ----- * G(ω)
+   -∞                    j*ω
+
+NOTE: simp is currently false
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+s01:[s_x=1 + σ_x/(%i*ω*ε_0),s_y=1 + σ_y/(%i*ω*ε_0)  , s_z=1 + σ_z/(%i*ω*ε_0)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_01:%i*ω*(1/rhs(s01[1])) * (rhs(s01[2])) * (rhs(s01[3]) )* row(transpose(H(ω)) ,1)[1][1] = (c_0/μ_xx) *second(rhs(far_x_sub));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+C_x_E(ω) = second(rhs(far_x_sub)); 
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Switch To Unevaluated s_x, s_y, s_z
+Move 1/s_x to the rhs of the equation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_02:up_01 * rhs(s01[1]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Manually forcing the substitutions for now to get the correct presentation
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_03:part(lhs(up_01),1) * part(lhs(up_01),2) * part(lhs(up_01),4) * part(lhs(up_01),5)  * part(lhs(up_01),6)  = rhs(up_01) * rhs(s01[1]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_04: %i*ω*H_x(ω) + ((σ_y + σ_z)/ε_0) *H_x(ω) + (1/(%i*ω)) * ((σ_y*σ_z)/ε_0^2) *H_x(ω) = -(c_0/μ_xx) * C_x_E(ω) - (1/(%i*ω)) * ((c_0*σ_x)/(ε_0*μ_xx)) * C_x_E(ω);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Inverse Fourier Transform The Frequency Domain Equations To Get Time Domain Equations
+This procedure and the format of the equations are identical (except for x,y,z) in all 6 eqns
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_05:subst([%i*ω*H_x(ω)='diff(H_x(t),t)], up_04);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_06:subst([ ((σ_y + σ_z)/ε_0) *H_x(ω)= ((σ_y + σ_z)/ε_0) *H_x(t) ] , up_05);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_07:subst([(1/(%i*ω)) * ((σ_y*σ_z)/ε_0^2) *H_x(ω) =integrate( ((σ_y*σ_z)/ε_0^2) *H_x(τ),τ)], up_06 );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_08:subst([ -(c_0/μ_xx)*C_x_E(ω)=-(c_0/μ_xx)*C_x_E(t)], up_07 );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_09:subst([(1/(%i*ω)) * ((c_0*σ_x)/(ε_0*μ_xx)) * C_x_E(ω)='integrate( ((c_0*σ_x)/(ε_0*μ_xx))*C_x_E(τ),τ) ], up_08 ) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use up_09 as the template for all faraday equations
+Use the same procedure on ampere's law equations
+Use the same procedure for the constitutive relations
+
+Just summarizing the resulting time domain equations for now 
+Will derive properly using maxima properly later
+He expands C_x_E out but it is left unexpanded here, same for C_y_E,C_z_E
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_x_td:up_09;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_y_td:'diff(H_y(t),t)+((σ_x+σ_z)/ε_0)*H_y(t)+'integrate(((σ_x*σ_z)/ε_0^2)*H_y(τ),τ)=(-c_0/μ_yy)*C_y_E(t)-'integrate(((c_0*σ_y)/(ε_0*μ_yy))*C_y_E(τ),τ);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+far_z_td:'diff(H_z(t),t)+((σ_x+σ_y)/ε_0)*H_z(t)+'integrate(((σ_x*σ_y)/ε_0^2)*H_z(τ),τ)=(-c_0/μ_zz)*C_z_E(t)-'integrate(((c_0*σ_z)/(ε_0*μ_zz))*C_z_E(τ),τ);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Transform Ampere's Law Frequency Domain Eqns To Time Domain
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_x_td:'diff(D_x(t),t)+((σ_y+σ_z)/ε_0)*D_x(t)+'integrate(((σ_y*σ_z)/ε_0^2)*D_x(τ),τ)=c_0*C_x_H(t)-'integrate(((c_0*σ_x)/ε_0)*C_x_H(τ) ,τ)
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_y_td:'diff(D_y(t),t)+((σ_x+σ_z)/ε_0)*D_y(t)+'integrate(((σ_x*σ_z)/ε_0^2)*D_y(τ),τ)=c_0*C_y_H(t)-'integrate(((c_0*σ_y)/ε_0)*C_y_H(τ) ,τ);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+amp_z_td:'diff(D_z(t),t)+((σ_x+σ_y)/ε_0)*D_z(t)+'integrate(((σ_x*σ_y)/ε_0^2)*D_z(τ),τ)=c_0*C_z_H(t)-'integrate(((c_0*σ_z)/ε_0)*C_z_H(τ) ,τ);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Time Domain Constitutive Relations For D and E
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_x_td: Dn_x(t) = ε_xx*En_x(t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_y_td: Dn_y(t) = ε_yy*En_y(t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+crel_y_td: Dn_y(t) = ε_yy*En_y(t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD Numerical Approximations
+
+Integrals       ⟶ Sums
+Derivatives   ⟶ Differences
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_x_p1:['diff(H_x(t) ,t) , (H_x[i,j,k,t+dt/2] - H_x[i,j,k,t-dt/2]) / dt ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Need an H_x value that exists at the integer time step - average the 2 values available
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_x_p2:[ ((σ_y + σ_z)/ε_0) *H_x(t) , ((σ_y[i,j,k] + σ_z[i,j,k])/ε_0) *((H_x[i,j,k,t+dt/2] + H_x[i,j,k,t-dt/2] )/2)] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The time step in fd_far_x_p3 goes dt/2 too far or not far enough
+Need to integrate up to time t, not t+dt/2 or t-dt/2
+Pull one term out of the summation, sum goes only to t-dt/2
+Final time step is multipled by dt/2 
+Final time step must be averaged to exist at an integer time step
+Upper summation limit is t-dt/2 ⟶  update summation before updating the H field!
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_x_p3:['integrate(((σ_y*σ_z)/ε_0^2) * H_x(τ),τ), ((σ_y*σ_z)/ε_0^2) *  'integrate(H_x(τ),τ) , ((σ_y*σ_z)/ε_0^2) * sum(H_x[i,j,k,T] *dt, T, dt/2, t+dt/2), ((σ_y*σ_z)/ε_0^2) * (H_x[i,j,k,t+dt/2] * dt/2) + sum(H_x[i,j,k,T] , T, dt/2, t-dt/2) , ((σ_y*σ_z)/ε_0^2)*( ((H_x[i,j,k,t+dt/2] + H_x[i,j,k,t-dt/2] )/2) * (dt/2) + sum(H_x[i,j,k,T] * dt, T, dt/2, t-dt/2) )  , ((σ_y*σ_z*dt)/ε_0^2)* ( ((H_x[i,j,k,t+dt/2] + H_x[i,j,k,t-dt/2] )/4)  + sum(H_x[i,j,k,T] , T, dt/2, t-dt/2) ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_x_p4:[-(c_0/μ_xx) * C_x_E(t) , -(c_0/μ_xx[i,j,k]) * C_x_E[i,j,k,t] , C_x_E[i,j,k,t]=((En_z[i,j+1,k,t] - En_z[i,j,k,t]) / dy) - ((En_y[i,j,k+1,t] - E_y[i,j,k,t])/dz)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Term 5 - C_x_E exists at the integer time step, upper limit of t is valid
+End time on this summation means that we update the summation before
+updating the E field
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_x_p5:[ -'integrate(  ((c_0*σ_x)/(ε_0*μ_xx)) * C_x_E(τ) ,τ,minf,inf) ,   ((c_0*σ_x)/(ε_0*μ_xx)) * 'integrate(C_x_E(τ),τ), ((c_0 * σ_x[i,j,k])/(ε_0 * μ_xx[i,j,k])) * sum(C_x_E[i,j,k,T]*dt, T,0,t)  , ((c_0*σ_x)/(ε_0*μ_xx)) * 'integrate(C_x_E(τ),τ), ((c_0 * dt*σ_x[i,j,k])/(ε_0 * μ_xx[i,j,k])) * sum(C_x_E[i,j,k,T], T,0,t) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_x: fd_far_x_p1[2] + fd_far_x_p2[2] + fd_far_x_p3[2] = fd_far_x_p4[2] +  fd_far_x_p5[5];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Build the other 5 equations by inspection and parameter and index substitution
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_y:(H_y[i,j,k,t+dt/2]-H_y[i,j,k,t-dt/2])/dt +
+    ((σ_x[i,j,k]+σ_z[i,j,k])/ε_0)*((H_y[i,j,k,t+dt/2]+H_y[i,j,k,t-dt/2])/2)  +
+    ((σ_x*σ_z)/ε_0^2)*'integrate(H_y(τ),τ)   
+= (-c_0/μ_yy[i,j,k])*C_y_E[i,j,k,t]+
+    ((c_0*dt*σ_y[i,j,k])/(ε_0*μ_yy[i,j,k])) *'sum(C_y_E[i,j,k,T],T,0,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_far_z:(H_z[i,j,k,t+dt/2]-H_z[i,j,k,t-dt/2])/dt +
+    ((σ_y[i,j,k]+σ_x[i,j,k])/ε_0)*((H_z[i,j,k,t+dt/2]+H_z[i,j,k,t-dt/2])/2)  +
+    ((σ_y*σ_x)/ε_0^2)*'integrate(H_z(τ),τ)   
+= (-c_0/μ_zzy[i,j,k])*C_z_E[i,j,k,t]+
+    ((c_0*dt*σ_z[i,j,k])/(ε_0*μ_zz[i,j,k])) *'sum(C_z_E[i,j,k,T],T,0,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Add the rest Ampere's law with PML here
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fd_amp_x:(Dn_x[i,j,k,t+dt]-Dn_z[i,j,k,t])/dt +
+    ((σ_y[i,j,k]+σ_x[i,j,k])/ε_0)*((H_z[i,j,k,t+dt/2]+H_z[i,j,k,t-dt/2])/2)  +
+    ((σ_y*σ_x)/ε_0^2)*'integrate(H_z(τ),τ)   
+= (-c_0/μ_zzy[i,j,k])*C_z_E[i,j,k,t]+
+    ((c_0*dt*σ_z[i,j,k])/(ε_0*μ_zz[i,j,k])) *'sum(C_z_E[i,j,k,T],T,0,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Derive The Update Equations
+Maxima does a lot of work for us here:
+    Expand the equation by multiplying all terms out.
+    Collect Common Terms
+    Solve for H_x at the t+dt/2 time step
+
+    
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(fd_far_x, H_x[i,j,k,t+dt/2]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Compact Form of the Update Equation
+
+Use variables to hold larger expressions to declutter the math and the code
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Final Form Of The Update Equations
+
+Update coefficients are computed before the main  FDTD loop
+The integration terms are computed inside the main loop before the update equation
+The update equation is computed inside the main FDTD loop immediately after 
+the integration terms are updated
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhx0:m_Hx0[i,j,k] = (1/dt) + ( (σ_y_H[i,j,k] + σ_z_H[i,j,k] ) /(2*ε_0)) + ((σ_y_H[i,j,k]  * σ_z_H[i,j,k] * dt) / (4*ε_0^2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhx1:m_Hx1[i,j,k] = (1/ mHx0[i,j,k]) * ( (1/dt) - (( σ_y_H[i,j,k] + σ_z_H[i,j,k] ) / (2*ε_0)) - ((σ_y_H[i,j,k] * σ_z_H[i,j,k] * dt )  / (4*ε_0^2)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhx2:m_Hx2[i,j,k] = -(1/m_Hx0[i,j,k]) * (c_0/μ_xx[i,j,k]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhx3:m_Hx3[i,j,k] = -(1/m_Hx0) * ((c_0 * dt * σ_x_H[i,j,k] )/ (ε_0*μ_xx[i,j,k]) )  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhx4:m_Hx4 = -(1/m_Hx0[i,j,k]) * (dt/ε_0^2)  * σ_y_H[i,j,k] * σ_z_H[i,j,k] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+icex: I_CEx[i,j,k,t] = sum(C_x_E[i,j,k,T], T,0,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ihx:I_Hx[i,j,k,t-dt/2] = sum( H_x[i,j,k,T],T,dt/2,t-dt/2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cex:C_x_E[i,j,k,t] = ((En_z[i,j+1,k,t]  - En_z[i,j,k,t]) /dy ) -  ((En_y[i,j+1,k,t]  - En_y[i,j,k,t]) / dz ) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+uphxcom:H_x[i,j,k,t+dt/2]  =m_Hx1[i,j,k] * H_x[i,j,k,t-dt/2]  + m_Hx2[i,j,k] * C_x_E[i,j,k,t] + m_Hx3[i,j,k]  * I_CEx[i,j,k,t] + m_Hx4[i,j,k]*I_Hx[i,j,k,t];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+To get the full equation substitute the rhs of the above expressions back into uphxcom
+e.g. subst(m_Hx1[i,j,k]=rhs(mhx1)], uphxcom)
+The placeholder variable names can be simplifed 
+There are ways to make maxima perform the substitutions more automatically if desired
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ subst([m_Hx1[i,j,k]=rhs(mhx1)], uphxcom);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Testing The FDTD Equations With PML 
+Set all PML parameters (conductivity) to zero
+Equations should reduce to the the update equations without PML from lectures 11,12,13
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_hx_cor_01:psubst([m_Hx1[i,j,k]=m_Hx1_No_Pml, m_Hx2[i,j,k]=m_Hx2_No_Pml, m_Hx3[i,j,k] =m_Hx3_No_Pml, m_Hx4[i,j,k]=m_Hx4_No_Pml ] , uphxcom);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_hx_cor_02:subst([C_x_E[i,j,k,t]=rhs(cex)] , up_hx_cor_01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+up_hx_cor_03:radcan(subst( ((En_y[i,j+1,k,t]  - En_y[i,j,k,t]) / dz)=0, up_hx_cor_02));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This is mathematically correct but...
+TODO: Need to get this separated into 2 fractions again
+TODO: Update Equation Derivation For Hy, Hz, Dx, Dy, Dz,ex,Ey,Ez
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Lecture 15 - Implementation Of 2D FDTD
+
+Code Development Sequence
+
+1. Basic Update Equations + Dirichlet Boundary Conditions - No PML
+2. Add Soft Source - Basic Update + Periodic Boundary Conditions
+3. Add Uniaxial (Later Stretched Coordinate) PML
+4. Add Total Field/Scattered Field Pulse Source - PML Top and Bottom
+5. Calculate Response Of System To Source - No Devices (Transmission & Reflection)
+6. Add Device and Benchmark the System
+
+Will copy expressions from above, but not depend on anything above.
+Re-organizing to make the Lecture 15 development more readable
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);load(vect);load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[E_x, E_y, E_z]; H:[H_x,H_y, H_z];En:[En_x, En_y, En_z]; H:[D_x,D_y, D_z]; B:[B_x,B_y, B_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Modular Curl Equations - Boundary Conditions Isolated Here
+Also isolating each finite difference equation to a separate expression
+These will be substituted in later as needed
+Will try out different versions of these expressions and use the most efficient one.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dezy: ((En_z[i,j+1,k,t] - En_z[i,j,k,t] )/ dy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dezx:((En_z[i+1,j,k,t] - En_z[i,j,k,t] )/ dx);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deyz:((En_y[i,j, k+1,t] - En_y[i,j,k,t]) / dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deyx:((En_y[i+1,j,k,t] - En_y[i,j,k,t] )/ dx);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dexz:((En_x[i,j,k+1,t] - En_x[i,j,k,t] )/ dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dexy:((En_x[i,j +1,k,t] - En_x[i,j,k,t]) / dy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Curl Equation ∇ x E_n
+Special boundary conditions required at high grid edges 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cxe:dezy - deyz;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cye:dexz - dezx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cze:deyx - dexy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dhzy: ((H_z[i,j,k,t] - H_z[i,j-1,k,t] )/ dy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dhzx:((H_z[i,j,jk,t] - H_z[i-1,j,k,t] )/ dx);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dhyz:((H_y[i,jk,t] - H_y[i,j,k-1,t]) / dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dhyx:((H_y[i,jk,t] - H_y[i-1,j,k,t] )/ dx);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dhxz:((H_x[i,j,k,t] - H_x[i,j,k-1,t] )/ dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dhxy:((H_x[i,j,k,t] - En_x[i,j-1,k,t]) / dy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Curl Equation ∇ x H
+Special boundary conditions required at low grid edges
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cxh:dhzy-dhyz;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cyh:dhxz-dhzx;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+czh:dhyx-dhxy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The E field calculation must reach to the high side (j+1 or k+1) which is unknown  
+
+NOTE: Using Periodic Boundary Condtions
+           For Direchlet replace all outside cell values with zero
+
+ii = interior cell, both j and k are  < N_z (GRID_SIZE) and > 1
+hi = high edge cell on y axis, j = N_y and k < N_z and k > 1
+ih = high edge cell on z axis, k = N_z and j < N_y and j > 1
+hh = high edge cell on y and z axes, k = N_z and j = N_y
+
+The same variables must be declared for the other Modular Curl Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dezy_ii: dezy; dezy_hi :((En_z[i,1,k,t] - En_z[i,N_y,k,t])/dy);dezy_ih:((En_z[i,j+1,N_z,t]-En_z[i,j,N_z,t])/dy);dezy_hh:((En_z[i,1,N_z,t] -En_z[i,N_y,N_z,t])/dy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deyz_ii: deyz; deyz_hi :((En_y[i,N_y,k+1,t] - En_y[i,N_y,k,t])/dz); deyz_ih:((En_y[i,j,1,t]-En_y[i,j,N_z,t])/dz);dezy_hh:((En_y[i,N_y,1,t] -En_y[i,N_y,N_z,t])/dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cxe_ii:dezy_ii - deyz_ii;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cxe_hi:dezy_hi - deyz_hi;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cxe_ih:dezy_ih - deyz_ih;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cxe_hh:dezy_hh - deyz_hh;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Matlab/Octave Code Steps
+NOTE: Maxima uses square brackets for matrices!
+
+% Naive 3D Update Equation for CEx (C_x_E or cxe_?? here)
+for nx = 1 : N_x
+    for ny = 1 : N_y
+        for nz = 1 : N_z
+            CEx(nx,ny,nz) = Ez(nx,ny+1,nz) - Ez(nx,ny,nz)/dy - 
+                                      Ey(nx,ny,nz+1) - Ey(nx,ny,nz)) / dz
+        end
+    end
+end
+
+Two problems occur, at the y-high and z-high sides of the grid
+Copy the code inside the nz loop and paste it after the nz loop
+Change high index of nz loo to N_y - 1
+
+% code fixes problem on z-high side but not y-high side
+for nx = 1 : N_x
+    for ny = 1 : N_y
+        for nz = 1 : N_z-1
+            CEx(nx,ny,nz) = Ez(nx,ny+1,nz) - Ez(nx,ny,nz)/dy - 
+                                      Ey(nx,ny,nz+1) - Ey(nx,ny,nz)) / dz
+        end
+            % replace nz+1 with 1 for periodic bc, or 0 for dirichlet
+            CEx(nx,ny,nz) = Ez(nx,ny+1,nz) - Ez(nx,ny,nz)/dy - 
+                                      Ey(nx,ny,1) - Ey(nx,ny,nz)) / dz
+    end
+end
+
+Still have a problem at the y-high side
+Copy the code from inside the ny loop and paste it after the ny loop
+Change high index of ny loop to N_y-1
+Replace ny+1 with 1 for periodic, 0 for dirichlet
+
+% code fixes problem on z-high side but not y-high side
+for nx = 1 : N_x
+    for ny = 1 : N_y
+        for nz = 1 : N_z-1
+            CEx(nx,ny,nz) = Ez(nx,ny+1,nz) - Ez(nx,ny,nz)/dy - 
+                                      Ey(nx,ny,nz+1) - Ey(nx,ny,nz)) / dz
+        end
+        % replace nz+1 with 1 for periodic bc, or 0 for dirichlet
+        CEx(nx,ny,nz) = Ez(nx,ny+1,nz) - Ez(nx,ny,nz)/dy - 
+                                  Ey(nx,ny,1) - Ey(nx,ny,nz)) / dz
+    end
+    % replace ny+1 with 1 for periodic bc, or 0 for dirichlet
+    CEx(nx,ny,nz) = Ez(nx,1,nz) - Ez(nx,ny,nz)/dy - 
+                               Ey(nx,ny,1) - Ey(nx,ny,nz)) / dz
+
+end
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+_____________________________________________________________________
+
+Reduction To Two Dimensions - Uniform slab in Z and X directions
+
+Still modelling a 3D device 3rd dimension infinitely extruded
+Restrict propagation to the x-y plane - nothing changes in z direction
+∂/∂z = 0
+
+Do not need a PML to terminate the Z axis
+
+σ_z(z) = 0, s_z(z) = 1 where σ is conductivity (for loss),s is a scattering parameter
+
+Update equations simplify due to the absence of the Z axis PML
+The update equations are calculated before the main loop
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhx0:m_Hx0[i,j] = (1/dt) + ( (σ_y_H[i,j] + σ_z_H[i,j] ) /(2*ε_0)) + ((σ_y_H[i,j]  * σ_z_H[i,j] * dt) / (4*ε_0^2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdc_m_Hx0:psubst([σ_z_H[i,j]=0] , mhx0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhx1:m_Hx1[i,j] = (1/ mHx0[i,j]) * ( (1/dt) - (( σ_y_H[i,j] + σ_z_H[i,j] ) / (2*ε_0)) - ((σ_y_H[i,j] * σ_z_H[i,j] * dt )  / (4*ε_0^2)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdc_m_Hx1:psubst([σ_z_H[i,j]=0] , mhx1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhx2:m_Hx2[i,j] = -(1/m_Hx0[i,j]) * (c_0/μ_xx[i,j]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdc_m_Hx2:psubst([σ_z_H[i,j]=0] , mhx2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhx3:m_Hx3[i,j] = -(1/m_Hx0) * ((c_0 * dt * σ_x_H[i,j] )/ (ε_0*μ_xx[i,j]) )  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdc_m_Hx3:psubst([σ_z_H[i,j]=0] , mhx3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+collapse(rdc_m_Hx3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhx4:m_Hx4 = -(1/m_Hx0[i,j]) * (dt/ε_0^2)  * σ_y_H[i,j] * σ_z_H[i,j] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdc_m_Hx4:psubst([σ_z_H[i,j]=0] , mhx4);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Add a step here that uses all reduced update coefficients 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+The integration terms are calculated inside the main loop, before the update equation
+Integration term for Hx has been eliminated by σ_z=0
+The 2nd difference in C_x_E (dz) has been eliminated too.
+
+Equations below are for explanatory text
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(I_CEx, C_x_E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+I_CEx[i,j,t] = sum(C_x_E[i,j,T],T,0,t); C_xE[i,j,t]= ((En_z[i,j+1,t] - En_z[i,j,t])/dy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Update equation calculated inside the main loop after updating the integration terms 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H_x[i,j,k,t+dt/2] = (rdc_m_Hx1) * H_x[i,j,k,t-dt/2]  + (rdc_m_Hx2)*C_xE[i,j,k,t] + rdc_m_Hx3*I_CEx[i,j,k,t] + rdc_m_Hx4*I_Hx[i,j,k,t];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Revised Update Equations After Cancelling All Zero Terms
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Update Coeffficents - Some Expressions Have Been Manually Altered
+Fix Them Above To Use Maxima-Defined Reduced Coefficients 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdc_m_Hx0;rdc_m_Hx1; rdc_m_Hx3 ; rdc_m_Hx4;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Integration terms are calculated inside the main loop before update equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdc_int_cex:I_CEx[i,j,t] = sum(C_x_E[i,j,T],T,0,t); rdc_cex:C_xE[i,j,t]= ((En_z[i,j+1,t] - En_z[i,j,t])/dy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Update equation is calculated inside main loop after updating the integration terms 
+TODO: REMOVE K FROM UPDATE COEFFICIENTS!
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H_x[i,j,t+dt/2] = rdc_m_Hx1 * H_x[i,j,t-dt/2]  + rdc_m_Hx2*rhs(rdc_cex) + rdc_m_Hx3*rhs(rdc_int_cex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Analytic Expressions of σ_x and σ_y
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+σ_x(x) = (ε_0/(2*dt)) * (x/L_x)^3;σ_y(y) = (ε_0/(2*dt)) * (y/L_y)^3;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+MATLAB/Octave Code To Calculate PML Parameters
+
+TODO: CONVERT THIS TO 'NUMERIC' MAXIMA CODE
+USE GENTRAN TO CONVERT ANALYTIC MAXIMA TO C 
+MODIFY GENTRAN TO GENERATE MAXIMA/OCTAVE CODE
+
+Calculate σ_x and σ_y on the 2x grid
+
+NPML contains the size of the PML on the 1x grid
+
+% Compute The PML Parameters
+N_x2 = 2 * N_x;
+N_y2 = 2 * N_y;
+
+sigx = zeros(N_x2, N_y2);
+
+for nx= 1 : 2 * NPML(1)
+    nx1 = 2 * NMPL(1) - nx + 1;
+    sigx(nx1,:)= (0.5 * e0 / dt) + (nx/2/NPML(1))^3;
+end
+
+for nx= 1 : 2 * NPML(2)
+    nx1 = N_x2 - 2*NPML(2) + nx;
+    sigx(nx1,:)= (0.5 * e0 / dt) + (nx/2/NPML(1))^3;
+end
+
+sigy = zeros(N_x2, N_y2);
+
+for ny= 1 : 2 * NPML(3)
+    nx1 = 2 * NMPL(3) - ny + 1;
+    sigy(ny1,:)= (0.5 * e0 / dt) + (ny/2/NPML(3))^3;
+end
+
+for ny= 1 : 2 * NPML(4)
+    ny1 = N_y2 - 2*NPML(4) + ny;
+    sigy(ny1,:)= (0.5 * e0 / dt) + (ny/2/NPML(4))^3;
+end
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+MATLAB/Octave Code To Calculate Update Coefficients
+
+Overlay the PML functions onto the 1x gird to calculate the update coefficients containing PML terms
+
+% COMPUTE UPDATE COEFFCIENTS
+sigHx = sigx(1:2:N_x2, 2:2:N_y2);
+sigHy = sigy(1:2:N_x2, 2:2:N_y2);
+
+mHx0 = (1/dt) * sigHy/(2*e0);
+mHx1 = ((1/dt) - sigHy/(2*e0)) ./ mHx0;
+mHx2 = -c0 ./ URxx ./ mHx0;
+mHx3 = - (c0*dt/e0) * sigHx ./ URxx ./ mHx0;
+
+sigHx = sigx(2:2:N_x2, 1:2:N_y2);
+sigHy = sigy(2:2:N_x2, 1:2:N_y2);
+
+mHy0 = (1/dt) * sigHx/(2*e0);
+mHy1 = ((1/dt) - sigHx/(2*e0)) ./ mHy0;
+mHy2 = -c0 ./ URyy ./ mHy0;
+mHy3 = - (c0*dt/e0) * sigHy ./ URyy ./ mHy0;
+
+sigDx = sigx(1:2:N_x2, 2:2:N_y2);
+sigDy = sigy(1:2:N_x2, 2:2:N_y2);
+
+mDz0 = (1/dt) + (sigDx + sigDy) / (2*e0) + sigDx .* sigDy * (dt/4/e0^2);
+mDz1 = (1/dt) - (sigDx  + sigDy) / (2*e0) - sigDx .* sigDy  * (dt/4/e0^2);
+mDz2 = c0 ./ mDz0;
+mDz3 = - (dt/e0^2) * sigDx .* sigDy  ./ mDz0;
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Implementation of the E_z Mode
+
+Define Device Parameters
+Define FDTD Parameters (Grid, Time resolution)
+Compute Grid Parameters
+Build Device On Grid
+Compute Time Step
+Compute Source
+Compute PML Parameters
+Compute Update Coefficients
+    mHx1, mHx2, mHx3
+    mHy1, mHy2, mHy3
+    mDz1, mDz2, mDz4
+    mEz1
+
+Initialize Fields
+    Hx, Hy, Dz, Ez
+
+Initialize Curl Arrays
+    CEx, CEy, CHz
+
+Initialize Integration Arrays
+    ICEx, ICEy, IDz
+
+Enter Main Time Loop (T)
+
+Do Repeat 
+    Compute Curl of E (CEx, CEy)
+    Update H Integrations
+        I_CEx = I_CEx + C_Ex
+        I_CEy = I_CEy + C_Ey
+
+    Update H Field
+        Hx = mHx1 .* Hx + mHx2 .* C_Ex + mHx3 .* I_CEx;
+        Hy = mHy1 .* Hy + mHy2 .* C_Ey + mHy3 .* I_CEy;
+
+    Compute Curl of H (C_Hz)
+    Update D Integrations 
+        I_Dz = I_Dz + Dz
+
+    Update Dz
+        Dz = mDz1 .* Dz + mDz2 .* C_Hz + mDz4 .* I_Dz;
+    
+    Inject Source
+        Dz(nxs,nys) = Dz(nxs,nys) + g(T);
+
+    Update Ez
+        Ez = mEz1 .*  Dz;
+
+    Visualize Fields
+Until T = MAX_TIME_STEPS
+    
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Implementation Of The Hz Mode
+
+Define Device Parameters
+Define FDTD Parameters (Grid, Time resolution)
+Compute Grid Parameters
+Build Device On Grid
+Compute Time Step
+Compute Source
+Compute PML Parameters
+Compute Update Coefficients
+    mHz1, mHz2, mHz3, mHz4 (mHz3 goes to zero)
+    mDx1, mDx2, mDx3
+    mDy1, mDy2, mDy3
+    mEx1, mEy1
+
+Initialize Fields
+    Hx, Dx, Dy, Ex, Ey
+
+Initialize Curl Arrays
+    CEx, CEy, CHz
+
+Initialize Integration Arrays
+    ICHx, ICHy, IHz
+
+Enter Main Time Loop (T)
+
+Do Repeat 
+    Compute Curl of E (CEz)
+    Update H Integrations
+        I_Hz = I_Hz + Hz
+
+    Update H Field
+        Hz = mHz1 .* Hz + mHz2 .* C_Ez + mHx4 .* I_Hz;
+    
+    Inject Source
+        Hz(nxs,nys) = Hz(nxs,nys) + g(T);
+
+    Compute Curl of H (C_Hx,C_Hy)
+
+    Update D Integrations 
+        I_CHx = I_CHx + C+Hx;
+        I_CHx = I_CHy + C+Hy;
+
+    Update D Field
+        Dx = mDx1 .* Dx + mDy2 .* C_Hx + mDx3 .* I_CHx;
+        Dy = mDy1 .* Dy + mDy2 .* C_Hy + mDx3 .* I_CHxy
+    
+    Update E Field
+        Ex = mEx1 .*  Dx;
+        Ey = mEy1 .*  Dy;
+
+    Visualize Fields
+Until T = MAX_TIME_STEPS
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Total Field/Scattered Field Plane Wave Source
+
+TF/SF is a one-way source
+Place it just inside the PML
+Place it at least 1 λ from the device
+Beware of evanescent waves impinging on the PML
+Evanescent waves will cause the PML to pulll power out of the grid
+TF/SF can be close to the device, but not cut through it
+Plane waves only exist in homogenous isotropic materials
+PML can completely surround the grid
+The TF/SF should be at least 2 cells away from the PML
+
+Must modify the update equations on either side of the TF/SF source
+Subtract src from equations on the scattered field that reach across 
+to the total field side of the source
+Add src to equations on the total field side that reach across 
+to the scattered field side of the source
+On SF side the source only affects the curl of E used in the H field update equation
+on TF side the source only affects the curl of H used in the D field update equation
+
+TODO: GET MAXIMA TO DO THE SEPARTION OF TERMS HERE
+
+Ez[i,j_src,t] is a total field value but cxe_sf is an equation on the scattered field side
+Subtract the source from Ez[i,j_src,t] to make it look like a scattered-field quantity
+
+Turning off maxima's simplification to get better presentation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cxe_sf_01: C_x_E[i,j_src-1,t] =  (En_z[i,j_src,t] - En_z[i,j_src-1,t])/dy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cxe_sf_02: C_x_E[i,j_src-1,t] =  ( (En_z[i,j_src,t] - (En_z_src[i,j_src,t]) - En_z[i,j_src-1,t])/dy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This can be separated into the original Ex update eqn and a correction term
+This correction can be applied after calculating the curl to inject the source
+Into the grid properly.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cxe_sf:C_x_E[i,j_src-1,t] =  (En_z[i,j_src,t] - En_z[i,j_src-1,t])/dy - (1/dy) * E_z_src[i,j_src,t];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This term is on the total field side but needs a term from the scattered field side
+Must add the source term to it to make it look like a total field value
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+czh_tf_01:C_z_H[i,j_src, t+dt/2] =( (H_y[i,j_src,t+dt/2] - H_y[i-1,j_src,t+dt/2])/dx) - ((H_x[i,j_src,t+dt/2] - H_x[i,j_src-1,t+dt/2]) /dy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Add the source to the term H_x[i,j_src-1,t+dt/2] to make it look like a TF value
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+czh_tf_02:C_z_H[i,j_src, t+dt/2] =( (H_y[i,j_src,t+dt/2] - H_y[i-1,j_src,t+dt/2])/dx) - ((H_x[i,j_src,t+dt/2] - ( H_x[i,j_src-1,t+dt/2] + H_x_src[i,j_src-1,t+dt/2] )  ) /dy);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Separate the original Hx /dx update expression from the source correction term
+Calculate curl without source then use a 1D loop to apply the source to the TF/SF
+interface
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simpC_z_H[i,j_src, t+dt/2] =( (H_y[i,j_src,t+dt/2] - H_y[i-1,j_src,t+dt/2])/dx) - ((H_x[i,j_src,t+dt/2] - H_x[i,j_src-1,t+dt/2]) /dy) - (1/dy) * H_x_src[i,j_src-1,t+dt/2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ 
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Calculate the two source terms H_x_src[i,j+src-1,t+dt/2] and E_z_src[i,j_src,t+dt/2]
+
+1. The amplitude of the two functions can be different because H ≠ E due to their 
+relationship via material impedence η
+
+2. The functions are 1/2 grid cell apart with a small time delay between them
+
+3. The functions exist at different time steps
+
+E_z_src[i, j-src,t] = g(t)
+
+H_x_src[i,j_src-1,t+dt/2] = -√ε_r/√μ_r * g(t + (n*dy)/(2*c_0) + (dt/2))
+
+√ε_r/√μ_r           ⟶ Amplitude due to Maxwell's Equations
+
+(n*dy)/(2*c_0)    ⟶  Delay through 1/2 of a grid cell
+
+dt/2 = Half Time-Step Difference
+
+NOTE: Add 2 steps to the Main FDTD Loop
+
+Do Repeat 
+    Compute Curl of E (CEx, CEy)
+
+    Inject TF/SF Source Into Curl Of E (NOTE THIS ADDED STEP)
+
+    Update H Integrations
+        I_CEx = I_CEx + C_Ex
+        I_CEy = I_CEy + C_Ey
+
+    Update H Field
+        Hx = mHx1 .* Hx + mHx2 .* C_Ex + mHx3 .* I_CEx;
+        Hy = mHy1 .* Hy + mHy2 .* C_Ey + mHy3 .* I_CEy;
+
+    Compute Curl of H (C_Hz)
+
+    Inject TF/SF Source Into Curl Of H (NOTE THIS ADDED STEP)
+
+    Update D Integrations 
+        I_Dz = I_Dz + Dz
+
+    Update Dz
+        Dz = mDz1 .* Dz + mDz2 .* C_Hz + mDz4 .* I_Dz;
+    
+    Inject Source
+        Dz(nxs,nys) = Dz(nxs,nys) + g(T);
+
+    Update Ez
+        Ez = mEz1 .*  Dz;
+
+    Visualize Fields
+Until T = MAX_TIME_STEPS
+
+
+   [wxMaxima: comment end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

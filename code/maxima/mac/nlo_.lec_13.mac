@@ -1,0 +1,54 @@
+/* Lecture 12 - Second Harmonic Generation
+
+Polarization In Different Forms */
+
+/* Vector Form */
+
+nlo_13_101:[P_vec=ε_0 * Χ__1*E + ε_0*Χ_2*E*E + ε_0*Χ_3*E*E*E + ε_0*Χ_N*E^N, P_vec=P_L+P_NL];
+
+/* Component Form */
+
+nlo_13_102:[P_i=ε_0 * Χ_ij_1*E_j + ε_0*Χ__ijk_2*E_j*E_k + ε_0*Χ__ijjkl_3*E_j*E_k*E_l];
+
+/* Scalar Form */
+
+nlo_13_103:[P_scalar=ε_0*Χ_1*E+ε_0*Χ_2*E_2+ε_0*Χ_3*E^3 + ε_0*Χ_N*E^N, P_scalar=P_L+P_NL];
+
+/* Linear Polarization  */
+
+nlo_13_104:[P_L_vect=ε_0*Χ_1*E_vec,P_i_comp=ε_0*Χ_ij_1*E_j,P_L_scalar=ε_0*Χ_1*E_scalar];
+
+/* Nonlinear Polarization 
+HOT == Higher Order Terms */
+
+nlo_13_105:[P_NL_vect=ε_0*Χ_2*E_vect*E_vect + ε_0*Χ_3*E_vect*E_vect*E_vect + ε_0*Χ_n*E_vect^n,P_NL_comp=ε_0*Χ_ijk_2*E_j*E_k + ε_0*Χ_ijkl_3*E_j*E_k*E_l + ε_0*Χi_4_ijklm*E_j*E_k*E_l*E_m + HOT,P_NL_scalar=ε_0*Χ_2*E^2+ε_0*Χ_3*E^3 + HOT + ε_0*Χ_n*E^n];
+
+/* Optical Susceptibilities and Their Dimensions
+TODO: USE MAXIMA'S DIMENSION PACKAGE
+ */
+
+nlo_13_106:[P=C/m^2, E=N/C ];
+
+/* Note how maxima already simplified the first element of the list
+
+Χ_1 is dimensionless so the dimensions of ε_0 will be: */
+
+nlo_13_107:[ε_0=(C/m^2)*(C/N), ε_0=C^2/(m^2*N)]
+;
+
+/* Second-Order and Third-Order Susceptibility
+NOTE: ABUSING abs() HERE, BRACKETS MEAN "Dimensions Of..."
+
+TODO: CREATE A DIMENSION PACKAGE OR USE unit or ezunit
+ */
+
+nlo_13_108:[P=ε_0*Χ_2*E^2,[Χ_2]=[P]/( [ε_0]*[E^2]), [Χ_2]=(C/m^2)/(C^2/(m^2*N))*(N^2/C^2),P_3=ε_0*Χ_3*E^3 ];
+
+nlo_13_109:[[Χ_3]=(C/N)*(C/N), [X_3]=[C^2]/[N^2],[Χ_3]=(m/V)^2];
+
+/* In General, [Χ_k]=(m/V)^(k-1) where k = 1,2,3...
+
+The Χ_2 Effect - Second Harmonic Generation */
+
+
+

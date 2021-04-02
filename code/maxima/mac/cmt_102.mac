@@ -1,0 +1,188 @@
+lemma_1242_A:P_v(z):=sum(P_vm(z), m, minf,inf);
+
+/* These lemmas and equations will not work yet
+My objective is to mimick the appearance of the textbook 
+Equations and variables will look similar to the textook
+Variable and function names will be simplified for maxima
+The sremove, ssubst, and other string functions will be used 
+Maxima strings, lists, macros wil be used to 'typeset' displayed 
+equations. Structs and Nested lists will be used to provide 
+useful latex strings accessed by the assoc function. The variable
+names and equation numbers will be used as keys into the tables 
+of latex strings.
+
+The latex produced by maxima/wxmaxima is often not quite 
+what I want and some of it is out of date according to
+the latest texlive and texstudio error messages.
+
+Delayed Evaluation Tricks will be required
+All lemmas will be changed to strings containing code for 
+maxima macros, functions and expressions. Substitution of 
+variables and values into these strings will produce functional
+unevaluated expressions. These will be parsed with parse_string or
+evaluated with eval_string to create working maxima code.
+
+Initial test values for w_p, w_s, etc will be given 
+Reference to 1 or 2 good sites on Manley-Rowe will be listed.
+Their content will be used to improve this code as well
+
+For some reason wxmaxima is now evaluating expressions
+Even expressions with ' are being evaluated without warning
+Tomorrow wxmaxima will go back to not evaluating them.
+Oh the mysteries of wxmaxima... */
+
+lemma_1242_A;
+
+lemma_1242_B:P_v(z):=abs(w_v)*sum(p_m*abs(a_vm(z))^2,m,minf,inf);
+
+lemma_1243:P_dz(z):='diff(sum(q_v*p_m*abs(a_vm(z))^2,m,minf,inf),z);
+
+lemma_1243_A:q_v='sign(w_v);
+
+lemma_1243_B:w_v=w+v*w_p;
+
+lemma_1244:[q_v=w_v/abs(w_v),q_v=(w_w+v*w_p)/(abs(w+v*w_p)) ,if w_v > 0 then q_v=+1,if w_v < 0 then q_v=-1];
+
+/* Mode Normalization in Watts */
+
+lemma_1245:abs(N_m)=4;
+
+lemma_1246:P_m(z):=p_m*abs(a_vm(z))^2;
+
+lemma_1247:[P(z):='sum(P_m(z),m,minf,inf),P(z):='sum(p_m*abs(a_vm(z))^2,m,minf,inf)];
+
+lemma_1248:D_Pz(z):='diff(sum(p_m * abs(a_vm(z))^2,m,minf,inf),z) = 0;
+
+lemma_1249:[D_Nvm(z):='diff('sum('sum(N_vm/w_v*abs(a_vm(z))^2,m,minf,inf),v,minf,inf),z)=0,D_Nqv(z):='diff(sum(sum(abs(N_vm)/abs(w_v)*q_v*p_m*abs(a_vm(z))^2,m,minf,inf),v,minf,inf),z)=0];
+
+/* 1.3 
+    Lossless Waveguide Systems
+    Coupled Mode Equations 
+    Relationship between Coupling Coefficients    
+ */
+
+lemma_131:'diff(a_vm(z),z)=i%i*β_vm*a_vm(z);
+
+lemma_132:'diff(a_vm(z),z)=-%i*β_vm *a_vm(z) + 'diff(A_vm(z),z) * exp(-%iβ_vm*z ) ;
+
+lemma_133:D_a_vm(z):='diff(a_vm(z),z)=(-%i)*β_vm*a_vm(z)+sum(sum(c_vm_vp_n(z)*a_vp_n(z),n,minf,inf),v_p,minf,inf);
+
+lemma_134:D_a_k(z):='diff(a_k(z),z)=(-%i)*β_k*a_k(z)+sum(c_kl(z)*a_k(z));
+
+/* 1.3.2 Power-conservation relationships between coupling coefficients */
+
+lemma_135:D_rk(z):='diff('sum(r_k*abs(a_k(z))^2,k,1,n),z)=0;
+
+lemma_136:[r_k=q_k*p_k, r_k=w_k/abs(w_k) * N_k/abs(N_k),'if q_k = p_k then  r_k=+1,'if q_k != p_k then r_k = -1 ];
+
+lemma_137:S_rk(N):='sum(r_k*('conjugate(a_k)*'diff(a_k,z)+ a_k*'diff( 'conjugate(a_k),z)),k,1,N)=0;
+
+lemma_138:[S_r_k(k,l):='sum('sum(r_k*c_kl*'conjugate(a_k)*a_l,l,1,N),k,1,N)+'sum('sum(r_k*'conjugate(c_kl)*a_k*'conjugate(a_l), l,1,N),k,1,N)=0, S_rk(k,l):='sum('sum((r_k*c_kl+r_l*'conjugate(c_lk))*'conjugate(a_k)*a_l,l,1,N),k,1,N)=0];
+
+lemma_139:[conjugate(c_lk(z))=(r_k/r_l)*c_kl(z), 'conjugate(c_lk(z))=-(q_k/q_l)*(p_k/p_l)*c_kl(z),'if r_k*r_l=+1 then 'conjugate(c_lk(z))=-c_kl(z), 'if r_k*r_l =  -1 then 'conjugate(c_lk(z)=c_kl(z)) ] ;
+
+lemma_1310:[conjugate(c_lk(z)) =-(p_k/p_l)*c_kl(z),'if p_k*p_l = +1 then 'conjugate(c_Lk(z))=-c_kl(z),'if p_k*p_l=-1 then 'conjugate(c_lk(z))=c_kl(z) ];
+
+lemma_1311:'conjugate(c_lk(z))=±c_kl(z);
+
+lemma_1312:['conjugate(c_lk(z))=(q_k/q_l)*c_kl(z), 'if q_k*q_l=+1 then 'conjugate(c_lk(z))=-c_kl(z), 'if q_k*q_l = -1 then 'conjugate(c_lk(z))=c_kl(z) ];
+
+lemma_1313:N_vm/w_v*c_vm_vpn = -(N_vpn/w_vp)*'conjugate(c_vm_vpn(z));
+
+lemma_1314:(abs(N_vm)/abs(w_v))*(p_m/q_v)*c_vm_vpn(z)=-(abs(N_vm)/abs(w_v))*(p_n/q_vp)*'conjugate(c_vm_vpn(z));
+
+lemma_1315:'bca_fwd(k):=a_k(0)≠0 or 'a_k(0)=0;
+
+lemma_1316:bca_rev(L):=a_k(L)≠0 or 'a_k(L) = 0;
+
+/* 1.3.3 Selection of Synchronously-Coupled Modes   */
+
+lemma_1317:D_ak(z):='diff(a_k(z),z)=-%i*β_k*a_k(z)+'sum(c_kl*a_l(z),k,1,N);
+
+lemma_1318:β_k\'=a_k(z) + β_k + %i*c_kk;
+
+lemma_1319:[a_k(z)=A_k(z)*exp(-%i*(β_k+%i*c_kk)), a_k(z)=A_k(z)*exp(-%i*β\'_k*z)];
+
+lemma_1320:D_Ak(z):='diff(A_k(z),z)='sum(c_kl*%e^(%i*β_kl*z)*A_l(z),k,0,N);
+
+lemma_1322:D_Ak(z):='diff(a_k(z),z)=c_lk*%e^(%i*Δβ_lk*z)*A_k(z)+'sum(c_lj*%e^(%i*Δβ_lj*z)*A_j(z),j,1,N);
+
+simp:false;
+
+lemma_1323:D_Ak(L):=A_k(z)-A_k(0)='sum(  (c_kl/(%i*Δβ_kl)) *(A_l(L)*%e^(%i*Δβ_kl*z) -A_l(0))-((c_kl*c_lk)/(%i*Δβ_kl))*'integrate(A_k(z),z,0,L),l,1,L)-'sum('sum( ((c_kl*c_lk)/(%i*Δβ_kl)),j,1,J),l,1,L )*'integrate(A_j(z)*%e^(%iΔβ_kl*z) ,z);
+
+lemma_1324:D_At(L):=A_t(z)-A_t(0)='sum( (c_lk/(%i*Δβ_lk)) *(A_k(L)*%e^(%i*Δβ_lk*z) -A_k(0))-((c_lk*c_kl)/(%i*Δβ_lk))*'integrate(A_t(z),z,0,L),l,1,L)+'sum(c_lj-((c_lk*c_kj)/(%i*Δβ_lk)),j,1,J)*'integrate(A_j(z)*%e^(%iΔβ_lj*z) ,z);
+
+lemma_1325:D_Ak(L):=A_k(L)=A_K(0)*(((1+ 'sum(Q_kl*%e^(%iΔβ_kl*L),l,1,L))/(1+'sum(Q_kl,l,1,L)))) + ('sum(B_kl*Q_kl*%e^(%i*Δβ_kl*L),l,1,L)/(1+'sum(Q_kl,l,1,L)));
+
+lemma_1326:B_kl(z):=((%i*Δβ_lk)/c_lk) * ( %e^(%i*Δβ_lk*L)*'sum(c_lj,j,1,J)*'integrate(A_j(z)*%e^(%iΔβ_kj*z),z,0,L)-'sum(c_lj,j,1,J)*'integrate(A_J(z)* %e^(%i*Δβ_lj*z),z,0,L))+'sum(c_kj,J,1,J)*'integrate(A_z(z)*%e^(%i*Δβ_lj*z),z,0,L);
+
+lemma_1327:Qkl(k,l):=(c_kl*c_lk)/(Δβ__kl*Δβ_lk)=(p_k*p_l)/(4*Δ_kl^2);
+
+lemma_1328:Δ_kl(k,l):='sqrt((Δβ_kl*Δβ_lk)/(4*'abs(c_kl*c_lk)))='abs(Δβ_kl)/(2*abs(c_kl));
+
+/* The equals sign in lemma_1329 should be ≅  but maxima won't take approximately equals as an operator here. */
+
+lemma_1329:I_Aj(z):='integrate(A_j(z)*%e^(%iΔβ_lj*z),z,0,L)=A_j(z_0)*L*((sin(Δβ_lj*(L/2))/(Δβ_lj*(L/2)))*%e^(%i*Δβ_lj*(L/2)));
+
+lemma_1330:['abs(β\'_k-β\'_l)≤2*'abs(c_kl), 2*'abs(c_kl)≤'abs(β\'_k+β\'_k)];
+
+lemma_1331:[2*'abs(c_lj)<'abs(β\'_l-β\'_j),'abs(β\'_l-β\'_j)≤'abs(β\'_l + β\'_j)];
+
+/* 1.3.4 Phase-Matching Conditions For Direct, Periodic and Parametric Coupling */
+
+lemma_1332_A:Δβ_kl≣β\'_k-β\'_l=0;
+
+lemma_1322:β_k=β_l;
+
+lemma_1333:c_kl(z)=c_kl*g(z);
+
+
+lemma_1334:g(z):='sum(G_s*%e^(%i*s*K*z),s,minf,inf);
+
+lemma_1334_A:k=2*%PI/Λ;
+
+lemma_1335:G_S=(1/Λ)*'integrate('g(z)*%e^(%i*s*K*z),z,0,Λ);
+
+lemma_1336:A_K(Z):='sum(a_sk*%e^(-%i*β\_s_k*z),s,minf,inf);
+
+lemma_1337:[β_s_k=β_k + s*K, β_s_k=β_k+(2*%pi*s)/Λ, s[0]=0, s[1]=±1, s[2]=±2,s[3]=±3];
+
+lemma_1337_A:v_s_phk=w/β_s_k;
+
+lemma_1337_B:[v_s_grk='diff(β_s_k,w)^-1,v_s_grk='diff(β_k,w)^-1,v_s_grk=v_gr_k];
+
+lemma_1338:β_s\'_k=β_s\'\'_l;
+
+lemma_1339:β_k-β_l=s*K;
+
+lemma_1339_A:'abs(s)='abs(s\' - s\'\');
+
+lemma_1340:β_n=s*(%pi/Λ);
+
+lemma_1340_A:β_m=k*'sin(θ);
+
+lemma_1340_B:k=(2*%pi/λ);
+
+/* Wave Number of em wave impinging on grating with grazing angle θ and wavenumber k
+Result is the Bragg Xray diffraction equation  */
+
+lemma_1340_C:2*Λ*'sin(θ)=s*λ;
+
+lemma_1341:[β_v_k=β_k + ν*β_p, ν=0, ν=±1,ν=±2,ν=±3];
+
+lemma_1342:β_v\'_k=β_v\'\'_t;
+
+lemma_1343:β_k-β_t=ν*β_p;
+
+lemma_1344:c_kl(z)=c_h_kl*%e^(-%i*β_p*z);
+
+lemma_1345:D_b(k,l):=Δβ_kl='(β_k-(β_p/2))-(β_t+β_p/2);
+
+/* 1.4     Normal Waves Of Lossless Systems With Two Phase-Matched Modes
+
+1.4.1   Dispersive and Power Properties Of The Normal Modes */
+
+lemma_141:[Δ_12='sqrt((Δβ_12*Δβ_12Δβ_21)/(4*'abs(c_12*c_21)) ),Δ_12='abs(Δβ_12)/(2*'abs(c_12))];
+
+

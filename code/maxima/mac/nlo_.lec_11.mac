@@ -1,0 +1,15 @@
+/* The Classical Origin Of Non-Linearlty
+
+The Harmonic Oscillator */
+
+U:(1/2)*k*X^2+(1/3)*a*m*X^3;
+
+P:'sum(ε_0*Χ[i]*E^i, i, 1,inf);
+
+/* Potential giveis rise to the force */
+
+F:-m*ω_0^2*X-m*a*X^2;
+
+nlo_11_001:'dff(X,t,2)+Γ*'diff(X,t)+ω_0^2*X+a*X^2=q*e/m;
+
+

@@ -1,0 +1,328 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: comment start ]
+EDHEC Risk Kit 
+Basics Of Returns
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ curry (f, [a]) := buildq ([f, a], lambda ([[x]], apply (f, append (a, x))));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+R(ps):=(ps[t+1]-ps[t])/ps[t];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Rs(ps):=(ps[t+1]/ps[t]) - 1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ps:[8.70,8.91,8.71,7.65,8.03,11.15];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+8.91/8.70 - 1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ps[2]/ps[1] - 1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ps[3]/ps[2] - 1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+makelist(2*x-1, x,length(ps) );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ixs:makelist(x*2-1,x,length(ps));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+length(ps);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rlst01: join(ps, ixs);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rlst01[rlst01[2]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rlst01[rlst01[12]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rlst01;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Ret(nl,t):=nl[nl[2*t]] /nl[nl[t-mod(t,2)]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Ret(rlst01,6);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rlst01[rlst01[2]  - mod(2,2)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+(rlst01 [rlst01[2*2]] / rlst01[rlst01[2]  - mod(2,2)])-1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+0
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+add(x,y):=x+y;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+for a:2 thru length(rlst01)/2 step 1 do ( rr: (rlst01[2*a-1]/rlst01[2*a-3])-1,printf(stdout, "return = ~f ~%",rr)   ) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+map (lambda( [x,y], x+y), [1,2,3],[4,5,6]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rest(ps,1)/rest(ps,-1)-1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+0
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(numericalio);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M:read_matrix("/home/fraser/projects/Python/PortfolioConstruction/data-one/Portfolios_Formed_on_ME_monthly_EW.csv")$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+length(M);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+length(M[1]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+NL:read_nested_list("/home/fraser/projects/Python/PortfolioConstruction/data-one/Portfolios_Formed_on_ME_monthly_EW.csv")$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+NL[3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rest(M[5],-1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+CL:makelist (col (M, k), k,1, 20)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+M[1][11];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+arrays;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+values;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+matrices;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+clst11:makelist(CL[11][x],x, 1,length(CL[11]))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+clst20:rest(clst20,1)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+clst11:clst11/100$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+CL[20][1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+clst20:makelist(CL[20][x],x,1,length(CL[20]))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+clst20:clst20/100$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+clst20[5];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(descriptive);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mean([5,6,7,8]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+%, numer;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+clst11:flatten(clst11)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+clst20:flatten(clst20)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mean(clst11);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mean(clst20);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+var1(clst20);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+var1(clst11);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+std1(clst20);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+std1(clst11);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ann_vol_small:std1(clst11)*sqrt(12);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+%,numer;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ann_vol_large:std1(clst20)*sqrt(12);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+%,numer;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+PRODUCTS OF WHOLE COLUMNS 
+PRODUCTS OF MANY LARGE NUMBERS GO TO INFINITY
+PRODUCTS OF MANY  SMALL NUMBERS GO TO ZERO
+I CANNOT REPRODUCE WHAT pandas.product OR pandas.prod() DOES
+AND PREVENT MAXIMA FROM BLOWING UP!!!
+TRYING THE bfloat PACKAGE
+NOPE! EVEN BIGFLOATS CAN'T DO THIS
+HOW CAN PANDAS DO THIS?
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+clst11_pct:clst11*100$
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

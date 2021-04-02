@@ -1,0 +1,42 @@
+depends(f,[x,y,z]);
+
+load(vect);
+
+f:x*y^2-y*z;
+
+mgl:['diff(f,x), 'diff(f,y), 'diff(f,z)];
+
+map(ev,mgl),diff;
+
+mgm:matrix([del/del(x)] , [del/del(y)] , [del/del(z)]);
+
+mgm[1];
+
+mgm[2];
+
+mgm[3];
+
+mygrad(fn):=['diff(fn,x),'diff(fn,y),'diff(fn,z)];
+
+mygrad(x*y^2-y*z);
+
+ev(%,diff);
+
+ev(express(grad(f)),diff  );
+
+i:matrix([1],[0],[0]);
+
+j:matrix([0],[1],[0]);
+
+
+k:matrix([0],[0],[1]);
+
+ev(mygrad(f),diff);
+
+mymatgrad(fn):='diff(fn,x)*i+'diff(fn,y)*j+'diff(fn,z)*k;
+
+mymatgrad(f);
+
+ev(mymatgrad(f), diff);
+
+

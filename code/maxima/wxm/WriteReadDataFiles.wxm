@@ -1,0 +1,205 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 0.8.1 ] */
+
+/* [wxMaxima: title   start ]
+Writing to and Reading from Data Files
+   [wxMaxima: title   end   ] */
+
+/* [wxMaxima: comment start ]
+Maxima can write data to files that can then be read either by Maxima or by other
+applications. Likewise, it can read data from files that other applications have 
+created. 
+
+The documentation for writing and reading data sets is in the Maxima Manual,
+Chapter 65, numericalio. This component of Maxima is defined thusly
+(Section 65.1): "numericalio is a collection of functions to read and write files and 
+streams. Functions for plain-text input and output can read and write numbers 
+(integer, float, or bigfloat), symbols, and strings. Functions for binary input and 
+output can read and write only floating-point numbers."
+
+This tutorial addresses plain-text input and output of numbers and strings. It 
+is organized as follows. The first section shows how to create a set of data 
+using two of Maxima's commands, makelist and cons (for construct). The 
+next section shows how to write the data to a file. The third and final section
+shows ways of accessing the data from a file. 
+
+The data file being accessed may be one previously created using Maxima, 
+or it may be created with another application
+
+Some of the commands below are preceded by comments. Comments 
+that are placed within cells that contain input and report output must be 
+contained within brackets of this type: /*     */. To place comments in
+separate cells like this one, above or below cells that contain inputs and 
+report output, place the cursor before the cell and  then do one of the 
+following: 
+* click on the text button above (7th from the left, with lines on a white 
+   page), 
+* select Edit/Cell/Insert/New text cell, or 
+* hit the F6 key.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: section start ]
+Creating a Table of Data
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: comment start ]
+The commands below generates a set of six data points for each of
+three variables. The variables are an integer named Variable x that 
+ranges from 4 to 9 and two functions of Variable x, the square of x and
+x factorial.
+
+The lists L1, L2, and L3 contain the numerical values. These are created
+with Maxima's makelist command. Then names are added to the lists, using
+Maxima's cons command. The lists with names are LN1, LN2, and LN3.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+/* Create three lists */                           L1 : makelist(i, i, 4, 9);                     
+L2 : makelist(i^2, i, 4, 9);                      L3 : makelist(i!, i, 4, 9);
+/* Add names to the lists' data */           LN1 : cons("Variable x", L1);
+LN2 : cons("x_squared", L2);                LN3 : cons("x_factorial", L3);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+The lists are now used to generate a table. Creating a standard table (vertical
+data columns) is a simple two-step process. First, gather the three lists 
+into a matrix, using Maxima's matrix command. Then transpose the matrix
+so that the variables' values appear in columns.
+
+Naming the matrix is not essential. One could leave it unnamed and create 
+the transpose with the command transpose(%), as long as no other
+operation occurs between the creation and transposition of the matrix.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+/* Put the data into a matrix */                          M : matrix(LN1,LN2,LN3)$
+/* Transpose matrix M to make a table T */      T: transpose(M)$
+print ("Matrix M, composed of three lists: ", M)$
+print ("Table T, creating by transposing M: ", T)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: section start ]
+Writing the Data Table to a File
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: comment start ]
+This section show how to write table T to a file named datamatrix.csv.
+This file is placed in a folder named wxMaximaData on the C: drive
+of a Windows-based computer. The C:/WXMAXIMADATA part
+of this command should be changed to tell wxMaxima where your
+file is to be saved before the command is executed.
+
+For a discussion of options regarding specifying folders for data, see
+Woollett, Maxima by Example, Chapter 2, at csulb.edu/~woollett/ . 
+
+Before executing the write_data command, executing the file_search
+command that precedes it is advisable. That command shows whether
+the file already exists. If a file by that name exists, one can change the
+name of the file to be saved. If a file with this name does not exist,
+Maxima returns this message: false.
+
+Window users: Note that the file path uses slash ( / ) and not
+the Windows-conventional backward slash ( \ ) in defining a path. 
+That is, Maxima follows Unix's convention in this regard.
+
+Warning: Replace C:/WXMAXIMADATA with your folder's path
+before executing the command below.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+file_search("c:/wxMaximaData/datamatrix.csv");
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+The Maxima command write_data transfers the data in table T to 
+the file datamatrix.csv. The csv suffix indicates that the file is to 
+contain Comma-Separated Variables. 
+
+The write_data command has either two or three arguments: the 
+name of the object to be copied (table T in this example); the file 
+name to which the object contents are to be copied, including the 
+path and folder name; and (optionally) the type of separator. 
+
+If the third part of this triad is omitted, Maxima use a space 
+as the separator.
+
+The separator can be a space, a comma, a tab, a pipe ( | ),
+or a semicolon. If a separator other than a comma is used, the
+suffix for the file name should be something other than csv, 
+perhaps txt or dat. The use of csv files has much to recommend
+it. In particular, all spreadsheet programs (Excel, Open Office 
+Calc, Gnumeric, and such) can read and write csv files.
+
+Repeat: Replace C:/WXMAXIMADATA with your folder's path
+before executing the command below.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+write_data(T,"c:/wxMaximaData/datamatrix.csv",comma);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: section start ]
+Reading Data from a Plain-Text File
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: comment start ]
+The printfile command confirms the contents of the newly-created file.
+
+If the command had been followed by the dollar sign rather than the
+semicolon, the file's contents would have been printed, but the path
+and folder name would not appear.
+
+Repeat: Replace C:/WXMAXIMADATA with your folder's path
+before executing the command below.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+printfile("c:/wxMaximaData/datamatrix.csv");
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+For many purposes, importing the data in the form of a table or a list 
+is more useful than just printing it to the screen. The commands
+read_table and read_nested_list, both executed below, read the data
+into Maxima in the indicated forms. Typically, of course, one of these
+two would be used, not both.
+
+The two commands below name the files that are being read, T2 for
+the table, and LT4 for the list. More descriptive names could be 
+applied. Alternatively, no name need be applied.
+
+Repeat: Replace C:/WXMAXIMADATA with your folder's path
+before executing the command below.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+T2 : read_matrix("c:/wxMaximaData/datamatrix.csv")$
+LT4 : read_nested_list("c:/wxMaximaData/datamatrix.csv")$
+print("This is the data entered as a table: ", T2)$
+print("This is the same data, entered as a nested list: ",LT4)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Before considering a third way to enter data, execute the values command.
+This shows what has been added to Maxima's working memory. The
+contents of T and T2 are identical, but Maxima is not aware of that.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+values;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+A third read option exists: the command read_list reads the data as a single, flat list. 
+That is, the data are not nested, nor are they placed into a table. 
+
+Repeat: Replace C:/WXMAXIMADATA with your folder's path
+before executing the command below.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+read_list("c:/wxMaximaData/datamatrix.csv");
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$

@@ -1,0 +1,846 @@
+/* [wxMaxima: input   start ] */
+load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x,y,z):=x*y^2-y*z;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(f,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends(f,[x,y,z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(f,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%,diff);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f:x*y^2-y*z;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+diff(f,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(grad(f));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%,diff);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+div(f);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(grad(f));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%,diff);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+div(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%,diff);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+div([3*x^2,2*y,0]) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%,diff);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+curl(x*y^2-y*z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+curl([3*x^2,2*y,0]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%,diff);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[3*x^2, 2*z, -x];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+curl(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%,diff);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+curl([x,y,z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%,diff);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(curl[x,-y,z])),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[y^3,x*y,-z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(curl(%))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[x^2,2*z,-y];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(curl(%))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(div([2*x^3,3*x*y,3*x^2]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(div( [x,y,z]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(curl([x^2,x*y*z,-z]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(curl([y*z, -2*x*z, x*y*z]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(curl([z,-z^2,y*z]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(curl([y*z,x*z,x*z]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(curl([y, x-z, -y]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(div([x, y, 0]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(div([3*x^2, -6*x*y, 0]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(div( [y^3,x*y,0]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(div([x^2,2*z, -y]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(div([(4*y)/x^2, sin(y), 3]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(express(div([exp(x), log(x*y), exp(x*y*z)]))),diff;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+----------------------------------------------------------------------------------------------
+Lines Above Are Calculus and Vector Math
+Lines Below are  Coupled Mode Theory From:
+"Modern Electrodynamics and Coupled-Mode Theory Application To Guided-Wave Optics" by Anatoly A. Barabin and Victor A. Dmitriev
+Rinton Press, February, 2002
+
+w is used in place of omega (ω)
+v is used in place of nu (ν)
+%i is sqrt(-1)
+%pi is 3.14....
+%e is 2.71...
+
+Other variable translations are given below
+----------------------------------------------------------------------------------------------
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a(w):=exp(-%i*phase);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a(t):=A * cos(w*t + phase);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_k(w):=exp(%i*w);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+b_k(w):=sin(w);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+g_k(w):=a_k(w)+%i * b_k(w);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+r_t(x,y):=[x,y];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_k(r_t):=E_k(r_t)*exp(-g_k * z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H_k(r_t):=H_k(r_t) * exp(-g_k * z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(r_t,z,t):=sum(A_k(z) * E_k(r_t) * exp(%i * w * t - g_k * z), k, 1, N);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H(r_t,z,t):=sum(A_k(z) * H_k(r_t) * exp(%i * w * t - g_k * z), k, 1, N);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Manley Rowe Relations For Lossless Waveguiding Systems
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_r (t):='realpart(a(w)*exp(%i*w*t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_d(w):=(1/2)*(a(w)*exp(%i*w*t)+a(-w)*exp(%i*w*t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Time averaged value for purely harmonic and linear (in signal) a(t) 
+P = <(a(t)> = 0.
+But for any quadratic product of a(t) * b(t) with complex amplitude a(w) and b(w), P = <a(t) * b(t)> ≠0 and is given by:
+P = 1/2 Re[a(ω) * b_c(ω)] = 1/2 (P_w + P_(-w))
+P_r is real part of P only
+P_d is double-ended (complex values  -inf < w < inf)
+
+Variable names are simplified versions of the textbook variables
+Latex,MathJax,MathML will be used in wxmaxima and sage for display 
+Sage tables (Python Dictionaries) will hold Tex fragments 
+Tex fragments are typeset versions of variable names
+Functions will use fragments to create textbook-accurate output
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_s(w):=(1/2)*'realpart(a(w)*'conjugate(b(w)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_d(w):=(1/2)*(P_w + P_m);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a(w_m):='conjugate(a(w_m));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w_m(w_p):=-w_p;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w_p(w_m):=-w_m;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wp(5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w_p(5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w_m(-5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Nonlinear systems generate frequency harmonics w_(-s) = -w_s and a_(-s) = a_c_s. This creates a multifrequency regime for polychromatic and monochromatic modes. For purely monochromatic modes the time-average value is <a(t)> = a_0 = 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w_sm(w_sp):= -w_sp;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w_sp(w_sm):=-w_sm;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_w_r(w_s):='realpart(sum(a_s*exp(%i * w_s * t),s,1,inf));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_w_d(w_s):=(1/2)*sum(a_s*exp(%i*w_s*t),s,minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Time-average value P = <a(t)b(t)> of the quadratic power-energy quantity a(t)b(t) is:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_r(a_s,b_s):=(1/2)*'realpart(sum(a_s*b_s_c, s,1,inf));
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+Question #1
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+zero;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_d(P_s,a_s,b_s):=(1/2)*sum(P_s, s, minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_s_r(a_s,b_s):=(1/2)*'realpart(a_s,'conjugate(b_s));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Two Frequency Input Sources
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_r(t):='realpart(sum(sum(a[s,p]*exp(%i * w[s,p]*t), p, 1,inf),s,minf,inf));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_d(t):=(1/2)*sum(sum(a[s,p]*exp(%i*w[s,p]*t),p,min,inf), s,minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_129_A:w[-s-p]=-w[s,p];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_129_B:a[-s-p]='conjugate(a[s,p]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P[r_1210](a,b,s,p):=(1/2)*'realpart(sum(sum(a[s,p]*'conjugate(b[s,p],p,1,inf),s,minf,inf)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P[d_1210](a,b,s,p):=(1/2)*sum(sum(P[s,p],p,minf,inf),s,minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P[r_sp_1211] (a,b,s,p):=(1/2)*'realpart(a_[s,p]*'conjugate(b_[s,p]));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P[d_sp_1211](a,b,s,p):=(1/2)*'realpart(a[-s-p]*'conjugate(b[-s-p]));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1211:'P_[s,p]='P_[-s-p];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1.2.2 Multifrequency Power Relations For Lossless Waveguiding Systems
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1212:'dP/dz  = 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemex_1212:'diff(P,z)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+P_1213(E,H,S):=(1/2)*'realpart(integrate(E~'conjugate(H) * e_z * dS,S));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1214:'diff(sum(sum('P_[s,p],p,minf,inf), s,minf,inf),z)=0;
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+Question #1
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1215:w_1*'diff(sum(sum((s*'P[s,p])/(s*w_1 + p*w_2),s,minf,inf),p,minf,inf),z)+w_2*'diff(sum(sum( ((p*'P[s,p])/(s*w_1 + p*w_2)),p,minf,inf),s,minf,inf),z)  ;
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+Question #1
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1215:w_1*'diff(sum(sum((s*'P[s,p])/(s*w_1 + p*w_2),s,minf,inf),p,minf,inf),z)+w_2*'diff(sum(sum((p*'P[s,p])/(s*w_1+p*w_2),p,minf,inf),s,minf,inf),z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1216:sum(sum(((s*'P[s,p])/(s*w_1+p*w_2)),s,minf,inf),p,minf,inf) = 2*'sum(sum((s*'P[s,p])/(s*w_1+p*w_2),s,1,inf),p,minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1217:w_1*'diff(sum(sum(((s*'P[s,p])/(s*w_1+p*w_2)),s,1,inf),p,minf,inf),z) + w_2*'diff(sum(sum(((p*'P[s,p])/(s*w_1+p*w_2)),p,1,inf),s,minf,inf),z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+lemma_1218_s:'diff(sum(sum(((s*'P[s,p])/(s*w_1+p*w_2)),s,1,inf),p,minf,inf),z)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1218_p:'diff(sum(sum(((p*'P[s,p])/(s*w_1+p*w_2)),p,1,inf),s,minf,inf),z)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1.2.3 Manley-Rowe Relations For Parametric Waveguiding Systems
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1220_p:w[s=0,p] = p * w_p;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1220_s:[w[1,p]=w[s] + p*w[p],w[-1,p]=w[s] + p*-    w[p] ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1.2.3.1 Multifrequency Parametric Waveguiding Systems
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1221:'diff(sum(('P[+1,p])/(w_s+p*w_p),p,minf,inf),z)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1222:'diff(sum(p*( ('P[1,p])/(p*w_p) + ('P[+1,p])/(w_s+p*w_p) - ('P[+1,-p])/(w_s-p*w_p)),p,1,inf),z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1222_P:'P[-1,p]='P[+1,-p];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1222_pv_A:w_s + p *w_ν=w_s+ν*w_p;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1222_pv_B:w_s+p*w_p=w_ν;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1222_pv_C:'P[1,p]='P[1,ν];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1222_pv_D:'P[1,ν]='P^(ν);¦;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1223:'diff('sum('P^v/w_v, v,minf,inf),z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1224:'diff(sum(ν * (('P^ν/w_p)-('P^(-ν)/'w[-ν])) ,ν,1,inf),z)=(-(1/w_p))*'diff('P[pump],z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1224_A:'P[pump]=sum('P[0,p],p,1,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1.2.3.2     Three Frequency Systems
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1225:grind(lemma_1224);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1225:'diff(((P^z/w_z)+(P^p1/w_p1)+(p^m1/w_m1)),z)=0;
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1226:'diff(((P_pump/w_z)+(P^p1/w_p1)-(p^m1/w_m1)),z)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Variable Translations Based On Textbook Equations
+This will be used to create a table from variable names
+to Tex renderings to provide dynamic typeset equations
+
+^ means superscript, _ means subscript
+P^z     ->  P^0 (zero)
+P^p1  -> P^(+1)
+P^m1 -> P^(-1)
+P^zp1 -> P_[0,+1]
+P^zm1 -> P_[0,-1]
+P_p1-p -> P_[+1,-p]
+P_p1pp -> P_[+1,p]
+P_zpp -> P_[0,p]
+P_zmp -> P_[0,-p]
+w_pv -> ω_(+ν)
+w_mv ->ω_(-ν)
+w_s -> ω_s
+P_p1pv -> P_[1,+ν]
+P^pv -> P^(ν)
+P^mv -> P^(-ν)
+v -> ν (nu)
+P_sign -> Power of Signal  wave/beam (P_signal)
+P_pump -> Power of pump wave/beam (P_Pump)
+P_idle -> Power of Idler wave/beam
+N^(ν)_m -> N_vm
+parity p_m -> par_m
+a^(ν)_m -> a_vm
+P^(ν)_m -> P_vm
+v^(ν)_gr,m -> vel_gr_vm
+W^(ν)_m -> W_vm
+β^(ν)_m -> beta_vm
+A^(ν)_m -> A_vm
+
+lemma_1225 -> Equation (1.2.25) in the textbook
+
+Choice 1: w_s = w_z >  0, 
+idler frequency w_i = w_m1 = w-s - w_p > 0 or < 0
+Then P^z = P_sign, P^m1 = P_idel, P^p1 = 0
+Then lemma_1225 and lemma_1226 give:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1227:'diff(((P_sign/w_s)+(P_idle/w_i)),z)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1228:'diff(((P_pump/w_p)+(P_idle/w_i)),z)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Choice 2: w_s = w_p1 > 0, w_i = w_0 = w_s - w_p >0
+Then P^z = P_idle, P^p1 = P_sign, P^m1 = 0
+then lemma_1225 and 1226 give:
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1229:'diff(((P_idle/w_i)+(P_sign/w_s)),z)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1230:'diff(((P_pump/w_p)+(P_signal/w_s)),z)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Both 1.2.27-28 and 1.2.29-30 give the same frequency-power relation
+The 3-part equality is transitive and broken into 3 parts for maxima syntax:
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1231:['diff(P_sign/w_s,z)='diff(P_idle/w_i,z),'diff(P_idle/w_i,z)='diff(P_pump/w_p,z),'diff(P_sign/w_s,z)='diff(P_pump/w_p,z) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Choice 2 can be discarded because choice 1 deals with both +w_1 and -w_i whereas choice 2 only deals with w_+i , so w_i = w_m1 = w_s - w_p is the only form that deals with both high-frequency and low-frequency pumping 
+
+Low Frequency Pumping 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1232:if 'diff(P_sign, z) > 0 then 'diff(P_idle,z)<0 and 'diff(P_pump,z) < 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+High Frequency Pumping w_p > w_s => w_i=w_s-w_p < 0 and w_s > 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1233:if 'diff(P_sign, z) > 0 then 'diff(P_idle,z)>0 and 'diff(P_pump,z) < 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1234:[P_v(z)='sum(P_vm(z),m,1,n),P_v(z)=(1/4)*'sum(N_vm*(a_vm(z))^2,m,1,n) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1225:a_vm(z)=A_vm(z)*exp(-%i * beta_vm*z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1225_A:[beta_vm=A_vm(w_v) ,gamma_vm=%i*beta_vm,alpha_vm=0,vel_gr_vm='diff((beta_vm), w_v)^(-1)] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1236:P_vm=vel_gr_vm * W_vm;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1237:[parity_m=P_vm/abs(P_vm),par_m=(vel_gr_vm/abs(vel_gr_vm))*(W_vm/abs(W_vm))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+lemma_1237_A: 
+    par_m = +1 for P_mv > 0
+    par_m = -1  for P_mv < 0¦
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1238:P_vm(z)=(1/4)*N_vm * (abs(a_vm(z)))^2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1239:N_vm=par_m*abs(N_vm);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+lemma_1240: 
+    Normalisation Condition:
+        |N_νm|/|w_ν|=4 Joules 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1240:abs(N_vm)/abs(w_v)=4;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_1241:P_vm(z)=par_m*abs(w_v)*(abs(a_vm(z))^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(P_vm);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+

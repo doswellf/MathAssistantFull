@@ -1,0 +1,629 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: comment start ]
+UTEP EM Analysis With The FDTD Method
+
+Lecture 6 - Implementation Of 1D FDTD
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Free Space Permeability
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Free Space Permittivity
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Free Space Impdedence
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Arrays For Relative Permeability and Permittivity
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maximum Number Of Time Steps
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+TIME_STEPS: 1000;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Size of FDTD Grid
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+declare(GRID_SIZE, integer) ; GRID_SIZE:50;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1D Grid Spacing 
+dx: 1;dz:1
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dx: 1;dz:1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ zs: makelist( 0, x,1,GRID_SIZE );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1D Grid Arrays For Hx and Hy Fields
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+array(Hx, GRID_SIZE); array(Hy, GRID_SIZE);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fillarray(Hx, zs); fillarray(Hy,zs);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1D Grid Array For Normalized H Fields
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+array(Hnx, GRID_SIZE); array(Hny, GRID_SIZE) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fillarray(Hnx, zs); fillarray(Hny,zs);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1D Grid Arrays For Ex and Ey Fields
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+array(Ex, GRID_SIZE); array(Ey, GRID_SIZE) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fillarray(Ex, zs); fillarray(Ey,zs);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1D Permeability and Permittivity Arrays
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+array(mu_xx, GRID_SIZE) ; array(eps_yy, GRID_SIZE);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Update Coefficient Arrays 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+array(mey, GRID_SIZE); array(mhx, GRID_SIZE) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use these functions to fill the coefficient arrays before main loop
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+meyk(k,dt):=(c_0 * dt)/eps_yy[k];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhxk(k,dt):= (c_0 * dt)/mu_xx[k];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Source Definition
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Physical Boundary Condition Definition
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+NOT YET DEALING WITH NUMERICAL BOUNDARY CONDITIONS
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+NOTE: THESE FUNCTIONS NEED TWEAKING
+THE ARRAY FUNCTIONS SHOULD BE REPLACED BY A FUNCTION
+OPERATING ON THE ARRAYS Ex, Ey, Hx, Hy
+EVALUATION TIMES ARE NOT AN EXPLICIT ARRAY INDEX IN THIS SCHEME
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD Update Equation For Ex
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ update_Ex(k,t,dt,dz) := Ex[k]  - mex[k] * ((Hny[k] - Hny[k-1])/dz)  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD Update Equation For Ey
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+update_Ey(k,t,dt,dz) := Ey[k]  + mey[k] * ((Hnx[k] - Hnx[k-1]  )/dz)   ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD Update Equation For Hnx
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+update_Hnx(k,t,dt,dz):= Hnx[k] + mex[k] * ((Ey[k+1] - Ey[k])/dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD Update Equation For Hny
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+update_Hny(k,t,dt,dz) := Hny[k] - mhy[k] * ((Ex[k+1] - Ex[k])/dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Main Loop
+
+For T:1 Thru TIME_STEPS do
+
+    For nz:1 thru GRID_SIZE
+        update_Hx(nz,T)
+
+    For nz;2 thru GRID_SIZE
+        update_Ey(nz, T)
+
+NOW DEALING WITH NUMERICAL BOUNDARY CONDITIONS
+
+USING DIRICHLET BOUNDARY CONDITIONS
+
+For Hnx[GRID_SIZE] pretend that Ey[k+1] exists and Ey[k+1] = 0
+
+For Ey[GRID_SIZE] pretend that Hnx[k-1] exists and Hnx[k-1] = 0
+
+------------------ Update H from E (Dirichlet Boundary Condtions) ------------------
+
+For T:1 Thru TIME_STEPS do
+
+    For nz:1 thru GRID_SIZE-1
+        update_Hnx(nz,T)
+
+Hnx[GRID_SIZE]:Hnx[GRID_SIZE] + mhx[GRID_SIZE] * (0 - Ey[GRID_SIZE])
+
+------------------ Update E from H (Dirichlet Boundary Condtions) ------------------
+
+Ey[GRID_SIZE]:Ey[GRID_SIZE] + mey[GRID_SIZE] * (0 - Hnx[GRID_SIZE])
+
+    For nz:2 thru GRID_SIZE
+        update_Ey(nz, T)   
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+PERIODIC BOUNDARY CONDITIONS
+
+Can use field values from previous cycle/phase, left or right of current position
+or at the other end of the yee grid.
+
+For Hnx[GRID_SIZE], Ey[GRID_SIZE+1] = Ey[1]
+
+For Ey[1]  Hnx[k-1] = Hnx[GRID_SIZE]
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+How big do the grid cells have to be to get accurate results?
+Grid resolution must be good enough to resolve the shortest wavelength
+
+Determine Smallest Wavelength
+λ_min = c_0/(f_max *η_max) where η_max is the max. grid refractive index 
+
+Grid resolution for the minimum wavelength wave using at least 10 cells
+
+Δ_λ ≅ λ_min/N_λ  where N_λ ≥ 10
+
+Mechanical features of devices
+
+Grid resolution must be high enough to resolve the smallest
+mechanical features of a device.
+
+Determine smallest feature size d_min
+
+Divide d_min by [1 .. 4]  
+
+Δ_d ≅d_min/N_d where N_d ≥ 1
+
+Δ_d is the minimum grid resolution needed 
+to model the  minimum feature size
+
+Set the initial grid resolution to the smallest of the 2 numbers
+calculated above.
+
+Δ_x = Δ_y = min(Δ_λ, Δ_d)
+
+Decide which dimensions along each axis are critical
+(e.g lattice constant, grating period along x, layer thickness along y)
+
+dx and dy
+
+Compute number of grid cells that d_c (critical dimension), round up
+
+Mx = ceil(d_x/Δ_x)
+My = ceil(d_y/Δ_y)
+
+Adjust grid resolution to fit this dimension to the grid exactly
+
+Δ_x = d_x / M_x
+Δ_y = d_y  / M_y
+
+Courant Stability Condition
+
+EM waves propagate at v= c_0/n, less than c_0, n > 1 (normally) where
+c_0 = 299792458 m/s, 
+n is the refractive index
+
+Limit on Δt
+
+During one time step Δt an EM wave will travel:
+
+Numerical distance travelled in one time step:      Δz
+Physical distance travelled in one time step:         c_0*Δt/n 
+
+The algorithm will not allow a wave to travel further than
+one unit cell in a single time step
+
+Guarantee that a physical wave would not propagate further than
+a single unit cell in one time step
+
+(c_0*Δt)/n < Δz
+
+The upper limit on the time step is then
+
+Δt < (n*Δz)/c_0
+
+n should be set to the smallest refractive index found anywhere on the grid
+n is normally set to 1.0 and dropped from the equations.
+
+Refractive index ≥ 1 so Δt < (Δz/c_0) worst case, n=1 gives 
+fastest possible physical wave
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+CSC:Δt < 1 / (c_0 * sqrt( 1/(Δx)^2 + 1/(Δy)^2  + 1/(Δz)^2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Practical Implementation Of the Stability Condition
+
+The stability condition is most restrictive along the shortest dimension
+of the grid unit cell
+
+Δ_min = min(Δx,Δy,Δz) 
+
+To ensure stability and accuracy on any grid
+
+Δt < Δ_min / (2 * c_0)  Include a factor of 0.5 for safety
+
+Generalize to account for special cases
+
+Δt < (n_min * Δ_min) / (2 * c_0)
+
+1. The grid is filled with dielectric so em energy travels slowely everywhere
+2. The model includes dispersive materials with n<1
+
+Time step for this 1D Grid
+
+Δt = (n_bc * Δz) / (2 * c_0) where n_bc is refractive index at boundary
+
+A wave will move one grid cell in 2 time steps
+
+This is a necessary condition for the perfect boundary condition
+
+We cannot have different materials at the 2 boundaries
+when using this boundary condition
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Perfect Boundary Condtion (PBC)
+
+If
+    The field is only moving outward at the boundaries
+    The materials at the boundaries are LHIN
+    The refractive index is the same at both boundaries (n_bc)
+    Δt = (n_bc *Δz)/(2*c_0) exactly
+    (LHIN = Linear Homogenous Isotropic and Non-Dispersive)
+
+Then
+    Ey[Nz+1,t] = Ey[Nz,t-2Δt]
+
+Implementing the PBC 
+
+Note that Ey and Hnx are actually 1D arrays
+Here I use a time index only to show when the values are calculated
+Later I may use a 2D array to allow storage by time and position
+Very slow but it may more intutitive
+This code will be used to generate faster Matlab/Octave, C and FORTRAN code 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Starting from the source location the wave moves toward the boundaries
+The amplitude of the wave is passed to each cell moving outward
+Two more "cells" exist outside the boundary of the grid
+The amplitude shifts into the first and second outside cell
+The value in the 2nd outside cell gives the amplitude outside the grid
+
+At the Low Z boundary (Z is position, not impedence)
+
+Order of operations is critical here to get the PBC 
+h3:h2;
+h2:h1; 
+h1:Hnx[1] ; 
+Ey[1,t+dt] :  Ey[1] + mey[k] * ((Hnx[1,t+(dt/2)] - h3) / dz) ;
+
+At the High Z Boundary (Z is position, not impedence)
+
+e3:e2;
+e2:e1; 
+e1:Ey[GRID_SIZE] ; 
+Hnx[1,t+dt/2] :  Hnx[1] + mhx[k] * ((e3 - Ey[GRID_SIZE,t] ) / dz) ;
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+The Gaussian Pulse
+
+g(t) = exp(-((t-t0)/τ)^2) τ is amesaure of pulse width
+
+Fourier transform g(t) = -(t^2/t^3) ⟶ G(f) = 1/√πB * exp(-(f^2/B^2))
+
+The frequency of the pulse extends from DC to ≅ B  (B = 1 / πτ)
+
+B is the max frequency we can model
+
+1. Determine maximum frequency of simulated system f_max
+
+2. Compute pulse width generated given upper frequency f_max
+
+B = f_max = 1/ (πτ) ⟶ τ ≤ 1/(π*f_max)  
+τ ≅ 0.5/f_max
+
+3. Time step may need to be reduced
+    Gaussian pulse should have a resolution of 10 to 20 time steps
+
+Δt = τ / N_t
+
+Determine a first Δt based on the Courant Stability Condition
+Determine a 2nd Δt based on resolution required to analyze f_max accurately
+Use the smallest Δt from the 2 Δt's calculated above
+
+N_t ≥ 10
+
+All of this should be automatically satisifed if Δt = (n*Δz) / (2*c_0)
+
+Designing the Pulse Source
+
+NO STEP FUNCTIONS!  NOT REALISTIC AND GIVES BAD RESULTS
+
+Give a time delay t_0 before the pulse is inserted into the grid
+
+Wait 6τ (6x the width of the pulse) into the simulation 
+
+Hard Source - Overwrites a cell with the source value - Not practical!
+Reflects scattered waves that impinge on it.
+
+Soft Source
+
+Transparent to scattered waves passing through it
+Update the field across the entire grid
+Then the source function value is added to one field component 
+at one point on the grid.
+This injects energy into the grid in both (all) directions
+This source is great for testing boundary conditions.
+
+Hnx[k,t+dt/2] = Hnx[k,t+dt/2] + g_H[k] 
+and/or
+Ey[k,t+dt] = Ey[k,t+dt] + g_E[k]
+
+ADD TO is rarely used but a stop-gap until we learn Total Field/Scattered Field
+SIMPLE ADD-TO sends energy in all directions with sloppy dispersion characteristics and bad amplitude control
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Grid Implementation 
+Ey,Hx,mu_xx, eps_yy, mey, mhx are 1D arrays of size GRID_SIZE
+GRID_SIZE O(500 to 1000) points
+
+Source Implemention
+
+gE(t) is stored in a 1D array of length STEPS (time steps) 
+STEPS is O(5000 to 10000) points
+Pulse starts at cell[N] to give delay 6τ delay of pulse injection
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Estimating Total Iterations Of Simulation
+
+1. Very resonant devices require more iterations
+2. Pure scattering devices require very few iterations
+3. More iterations needed for more wave bouncing across the grid
+
+Information Considerations
+
+1. Calculating spectral shapes requires calculating the most events 
+    Involves calculation of reflectance, transmittance, line shapes, ...
+2. Calculating the position of resonances can require fewer iterations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Rule Of Thumb - Qty of iterations to finish a simulation
+
+How long for a wave to move across the grid (worst case)?
+
+t_prop - (n_max * Nz * Δz)/c_0
+
+Simulation time T has to include entire pulse of duration τ
+
+T ≥ 12τ
+
+Simulation duration should allow for ~5 bounces
+
+T ≥ 5*t_prop
+
+T = 12τ + 5*t_prop (more time needed for resonant devices!)
+
+Given Δt, the total iterations required is:
+
+STEPS= ceil(T/Δt)   Must be an integer!
+
+STEPS is used in a for loop
+
+CAN ALSO USE while and check for energy/power left in grid
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Revised FDTD Algorithm
+
+Compute Grid Resolution
+Compute Time Step
+Compute Source Pulse
+Compute Update Coefficients
+Initialize Fields
+--
+-- MAIN TIME LOOP
+--
+DO 
+    Update H from E
+    Record H-Field Boundary Term
+    Update E from H
+    Recordd E-Field Boundary Term
+    Inject Source Pulse
+    Visualize Fields
+UNTIL T > STEPS
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Compute Default Grid Resolution
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dz1: min(LAMBDA) / nmax / NRES;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dz2 =dmin/NRES ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dz = min(dz1, dz2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Snap grid to critical dimensions
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+N = ceil(dc/dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dz = dc/N;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Main FDTD Loop
+
+Nz == GRID_SIZE STEPS == TIME_STEPS
+    
+for T:1 thru STEPS
+    /// update H from E (Dirichlet Boundary Conditions) 
+    for nz:1 thru Nz-1
+        Hnx[nz] :Hnx[nz] + mhx[nz] * ((Ey[nz+1] - Ey[nz])/dz )
+    
+    Hnx[Nz] :Hnx[Nz] +  mhz[Nz]*((e3-Ey[Nz])/dz)
+    h3:h2:h2:h1:h1:Hnx[1]
+
+/// update E from H (Dirichlet Boundary Conditions)
+Ey[1] : Ey[1] + mey[1] * (Hnx[1] - h3)/dz)
+for nz:1 thru Nz-1
+    Ey[nz]:Ey[nz] + mey[nz]*((Hnx[nz] - Hnx[nz-1]) / dz)
+
+e3:e2:e2:e1:Ey[Nz]
+
+/// inject the soft source 
+Ey[nzsrc] : Ey[nzsrc] + g[T]
+
+
+   [wxMaxima: comment end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

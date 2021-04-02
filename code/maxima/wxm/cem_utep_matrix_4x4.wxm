@@ -1,0 +1,40 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 19.07.0 ] */
+/* [wxMaxima: comment start ]
+f
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect); load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(r):=E_0*exp(j*k*z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H(r):=H_0_norm*exp(j*k*z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cem_101:[E_k(r)=E_0*exp(j*(k.r)), E_k(r)=E_0*exp(j*k_x*x)*exp(j*k_y*y)*exp(j*k_z*z)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cem_102:[H_k_norm(r)=H_0_norm(r)*exp(j*(k.r)), H_k_norm(r)=H_0_norm*exp(j*k_x*x)*exp(j*k_y*y)*exp(j*k_z*z) ];
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 19.07.0"$

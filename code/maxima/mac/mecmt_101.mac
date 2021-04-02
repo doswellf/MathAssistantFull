@@ -1,0 +1,179 @@
+load(eigen);
+
+load(vect);
+
+f(x,y,z):=x*y^2-y*z;
+
+diff(f,x);
+
+depends(f,[x,y,z]);
+
+diff(f,x);
+
+ev(%,diff);
+
+f:x*y^2-y*z;
+
+diff(f,x);
+
+express(grad(f));
+
+ev(%,diff);
+
+div(f);
+
+express(grad(f));
+
+ev(%,diff);
+
+div(%);
+
+express(%);
+
+ev(%,diff);
+
+div([3*x^2,2*y,0]) ;
+
+express(%);
+
+ev(%,diff);
+
+curl(x*y^2-y*z);
+
+curl([3*x^2,2*y,0]);
+
+express(%);
+
+ev(%,diff);
+
+[3*x^2, 2*z, -x];
+
+curl(%);
+
+express(%);
+
+ev(%,diff);
+
+curl([x,y,z]);
+
+express(%);
+
+ev(%,diff);
+
+ev(express(curl[x,-y,z])),diff;
+
+[y^3,x*y,-z];
+
+ev(express(curl(%))),diff;
+
+
+[x^2,2*z,-y];
+
+ev(express(curl(%))),diff;
+
+ev(express(div([2*x^3,3*x*y,3*x^2]))),diff;
+
+ev(express(div( [x,y,z]))),diff;
+
+ev(express(curl([x^2,x*y*z,-z]))),diff;
+
+ev(express(curl([y*z, -2*x*z, x*y*z]))),diff;
+
+ev(express(curl([z,-z^2,y*z]))),diff;
+
+ev(express(curl([y*z,x*z,x*z]))),diff;
+
+ev(express(curl([y, x-z, -y]))),diff;
+
+
+ev(express(div([x, y, 0]))),diff;
+
+ev(express(div([3*x^2, -6*x*y, 0]))),diff;
+
+ev(express(div( [y^3,x*y,0]))),diff;
+
+ev(express(div([x^2,2*z, -y]))),diff;
+
+ev(express(div([(4*y)/x^2, sin(y), 3]))),diff;
+
+ev(express(div([exp(x), log(x*y), exp(x*y*z)]))),diff;
+
+/* ----------------------------------------------------------------------------------------------
+Lines Above Are Calculus and Vector Math
+Lines Below are  Coupled Mode Theory
+w is used in place of omega 
+%i is sqrt(-1)
+%pi is 3.14....
+%e is 2.71...
+---------------------------------------------------------------------------------------------- */
+
+a_k(w):=exp(-%i*w);
+
+b_k(w):=sin(w);
+
+g_k(w):=a_k(w)+%i * b_k(w);
+
+r_t(x,y):=[x,y];
+
+E_k(r_t):=E_k(r_t)*exp(-g_k * z);
+
+H_k(r_t):=H_k(r_t) * exp(-g_k * z);
+
+E(r_t,z,t):=sum(A_k(z) * E_k(r_t) * exp(%i * w * t - g_k * z), k, 1, N);
+
+H(r_t,z,t):=sum(A_k(z) * H_k(r_t) * exp(%i * w * t - g_k * z), k, 1, N);
+
+/* Manley Rowe Relations For Lossless Waveguiding Systems */
+
+a_r (t):='realpart(a(w)*exp(%i*w*t));
+
+a_d(w):=(1/2)*(a(w)*exp(%i*w*t)+a(-w)*exp(%i*w*t));
+
+/* Time averaged value for purely harmonic and linear (in signal) a(t) 
+P = <(a(t)> = 0.
+But for any quadratic product of a(t) * b(t) with complex amplitude a(w) and b(w), P = <a(t) * b(t)> ≠0 and is given by:
+P = 1/2 Re[a(ω) * b_c(ω)] = 1/2 (P_w + P_(-w))
+P_r is real part of P only
+P_d is double-ended (complex values  -inf < w < inf) */
+
+/*  */
+
+P_s(w):=(1/2)*'realpart(a(w)*'conjugate(b(w)));
+
+P_d(w):=(1/2)*(P_w + P_m);
+
+a(w_m):='conjugate(a(w_m));
+
+w_m(w_p):=-w_p;
+
+w_p(w_m):=-w_m;
+
+wp(5);
+
+w_p(5);
+
+w_m(-5);
+
+/* Nonlinear systems generate frequency harmonics w_(-s) = -w_s and a_(-s) = a_c_s. This creates a multifrequency regime for polychromatic and monochromatic modes. For purely monochromatic modes the time-average value is <a(t)> = a_0 = 0 */
+
+w_sm(w_sp):= -w_sp;
+
+w_sp(w_sm):=-w_sm;
+
+P_w_r(w_s):='realpart(sum(a_s*exp(%i * w_s * t),s,1,inf));
+
+P_w_d(w_s):=(1/2)*sum(a_s*exp(%i*w_s*t),s,minf,inf);
+
+/* Time-average value P = <a(t)b(t)> of the quadratic power-energy quantity a(t)b(t) is: */
+
+P_r(a_s,b_s):=(1/2)*'realpart(sum(a_s*b_s_c, s,1,inf));
+
+P_d(P_s,a_s,b_s):=(1/2)*sum(P_s, s, minf,inf);
+
+P_s_r(a_s,b_s):=(1/2)*'realpart(a_s,'conjugate(b_s));
+
+/* Two Frequency Input Sources */
+
+a(t):='realpart(sum(sum  ))
+
+

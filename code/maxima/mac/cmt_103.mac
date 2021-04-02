@@ -1,0 +1,81 @@
+depends(B, [r,t]);
+
+depends(r, [x,y,z]);
+
+∇*E=-'diff(B,t);
+
+load(vect);
+
+curl(E)=-diff(B,t);
+
+E:[x,y];
+
+E:[x^3, y^3];
+
+curl(E);
+
+express(%);
+
+ev(%);
+
+express(curl(E))=-'diff(B,t);
+
+D:[x^2,y^2,z^2];express(div(D))=ρ_v;
+
+H:[x^2,y^3];
+
+B:[x^4,y^3];
+
+depends([x,y,z],t);
+
+express(curl(H)=diff(D,t))+J;
+
+B:[x^2,y^3,z^4];
+
+express(div(B))=0;
+
+D=ε_0*E+P;
+
+B=μ_0*(H+M);
+
+E;
+
+H;
+
+E:[x^3,y^3,z^3];
+
+express(div(E ~ H))=-E*diff(D,t)-H*diff(B,t)-J*E;
+
+w=(%o35 + %o36)/ 2;
+
+E . D;
+
+H . B;
+
+w=(%o35 + %o36)/ 2;
+
+%o35;
+
+%o36;
+
+w = (%o35+ %o36)/2;
+
+w:rhs(%o42);
+
+w;
+
+S:express(E ~ H); diff(w,t)+express(div(S))=-I_J-I_P-I_M;
+
+I_J:J . E;
+
+J:[x^7,y^6,z^5];
+
+I_J:J . E;P:[x^2,y^3,z^2]; M:[x^3,y^4,z^5];μ_0:5.3e-6;
+
+I_P:(1/2)*(E . diff(P,t) - P . diff(E,t));
+
+I_M:(1/2)*(H . diff((μ_0*M),t)-(μ_0*M) . diff(H,t));
+
+S:express(E ~ H); diff(w,t)+express(div(S))=-I_J-I_P-I_M;
+
+

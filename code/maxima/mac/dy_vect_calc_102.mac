@@ -1,0 +1,129 @@
+depends(f,[x,y,z]);
+
+load(vect);
+
+f:x*y^2-y*z;
+
+mgl:['diff(f,x), 'diff(f,y), 'diff(f,z)];
+
+map(ev,mgl),diff;
+
+mgm:matrix([del/del(x)] , [del/del(y)] , [del/del(z)]);
+
+mgm[1];
+
+mgm[2];
+
+mgm[3];
+
+mygrad(fn):=['diff(fn,x),'diff(fn,y),'diff(fn,z)];
+
+mygrad(x*y^2-y*z);
+
+ev(%,diff);
+
+ev(express(grad(f)),diff  );
+
+i:matrix([1],[0],[0]);
+
+j:matrix([0],[1],[0]);
+
+
+k:matrix([0],[0],[1]);
+
+ev(mygrad(f),diff);
+
+mymatgrad(fn):='diff(fn,x)*i+'diff(fn,y)*j+'diff(fn,z)*k;
+
+mymatgrad(f);
+
+ev(mymatgrad(f), diff);
+
+transpose(%);
+
+[ %[1], %[2],%[3]];
+
+[first(%o27[1]), first(%o27[2]) ,first(%o27[3]) ] ;
+
+part(%o27);
+
+pickapart(first(%o27[2]) ,1);
+
+%t43;
+
+transpose(%o41);
+
+
+avect(x,y,z):=x*i+y*j+z*k;
+
+mvect(x,y,z):=sqrt(x^2+y^2+z^2);
+
+mvhat(x,y,z):=avect(x,y,z)/mvect(x,y,z);
+
+uvect(x,y,z):=avect(x,y,z)/mvect(x,y,z);
+
+svect(x,y,z):=x^2+y^2+z^2;
+
+rvect(x,y,z):=svect(x,y,z)*uvect(x,y,z);
+
+avect(4,3,2);
+
+ a:avect(4,3,2);
+
+b:avect(7,4,3);
+
+a*b;
+
+a . b;
+
+5* a;
+
+5*a;
+
+a[1];
+
+a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+
+ev(%);
+
+a[2];
+
+b[2];
+
+a[1]*b[1]+a[2]*b[2]+a[3]*b[3];
+
+a . b;
+
+a*b;
+
+mcross(a,b):= matrix([i,j,k], [a[1],a[2],a[3]],[b[1],b[2],b[3]]);
+
+mcross(a,b);
+
+det(mcross(a,b));
+
+cpdet:mcross(a,b);
+
+cpdet[1,1];
+
+cp:cpdet[1,1]*(cpdet[2,2]*cpdet[3,3]-cpdet[2,3]*cpdet[3,2])-cpdet[1,2]*(cpdet[2,1]*cpdet[3,3]-cpdet[2,3]*cpdet[3,1])+cpdet[1,3]*(cpdet[2,1]*cpdet[3,2]-cpdet[3,1]);
+
+first(cpdet[2,2]) * cpdet[1,1];
+
+3 * cpdet[1,1];
+
+ev(%);
+
+cpdet[1,1];
+
+transpose(transpose(cpdet[1,1]));
+
+transpose(cpdet[1,3]);
+
+load(vect);
+
+first(cpdet[2,2]);
+
+transpose(cpdet[1,1]);
+
+

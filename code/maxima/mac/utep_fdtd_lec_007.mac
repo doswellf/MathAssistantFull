@@ -1,0 +1,1480 @@
+/* [wxMaxima: comment start ]
+UTEP EM Analysis With The FDTD Method
+
+Lecture 7 - Learning From 1D FDTD
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Normalize The Magnetic Field To Get New Curl Equations 
+TODO: INSERT PROOFS FROM SLIDE IN LECTURE 6 
+
+Can't use the full tensor forms for these yet
+
+μ_sr:matrix([μ_xx, 0, 0],[0,μ_yy, 0], [0,0,μ_zz]);
+ε_sr:matrix([ε_xx, 0, 0],[0,ε_yy, 0], [0,0,ε_zz]);
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_s0_full:matrix([μ_xx, μ_xy, μ_xz],[μ_yx, μ_yy, μ_yz],[μ_zx, μ_zy, μ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_s0_full:matrix([ε_xx, ε_xy, ε_xz],[ε_yx, ε_yy, ε_yz],[ε_zx, ε_zy, ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Diagonal Tensors For Diagonally Anisotropic Materials
+Axes of Grid Aligned With Axes of Crystal
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_s0_diag:μ_s0:matrix([μ_xx, 0, 0],[0, μ_yy, 0],[0, 0, μ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_s0_diag:matrix([ε_xx, 0, 0],[0, ε_yy,0],[0, 0, ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_s:[E_x, E_y, E_z] ; H_s:[H_x, H_y, H_z];H_sn:[Hn_x,Hn_y,Hn_z]; B_s:[B_x, B_y, B_z]; D_s:[D_x,D_y,D_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Proof of Curl Equations With Normalized Magnetic Field
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sym_curl_E:express(curl(E_s))=μ_sr /c_s0 * 'diff(H_s,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sym_curl_Hn:express(curl(H_sn))=ε_sr /c_s0 * 'diff(E_s,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+_________________________________________________________________________
+
+Proof FOR USE OF NORMALIZED H FIELD  in Curl Equations For The E Field
+_________________________________________________________________________
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H_sn = η_s0 * H_s; H_s = H_sn/η_s0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(μ_s0, μ_sr, ε_s0, ε_sr);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_s = μ_s0 * μ_sr; ε_s=ε_s0 * ε_sr;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+chn:express(curl(E_s)) = -μ_s * 'diff(H_n/η_s0,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p0:lhs(chn);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+η_0 (η_s0 here) is a constant and can be extracted from the derivative
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p1:1/denom(part(part(part(rhs(chn),1),1),1));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p2:part(part(part(rhs(chn),1),1),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p3:num(part(part(part(rhs(chn),1),1),1));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p4:part(part(rhs(chn),1),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p5:part(part(rhs(chn),1),1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p6:subst(p3, H_n /η_s0, p5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p7:p0=-p1*p4 * p6;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Not quite ready for substitution of μ_s0_diag with dot product in these equations
+The diff(Hn,t) is a vector that should be multiplied by μ_s0_diag with a dot product
+
+But the derivation got out of control and expanded the tensors in multiple instances.
+
+Going around this for now below by using  dot product of each row of μ_s0_diag with diff(Hn,t)
+That is giving the correct results, but the result is not directly derived from the curl equations.
+
+This is text until I can troubleshoot the more complex derivation with tensors
+p8:subst(μ_s0_diag * μ_sr, μ_s, p7);
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p8:p7 ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p8;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p9:subst(sqrt(ε_s0/μ_s0), 1/η_s0, p8);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p10:subst(sqrt(μ_s0^2), μ_s0, p9) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p11:ratsubst(1/c_s0, sqrt(ε_s0) * sqrt(abs(μ_s0)), p10);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p11;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p12:part(part(factor(part(rhs(p11),1)),1),1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p13:part(part(factor(part(rhs(p11),1)),1),1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p14:part(part(factor(part(rhs(p11),1)),1),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p15:part(factor(part(rhs(p11),1)),2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p16:p0=p14*p15* p12;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p17:subst(1/c_s0,   c_s0^-1 ,p16);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+simp:true;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Not Quite The Desired Format  At P17 But Close
+
+Pick the pieces and assemble them in the desired order for latex()
+TODO: Enter the derivation for curl of H which is very similar 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p17;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(H_ns); depends([H_x, H_y, H_z],t); depends(H_ns, [H_x,H_y, H_z]); H_ns:[H_x, H_y, H_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p18:subst(H_n= H_ns, p17);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+verbify( part(part(part(rhs(p18),1),1),0));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p19:subst(verbify( part(part(part(rhs(p18),1),1),0)), part(part(part(rhs(p18),1),1),0) ,p18);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p20:subst(μ_sr=μ_s0_full, p19 );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p21:part(lhs(p20),1)= row(μ_s0_full ,1) . diff([H_x, H_y,H_z], t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(p21);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p22:part(lhs(p20),2)= row(μ_s0_full ,2) . diff([H_x, H_y,H_z], t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p23:part(lhs(p20),3)= row(μ_s0_full ,3) . diff([H_x, H_y,H_z], t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Assume Only Diagonal Tensors
+
+Simplification Step - Assume Diagonally Anisotropic Materials 
+
+For diagonally anisotropic materials only the μ_xx, μ_yy, μ_zz, ε_xx, ε_yy, ε_zz 
+matrix entries have values. Off-diagonal entries are all zero
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p24:part(lhs(p20),1)= row(μ_s0_diag ,1) . diff([H_x, H_y,H_z], t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p25:part(lhs(p20),2)= row(μ_s0_diag ,2) . diff([H_x, H_y,H_z], t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p26:part(lhs(p20),3)= row(μ_s0_diag ,3) . diff([H_x, H_y,H_z], t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Defining d2d and deriv2diff here and below for now 
+Comment out the lower definition but leave it for reference
+Make the definitions a text cell below instead of a code cell
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d(dq):= block( template: (FLD[i,j+1,k] -  FLD[i,j,k]) / DIF, c1:part(dq,1), c2:part(dq,2), subst([FLD=c1, DIF=concat(d, c2) ], template) );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ deriv2diff(dq):=block(p1:part(lhs(dq),1) , print(p1), p2:part(part(lhs(dq),2),1), print(p2), p3:part(rhs(dq),1), print(p3), p4:part(rhs(dq),2) ,print(p4), d2d(p1)-d2d(p2)=p4*d2d(p3) );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv2diff(p24);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv2diff(p25);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv2diff(p26);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Proof For Curl of H Using Normalized Magnetic Field
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+pch: curl(H)=ε_s * 'diff(E,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+php1:subst(H=H_n/η_s0, pch);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(php1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+php2:subst(curl(H_n/η_s0)=curl(H_n)*(1/η_s0), php1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+php3:php2*η_s0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+php4:subst(ε_s=ε_s0*ε_sr, php3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(μ_s0, μ_sr, ε_s0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+php5:subst(η_s0 = sqrt(μ_s0/ε_s0), php4);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+php6:radcan(php5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+hp1:part(rhs(php6),1);hp2:part(rhs(php6),2);hp3:part(rhs(php6),3);hp4:part(rhs(php6),4);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+hp10:hp2*hp4;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+hp11:ratsimp(rootscontract(hp10)); 
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+php7:lhs(php5)=hp11*hp3*hp1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+php8:subst(sqrt(ε_s0*μ_s0)=(1/c_s0), php7);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+php9:subst(H_n=H_sn, php8);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+php10:express(php9);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Conversion Of Analytic Curl of E To Discrete FDTD Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(E_s); depends([E_x,E_y,E_z],t);depends(E_s, [E_x, E_y, E_z]) ; E_s[E_x, E_y, E_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sym_curl_E:php10;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fs0:subst(E=[E_x, E_y, E_z],sym_curl_E);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The verbify() function must be applied to an expression which is a noun form (quoted)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fs1:subst(ε_sr=ε_s0_full, fs0);fs1A:subst(verbify(part(part(rhs(fs1),2),0)) , part(part(rhs(fs1),2),0) , fs1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fs2:lhs(fs1A) = rhs(fs1A);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fs3:part(lhs(fs2),1 ) = row(part(fs1A:rhs(fs1),1),1)  . diff([E_x, E_y, E_z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fs4:part(lhs(fs2),2 ) = row(part(fs1A:rhs(fs1),1),2)  . diff([E_x, E_y, E_z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fs5:part(lhs(fs2),3 ) = row(part(fs1A:rhs(fs1),1),3)  . diff([E_x, E_y, E_z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Assume Only Diagonal Tensors
+
+Simplification Step - Assume Diagonally Anisotropic Materials 
+
+For diagonally anisotropic materials only the μ_xx, μ_yy, μ_zz, ε_xx, ε_yy, ε_zz 
+matrix entries have values. Off-diagonal entries are all zero
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ft01:part(lhs(fs2),1 ) = row(ε_s0_diag,1)  . diff([E_x, E_y, E_z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ft02:part(lhs(fs2),2 ) = row(ε_s0_diag,2)  . diff([E_x, E_y, E_z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ft03:part(lhs(fs2),3 ) = row(ε_s0_diag,3)  . diff([E_x, E_y, E_z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Analytic To FDTD - Extracting For Hx From Curl Equations On LHS 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+First Version Of deriv2diff() to build a difference eqn from a differential eqn.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+d2d(dq):= block( 
+    template: (FLD[i,j+1,k] -  FLD[i,j,k]) / DIF, 
+    c1:part(dq,1), 
+    c2:part(dq,2), 
+    psubst([FLD=c1, DIF=concat(d, c2) ], template )
+);
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d2d(dq):= block( 
+    template: (FLD[i,j+1,k] -  FLD[i,j,k]) / DIF, 
+    c1:part(dq,1), 
+    c2:part(dq,2), 
+    psubst([FLD=c1, DIF=concat(d, c2) ], template )
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ deriv2diff(dq):=block(p1:part(lhs(dq),1) , print(p1), p2:part(part(lhs(dq),2),1), print(p2), p3:part(rhs(dq),1), print(p3), p4:part(rhs(dq),2) ,print(p4), d2d(p1)-d2d(p2)=p4*d2d(p3) );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv2diff(ft01);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv2diff(ft02);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+deriv2diff(ft03);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_s0_full:matrix([μ_xx, μ_xy, μ_xz],[μ_yx, μ_yy, μ_yz],[μ_zx, μ_zy, μ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_s0_full:matrix([ε_xx, ε_xy, ε_xz],[ε_yx, ε_yy, ε_yz],[ε_zx, ε_zy, ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Diagonal Tensors For Diagonally Anisotropic Materials
+Axes of Grid Aligned With Axes of Crystal
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_s0_diag:μ_s0:matrix([μ_xx, 0, 0],[0, μ_yy, 0],[0, 0, μ_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_s0_diag:matrix([ε_xx, 0, 0],[0, ε_yy,0],[0, 0, ε_zz]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reduction of Analytic Equations to 1D Form
+
+Derivatives with dx and dy in the denominator are assumed to be zero
+
+Filling in the -(1/c_s0) here until I fix the substitutions above 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p20;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p124:part(lhs(p20),1)= -(1/c_s0)*row(μ_s0_diag ,1) . diff([H_x, H_y,H_z], t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p224:subst(0, part(lhs(p124),1), p124);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p125:part(lhs(p20),2)= -(1/c_s0)* row(μ_s0_diag ,2) . diff([H_x, H_y,H_z], t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p225:subst(0, part(lhs(p125),2), p125);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p126:part(lhs(p20),3)= -(1/c_s0)* row(μ_s0_diag ,3) . diff([H_x, H_y,H_z], t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p226:subst(0, lhs(p126), p126);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p127:part(lhs(fs2),1 ) = -(1/c_s0)* row(ε_s0_diag,1)  . diff([E_x, E_y, E_z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p227:subst(0, part(lhs(p127),1), p127);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p128:part(lhs(fs2),2 ) = -(1/c_s0)* row(ε_s0_diag,2)  . diff([E_x, E_y, E_z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p228:subst(0, part(lhs(p128),2), p128);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+p129:part(lhs(fs2),3 ) = -(1/c_s0) *row(ε_s0_diag,3)  . diff([E_x, E_y, E_z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(0, lhs(p129), p129);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reduction of FDTD Equations to 1D Form
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reduced deriv2diff For 1D Reduced Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+
+TODO: ADD OUTER CONDITION ON rdv2diff 
+Detect leading unary minus sign or diff/deriv 
+If minus then 
+    p0:part(lhs(dq),0)
+    other parts start at index 1
+else
+    left-hand sign : +1
+    all lhs indices start at zero
+
+rdv2diff(dq):=block(
+    if equal(part(lhs(dq),0), "-") then
+        (
+            p0:part(lhs(dq),0),
+            p1:part(part(part(rhs(dq),1),1),1),
+            p2:part(part(part(rhs(p224),1),1),2),
+            p3:part(rhs(dq),2) ,
+            p4:1/c_s0, 
+            p5:part(rhs(dq),0),
+            if equal(p0, "-") then snL:-1 else snL:1, 
+            if equal(p5,"-") then snR:-1 else snR:1; 
+            snL*d2d(p1)=snR*p3*p4*d2d(p2)
+        ) else (
+            p1:part(part(part(rhs(dq),0),1),1),
+            p2:part(part(part(rhs(dq),0),1),2),
+            p3:part(rhs(dq),2) ,
+            p4:1/c_s0, 
+            p5:part(rhs(dq),0),
+            snL:1,
+            if equal(p5,"-") then snR:-1 else snR:1; 
+            snL*d2d(p1)=snR*p3*p4*d2d(p2)
+        )
+)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdv2diff(dq):=block(
+    p0:part(lhs(dq),0),
+    p1:part(lhs(dq),1) , 
+    p2:part(part(part(rhs(dq),1),1),1),
+    p3:part(part(part(rhs(p224),1),1),2),
+    p4:1/c_s0, 
+    p5:part(rhs(dq),0),
+    if equal(p0, "-") then snL:-1 else snL:1, 
+    if equal(p5,"-") then snR:-1 else snR:1,
+    snL*d2d(p1)=snR*p3*p4*d2d(p2) );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdv2diff(p224);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+rdv2diff(p227);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+if(equalspart(lhs(p225),0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Setting μ_r and ε_r to 1.0 For Now
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_r:1; μ_r:1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Free Space Permittivity
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε_0:8.854187817E-12;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Free Space Permeability
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ_0:1.256637061E-6;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Permittivity
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ε:ε_r * ε_0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Permeability
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+μ:μ_r*μ_0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Refractive Index (μ_r = 1 for diamagnetic materials - no magnetic response)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+n = sqrt(μ_r *ε_r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Free-Space Wave Velocity (m/s)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+c_0: 299792458;c_0_calc:1/sqrt(ε_0*μ_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Wave Velocity In Material
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+v(n):=c_0/n;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Free Space Impdedence
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+η_0:sqrt(μ_0/ε_0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Material Impedence
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+η:η_0*sqrt(μ_r/ε_r);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Arrays For Relative Permeability and Permittivity
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Maximum Number Of Time Steps
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+TIME_STEPS: 1000;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Size of FDTD Grid
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+declare(GRID_SIZE, integer) ; GRID_SIZE:50;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1D Grid Spacing 
+dx: 1;dz:1
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dx: 1;dz:1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ zs: makelist( 0, x,1,GRID_SIZE );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1D Grid Arrays For Hx and Hy Fields
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+array(Hx, GRID_SIZE); array(Hy, GRID_SIZE);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fillarray(Hx, zs); fillarray(Hy,zs);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1D Grid Array For Normalized H Fields
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(Hnx, Hny);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+array(Hnx, GRID_SIZE); array(Hny, GRID_SIZE) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fillarray(Hnx, zs); fillarray(Hny,zs);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Once Hx and/or Hy have real values loaded, normalize those values 
+using the free-space impedence. This makes the magnitude of Hn and E
+roughly the same for better numerical accuracy.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Hnx:η_0 * Hx; Hny:η_0 * Hy;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1D Grid Arrays For Ex and Ey Fields
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+array(Ex, GRID_SIZE); array(Ey, GRID_SIZE) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fillarray(Ex, zs); fillarray(Ey,zs);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+1D Permeability and Permittivity Arrays
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+array(mu_xx, GRID_SIZE) ; array(eps_yy, GRID_SIZE);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Update Coefficient Arrays 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+array(mey, GRID_SIZE); array(mhx, GRID_SIZE) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use these functions to fill the coefficient arrays before main loop
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+meyk(k,dt):=(c_0 * dt)/eps_yy[k];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+mhxk(k,dt):= (c_0 * dt)/mu_xx[k];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Source Definition
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Physical Boundary Condition Definition
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+NOT YET DEALING WITH NUMERICAL BOUNDARY CONDITIONS
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+NOTE: THESE FUNCTIONS NEED TWEAKING
+THE ARRAY FUNCTIONS SHOULD BE REPLACED BY A FUNCTION
+OPERATING ON THE ARRAYS Ex, Ey, Hx, Hy
+EVALUATION TIMES ARE NOT AN EXPLICIT ARRAY INDEX IN THIS SCHEME
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD Update Equation For Ex
+TODO: DERIVE THESE USING deriv2diff() to be defined above
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ update_Ex(k,t,dt,dz) := Ex[k]  - mex[k] * ((Hny[k] - Hny[k-1])/dz)  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD Update Equation For Ey
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+update_Ey(k,t,dt,dz) := Ey[k]  + mey[k] * ((Hnx[k] - Hnx[k-1]  )/dz)   ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD Update Equation For Hnx
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+update_Hnx(k,t,dt,dz):= Hnx[k] + mex[k] * ((Ey[k+1] - Ey[k])/dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+FDTD Update Equation For Hny
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+update_Hny(k,t,dt,dz) := Hny[k] - mhy[k] * ((Ex[k+1] - Ex[k])/dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Main Loop
+
+For T:1 Thru TIME_STEPS do
+
+    For nz:1 thru GRID_SIZE
+        update_Hx(nz,T)
+
+    For nz;2 thru GRID_SIZE
+        update_Ey(nz, T)
+
+NOW DEALING WITH NUMERICAL BOUNDARY CONDITIONS
+
+USING DIRICHLET BOUNDARY CONDITIONS
+
+For Hnx[GRID_SIZE] pretend that Ey[k+1] exists and Ey[k+1] = 0
+
+For Ey[GRID_SIZE] pretend that Hnx[k-1] exists and Hnx[k-1] = 0
+
+------------------ Update H from E (Dirichlet Boundary Condtions) ------------------
+
+For T:1 Thru TIME_STEPS do
+
+    For nz:1 thru GRID_SIZE-1
+        update_Hnx(nz,T)
+
+Hnx[GRID_SIZE]:Hnx[GRID_SIZE] + mhx[GRID_SIZE] * (0 - Ey[GRID_SIZE])
+
+------------------ Update E from H (Dirichlet Boundary Condtions) ------------------
+
+Ey[GRID_SIZE]:Ey[GRID_SIZE] + mey[GRID_SIZE] * (0 - Hnx[GRID_SIZE])
+
+    For nz:2 thru GRID_SIZE
+        update_Ey(nz, T)   
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+PERIODIC BOUNDARY CONDITIONS
+
+Can use field values from previous cycle/phase, left or right of current position
+or at the other end of the yee grid.
+
+For Hnx[GRID_SIZE], Ey[GRID_SIZE+1] = Ey[1]
+
+For Ey[1]  Hnx[k-1] = Hnx[GRID_SIZE]
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+How big do the grid cells have to be to get accurate results?
+Grid resolution must be good enough to resolve the shortest wavelength
+
+Determine Smallest Wavelength
+λ_min = c_0/(f_max *η_max) where η_max is the max. grid refractive index 
+
+Grid resolution for the minimum wavelength wave using at least 10 cells
+
+Δ_λ ≅ λ_min/N_λ  where N_λ ≥ 10
+
+Mechanical features of devices
+
+Grid resolution must be high enough to resolve the smallest
+mechanical features of a device.
+
+Determine smallest feature size d_min
+
+Divide d_min by [1 .. 4]  
+
+Δ_d ≅d_min/N_d where N_d ≥ 1
+
+Δ_d is the minimum grid resolution needed 
+to model the  minimum feature size
+
+Set the initial grid resolution to the smallest of the 2 numbers
+calculated above.
+
+Δ_x = Δ_y = min(Δ_λ, Δ_d)
+
+Decide which dimensions along each axis are critical
+(e.g lattice constant, grating period along x, layer thickness along y)
+
+dx and dy
+
+Compute number of grid cells that d_c (critical dimension), round up
+
+Mx = ceil(d_x/Δ_x)
+My = ceil(d_y/Δ_y)
+
+Adjust grid resolution to fit this dimension to the grid exactly
+
+Δ_x = d_x / M_x
+Δ_y = d_y  / M_y
+
+>>>>> Courant Stability Condition <<<<<
+
+EM waves propagate at v= c_0/n, less than c_0, n > 1 (normally) where
+c_0 = 299792458 m/s, 
+n is the refractive index
+
+Limit on Δt
+
+During one time step Δt an EM wave will travel:
+
+Numerical distance travelled in one time step:      Δz
+Physical distance travelled in one time step:         c_0*Δt/n 
+
+The algorithm will not allow a wave to travel further than
+one unit cell in a single time step
+
+Guarantee that a physical wave would not propagate further than
+a single unit cell in one time step
+
+(c_0*Δt)/n < Δz
+
+The upper limit on the time step is then
+
+Δt < (n*Δz)/c_0
+
+n should be set to the smallest refractive index found anywhere on the grid
+n is normally set to 1.0 and dropped from the equations.
+
+Refractive index ≥ 1 so Δt < (Δz/c_0) worst case, n=1 gives 
+fastest possible physical wave
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+CSC:Δt < 1 / (c_0 * sqrt( 1/(Δx)^2 + 1/(Δy)^2  + 1/(Δz)^2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Practical Implementation Of the Stability Condition
+
+The stability condition is most restrictive along the shortest dimension
+of the grid unit cell
+
+Δ_min = min(Δx,Δy,Δz) 
+
+To ensure stability and accuracy on any grid
+
+Δt < Δ_min / (2 * c_0)  Include a factor of 0.5 for safety
+
+Generalize to account for special cases
+
+Δt < (n_min * Δ_min) / (2 * c_0)
+
+1. The grid is filled with dielectric so em energy travels slowely everywhere
+2. The model includes dispersive materials with n<1
+
+Time step for this 1D Grid
+
+Δt = (n_bc * Δz) / (2 * c_0) where n_bc is refractive index at boundary
+
+A wave will move one grid cell in 2 time steps
+
+This is a necessary condition for the perfect boundary condition
+
+We cannot have different materials at the 2 boundaries
+when using this boundary condition
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Perfect Boundary Condtion (PBC)
+
+If
+    The field is only moving outward at the boundaries
+    The materials at the boundaries are LHIN
+    The refractive index is the same at both boundaries (n_bc)
+    Δt = (n_bc *Δz)/(2*c_0) exactly
+    (LHIN = Linear Homogenous Isotropic and Non-Dispersive)
+
+Then
+    Ey[Nz+1,t] = Ey[Nz,t-2Δt]
+
+Implementing the PBC 
+
+Note that Ey and Hnx are actually 1D arrays
+Here I use a time index only to show when the values are calculated
+Later I may use a 2D array to allow storage by time and position
+Very slow but it may more intutitive
+This code will be used to generate faster Matlab/Octave, C and FORTRAN code 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Starting from the source location the wave moves toward the boundaries
+The amplitude of the wave is passed to each cell moving outward
+Two more "cells" exist outside the boundary of the grid
+The amplitude shifts into the first and second outside cell
+The value in the 2nd outside cell gives the amplitude outside the grid
+
+At the Low Z boundary (Z is position, not impedence)
+
+Order of operations is critical here to get the PBC 
+h3:h2;
+h2:h1; 
+h1:Hnx[1] ; 
+Ey[1,t+dt] :  Ey[1] + mey[k] * ((Hnx[1,t+(dt/2)] - h3) / dz) ;
+
+At the High Z Boundary (Z is position, not impedence)
+
+e3:e2;
+e2:e1; 
+e1:Ey[GRID_SIZE] ; 
+Hnx[1,t+dt/2] :  Hnx[1] + mhx[k] * ((e3 - Ey[GRID_SIZE,t] ) / dz) ;
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+The Gaussian Pulse
+
+g(t) = exp(-((t-t0)/τ)^2) τ is amesaure of pulse width
+
+Fourier transform g(t) = -(t^2/t^3) ⟶ G(f) = 1/√πB * exp(-(f^2/B^2))
+
+The frequency of the pulse extends from DC to ≅ B  (B = 1 / πτ)
+
+B is the max frequency we can model
+
+1. Determine maximum frequency of simulated system f_max
+
+2. Compute pulse width generated given upper frequency f_max
+
+B = f_max = 1/ (πτ) ⟶ τ ≤ 1/(π*f_max)  
+τ ≅ 0.5/f_max
+
+3. Time step may need to be reduced
+    Gaussian pulse should have a resolution of 10 to 20 time steps
+
+Δt = τ / N_t
+
+Determine a first Δt based on the Courant Stability Condition
+Determine a 2nd Δt based on resolution required to analyze f_max accurately
+Use the smallest Δt from the 2 Δt's calculated above
+
+N_t ≥ 10
+
+All of this should be automatically satisifed if Δt = (n*Δz) / (2*c_0)
+
+Designing the Pulse Source
+
+NO STEP FUNCTIONS!  NOT REALISTIC AND GIVES BAD RESULTS
+
+Give a time delay t_0 before the pulse is inserted into the grid
+
+Wait 6τ (6x the width of the pulse) into the simulation 
+
+Hard Source - Overwrites a cell with the source value - Not practical!
+Reflects scattered waves that impinge on it.
+
+Soft Source
+
+Transparent to scattered waves passing through it
+Update the field across the entire grid
+Then the source function value is added to one field component 
+at one point on the grid.
+This injects energy into the grid in both (all) directions
+This source is great for testing boundary conditions.
+
+Hnx[k,t+dt/2] = Hnx[k,t+dt/2] + g_H[k] 
+and/or
+Ey[k,t+dt] = Ey[k,t+dt] + g_E[k]
+
+ADD TO is rarely used but a stop-gap until we learn Total Field/Scattered Field
+SIMPLE ADD-TO sends energy in all directions with sloppy dispersion characteristics and bad amplitude control
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Grid Implementation 
+Ey,Hx,mu_xx, eps_yy, mey, mhx are 1D arrays of size GRID_SIZE
+GRID_SIZE O(500 to 1000) points
+
+Source Implemention
+
+gE(t) is stored in a 1D array of length STEPS (time steps) 
+STEPS is O(5000 to 10000) points
+Pulse starts at cell[N] to give delay 6τ delay of pulse injection
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Estimating Total Iterations Of Simulation
+
+1. Very resonant devices require more iterations
+2. Pure scattering devices require very few iterations
+3. More iterations needed for more wave bouncing across the grid
+
+Information Considerations
+
+1. Calculating spectral shapes requires calculating the most events 
+    Involves calculation of reflectance, transmittance, line shapes, ...
+2. Calculating the position of resonances can require fewer iterations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Rule Of Thumb - Qty of iterations to finish a simulation
+
+How long for a wave to move across the grid (worst case)?
+
+t_prop - (n_max * Nz * Δz)/c_0
+
+Simulation time T has to include entire pulse of duration τ
+
+T ≥ 12τ
+
+Simulation duration should allow for ~5 bounces
+
+T ≥ 5*t_prop
+
+T = 12τ + 5*t_prop (more time needed for resonant devices!)
+
+Given Δt, the total iterations required is:
+
+STEPS= ceil(T/Δt)   Must be an integer!
+
+STEPS is used in a for loop
+
+CAN ALSO USE while and check for energy/power left in grid
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Revised FDTD Algorithm
+
+Compute Grid Resolution
+Compute Time Step
+Compute Source Pulse
+Compute Update Coefficients
+Initialize Fields
+--
+-- MAIN TIME LOOP
+--
+DO 
+    Update H from E
+    Record H-Field Boundary Term
+    Update E from H
+    Recordd E-Field Boundary Term
+    Inject Source Pulse
+    Visualize Fields
+UNTIL T > STEPS
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Compute Default Grid Resolution
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dz1: min(LAMBDA) / nmax / NRES;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dz2 =dmin/NRES ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dz = min(dz1, dz2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Snap grid to critical dimensions
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+N = ceil(dc/dz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dz = dc/N;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Main FDTD Loop
+
+Nz == GRID_SIZE STEPS == TIME_STEPS
+    
+for T:1 thru STEPS
+    /// update H from E (Dirichlet Boundary Conditions) 
+    for nz:1 thru Nz-1
+        Hnx[nz] :Hnx[nz] + mhx[nz] * ((Ey[nz+1] - Ey[nz])/dz )
+    
+    Hnx[Nz] :Hnx[Nz] +  mhz[Nz]*((e3-Ey[Nz])/dz)
+    h3:h2:h2:h1:h1:Hnx[1]
+
+/// update E from H (Dirichlet Boundary Conditions)
+Ey[1] : Ey[1] + mey[1] * (Hnx[1] - h3)/dz)
+for nz:1 thru Nz-1
+    Ey[nz]:Ey[nz] + mey[nz]*((Hnx[nz] - Hnx[nz-1]) / dz)
+
+e3:e2:e2:e1:Ey[Nz]
+
+/// inject the soft source 
+Ey[nzsrc] : Ey[nzsrc] + g[T]
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Total Field/Scattered Field TF/SF
+
+Total Field contains device and all fields (source, reflected, transmitted waves)
+Scattered Field contains only the reflected (outgoing) wave(s) bouncing from device
+1D Grid - k=1 is boundary condition PAB in this case (others are PML, PERIODIC, etc)
+TS/SF interface is between cells for k=1 and k=2
+Cell where k=2 is source injection cell
+'Cell' to the right of k=1 records reflected waves
+'Cell' to the left of k=Nz records transmitted waves
+Spacer regions not needed for 1D but are useful for visualization
+Spacer region is ~λ_max
+n_bc is refractive index at grid boundary
+μ_r and ε_r must be known at the cell where source wave is injected
+Device is placed more toward the center of the grid
+
+Problem with Ey and Hx at point k_src and k_src-1
+
+Ey finite difference in SF Ey[k_src] has a term from the TF
+Subtract source value from Ey[k_src], i.e. Ey_total[k_src] - g(t)  
+where g(t) = Ey_src[k_src] (only the source injected/added into cell Ey[k_src])
+Finite Difference in TF has a term from the SF
+
+Have Hx from scattered field side in expression for a total field value
+Add the Hx[k_src] source component to the Hx value to make it a TF value
+
+Calculate 2 source functions before entering the main FDTD loop
+Hx_src[k_src-1, t+dt/2] and Ey_src[k_src,t]
+   [wxMaxima: comment end   ] */
+
+
+

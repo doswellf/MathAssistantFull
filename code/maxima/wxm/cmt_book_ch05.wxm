@@ -1,0 +1,594 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Modern Electrodynamics and Coupled Mode Theory
+Chapter 5
+Planar 3 Layer Dielectric Structure
+Determine Complete Eigenfield Distributions
+Derive Eigenvalue (Dispersion) Equations
+Dealing with guided and radiative modes 
+
+5.2 Closed Waveguide Without Losses and Perfect Conducting Metallic Boundary
+
+Cental Arbitrary Waveguiding Medium 
+Surrounding Isotropic Homogenous Medium with constant permittivity and permeability ε and μ
+Outer Perfectly Conducting Boundary 
+
+k_z = k_long = k[z]      longitudinal wave number
+k_t = trns = k[t]          transverse wave number
+
+The isotropic waveguiding medium satisfies this characteristic equation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_101:[ k[t]=(k[x]^2+k[y]^2)/2,k^2=2*ε*μ, k^2=k[t]^2+k[z]^2    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The laplacian here acts on the radius vector r[t] of points in the cross-section of the outer medium
+
+cmt_ch05_101 
+    results from substituting the phase exp(i(ωt-(k . r)) into the ordinary wave equation 
+    the substitution converts it into the Helmholtz for the transverse fields
+
+In fact r[t] is a vector but when using cylindrical/spherical coordinates x,y,z are parametric equations, not just scalar coordinates
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_102:[r[t]:[x,y,z],express(laplacian(f(r[t]))) + k[t]^2*f(r_t)=0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+f_hat(r[t]) 
+    corresponds to any component of the EM field
+    determines the total wave dependence of that component as follows:
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_103:[f(r[t],z,t)=f(r[t])*exp(%i*(ω*t-k[z]*z))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The modes in the outer medium (isotropic) is a function of the transverse wave number k[t]
+if k[t]^2 is real and positive, the outer fields are components of volume modes
+if k[t]^2 is real and negative, the outer fiels are compoents of surface modes
+if k[t]^2 is complex the outer fields are components of complex (evanescent) modes
+
+The system under study is now simplified 
+The waveguide structure is now planar with ∂/∂x =iik[x] = 0 and k[t] = k[y]
+
+At fixed frequency ω the nth eigenmode has the wavenumber
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+k[z,n](ω)=sqrt(ω^2*ε*μ - k[y,n](ω)^2 );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The frequency dependence of k[z,n](ω) for the outer medium results from the dispersion 
+properties of the waveguide. These dispersion properties result from contributions from all media 
+within the total waveguide structure.
+
+The Helmholtz equation for the nth mode of a planar system has the following form:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_104:['diff(f_hat[n](y),y,2)+k[y,n](ω)^2*f_hat[n](y)=0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The solution of cmt_ch05_104 gives the transverse function
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_105:[f_hat[n](y,z,t)=A*exp(-%i*k[y,n]*y)+B[n]*exp(-%i*k[y,n]*y)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.2.1 Volume Modes
+
+k[y,n](ω)^2 > 0
+Real values of k[y,n](ω) only
+Transverse distribution of the fields at constant z (z=C_real) consists of 2 waves
+The 2 waves are travelling in opposite directions along the y axis
+This describes the "transverse wave resonance" within the volume of the isotropic material.
+This resonance is a result of the interference between the transverse forward and reverse waves 
+The transverse waves are reflected from 2 boundaries
+    1) The outer perfectly conducting surface 
+    2) A boundary of the inner waveguide layer
+A transverse standing wave pattern is typical for spatial resonance of this type.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_106:[f_hat[n](y,z,t)=An]*exp(-%i*k[z,n]*z)*exp(%i*(ω*t-k[y,n]*y)) + B[n]*exp(-%i*(k[z,n]*z))*exp(%i*(ω*t-k[y,n]*y) ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+When ω^2*ε*μ> k[y,n](ω)^2 the value of k[z,n] is real and takes on the role of the phase constant β[n](ω)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_107:[k[z,n]=sqrt(ω^2*ε*μ-k[y,n](ω)^2), k[z,n]=β[n](ω)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Then equation cmt_ch05_106 takes the form 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_106:[f_hat[n](y,z,t)=f_hat[n](y)*exp(%i*(ω*t-β[n]*z)), f_hat[n](y)=(A[n]*exp(-%i*k[y,n]*y) + B[n]*exp(-%i*(k[y,n]*y)))*exp(%i*(ω*t-β[n]*z)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The wave factor at the end of cmt_ch05_106 is the volume mode propagating with phase velocity given by
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_107:[v[ph,n](ω) =ω/β[n](ω), v[ph,n](ω)=c/sqrt(1-(k[y,n](ω)*c/ω)^2)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The equation in cmt_ch05_107 indicates that the moving volume modes are always fast, meaning that:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_108:[v[ph,n]>c, v[ph,n] =1/sqrt(ε*μ)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The group velocity of the nth volume mode is given by:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_109:[v[gr,n](ω)=1/('diff(β[n](ω),ω)), v[gr,n]=c*(β[n](ω)/((ω/c)-k[y,n](ω) *c* 'diff(k[y,n](ω),ω))) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The condition v[gr,n] <=c results in the following restriction on the frequency dependence of 
+the transverse wave number in the outer (isotropic) medium
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5212:['diff(k[y,n](ω),ω)<= ( ((ω/c)-β[n](ω)) /(k[y,n](ω)*c))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+When ω^2*ε*μ < k[y,n](ω)^2 k[z,n](ω) is purely imaginary.
+This transforms the phase constant β[n] into an amplitude decay constant α[n]:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5213:[k[z,n](ω) = -%i*sqrt(k[y,n](ω)^2-ω^2*ε*μ), k[z,n](ω)=-%i*α[n](ω)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This causes amplitude decay in the previous  direction of phase propagation.
+The amplitude decay is denoted by a minus sign
+
+α[n] > 0 for β[n] > 0, giving:
+
+Given purely real values of α[N] the equation below describes the evanescent mode
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5214:[f_hat[n](y,z,t)=A[n]*exp(-α[n])*exp(%i*(ω*t-k[y,n]*y))+B[n]*exp(-α[n]*z)*exp(%i*(ω*t+k[y,n]*y)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Any volume mode turning into an evanescent mode stops propagating it's phase 
+The mode decays in amplitude as it travels in the z direction: exp(-α[n]*z) 
+
+The evanescent modes correspond to the cutoff or stop band of a screened waveguide.
+The passband corresponds to the locations where active modes with real-valued β[n] exist 
+Any volume mode turning into an evanescent mode stops propagating it's phase 
+The mode decays in amplitude as it travels in the z direction: exp(-α[n]*z) 
+
+The evanescent modes correspond to the cutoff or stop band of a screened waveguide.
+The passband corresponds to the locations where active modes with real-valued β[n] exist 
+
+The transition between pass and stop bands matches the cutoff frequency ω[n,c]. 
+The following constraints are imposed on the longitudinal and transverse wave numbers
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5215:[β[n](ω[n,c])=0, k[y,n](ω[n,c])=ω[n,c]/c];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5216:[v[ph,n,c] = v[ph,n](ω[n,c],v[ph,n,c]=inf )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+On the ω-β graph (Fig 5.2) the cutoff points are located along the ω axis
+The  cutoff points are ω=ω[c,n] and β[n]=0
+These are the extreme ends of the mode dispersion curve.
+At these points ∂ω/∂β[n] = 0 because v[gr,n,c] = 0
+v[gr,n,c] = 0 only if 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5217:[ ω=ω[n,c], 'diff(k[y,n](ω),ω) # 1/c ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Or else  v[gr,n,c] is indeterminate (0/0) at the cutoff frequency given by (5.2.15) so that v[grn,ln,c] ≠ 0
+The fields of the nth mode in the outer medium at it's cutoff frequency ω[n,c] propagate along the y axis (transverse)
+as a plane wave with dispersion relation k[y,c]^2 = -abs(k[y,n](ω))^2 < 0
+
+When the reflecting metallic screen is moved out to x=∞ and y = ∞ the volume modes turn into radiating modes in an open
+waveguide system. Propagating and evanescent modes become radiating modes when the metal screen is removed.
+
+Further details will be added later - only equations will be entered for now.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.2.2 Surface Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5218:[ k[y,n](ω) ^2    =-abs(k[y,n](ω))^2, k[y,n](ω) < 0, k[y,n](ω)=-%i*abs(k[y,n](ω)) ,k[z,n](ω)=sqrt(ω^2*ε*μ+'abs(k[y,n](ω))^2), k[z,n](ω)=β[n](ω) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Equation (5.2.18) gives these equations for the phase and group velocities of the nth surface mode (5.2.10 and 5.2.11)
+Equation (5.2.19) shows that the surface modes are always slow (v[ph,n]  < c). The volume modes are fast v[ph,n]>c
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5219:[v[ph,n](ω)=ω/β[n](ω), v[ph,n](ω)=c/sqrt(1+('abs(k[y,n](ω)) *c/ω)^2)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5220:[ v[ph,n] < c, v[ph,n] < 1/sqrt(ε*μ),v[gr,n](ω)=1/'diff(β[n](ω),ω), v[gr,n](ω)=c*(β[n]/((ω/c) +abs(k[y,n](ω))*c * 'diff(abs(k[y,n](ω)) ,ω))) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5221:[v[ph,n] ≤ c, 'diff(abs(k[y,n](ω)),ω) ≥ ((β[n](ω) - (ω/c))/(abs(k[y,n](ω))*c)) , 'diff(abs(k[y,n](ω)),ω) > 0  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For surface moes (5.2.3) and (5.2.6) give the following formulae for any part of the EM field
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5222:[f[n](y,z,t)=f[n](y)*exp(%i*(ω*t-β[n]*z)),f[n](y,z,t)=(A[n]*exp(-abs(k[y,n])*y) +B[n]*exp(abs(k[y,n])*y))*exp(%i*(ω*t-β[n]*z)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Transition occurs between surface and volume mode regimes at cutoff frequency ω[n,c]
+The transverse and longitudinal wave numbers have the following contraints
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5223:[k[y,n](ω[n,c]) = 0, β[n](ω[n,c])=ω[n,c]/c];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The group and phase velocities are always equal to c in the outer isotropic material
+The phase and group velocities at the cutoff frequency are always
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5224:[v[ph,n,c]=v[ph,n](ω[n,c]), v[ph,n,c] = c, v[gr,n,c] = v[gr,n](ω[n,c]),v[gr,n,c] =c ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Complex Modes
+
+Complex modes occur when k[y](ω)^2 becomes complex, making transverse and longitudinal modes complex as well.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Re(n):=realpart(n); Im(n):=imagpart(n);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5225:[k[y]='Re(k[y]) + %i*im(k[y])  , k[x]='Re(k[x]) + %i*'Im(k[x])];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Modal fields are localized near the surface according to exp(-Im(k[y,n]*y))
+The fields decrease in amplitude with distance from the surface
+The transverse propagation differs from that of surface modes according to exp(%i*(ω*t-Re(k[n,y]*y)))
+Wavenumbers are interdependent.
+Substitution of them into (5.2.1) gives equations for Re(k[y]) and Im(k[y])
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5226:[('Re(k[y])^2-'Im(k[y])^2=K^2) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5227:['Re(k[y])*'im(k[y])=α*β];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Phase constant α and β are defined in order to define the longitudinal propagation constant
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5228:[α=-'Im(k[z]), β='Re(k[z]), γ=α+%i*β, γ=-'Im(k[z])+%i*'Re(k[z]), γ=%i*k[z]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5229:[K^2=k^2+α^2-β^2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Equations (5.2.26) and (5.2.27) define hyperbolic functions plotted in Fig 5.3
+There are 2 cases shown by 5.3 (a) and 5.3 (b)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5230:[K^2>0, β^2 < k^2 + α^2,(v[ph]/c)^2 > 1/(1 + (α/k)^2)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5231:[K^2>0, β^2 > k^2 + α^2, (v[ph]/c)^2=1/(1+(α/k)^2) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+TODO: GENERATE OR INCLUDE FIGURE 5.3 IN THIS DOCUMENT
+
+Fig 5.3(a) gives 2 solutions at points K and -K that correspond to the fast volume modes.
+For maxima the 2 cases are given as separate list entries because ± was not accepted.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5232:[β^2<k^2,α=0, k[y]='Re(k[y]), k[y]=K(αlpha), k[y]=-K(αlpha),k[y]=-sqrt(k^2-β^2),k[y]=sqrt(k^2-β^2) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Fig 5.3(b) gives 2 solutions at points |K| and -|K| that correspond to the slow surface modes 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5232:[β^2>k^2,α=0, k[y]=%i*'Im(k[y]), k[y]=%i*K(αlpha), k[y]=-%i*K(αlpha),k[y]=%i*sqrt(k^2-β^2),k[y]=-%i*sqrt(k^2-β^2) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The 4 roots of (5.2.26) and (5.2.27) combine to give 2 pairs 1-1_bar and 2-2_bar.
+These root pairs correspond to the twin-conjugate modes (Section 3.3.2)
+Twin conjugate modes do not have self-power (P[n]=P[n_hat]=0 )
+but together carry the pair-cross power P_pair[n,n_hat] defined by equation (3.3.23)
+
+To arrange these system properties use the following relationship 
+between the longitudinal propagation constants typical of the twin-conjugate modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_34:[γ[n_bar]=-'conjugate(γ[n]), k[z,n_bar]='conjugate(k[z,n])];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This implies that
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5235:[α[n_bar]=-'Im(k[z,n_bar]),a[n_bar]='Im(k[z,n_nar]), α[n_bar]=-α[n], β[n_bar]='Re(k[z,n_bar]), β[n_bar]='Re(k[z,n]), β[n_bar]=β[n] ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+If point 1 or 2 (where αβ>0) is identified with mode n then point 1_bar or 2_bar (αβ<0) will be identified with the twin mode n_bar where:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5236:['Re(k[y,n_bar])=-'Re(K[y,n]),'Im(k[y,n_bar])='Im(k[y,n]) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+which implies that
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5237:[k[y,n_bar]=-'conjugate(k[y,n])];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Both modes of a twin pair have the same Im(k[y]) following from (5.2.36).
+Both modes have the same propagation constant (β[n_bar]=β[n] but the amplitude (decay) constants have opposite signs (α[n]=-α[n_bar])
+
+Evanescent modes have no propagation of phase (β[n]=0) but α[n]=-α[n_bar]
+The complex and evanescent modes are reactive modes due to reactive decay in space. 
+
+The complex and evanescent modes store reactive energy without an active self-power flow
+This guarantees that the 2 modes belong to a common sheet of Rieman surface for the function k[y](k[z])=sqrt(k^2-k[z])^2)
+
+For further details see Appendix H)
+
+(5.2.4) Mode Excitation By External Sources
+
+Source region centered about z=0, width -z0 ⟶ z0
+Active modes propagate left and right out of the source region without decaying in amplitude.
+Reactive modes (complex and evanescent) decay according to exp(|α[-m]|(z+z_0))
+The distribution of the mode excitations in the source region by external sources gives the following equations for 
+the excitation amplitudes A[m] and A[-m] of the forward and backward active and reactive modes 
+
+For the forward modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5238:[+m > 0, if z < -z[0] then A[+m](z)=0,if -z[0]< z and z < z[0] then A[+m](z) # 0, if z > z[0] then A[+m](z)=C];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the backward modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5239:[-m < 0, if z >z[0] then A[-m](z)=0,if -z[0]< z and z < z[0] then A[-m](z) # 0, if z <-z[0] then A[-m](z)=C];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The restrictions A[+m](z<-z[0]) = 0 or A[-m](z>z[0]) = 0 implies that:
+    The forward modes can be excited and driven only to the right of the source region
+    The backward modes can be excited and driven only to the left of the source region
+
+The input amplitude A[+m](-z[0]) at the left end of the source region 
+        and 
+The input amplitude A[-m](z[0]) at the right end of the source region
+
+are given as the boundary conditions, written in the following form:
+
+(i) at the left end z = -z[0] for the forward mode, active with v[gr,+m] >0 and reactive with α[+m] > 0
+Driven Mode:        A[+m](-z[0]) ≠ 0
+Undriven Mode:    A[+m](-z[0]) = 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5240:[A[+m](-z[0]) # 0 or A[+m](-z[0]) = 0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+(ii) z = z[0] at the right end for the backward mode, active with v[gr,-m] < 0, reactive with α[-m]<0
+Driven Mode:         A[-m](z[0] ≠ 0
+Undriven Mode:     A[-m](z[0]) = 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch105_5241:[A[-m](z[0]) # 0 or A[-m](z[0]) = 0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use equation (3.5.13) to find the excitation Amplitude A[n](z)
+Re-write (3.5.13) for the source region with bulk exciting currents J[b,e,m] 
+and effective surface currents J[s,eff,e,m]  = J[s,e,m]
+
+
+L[b] is the a contour bounding Surface S[b] that is occupied by the bulk currents
+For the active modes (forward and backward with subscript n = ±m)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5242:['diff(A[n](z),z)=(1/N[n]) * 'integrate(((J[b,e] . 'conjugate(E[n])) + (J[b,m] . 'conjugate(H[n]))) ,S[b],1,N) - (1/N[n])*'integrate(((J[s,e] . 'conjugate(E[n]))+(J[s,m]*'conugate(H[n]))),L[b],1,N)];
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><munder><mrow><mi>J</mi></mrow><mrow><mi>b</mi><mi>,</mi><mi>m</mi></mrow></munder><mi> . </mi><mrow><cj><munder><mrow><mi>H</mi></mrow><mrow><mi>n</mi></mrow></munder></cj></mrow><mi>+</mi><munder><mrow><mi>J</mi></mrow><mrow><mi>b</mi><mi>,</mi><mi>e</mi></mrow></munder><mi> . </mi><mrow><cj><munder><mrow><mi>E</mi></mrow><mrow><mi>n</mi></mrow></munder></cj></mrow><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the reactive modes (forward and backward with subscript n = +/- m and n[bar]=-/+m)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5243:['diff(A[n](z),z)=1/N[n[bar]]*'integrate(( (J[b,e] . 'conjugate(E[n[bar]])) + (J[b,m] . 'conjugate(H[n[bar]]))) ,S[b],1,N)- (1/N[n[bar]])*'integrate(((J[s,e] . 'conjugate(E[n[bar]]))+(J[s,m]*'conugate(H[n[bar]]))),L[b],1,N) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The morns of the active and reactive modes are defined in using the form of Eqs (3.3.15) and (3.3.20)
+TODO: EDIT 44 AND 45 AND CONTINUE
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5244[N[n]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5245:[N[n[bar]]];
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

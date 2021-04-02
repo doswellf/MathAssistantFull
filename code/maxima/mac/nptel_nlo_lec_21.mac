@@ -1,0 +1,49 @@
+/* [wxMaxima: comment start ]
+NPTEL Nonlinear Optics
+Lecture 21
+Birefringence Phase Matching & Type II Phase Matching
+
+Birefringence - refractive index is a function of angle of travel of 
+modes through a material such as Calcite
+
+Effective refractive index is a function of an angle theta
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_21_101:[n_e(2*ω, θ)=n_0(ω) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Refractive Index
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_21_102:[n(ω)^2=1+Χ_n_1(ω),n(ω)^2=1 + ((ω_p^2)/(ω_0^2-ω^2))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Phase Matching Requirement
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_21_103:[n(2*ω)=n(ω)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Due To Dispersion Effect
+n(2ω) ≠ n(ω)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_21_104:[n_0(ω)=n_e(2*ω,θ),1/n_e(2*ω,θ)^2=(cos(θ)^2/n_0(24*ω)^2) + (sin(θ)^2/n_e(2*ω)^2) ];
+/* [wxMaxima: input   end   ] */
+
+
+

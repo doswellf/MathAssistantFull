@@ -1,0 +1,65 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 18.02.0 ] */
+/* [wxMaxima: comment start ]
+Adding Sines - The Limit Of Equal Amplitudes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_01: [E_10=E_20,E_10=E_θ0, E_θ0=E_20];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+assume(E_θ0>0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_θ0:sqrt(E_10^2+e_20^2+2*E_10*E_20*cos(δ));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_θ0=E_10;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_0=E_10;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_10=E_20;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_θ0:sqrt(E_10^2+E_20^2+2*E_10*E_20*cos(δ));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst([E_10=E_0,E_20=E_0], E_θ0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cos(δ/2)^2=(1/2)*(1+cos(δ));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+factor(%o8);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+subst(cos(δ)+1=2*cos(δ/2)^2,%o11) ;
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 18.02.0"$

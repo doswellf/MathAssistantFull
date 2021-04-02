@@ -1,0 +1,470 @@
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(eigen);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Phase Velocity Vp is the velocity of one frequency of light in a packet
+Group Velocity Vg is the velocity of a packet of light as a whole
+
+Phase is normally a relative term - from "perspective" of one wave
+One wave may be out of phase with the other - their ω's are different
+The relative instantaneous relative frequency shift is Δω 
+Phase Shift at any instant is an accumulating function of time and ω
+Total Relative Phase Shift at any instant adds up over time from t0
+
+Imagine you are standing on a peak of Wave #1. 
+Peaks and Valleys of Wave #2 will pass by you at rate Δω
+Total number of peaks that pass you over time is accumulated phase.
+
+Angular frequency of a wave may change over time - not constant
+The value ω(t) is the instantaneous angular frequency of oscillation
+
+Total accumulated phase difference over time is:
+    Continuous: φ_c=∫ω(t)dt
+            or 
+    Discrete:       φ≅Σ{avg(w(t)*Δt)/N} where N is 1,2,...∞
+
+Textbooks Show S(t)=A*sin(ω_0*t+φ) but 
+    In the "real world" S is a function of A,ω_0,t,φ)
+    In the "real world" φ is a function of time and ω_0
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S(A,ω_0,t,φ):=A* sin(w_0*t+φ);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends(ω_i,t) ;φ_c(t,ω):='integrate(ω_i(t),t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+TODO: Double-Check This Discrete Formula
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+φ_d(t,ω):='sum(avg(ω_i(t)*Δt)/N,N,1,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+φ_121(ω,t_n):=''integrate(ω(t_i),t_i,0,t_n) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Currently using global variables and values within functions
+
+TODO:  Use one or more hash arrays (usefastarrays:true) to
+            to contain maxima structures. These structures will
+            hold "global" constants, variables, settings. These
+            settings are used my more than one formula
+            or expression. The name of the 'global" item will
+            be the hash key for access to the structure within
+            the hash array. Of course an index into the 
+            value could be stored in another hash array, as is
+            done with database index tables.
+
+            Make all variables in functions local variables
+            Use blocks, macro expansion, substitution, etc
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ω(t):=1.3*sin(t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+φ_121(ω,100);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+float(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+A(A_0,ω,t):=A_0*sin(ω*t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+A(13,1.3,11);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+A_k(z) is a z-dependent (varies along z axis of waveguide) excitation amplitude; it is the result of output of energy by an additional source.
+
+A_k represents the perturbing action of a 2nd (external) optical source or 2nd waveguide in a 2-waveguide system. 
+
+A_k varies with z inside the region of influence of a second optical source or waveguide. 
+A_k is constant outside the region of influence of a second optical source or waveguide.
+
+Finding the A_k(z) for all additional sources and waveguides is the final objective of coupled mode theory.
+
+The initial E and H modes in the reference waveguide are perturbed and mix with the light from additional sources and waveguides attached to the reference waveguide. The E and H modes are multiplied by the complex excitation amplitudes A_k(z)
+
+The reference waveguide state is initially established without the 2nd source or 2nd waveguide or additional sources when studying multi-source and multi-waveguide systems.
+
+Then all other sources and waveguides are considered to be extra waveguides and pumping sources external to the reference state. But these sources and waveguides cause the state of the reference waveguide to change by injecting additional optical energy (light) into the reference waveguide.
+
+To specify the modes (eigenmodes, i.e. independent or orthogonal modes) of the perturbed waveguide it is necessary to know:
+
+The Transmission (longitudinal) Characteristics)
+Given by the propagation constants  γ_k=α_k+i*β_k where α(ω) is the amplitude constant and β(ω) is the phase constant
+α(ω) and β(ω) are roots of a dispersion equation.
+
+Cross-Sectional Characteristics: 
+Transverse Modes/Energy Distributions E(r_t) and H(r_t)
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+A_k(A_0,k_A,z):=(A_0/z)*sin(k_a*z)*exp(-%i*z/4*%pi);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+tex((A_0/z)*sin(k_a*z)*exp(-%i*z/4*%pi))
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_k(r_t,z):=E_k(r_t)*exp(%-γ_k*z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H_k(r_t,z):=H_k(r_t)*exp(%-γ_k*z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Traditional CMT - Only longitudinal characteristics are perturbed
+True if modal base chosen to expand the perturbed fields is complete
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(r_t,z,t):=sum(A_k(A_0,k_A,z)*E_k(r_t)*exp(%i*ω*t-γ_k*z),k,minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+tex("E(r_t,z,t):=sum(A_k(A_0,k_A,z)*E_k(r_t)*exp(%i*ω*t-γ_k*z),k,minf,inf)") ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+ E(r\_t,z,t):=\sum(A\_k(A\_0,k\_A,z)*E\_k(r\_t)*exp(\%i*ω*t-γ\_k*z),k,minf,inf) 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H(r_t,z,t):=sum(A_k(A_0,k_A,z)*H_k(r_t)*exp(%i*ω8t-γ_k*z),k,minf,inf);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a(ω):=A_0*exp(i*φ_c);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+dispfun(φ_c);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_re(t):=''realpart(a(ω)*exp(%i*ω*t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+a_im(t):=(1/2)*(a(ω)*exp(%i*ω*t) + a(-ω)*exp(%i*ω*t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(t); depends(B,t); lemma_321_A:curl(E)=-diff(B,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_321_B:div(D)=ρ_v;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends(D,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_321_C:curl(H)=diff(D,t) + J;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_321_D:div(B)=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_322_A:D=ε_0*E+P;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_322_B:B=μ_0*(H+M);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_323:div(E ~ H)=-E . diff(D,t)-H.diff(B,t)-J.E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_324_A:w = (E . D+ H . B)/2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S:E ~ H;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+I_J:J . E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+I_P:(1/2)*(E . 'diff(P,t)-P . 'diff(E,t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+I_M:(1/2)*(H . 'diff(μ_0*M,t)-(μ_0*M ) . 'diff(H,t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_324:'diff(w,t)+div(S)=-I_J-I_P-I_M;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+avg_t(f,N):=sum(f(t),t,0,N);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_325:div(avg_t(S,N))=-avg_t(I_J,N)-avg_t(I_P,N) - avg_t(I_M,N);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_329:D=ε.E+ξ . H;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3210:B=ζ.E+μ . H;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Four constitutive parameters ε,ξ,ζ,μ are dyadic functions of frequency given for a specific medium . They cover all special cases of non-dispersive media
+
+lemma_3211: For Isotropic meda: 
+    ε_bar=ε*I_bar, μ_bar=μ*I_bar, ξ_bar=ζ=0
+
+lemma_3212: For double anisotropic media 
+    ε_bar ≠ε*I_bar, υ_bar≠μ*I_bar, ξ_bar =ζ_bar=0
+
+lemma_3213: For chrial (bi-isotropic) media:
+    ε_bar=ε*I_bar, μ_bar=μ*I_bar,         ξ_bar=(χ-iΚ)*sqrt(ε_0*μ_0)*I_bar,
+ζ_bar=(χ + iΚ)*sqrt(ε_0*μ_0)*I_bar
+
+lemma_3214:
+    ε_bar=ε_bar_dagger, μ_bar=μ_bar_dagger, ξ_bar=ξ_bar_dagger
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3215:J=σ_c . E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3216:['avg_t(I_J,N)=(J . E),'avg_t(I_J,N)=(1/2)*realpart(J . 'conjugate(E)), 'avg_t(I_J,N)=(1/2)*realpart('conjugate(E).σ_c.E), 'avg_t(I_J,N)=(1/2)*σ_c . (E*'conjugate(E)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3217:[avg_t(I_P,N)=(1/2)*avg_t(E.'diff(P,t)-P.'diff(E,t) ,N),avg_t*(I_P)=(1/2)*avg_t(E.'diff(D,t)-D.'diff(E,t),N),avg_t(I_P,N)=(1/4)*'realpart('conjugate(E) . (%i*ω*D)-'conjugate(D) . (%i*ω*E))   ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+'avg_t(I_M,N ) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+I_M;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+lemma_3217_test:[
+        avg_t(I_P,N)=(1/2)*avg_t(E.'diff(P,t)-P.'diff(E,t),N)
+    ,   avg_t*(I_P)=(1/2)*avg_t(E.'diff(D,t)-D.'diff(E,t),N)
+    ,   avg_t(I_P,N)=(1/4)*'realpart('conjugate(E) . (%i*ω*D)-'conjugate(D) . (%i*ω*E)) 
+    .   avg_t(I_P,N)=(1/4)*'realpart(%i*ω*('conjugate(E) . ε_bar . E + 'conjugate(E)*ξ_bar . H - E .'conjugate(ε_bar) . 'conjugate(E) -E .'conjugate(ξ_bar) . 'conjugate(H))
+    ,   avg_t(I_P,N)=(1/4)*'realpart(%i*ω*('conjugate(E) . (ε_bar-'conjugate(ε_bar) . E + 2 * 'conjugate(E) - E .'conjugate(ξ_bar) . 'conjugate(H))
+    ,   avg_t(I_P,N)=(1/2)*'realpart(%i*ω*('conjugate(ε_bar . E . 'conjugate(E) + ε_bar . H .'conjugate(E )
+];
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3217_test:[
+        avg_t(I_P,N)=(1/2)*avg_t(E.'diff(P,t)-P.'diff(E,t),N),avg_t(I_P,N)=(1/2)*avg_t(E.'diff(D,t)-D.'diff(E,t),N),avg_t(I_P,N)=(1/4)*'realpart('conjugate(E).(%i*ω*D)-'conjugate(D).(%i*ω*E)),avg_t(I_P,N)=(1/4)*'realpart(%i*'ω*('conjugate(E).ε_bar.E+'conjugate(E)*ξ_bar.H-E.'conjugate(ε_bar).'conjugate(E)-E.'conjugate(ξ_bar).'conjugate(H)))
+,avg_t(I_P,N)=(1/4)*'realpart(%i*ω*('conjugate(E).(ε_bar-'conjugate(ε_bar)).E+2*'conjugate(E)-E.'conjugate(ξ_bar).'conjugate(H))),avg_t(I_P,N)=(1/2)*'realpart(%i*ω*('conjugate(ε_bar).E.'conjugate(E))+ε_bar.H.'conjugate(E))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+WARNING: values for ζ_bar, ε_bar, μ_bar, ω, E, H, D, B are not defined - some equations will be zero even with delayed evaluation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3218:[avg_t(I_M,N)=(1/2)*avg_t(H . 'diff(μ_0*M,t) - (μ_0*M) . 'diff(H,t),N),avg_t(I_M,N)=(1/2)*avg_t(H . 'diff(B,t) - B . 'diff(H,t),N),avg_t(I_M,N) =(1/4)*realpart('conjugate(H).(%i*ω*B)-'conjugate(B).(%i*ω*H)),avg_t(I_M,N)=(1/4)*'realpart(%i*ω*('conjugate(H).μ_bar.H+'conjugate(H).ζ_bar.E-H.'conjugate(μ_bar).'conjugate(H)-H.ζ_bar.'conjugate(E))),avg_t(__M,N)=(1/4)*'realpart(%i*ω*('conjugate(H).(μ_bar-μ_bar_dagger).H-2*'conjugate(E).ζ_bar_dagger.'conjugate(E))), avg_t(I_M,N)=(1/2)*'realpart(%i*ω*(μ_bar_a.H-μ_bar_dagger).'conjugate(H)-ζ_bar_dagger.H.'conjugate(E)),avg_t(I_M,N)=(1/2)*'realpart(μ_bar_a.H.'conjugate(H)-ζ_bar_dagger.H.'conjugate(E))] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3219:div(avg_t(S,N)) + avg_t(q,N) = 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3220:avg_t(S,N)=(1/2)*'realpart(E~'conjugate(H));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3220_B:avg_t(q,N)=avg_t(I_J,N)+avg_t(I_P,N)+avg_t(I_M,N);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3222:[σ_bar_e=σ_bar_c + σ_bar_d,σ_bar_e=σ_bar_c + %i*ω*ε_bar_a+((%i*ω)/2)*(ε_bar-ε_bar_dagger)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3223:[σ_m=%i*ω*μ_a,σ_m=((%i*ω)/2)*(μ_bar-μ_bar_dagger)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3221:avg_t(q,N)=(1/2)*σ_bar_e.E.'conjugate(E) + (1/2)*σ_m.H.'conjugate(H)+(1/2)*realpart(σ_me.H.'conjugate(E));lemma_3221:avg_t(q,N)=(1/2)*σ_bar_e.E.'conjugate(E) + (1/2)*σ_m.H.'conjugate(H)+(1/2)*realpart(σ_me.H.'conjugate(E));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3224:[σ_me=%i*ω*(ξ_bar-ζ_bar_dagger),σ_me=%i*ω*(ξ_bar_a+ζ_bar_a)+(ξ_bar_h-ζ_bar_h),σ_bar_e=σ_bar_c+%i*ω*ε_bar_a, σ_bar_m=%i*ωμ_bar_a ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3221:avg_t(q,N)=(1/2)*σ_bar_e.E.'conjugate(E) + (1/2)*σ_m.H.'conjugate(H)+(1/2)*realpart(σ_me.H.'conjugate(E));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+3.2.2 Modal Transmission and Dissipation Of Power
+
+3.2.2.1 General Power Relations
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3225:'integral(div(A),S)='diff('integrate(e_z.A,S),z)+'integrate(n_0.A,L_i);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+WARNING NOT SURE IF RESULT OF lemma_3226 is positive, negative or zero - pick positive for now.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3226:'integrate('div(avg_t(S,N)),S)='diff('integrate(e_z.avg_t(S,N),S) ,z)-'sum('integrate(n_i_p.avg_t(S_p,N)+n_i_m.avg_t(S_m,N),L_i) ,i,minf,inf);
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+Question #1
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3227:E_τ=Z_s.(H_τ ~n_i);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3228:[R_s=(1/(σδ)),R_s=sqrt((ωμ)/(2*σ))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3229:'diff(P,z)+Q=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3230:[P='integrate(avg_t(S,N).e_z,S),P=(1/2)*realpart('integrate((E~'conjugate(H)).e_z,S))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+lemma_3231:[Q=Q_b+Q_s,Q='integrate(avg_t(q_b,N),S)+'integrate(avg_t(q_s,N),L)];
+/* [wxMaxima: input   end   ] */
+
+
+

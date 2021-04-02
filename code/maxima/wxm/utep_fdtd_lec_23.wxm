@@ -1,0 +1,34 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: comment start ]
+EMPossible 
+
+EM Analysis Using FDTD
+
+Lecture 23 - 3D FDTD
+
+Assumptions
+    Material Dimensions are inifinite in the X and Y directions
+    Material Dimensions are finite in the Z direction
+
+PML only on Z axis boundaries
+Periodic Boundary Conditions  on X and Y axis boundaries
+
+Cross Gratings ⟶ Infinitely Periodic in X and Y directions
+
+Introduce Plane Wave Source using Total Field/Scattered Field
+
+PML 'box' placed around grid wheen PML is used on all sides
+
+Erase PML on X and Y Axes
+
+Simplify and Streamline Update Equations!
+
+PML Integration Terms for X and Y are eliminated, simplifying PML update equations
+
+   [wxMaxima: comment end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

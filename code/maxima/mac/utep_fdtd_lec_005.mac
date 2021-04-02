@@ -1,0 +1,566 @@
+/* [wxMaxima: comment start ]
+UTEP (Empossible) EM Analysis Using FDTD
+
+Lecture 5 - Formulation Of 1D FDTD
+
+The transverse and longitudinal fields are all time-varying vectors
+Polarization of transverse (x and y) E and H vectors is given by vector P(t)
+The magnitude and phase of transverse E and H may be a function of Z.
+The initial complex amplitude and phase of a plane wave are not
+necessarily zero, because the wave is assumed to already be in flight.
+
+All mutually coupled fields are upating in parallel in time but we can't model that yet. Maybe when we get optical/holographic cpu's and gpu's we will.
+
+Treat the field updates as a serial sequence of events
+Break the field dependencies into a chain of updates.
+
+For time steps 0 to N Do
+    Update B field from E field
+    Update H field from B field
+    Update D field from H field
+    Update E field from D field
+    Update Δt
+End Do
+
+Also, all fields are expressed as time-dependent vector-valued functions
+The H and E field equations are staggered in time and space
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[Ex,Ey,Ez]; E_0:[E0x,E0y,E0z];H:[Hx,Hy,Hz]; D:[Dx,Dy,Dz]; B:[Bx,By,Bz] ;d_bar:[dbar_x,dbar_y,dbar_z];k:[kx,ky,kz];r:[rx,ry,rz];b_bar:[bx,by,bz];J:[Jx,Jy,Jz];a:[ax,ay,az];a_r:[az,ay,ax];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E(t):= [Ex(t), Ey(t),Ez(t)]; H(t) := [Hx(t), Hy(t), Hz(t)] ; D(t):=[Dx(t), Dy(t), Dz(t)]; B(t):=[Bx(t), By(t), Bz(t)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ρ_v = 0; express(div(d_bar))=0; express(div(D))=0; express(div(d_bar * exp(-%i* (k . r)))) = 0;express(div(D))=ρ_v; express(div(B)) = 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(fft)$
+conv(a,b):=block([n : length(a) + length(b) - 1],
+inverse_fft (fft (zero_extend (a, next2(n))) * fft (zero_extend (b, next2(n)))),
+realpart (next2(n) * %%),
+rest (%%, n - next2(n)))$
+zero_extend (a, n) := makelist (if i <= length(a) then a[i] else 0, i, 1, n) $
+next2 (n) := block ([i : ilog2 (n)], if n = 2^i then n else 2^(i + 1)) $
+ilog2 (n) := block ([i : 0], while n > 1 do (n : floor (n/2), i : i + 1), i) $
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends([x,y,z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Faraday's Law of Induction
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+faraday:express(curl(E(t)))= diff(B(t),t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Time must change for B to change, B will be a harmonic field
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Ampere's Current Law With Maxwell's Correction
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ampere:express(curl(H(t)) = J + diff(D(t), t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Solve Faraday's Law For the B field
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+b_faraday:B(t) = integrate(curl(E),t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use the constitutive relation for magnetic fields and flux with 
+proportionality constant μ(t)
+
+NOTE: conv will not work until B, H and μ are properly defined
+Leaving conv as an unevaluated noun for now
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cr_mag: B(t) ='conv(μ(t) , H(t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Solve Ampere's Law For the D field
+
+Ignore J for dielectric materials, conductivity σ = 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+d_ampere:D(t) = integrate(curl(H) ,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Defining constitutive relation for fields E and D with 
+proportionality constant ε(t)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cr_elec:D(t) = 'conv(ε(t) ,E(t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Transform curl equations into finite difference update equations
+First element of upe is curl eqn, second element is a partially defined finite difference update equation.
+The transformation of the curl to finite difference form will be given below.
+The term dt stands for Δt, and does not have a value yet.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upe:[express(curl(E(t))) = -μ * diff(H(t),t) , express(curl(E(t)))=-μ * ((H(t+dt/2) - H(t-dt/2))/dt ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upm:[express(curl(H(t))) = -ε * diff(E(t),t) , express(curl(H(t)))=-μ * ((E(t+dt/2) - E(t-dt/2))/dt ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+More complete definitions of FDTD update equations
+
+H, E, B and D as well as other vectors can be transformed into functions 
+using maxima's define, subst, apply, etc or just defined as maxima functions
+and macros as needed.
+
+Calculate E at time t + dt then H is calculated at t + dt/2
+
+Field calculations are offset in time, and time stepping occurs too.
+LHS is the field at the next time step
+
+RHS 
+    first part is field at the previous time step
+    2nd part is update coeffficent times curl of the other field 
+    at an intermediate time step
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+upec:E(t+dt)=E(t) + (dt/ε) * (express(curl(H(t+dt/2))));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Initially E and H are set to zero
+Initial test loop calculates E and H and both should stay at zero
+Later the sources and structures will be added to change the fields.
+
+The Yee Grid
+
+Yee grid is used with E and H offset in space 
+Axes are not co-located with a common origin
+Fields only calculated at centers of grid blocks, discrete simulation.
+Make the grid finer to get better resolution and more precise results.
+The dimensions of the unit cell, Δx, Δy, Δz should be close in size
+The dimensions can be different but normally are similar.
+
+Advantages Of Staggered Grid Axes 
+    Grid is Free of Divergence
+    Physical Boundary  Conditions Are Satisfied
+    Elegant scheme to approximate the curl equations 
+    with Finite Difference equations
+    Fields enclose each other, matching the inital FDTD update equations
+
+Disadvantages Of Yee Grid
+    Field components are in physically different locations
+    Field components may end up in different materials even in same unit cell
+    Field components will be out of phase
+    Field components are staggered in time as well as space
+
+Finite Difference Approximation To Maxwell's Equations
+
+E field is 3x magnitude of magnetic field
+Need to normalize the magnetic field (multiply by free-space impedence)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H_n(t) := sqrt(μ_0/ε_0) * H(t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+n_faraday: express(curl(E(t))) = (μ_r/c_0) * diff(H_n(t), t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+n_ampere:express(curl(H_n (t)))= (ε_r/c_0) * diff(E(t),t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Separate the vector equations into partial differential scalar equations
+
+Use lisp and maxima to make this transformation a macro/function to 
+create a set of automated  steps to do this work. Also look at the maxima package to create matlab code from maxima.
+
+Quotes added for now to show the form of the equations
+ε_?? and μ_?? will be in matrices/tensors at the end of this derivation
+
+Again, nounifying the diff function for clarity until all definitions are complete
+These equations are for fully anistropic materials
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[ express(curl(E(t)))=-(μ_r/c_0) * 'diff(H_n(t),t), 'diff(Ez(t), y) - 'diff(Ey(t),z) = -(1/c_0) * ( μ_xx * 'diff(Hnx(t),t) + μ_xy * 'diff(Hny(t),t) + μ_xz * 'diff(Hnz(t),t)), 'diff(Ex(t), z) - 'diff(Ez(t),x) = -(1/c_0) * (μ_yx * 'diff(Hnx(t),t) + μ_yy * 'diff(Hny(t),t) + μ_yz*'diff(Hnz(t),t)) , 'diff(Ey(t),x) - 'diff(Ex(t),y) = -(1/c_0)* ( μ_zx * 'diff(Hnx(t),t) + μ_zy * 'diff(Hny(t), t) + μ_zz*'diff(Hnz(t),t))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[ express(curl(H_n(t)))=-(ε_r/c_0) * 'diff(E(t),t), 'diff(Hnz(t), y) - 'diff(Hny(t),z) = -(1/c_0) * ( ε_xx * 'diff(Ex(t),t) + ε_xy * 'diff(Ey(t),t) + ε_xz * 'diff(Ez(t),t)), 'diff(Hnx(t), z) - 'diff(Hnz(t),x) = -(1/c_0) * (ε_yx * 'diff(Ex(t),t) + ε_yy * 'diff(Ey(t),t) + ε_yz*'diff(Ez(t),t)) , 'diff(Hny(t),x) - 'diff(Hnx(t),y) = -(1/c_0)* ( ε_zx * 'diff(Ex(t),t) + ε_zy * 'diff(Ey(t), t) + ε_zz*'diff(Ez(t),t))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now Assume Diagonal Anistropic Constitutive Tensors 
+
+This eliminates off-diagonal elements of the tensors
+Any ε_nm or μ_nm where n ≠ m becomes zero
+This eliminates terms above multiplied by off-diagonal tensor elements
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[ express(curl(E(t)))=-(μ_r/c_0) * 'diff(H_n(t),t), 'diff(Ez(t), y) - 'diff(Ey(t),z) = -(1/c_0) * ( μ_xx * 'diff(Hnx(t),t))  ,'diff(Ex(t),z)-'diff(Ez(t),x) =    (1/c_0) * (μ_yy * 'diff(Hny(t),t)) , 'diff(Ey(t),x) - 'diff(Ex(t),y) = -(1/c_0)* (μ_zz*'diff(Hnz(t),t))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[ express(curl(H_n(t)))=-(ε_r/c_0) * 'diff(E(t),t), 'diff(Hnz(t), y) - 'diff(Hny(t),z) = -(1/c_0) * ( ε_xx * 'diff(Ex(t),t) ), 'diff(Hnx(t), z) - 'diff(Hnz(t),x) = -(1/c_0) * (ε_yy * 'diff(Ey(t),t)) , 'diff(Hny(t),x) - 'diff(Hnx(t),y) = -(1/c_0)* (ε_zz*'diff(Ez(t),t))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Now approximate all 6 equations with finite-differences using the Yee Grid
+
+Obtain the update equations for the fields on the right hand sides of the eqns.
+First eqn below will be solved for the normalized magnetic field vector Hn
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_hx:[ 'diff(Ez(t), y) - 'diff(Ey(t),z) = -(1/c_0) * ( μ_xx * 'diff(Hnx(t),t)) , ((Ez[i,j+1,k,t] - Ey[i,j,k+1,dt]) / dy) - ((Ey[i,j,k+1,t]-Ey[i,j,k,t])/dz) = -(u_xx[i,j,k] /c_0) * ((Hnx[ i,j,k,t+(dt/2)] - Hnx[i,j,k,t-(dt/2)])/dt)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_hy:[ 'diff(Ex(t), z) - 'diff(Ez(t),x) = -(1/c_0) * ( μ_yy * 'diff(Hny(t),t)) , ((Ex[i,j,k+1,t] - Ex[i,j,k,t]) / dz) - ((Ez[i+1,j,k,t]-Ez[i,j,k,t])/dx) = -(u_yy[i,j,k] /c_0) * ((Hny[ i,j,k,t+(dt/2)] - Hny[i,j,k,t-(dt/2)])/dt)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_hz:[ 'diff(Ey(t), x) - 'diff(Ex(t),y) = -(1/c_0) * ( μ_zz * 'diff(Hnz(t),t)) , ((Ey[i+1,j,k,t] - Ey[i,j,k,t]) / dx) - ((Ex[i,j+1,k,t]-Ez[i,j,k,t])/dy) = -(u_zz[i,j,k] /c_0) * ((Hnz[ i,j,k,t+(dt/2)] - Hnz[i,j,k,t-(dt/2)])/dt)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The H field exists at the 1/2 time step Δt/2, offset in time from the E field
+The finite difference for the Electric field has midpoint Δt/2
+The times on both sides of the finite difference equation are consistent
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_ex:['diff(Hnz(t), y) - 'diff(Hny(t),z) = -(1/c_0) * ( ε_xx * 'diff(Ex(t),t)) , ((Hnz[i,j,k,t+(dt/2) ] - Hnz[i,j-1,k,t+(dt/2)]) / dy)- ((Hny[i,j,k,t+(dt/2) ]-Hny[i,j,k-1,t+(dt/2) ])/dy) = -(ε_xx[i,j,k] /c_0) * ((Ex[i,j,k,t+dt] - Ex[i,j,k,t])/dt) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eqn_ey:['diff(Hnx(t), z) - 'diff(Hnz(t),x) = -(1/c_0) * ( ε_yy * 'diff(Ey(t),t)) , ((Hnx[i,j,k,t+(dt/2) ] - Hnx[i,j,k-1,t+(dt/2)]) / dz)- ((Hnz[i,j,k,t+(dt/2) ]-Hnz[i-1,j,k,t+(dt/2) ])/dx) = -(ε_yy[i,j,k] /c_0) * ((Ey[i,j,k,t+dt] - Ey[i,j,k,t])/dt) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ eqn_ez:['diff(Hny(t), x) - 'diff(Hnx(t),y) = -(1/c_0) * ( ε_zz * 'diff(Ez(t),t)) , ((Hny[i,j,k,t+(dt/2) ] - Hny[i-1,j,k-1,t+(dt/2)]) / dx)- ((Hnx[i,j,k,t+(dt/2) ]-Hnx[i,j-1,k,t+(dt/2) ])/dy) = -(ε_zz[i,j,k] /c_0) * ((Ez[i,j,k,t+dt] - Ez[i,j,k,t])/dt) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Move to 1D grid
+Slab dimensions in x and y are infinite 
+Material is homogenous and isotropic in x and y directions
+Slabs of material are stacked and finite width along the z axis
+
+dx and dy go to zero 
+
+Any finite differences for derivatives in the x and y directions are zero
+
+This simplifies the update equations considerably.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+adiff_removed:[ 'diff(Ez,y),'diff(Ez,x),'diff(Ey,x), 'diff(Ex,y), 'diff(Hz,y),'diff(Hz,x), 'diff(Hy,x),'diff(Hx,y) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fdiff_removed[ ((Ez[i,j+1,k,t] - Ey[i,j,k+1,dt]) / dy), ((Ez[i+1,j,k,t]-Ez[i,j,k,t])/dx), ((Ey[i+1,j,k,t] - Ey[i,j,k,t]) / dx) , ((Ex[i,j+1,k,t]-Ez[i,j,k,t])/dy), ((Hnz[i,j,k,t+(dt/2) ] - Hnz[i,j-1,k,t+(dt/2)]) / dy),((Hnz[i,j,k,t+(dt/2) ]-Hnz[i-1,j,k,t+(dt/2) ])/dx) , ((Hny[i,j,k,t+(dt/2) ] - Hny[i-1,j,k-1,t+(dt/2)]) / dx), ((Hnx[i,j,k,t+(dt/2) ]-Hnx[i,j-1,k,t+(dt/2) ])/dy) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Reduced Equations For 1D FDTD
+Longitudinal field components Ez and Hz are always zero
+The set of 6 equations now decouples into two sets of two equations
+NOTE: Will solve for the rhs variable soon
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+h_analytic:[ -'diff(Ey, z)=-(μ_xx/c_0) * 'diff(Hnx,t) , 'diff(Ex,z) = -(μ_yy/c_0)*'diff(Hny,t), 0 = -(μ_zz/c_0)*'diff(Hnz,t) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(h_analytic[3],Hnz);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+h_discrete:[- ((Ey[i,j,k+1,t]-Ey[i,j,k,t])/dz) = -(u_xx[i,j,k] /c_0) * ((Hnx[ i,j,k,t+(dt/2)] - Hnx[i,j,k,t-(dt/2)])/dt) ,((Ex[i,j,k+1,t] - Ex[i,j,k,t]) / dz) = -(u_yy[i,j,k] /c_0) * ((Hny[ i,j,k,t+(dt/2)] - Hny[i,j,k,t-(dt/2)])/dt) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+e_analytic:[ -'diff(Hny,z) = (ε_xx/c_0) * 'diff(Ex,t), 'diff(Hnx,z) = (ε_yy/c_0)*'diff(Ey,t) ,0 =( ε_zz/c_0)*'diff(Ez,t) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(e_analytic[3],Ez);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+e_discrete:[- ((Hny[i,j,k,t+(dt/2) ]-Hny[i,j,k-1,t+(dt/2) ])/dy) = -(ε_xx[i,j,k] /c_0) * ((Ex[i,j,k,t+dt] - Ex[i,j,k,t])/dt) , ((Hnx[i,j,k,t+(dt/2) ] - Hnx[i,j,k-1,t+(dt/2)]) / dz)= -(ε_yy[i,j,k] /c_0) * ((Ey[i,j,k,t+dt] - Ey[i,j,k,t])/dt) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The 2 sets of 2 equations for 1D FDTD are the Ex/Hy mode and the Ey/Hx mode
+The 2 sets of equations contain no terms in common
+The equations in each set have terms in common
+Z components of both coupled sets are zero
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ex_hy_mode:[ ((Ex[i,j,k+1,t] - Ex[i,j,k,t]) / dz) = -(u_yy[i,j,k] /c_0) * ((Hny[ i,j,k,t+(dt/2)] - Hny[i,j,k,t-(dt/2)])/dt) , - ((Hny[i,j,k,t+(dt/2) ]-Hny[i,j,k-1,t+(dt/2) ])/dy) = -(ε_xx[i,j,k] /c_0) * ((Ex[i,j,k,t+dt] - Ex[i,j,k,t])/dt) ,Hnz[i,j,k] = 0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ey_hx_mode:[- ((Ey[i,j,k+1,t]-Ey[i,j,k,t])/dz) = -(u_xx[i,j,k] /c_0) * ((Hnx[ i,j,k,t+(dt/2)] - Hnx[i,j,k,t-(dt/2)])/dt),((Hnx[i,j,k,t+(dt/2) ] - Hnx[i,j,k-1,t+(dt/2)]) / dz)= -(ε_yy[i,j,k] /c_0) * ((Ey[i,j,k,t+dt] - Ey[i,j,k,t])/dt) ,Ez[i,j,k] = 0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For anisotropic materials the analysis of the 2 sets will have different results.
+
+For isotropic materials analysis of the 2 sets will have the same results.
+The modes have physical properties and will propagate indpendently.
+Numerically they display the same electromagnetic characteristics.
+
+!!!!!WARNING!!!!!
+For this analysis the he claimed that the Ey/Hx mode will be used.
+However he used the equation for the Ex/Hy mode with ε_xx[k] in it
+So these notes will follow his mistake and use the Ex/Hy mode instead
+
+Indices i and j can be eliminated from the equations
+Only k remains , the position along the Z axis
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ex_hy_k:[ - ((Hny[k,t+(dt/2) ]-Hny[k-1,t+(dt/2) ])/dz) = (ε_xx[k] /c_0) * ((Ex[k,t+dt] - Ex[k,t])/dt) , ((Ex[k+1,t] - Ex[k,t]) / dz) = -(μ_yy[k] /c_0) * ((Hny[k,t+(dt/2)] - Hny[k,t-(dt/2)])/dt),Hnz[k] = 0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ey_hx_k:[ -((Ey[k+1,t] - Ey[k,t]) / dz) = -(μ_xx[k] /c_0) * ((Hnx[k,t+(dt/2)] - Hnx[k,t-(dt/2)])/dt) , ((Hnx[k,t+(dt/2) ]-Hnx[k-1,t+(dt/2) ])/dz) = (ε_yy[k] /c_0) * ((Ey[k,t+dt] - Ey[k,t])/dt) ,Ez[k] = 0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Finally Derive The Update Equations
+
+One or two more steps are needed to simplify the dz/dz from the rhs 
+of the solved equation. There are maxima functions like collect to do this.
+TODO: test all relevant expression transformation functions to get rid of dz/dz
+
+Solve the eqn for Ex that has Ex in the time derivative
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eyhx_t01:rhs(ex_hy_k[1])=lhs(ex_hy_k[1]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eyhx_t02:eyhx_t01 * (c_0/ε_xx[k] ) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eyhx_t103:eyhx_t02*dt;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(eyhx_t02,Ex[k,t+dt]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ey_hx_k[2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eyhx_t11:rhs(ey_hx_k[2]) = lhs(ey_hx_k[2]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eyhx_t21:eyhx_t11*((c_0*dt)/ε_yy[k]) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+eyhx_t22:solve(eyhx_t21,Ey[k,t+dt] );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ex_hy_k[2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+exhy_t31:rhs(ex_hy_k[2])=lhs(ex_hy_k[2]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+exhy_t32:exhy_t31* (-(c_0*dt)/μ_yy[k]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+exhy_t33:solve(exhy_t32, Hny[k,t+(dt/2)]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+grind(exhy_t33);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Implementation of the Basic Update Equations for the Ey/Hx mode 
+Create arrays mey[k] and mhx[k] to hold the update coefficients
+Calculate the update coefficients before entering the main time-step loop
+Read ε_yy[k] in from a file or calculate it, storing values into array epyy[k]
+Repeat for ε_xx[k], μ_xx[k], μ_yy[k], storing them into arrays
+Calculate mey[k] and mhx[k] per update_coeff below.
+
+Fixing update maxima code by hand until I can get it to do more for me.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+update_coeff:[mey[k] =(c_0*dt)/ε_yy[k], mhx[k]=(c_0*dt)/μ_xx[k]]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+update_eqns_m:[ Hnx[k,t+dt/2] = Hnx[k] + rhs(update_coeff[2]) * ((Ey[k+1,t]-Ey[k,t])/dz) , Ey[k,t+dt] = Ey[k,t] + rhs(update_coeff[1]) * ((Hnx[k,t+dt/2] - Hx[k-1,t+dt/2] ) / dz) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Go Time! 
+Create running code from the mess above...
+
+Relative permittivity       ER       Array
+Relative permeability     EU       Array
+Ey update coeff             mey     Array
+Hx update coeff             mhx     Array
+Size Of Grid                    Nz         Integer
+No. of time steps           STEPS     Integer
+Time loop counter          TS         integer
+Magnetic Field Vector     Hx         Integer
+Electric Field Vector       Ey          Integer
+Z loop counter              nz           Integer
+Grid z block size            dx         integer
+
+TODO: GET MAXIMA NESTED LOOPS WORKING 
+ALTERNATIVELY USE LIST/VECTOR AND MATRIX OPERATIONS 
+MAXIMA WILL ALLOW MAP AND APPLY, AND SIMPLE VECTORISED OPS
+for TS:1 thru STEPS do 
+        for nz: 1 thru Nz do 
+            (Hnx[nz]:Hnx[nz] + mHx[nz] * (Ey[nz+1] - ey[nz])/dz)
+        for nz:1 thru Nz do 
+    (Ey[nz]:Ey[nz] + mEy[nz] *  (Hnx[nz] - Hnx[nz-1])/dz)   
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+[5,6,7,8,9,11];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+% * 5;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+% /3;
+/* [wxMaxima: input   end   ] */
+
+
+

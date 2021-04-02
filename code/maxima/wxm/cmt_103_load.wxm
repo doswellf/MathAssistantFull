@@ -1,0 +1,217 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: input   start ] */
+0
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(vect);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends(B, [r,t]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+THESE EQUATIONS USE B,H,D,E, M, P, S vectors [lists] that work with curl,div, cross and dot product in maxima. These vectors are nonsense and are used to show how the express(curl) and express(div) operators from the vect.mac package work. 
+While the equations are mathematically sound, the vectors do not represent actual physical electromagnetic field vectors. I will replace them with actual complex amplitude vectors and proper plane wave equations next.
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends(r, [x,y,z]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+∇*E=-'diff(B,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+curl(E)=-diff(B,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[x,y];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[x^3, y^3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(E));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ev(%);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(E))=-'diff(B,t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D:[x^2,y^2,z^2];express(div(D))=ρ_v;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H:[x^2,y^3,z^4];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+B:[x^4,y^3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+depends([x,y,z],t);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(curl(H)=diff(D,t))+J;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+B:[x^2,y^3,z^4];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(div(B))=0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+D=ε_0*E+P;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+B=μ_0*(H+M);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E:[x^3,y^3,z^3];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+express(div(E ~ H))=-E*diff(D,t)-H*diff(B,t)-J*E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w=(%o35 + %o36)/ 2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E . D;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+H . B;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w=(%o35 + %o36)/ 2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+%o35;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+%o36;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w = (%o35+ %o36)/2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w:rhs(%o42);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+w;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S:express(E ~ H); diff(w,t)+express(div(S))=-I_J-I_P-I_M;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+I_J:J . E;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+J:[x^7,y^6,z^5];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+I_J:J . E;P:[x^2,y^3,z^2]; M:[x^3,y^4,z^5];μ_0:5.3e-6;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+I_P:(1/2)*(E . diff(P,t) - P . diff(E,t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+I_M:(1/2)*(H . diff((μ_0*M),t)-(μ_0*M) . diff(H,t));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S:express(E ~ H); diff(w,t)+express(div(S))=-I_J-I_P-I_M;
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

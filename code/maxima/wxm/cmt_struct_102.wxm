@@ -1,0 +1,150 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 18.02.0 ] */
+/* [wxMaxima: input   start ] */
+values;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+defstruct(var_info(name,value,latex));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+defstruct(fun_info(ftyp,name,args,body,latex));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+defstruct(var_table(count,vars));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+defstruct(fun_table(count,funs));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vinfo_ch01:new(var_info);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vinfo_ch01@name:P_p1_s;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vinfo_ch01@value:0.0531;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vinfo_ch01@latex:[['math,"P_{\\scriptscriptstyle{[+1,s]}}"],['text,"P_{[+1,s]}"]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+assoc('math,vinfo_ch01@latex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+assoc('text,vinfo_ch01@latex);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vtab_ch01:new(var_table);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vtab_ch01@vars:[vinfo_ch01];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+vtab_ch01@count:1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pv_z:new(fun_info);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pv_z@ftyp:"FUN";
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pv_z@name:P_v;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pv_z@args:[z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pv_z@body:"abs(w_v)*sum(p_m*abs(a_vm(z))^2,m,minf,inf)";
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pv_z@latex:"P_\\nu(z)~=~\\left| \\omega_\\nu \\right|~\\sum_{-\\infty}^{\\infty}~p_{m}~\\left|~a_{-\\nu}~(z)\\right|^2";
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ftab_ch01:new(fun_table);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ftab_ch01@count:1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ftab_ch01@funs:[finfo_Pv_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pdz_z:new(fun_info);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pdz_z@ftyp:"FUN";
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pdz_z@name:P_dz;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pdz_z@args:[z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pdz_z@body:"diff(sum(q_v*p_m*abs(a_vm(z))^2,m,minf,inf),z)";
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+finfo_Pdz_z@latex:"P_{dz}(z)~=~\\left| \\omega_\\nu \\right|~\\sum_{-\\infty}^{\\infty}~p_{m}~\\left|~a_{{-\\nu}~(z)\\right|^2";
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 18.02.0"$

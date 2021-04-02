@@ -1,0 +1,40 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [wxMaxima: comment start ]
+NPTel Introduction To Nonlinear Optics 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Lecture 20 Manley-Rowe Relation, Energy conservation in SHG
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Phase Matching Condition Δk = 0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_20_101:['diff(E_2,z)=%i*((ω*d)/(c*n_2))*E_162*exp(-%i*Δk*z),'diff(E_1,z)=%i*((ω*d)/(c*n_1))*'conjugate(E_1)*E_2*exp(%i*Δk*z),I_2_2ω=(1/2)*ε_0*c*n_2*'abs(E_2)^2, I_1_ω=(1/2)*ε_0*c*n_1*'abs(E_1)^2 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_20_102:[I_2_ω=(1/2)*ε_0*c*n_2*abs(E_2)^2,I_1_ω=(1/2)*ε_0*c*n_1*'abs(E_1)^2,'diff(I_1_ω,z)=(1/2)*ε_0*c*n_1*'diff(abs(E_1)^2, z),'diff(I_1_ω,z)=(1/2)*ε_0*c*n_1*(E_1*'diff('conjugate(E_1),z)+'conjugate(E_1)*'diff(E_1,z)) , 'diff(I_1_ω,z)=(1/2)*ε_0*c*n_1*(%i*((ω*d)/(c*n_1))*(-E_1^2*'conjugate(E_2)*exp(-%i*Δk*z) + 'conjugate(E_1)^2*E_2*exp(%i*Δk*z)))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The last element of this list is the Manley-Rowe Relation 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+nlo_20_103:['diff(I_2_2ω,z)=(1/2)*ε_0*c*n_2*'diff('abs(E_2)^2,z),'diff(I_2_2ω,z)=(1/2)*ε_0*c*n_2*(E_2*'diff('conjugate(E_2),z) + 'conjugate(E_2)*'diff(E_2,z)),'diff(I_2_2ω,z)=(1/2)*ε_0*c*n_2*(%i*((ω*d)/(c*n_2))*(-'conjugate(E_1)^2*E_2*exp(%i*Δk*z) + E_1^2*'conjugate(E_2)*exp(-%i*Δk*z))),'diff(I_1_ω,z)='diff(I_2_2ω,z) ];
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$

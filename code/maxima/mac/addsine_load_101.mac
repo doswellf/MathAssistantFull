@@ -1,0 +1,33 @@
+E_1:E_10*sin(w*t);
+
+E_2:E_20*sin(w*t+delta_p);
+
+E_theta:E_10*sin(w*t)+E_20*sin(w*t+delta_p);
+
+E_theta:E_10*sin(w*t)+E_20*sin(w*t+delta_p)=E_θ0*sin(w*t+φ_off);
+
+subst(t=0, E_theta);
+
+solve(%o6,sin(φ_off));
+
+sin_phi:rhs(first(%));
+
+subst(w*t=%pi/2, E_theta);
+
+solve(%o15, cos(φ_off));
+
+cos_phi:rhs(first(%o18));
+
+trig1:cp^2+sp^2=1;
+
+subst( [sp=sin_phi,cp=cos_phi],trig1);
+
+ratsimp(%o21);
+
+radcan(%);
+
+%*E_θ0^2;
+
+sqrt(%);
+
+
