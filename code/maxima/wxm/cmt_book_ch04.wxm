@@ -1,5 +1,5 @@
 /* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
-/* [ Created with wxMaxima version 20.09.0-DevelopmentSnapshot ] */
+/* [ Created with wxMaxima version 20.12.1 ] */
 /* [wxMaxima: comment start ]
 CMT Chapter 4
 Generalized Theory of Mode Excitation For Space-Dispersive Media Waveguides
@@ -19,7 +19,9 @@ The expansion  of the  modal fields must be supplemented with orthogonal complem
 
 
 /* [wxMaxima: input   start ] */
-load(vect);load(eigen);
+kill(all);
+load(vect);
+load(eigen);
 /* [wxMaxima: input   end   ] */
 
 
@@ -330,6 +332,7 @@ E is found from measuring the field dependence of
 
 /* [wxMaxima: input   start ] */
 B:[B_x,B_y,B_z];v:[v_x, v_y, v_z];r_1:[r1_x, r1_y, r1_z]; r_0:[r0_x, r0_y, r0_z];
+J_b1_e:[J_b1e_x, J_b1e_y, J_b1e_z]; J_b1_m:[J_b1m_x, J_b1m_y, J_b1m_z]; 
 /* [wxMaxima: input   end   ] */
 
 
@@ -451,7 +454,12 @@ cmt_ch04_4324:[v_1 = 'diff(r_1,t) + (v_0 . express(grad(r_1)))];
 
 
 /* [wxMaxima: input   start ] */
-J_1: [J1_x, J1_y,J1_z];p_1:[p1_x, p1_y, p1_z];v_0:[v0_x,v0_y,v0_z];E_1: [E1_x, E1_y,E1_z];D_1: [D1_x, D1_y,D1_z];H_1: [H1_x, H1_y,H1_z]; B_1: [B1_x, B1_y,B1_z]; M_1: [M1_x, M1_y,M1_z]; P_1: [P1_x, P1_y,P1_z];
+J_1: [J1_x, J1_y,J1_z];p_1:[p1_x, p1_y, p1_z];v_0:[v0_x,v0_y,v0_z];E_1: [E1_x, E1_y,E1_z];D_1: [D1_x, D1_y,D1_z];
+H_1: [H1_x, H1_y,H1_z]; B_1: [B1_x, B1_y,B1_z]; M_1: [M1_x, M1_y,M1_z]; P_1: [P1_x, P1_y,P1_z];
+H_2_p:[H2p_x, H2p_y, H2p_z];
+E_2:[E2_x, E2_y, E2_z];
+
+
 /* [wxMaxima: input   end   ] */
 
 
@@ -985,6 +993,1873 @@ cmt_ch04_4441:['diff(w_em + w_el + efm + w_pl,t ) + express(div( S_em + S_el + S
 /* [wxMaxima: input   end   ] */
 
 
+/* [wxMaxima: input   start ] */
+cmt_ch04_4442:[w_em = ((E_1 . D_1_p ) / 2) + ((H_1_p . B_1) /2)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4443:[S_em = express(E ~ H_1_p) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Left out express(div()) here because avg_t is not yet defined
+avg_t(F, n) will be a time-averaged value of F over n time intervals)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4444:[(div( (avg_t(S_em) + avg_t(S_el) + avg_t(S_fm) + avg_t(S_pl)) + (avg_t(q_el) +  avg_t(q_fm) + avg_t(q_pl)) )) = 0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Elastic Properties of a Medium
+Elastic properties of a medium contribute these terms to the time-averaged power relation (4.4.4.4)
+
+The average elastic energy flux density
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ cmt_ch04_4445:[avg_t(S_el) = (1/2) * Re(-E_1_Σ . conjugate(U_1)), avg_t(S_el) = (1/2) * Re(V_1_a . conjugate(J_1_a)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The average elastic power loss density
+Author uses : for double-dot or tensor (term -by term) multiplication
+NOTE: For now I use dot product but this needs to be addressed properly
+Re can be defined to call realpart() 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Re(ev):=''realpart(ev);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4446:[
+    avg_t(q_el,n) = (1/2) * Re( conjugate(S_1_dot_bar) . η_bar . S_1_dot_bar + p_m0  * conjugate(U1) . τ^(-1) . U_1  ),
+    avg_t(q_el,n) = (ω^2/2) * conjugate(S_1) . η_bar . S_1 + (p_m0/2) * conjugate(U_1) . τ^(-1) . U_1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4447:[J_1_a = %i*ω*u_1, J_1_a = U_1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4448:[V_1_a = -T_1_Σ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4449:[avg_t(S_fm,n) = (1/2) * Re(%i*ω*μ_0*λ_ex * express(grad(M_1)) . conjugate(M_1) ) , avg_t(S_fm,n) = (1/2) * Re(V_1_m . conjugate(J_1_m) )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4450:[avg_t(q_fm,n) = (1/2) * Re(  α * (μ_0/ω_M) * ('diff(M_1,t) . 'diff(conjugate(M_1),t))) , avg_t(q_fm,n) = ν_M * (μ_0/2) * (ω/ω_M)^2 * abs(M_1)^2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4451:[J_1_m = %i*ω*μ_00*M_1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4452:[V_1_m = -λ_ex * express(grad(M_1))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Plasma Properties of a Medium
+
+Plasma properties contribute these terms to the time-average power relation (4.4.44)
+
+(i) The average plasma energy flow density 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4453:[avg_t(S_pl,n) = avg_t(S_ek,n) + avg_t(S_th,n), 
+    avg_t(S_pl,n) = (1/2)* Re( (m/e) * v_0*v_1_p .  conjugate(%i*ω*p_1) )  + (1/2) * Re( -(m/e) * (v_τ^2/p_0) * express(div(p_1)) * conjugate(i%ω*p-1) ) ,
+    avg_t(S_pl,n) = (1/2) * Re( V_1_ek . conjugate(J_1_e)) + (1/2) * Re(V_1_th * conjugate(J_1_e)) , 
+avg_t(S_pl,n) = (1/2) * Re(V_1_e . conjugate(J_1_e))    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+(ii) The average plasma power loss density
+
+where μ_e = (e/m) is the static electron mobility and 
+j_1 = (τ_1 + r_1 . express(grad(τ_0)) ) / τ_0
+    and 
+j_1 = (κ_0 - 1) * (E_0_v / E_0) .  ((E_1 +  express(v_0 ~ B-1)  ) / E_0)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4454:[avg_t(q_pl,n) = (1/2) * Re( (1/τ_0) * (m/e) * (v_1 - j_1 * v_0)  .  conjugate(%i*ω*p_1)), avg_t(q_pl,n) = (1/2) * Re( (1/μ_e) * (v_1 - j_1 * v_0 ) . conjugate(J_1_e)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Two new quantities in (4.4.53) 
+
+A vector of the electronic polarization  current density
+
+j_1_e = %i*ω*p_1
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4455:[ j_1_e = %i*ω*p_1 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+A tensor of the effective electronic potential
+
+V_1_e = V_1_ek + V_1_th * I_bar = (m/e) * (v_0*v_1_p + (v_r^2/p_0) * p_1 * I_bar)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4456:[V_1_e = V_1_ek + V_1_th * I_bar, V_1_e = (m/e) * (v_0*v_1_p + (v_r^2/p_0) * p_1 * I_bar) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+which involves the tensor of electrostatic potential
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4457:[V_1_ek = (m/e) * v_0 * v_1_p];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+and a scalar of the thermal potential (with unit dyadic I_bar)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4458:[V_1_th = -(m/e) * (v_τ^2/p_0)  * (express(div(p_1)) , V_1_th =  ((k_B * T)/e)) * (p_1/p_0)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+EM contribution to time-average power relation (4.4.44)  according to generalized Poynting vecdtor (4.4.43) is:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4459:[avg_t(S_em,n) = (1/2) *  Re( express(E_1 ~ conjugate(H_1_p)))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use the Helmholtz Decomposition Theorem to represent the EM field intensity vectors 
+as sum of curl and potential components
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4460:[E_1 = E_c1 - express(grad(φ_1)), H_1 = H_c1 - express(grad(ψ_1)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Modify S_em by replacing H_1 with H-1_p to get S_em = express(E_1 ~ H_1_p) 
+
+From (4.3.48 and 4.3.61) it follows that:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4461:[H_1_p = H_e1_p - express(grad(ψ_1)), H_c1_p = H_c1 - express(p_1 ~ v_0 )]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Use Maxwell's equations in dielectric form (4.43.48) and (4.3.61) along with (4.4.60) and (4.4.61) 
+Also use the following vector identities
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+A:[A_x,A_y,A_z];Φ:[Φ-x, Φ_y, Φ_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4461_A:[
+    express(curl(Φ*A) ) = express(Φ*A ~ A) + express(express(grad(Φ)) ~ A) ,
+    express(div(  express(curl(Φ*A))))    = 0,
+    express(curl(curl(Φ))) = 0
+] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+This gives rise to the relation:
+TODO: CREATE A VECTOR-VALUED VERSION OF avg_t
+TODO: USE express to evaluate curls, divergence, grad and cross-product
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4462:[(div(avg_t(S_em,n))) = avg_t(S_add,n)  and avg_t(q_b,n) = (div( (E_1 ~ h_1_P))) , 
+    div(avg_t(S_em,n) )  = div(avg_t( (E_c1 ~ H_c1_p) + φ-1 *'diff(D_1_p,t) + ψ_1 * 'diff(B_1,t) ,n) ) ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Substitute (4.4.62) into (44.44) to give:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4463:[ div( avg_t(S_el,n) + avg_t(S_add)) + avg_t(q_b,n) = 0 ]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where avg_t(S_add,n)  and avg_t(q_b,n)  are time-averaged values of (4.4.13) and (4.4.14)
+The constituents of avg_t(S_add,n)  and avg_t(q_b,n)  are obtained from
+eqns
+    (4.4.45),(4.4.46), (4.4.49),(4.4.50),(4.4.53),(4.4.54)
+
+Now avg_t(S_add,n)  and avg_t(q_b,n)  can be given as follows:
+
+Not using express for div curl grad cross-product (~) for now 
+Use express when vector quantities are properly defined
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4464:[  
+    avg_t(S_add, n) = avg_t(S_el,n) + avg_t(S_fm,n)   + avg_t(S_pl,n ) ,
+    avg_t(S_add, n) = (1/2) * Re( V_1_a . conjugate(J_1_a) +  V_1_m . conjugate(J_1_m) +  V_1_e . conjugate(J_1_e))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4465:[ 
+    avg_t(q_b,n) = avg_t(q_add,n), 
+    avg_t(q_b,n) = avg_t(q_el,n) + avg_t(q_fm,n) + avg_t(q_pl,n),
+    avg_t(q_b,n) =     (ω^2/2 * conjugate(S_1_bar) . η_bar . S_1_bar)
+    + (p__m0/2) * conjugate(U_1) . τ^(-1) . U_1
+    + v_M * (μ_0/2) * (ω/ω_M)^2 * abs(M_1)^2 + (1/2) * Re((1/μ_e) * (v_1 - j_1*v_0) . conjugate(J_1_e)    )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4466:[avg_t(S_em,n) = (1/2) * Re( (E_c1 ~ conjugate(H_c1_p) + φ_1 *  conjugate(%i*ω*D_1_p)) + ψ_1 *  conjugate(%i*ω*B_1)), avg_t(S_em,n) = avg_t(S_em_c,n) + avg_t(S_es,n) + avg_t(S_ms,n)  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4467:[avg_t(S_em_c,n) = (1/2) * Re( E_c1 ~ conjugate(H_c1_p))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4468:[avg_t(S_es,n) = (1/2) * Re( φ_1* conjugate(%i*ω*D_1_p))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4469:[avg_t(S_ms,n) = (1/2) * Re(ψ_1*conjugate(%i*ω*B_1)) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.4.2   Modal Transmission and Dissipation Of Power
+
+4.4.2.1 General Power Relations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(S);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4469A:[   div(avg_t(S_em,n) + avg_t(S_add,n)) ]   ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4470:[   'integrate( div(avg_t(S_em,n) + avg_t(S_add,n)) ,S )  = 
+    'diff(  'integrate(e_z . avg_t(S_em,n),S ) ,z)  + 'diff( 'integrate( e_z . avg_t(S_add,n),S),z)
+    - 'sum(  'integrate( n_i_p  . avg_t(S_em_p,n) + n_i_m . avg_t(S_em_m,n) ,L_i),i,1,N  )    
+    - 'sum(  'integrate( n_i_p  . avg_t(S_add_p,n) + n_i_m . avg_t(S_add_m,n) ,L_i),i,1,N  )    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4471:[Q_em_s = 'sum( 'integrate( n_i_p . avg_t(S_em_p,n) + n_i_m . avgs_t(S_em_m,n),S),i,1,N) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4472:[Q_add_s = 'sum( 'integrate( n_i_p . avg_t(S_add_p,n) + n_i_m . avgs_t(S_add_m,n),S),i,1,N) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Contribution by a metallic boundary
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4473:[Q_em_s = (1/2) * 'integrate(R_s*(H_τ . conjugate(H_τ)), L)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4474:[ 'diff(P(z),z) + Q(z) = 0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4475:[ P = P_EM + P_PM, P = 'integrate(avg_t(S_em,n) . e_z, S)  + 'integrate(avg_t(S_add,n) . e_z, S)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4476:[
+    P_EM = 'integrate(avg_t(S_EM,n) .e_z ,S) , 
+    P_EM = 'integrate(avg_t(S_em,n) . e_z, S), 
+    P_EM = (1/2) * Re('integrate( (E_c1 ~ conjugate(H_c1_p) + φ_1 * conjugate(%i*ω*D_1_P)  + ψ_1 * conjugate(%i*ω*B_1 ) ). e_z,S)) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_c1:[Ec1_x, Ec1_y, E_c1_z]; 
+H_c1_p:[Hc1p_x, Hc1p_y, Hc1p_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4477:[P_em = 'integrate( avt_t(S_em_c, n) . e_z, S), P_em = (1/2) * Re( 'integrate( express(E_c1 ~ conjugate(H_c1_p)) . e_z, S)) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4478:[P_es = 'integrate(avg_t(S_es,n) . ez, S) , P_es = (1/2) * Re(  'integrate( conjugate( ψ_1(%i*ω*D_1_P)) . e_z, S)  )];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4479:[P_ms = 'integrate( avg_t( S_ms,n) . e_z, S), P_ms = (1/2) * Re( 'integrate(  conjugate(ψ_1(%i*ω*B_1)) . e_z,S ) ) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4480:[
+    P_PM = 'integrate( avg_t(S_add,n) . e_z, S),
+    P_PM= (1/2) * Re(  'integrate( (V_1_a . conjugate(J_1_a) + V_1_m . conjugate(J_1_m) + V_1_e . conjugate(J_1_e) ) . e_z,S ))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4480 involves 3 contributions 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4481:[P_el = 'ntegrate( avg_t(S_el,n) . e_z, s), P_el = (1/2) * Re( 'integrate(  (V_1_a . conjugate(J_1_a)) . e_z,S) ) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4482:[ P_fm = 'integrate( avg_t( S_fm,n) . e-z, S), P_fm = (1/2) * Re( 'integrate ( (V_1_m . conjugate(J_1_m)) . e_z, S ))];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4483: [
+    P_pl = 'integrate(avg_t(S_pl,n) . e_z, S),
+    P_pl = (1/2) * Re( 'integrate( (V_1_e . conjguate(J_1_e)) . e_z,S))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4484:[Q = Q_b + Q_s , Q = integrate(avg_t(q_b,n) ,S) + integrate(avg_t( q_add_s,n),L)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4485:[
+    Q_b = 'integrate( avg_t(q_b,n),S) ,
+    Q_b = 'integrate( avg_t(q_add,n),S)  , 
+    Q_b = 'integrate(  avg_t(q_el,n) + avg_t(q_fm,n) + avg_t(q_pl,n),S),
+    Q_b =Q_el_b + Q_fm_b + Q_pl_b
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Note : (colon) double-dot notation which is a term-by-term tensor product
+        is being replaced temporarily by standard multiplication. This is easy
+        to implment in octave and matlab with the dotted operations
+                
+Bulk losses from 4485 include contributions from:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4486:[
+Q_el_b = 'integrate( avg_t(q_el,n),s),
+Q_el_b = (ω^2/2) * 'integrate(  conjugate(S_1_bar)* η_bar * S_1_bar ,S)   
+                + 
+                (ρ_m0 /2) * 'integrate(  conjugate(U_1) . (1/τ_bar). U_1,S  ) ] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4487:[
+    Q_fm_b = 'integrate( avg_t(q_fm,n),S) , Q_fm_b = ν_M  * (μ_0/2) * (ω/ω_M)^2 * 'integrate( abs(M_1)^2,S)
+
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4488:[
+    Q_pl_b = 'integrate( avg_t(q_pl, n) , S),
+    Q_pl_b = (1/2) * Re( 'integrate(  (1/μ_e) * (v_1 - j_1 * v_0)  . conjugate(J_1) ,S))  
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4489:[
+
+Q_s = 'integrate(avg_t(q_add_s, n) ,L),
+Q_s = 'integrate(n . avg_t(S_add, n), L),
+Q_s = integrate(n . ( avg_t(S_el,n) + avg_t(S_fm,n) + avg_t(S_pl,n) ) ,L)   ,
+Q_s = Q_el_s + Q_fm_s + Q_pl_s    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4489 Includes 3 contributions  
+    Q_el_S from elastic mediia,
+    Q_fm_s from surfaces of ferrimagnetic media, 
+    Q_pl_s from surfaces of charge carrier streams in plasmas
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4490:[  
+    Q_el_s = integrate(avg_t(q_el_s,n),L),
+    Q_el_s = integrate(n . avg_t(S_el,n) ,L)    ,
+    Q_el_s = (1/2) * Re( integrate( (n . V_bar_1_a ) . conjugate(J_1_a) ,L  ) )  ,
+    Q_el_s = (1/2) * Re( integrate( - (n . T_1_Σ ) . conjugate(U_1)  ,L  )  )  
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4491:[  
+    Q_fm_s = integrate(avg_t(q_fm_s,n),L),
+    Q_fm_s = integrate(n . avg_t(S_fm,n) ,L)    ,
+    Q_fm_s = (1/2) * Re( integrate( (n . V_bar_1_m ) . conjugate(J_1_m) ,L  ) )  ,
+    Q_fm_s = (1/2) * Re( integrate( %i*ω*μ_0*λ_ex(n . express(grad(M_1)))  . conjugate(M_1)  ,L  )  )  
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4492:[  
+    Q_pl_s = integrate(avg_t(q_pl_s,n),L),
+    Q_pl_s = integrate(n . avg_t(S_pl,n) ,L)    ,
+    Q_pl_s = (1/2) * Re( integrate( (n . V_bar_1_e ) . conjugate(J_1_e) ,L  ) )  ,
+    Q_pl_s = (1/2) * Re( integrate( %i*ω*(m/e) * (v_r^2/p_0) * (n . p_v_1) * conjugate(p_1)  ,L  )  )  
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For free solid surface , For rigid solid surface
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4493: n . T_bar_1_Σ = 0;
+cmt_ch04_4494: U_1 = 0    
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4494_A: [ 
+n . V_bar_1_a = 0 , 
+J_1_a = 0    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Boundary Conditions On Ferrite Surface For Calculation of Ferrimagnetic Losses 
+Textbook ⟶ λ_ex(n . ∇) . M_1 
+What exactly does this mean?
+TODO: I have split it into n . div(M_1) but this needs to be verified
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4494_B:[
+n . V_bar_1_m = -λ_ex(n  . div(M_1) ),
+j_1_M = %I* ω* μ_0* m_1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For free surface spins
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4495: ρ_1 = 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For rigid surface spins
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4496: n . p_v_1 = 0;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.4.97 and 4.4.98 ensure the following conditions on the unperturbed carrier stream boundary
+The result is that the countour integral in (4.4.92) vanishes so Q_pl_s = 0 
+This shows that there are no plasma surface losses
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4498_A:[
+n . V_bar_1_e  = n * V_1_th, n . V_bar_1_e = 0,
+n . J_1_e = 0 , n . v_0 = 0    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4499:[
+a_k(z) = A_k * %e^(-γ_k*z) , a_k(z) = A_k * %e^(-α_k*z) * %e^(-%i*β_k *z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44100:[
+    Φ_1(r_t,z) = 'sum(A_k * Φ_k(r_t,z) , k,1,N),  
+    Φ_1(r_t,z) = 'sum (A_k * Φ_k_bar(r_t) * %e^(-γ_k*z), k,1,N),
+    Φ_1(r_t,z) = 'sum(a_k(z) * Φ_k_bar(r_t), k, 1,N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the total power flow P defined in (4.4.75) 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44101:[ 
+    P(z) = P_EM(z) + P_PM(z)    ,
+    P(z) = sum(sum(P_kl(z), L, 1,N),K,1,N)    , (1/2)*Re(sum(sum(N_kl * conjugate(a_k(z)) * a_l(z),l, 1,m),k,1,n))    ,
+    P(z) = (1/4) * sum(sum( N_kl * conjugate(a_k(z) ) * conjugate(a_l(z)), l,1,m), k,1,n)    ,
+    P(z) = (1/4) * sum(N_k*abs(a_k(z))^2,k,1,n) + (1/2)*Re(sum(sum(N_kl * conjugate(a_k(z)) * a_l(z),l, 1,m),k,1,n))      ,
+    P(z) = sum(P_k(z),k,1,n) + sum(sum(Q_kl_pair(z) ,l,1,m),k,1,n) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the total power loss Q defined in (4.4.84) 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44102: [
+Q(z) = Q_b(z) + Q_s(z) , 
+Q(z) = sum(sum( P_kl(z) , l,1,m),k,1,n),
+Q(z) = (1/4) * sum(sum(M_kl * conjugate(a__k(z)) * conjugate(a_l(z)) , l,1,m),k,1,n)    ,
+Q(z) = (1/4) * sum( sum( M_k * abs(a_k(z))^2,l,1,m),k,1,n)  + (1/2) * Re(   sum(sum( M_kl * conjugate(a_k(z) ) * a_l(z), l,1,m),k,1,n)) ,
+Q(z) = sum(Q_k(z), k,1,n) + sum(sum(Q_kl_pair(z),l,1,m),k,1,n)
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44103:[
+N_kl = conjugate(N_lk), M_kl = conjugate(M_lk)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44104:[
+    N_kl= N_kl_EM + N_kl_PM
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44105:[
+    N_kl_EM = integrate( 
+    (
+        conjugate(E_bar_k)  ~ H_bar_l_P) 
+        + 
+        E_bar_l ~ conjugate(H_bar_ck_p) 
+        ,S,1,N) 
+    + 
+    ( 
+        conjugate(φ_hat_k(%i*ω*D_hat_l_p) )   
+        +  
+        conjugate(φ_hat_l(%i*ω*D_hat_k_p)) 
+    )  
++
+    (
+        conjugate(ψ_hat_k(%i*ω*B_hat_l))
+        + 
+        conjugate(ψ_hat_l(%i*ω*B_hat_k) )    
+      . e_z, S) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44106:[
+N_kl_EM = 'integrate(  
+        (
+            (conjugate(E_ck_hat) ~ Hn_l_p_hat) + (E_l_hat ~ conjugate(H_k_p_hat)))
+            +
+            (conjugate(φ_k_hat(%I*ω*D_l_p_hat)) + conjugate(φ_l_hat(%i*ω*D_k_p_hat)))  
+            +
+            (conjugate(ψ_k_hat(%i*ω*B_l_hat))    + conjugate(ψ_l_hat(%i*ω*B_k_hat))
+        )
+      . e_z, S )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44107:[
+N_kl_PM = 'integrate( (  ((conjugate(V_k_a_bar_hat) . J_l_a_hat) + (V_l_a_bar_hat . conjugate(J_k_a_hat))) 
++
+(conjugate( V_m_k_bar_hat) . J_l_m_hat) + (V_l_m_bar_hat . conjugate(J_k_m_hat))  
++
+(conjugate(V_k_e_bar_hat) . J_l_e_hat) + (V_l_e_bar_hat . conjugate(J_k_e_hat))) . e_z, S )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_44108:[
+    M_kl = M_kl_b + M_kl_s
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Here he uses colon (:) for the term-by-term tensor product 
+Maxima will not accept that syntax, will create function tbyt or prdt to do this
+For now using dot product or multiplication, but this has to be changed later.
+INCOMPLETE cmt_ch04_44109 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44109:[
+    M_kl_b = 2 * 'integrate( (ω^2 . ( conjugate(S_k_bar_hat) . η_bar . S_l_bar_hat)) ,S )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44110:[
+    M_kl_s = - 'integrate( ( ((n . conjugate(T_hat_k_Σ))   . U_hat_t + (n  . T_hat_l_Σ) . conjugate(U_hat_k)) 
+    +
+    λ_ex * ( (n . grad(conjugate(M_hat_k))) . (%i*ω*μ_0 * M_hat_t) + (n . grad(M_hat_t) ) . conjugate(%i*ω*μ_0*M_hat_k) )
+    +
+    (m/e) * (v_r^2 / ρ_0) * ( (n . conjugate(p_hat_k)) .  (%i*ω*ρ_hat_l) + (n . ρ_hat_l) . conjugate(%i*ω*ρ_bar_k))
+                        ) ,S) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44111:[ P_k(z) = P_kk(z), P_kk(z) = 1/4 * N_kk . conjugate(a_k(z)) * a_k(z)  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44112:[ Q_k(z) = Q_kk(z), Q_kk(z) = 1/4 * M_kk . conjugate(a_k(z)) * a_k(z)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44113:[P_kl(z) = conjugate(P_lk(z))  , P_kl(z) =   (1/4) * N_kl * conjugate(a_k(z) ) * a_l(z) ]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44114:[Q_kl(z) = conjugate(Q_lk(z))  ,Q_kl(z) =  (1/4) * M_kl * conjugate(a_k(z) ) * a_l(z) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Example Using tex - Output Latex From Derived Expressions
+
+Latex strings can be created using maxima and the wxmaxima notebook gets saved as pdflatex.
+Then the exported notebook with latex  can be processed by the pdflatex command to generate documents.
+You can also call maxima from SageMath or  Maxima-Jupyter and export those notebooks in pdf or latex format.
+SageTex also works well and can be integrated into TexMaker and TexStudio for a full publishing environment
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+tex( [Q_kl(z) = conjugate(Q_lk(z))] ,false );
+tex([Q_kl(z) = conjugate(Q_lk(z))],false )  ;
+tex([Q_kl(z) =  (1/4) * M_kl * conjugate(a_k(z) ) * a_l(z) ],false ) ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_44115:[ P_kl_pair(z) = P_kl(z)  + P_lk(z) , P_kl_pair(z) = (1/2) * Re(N_kl * conjugate(a_k(z)) * a_l(z)) ]
+    ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4416:[Q_kl_pair(z) = Q_kl(z) + Q_lk(z) , Q_kl_pair(z) = 1/2 * Re(M_kk . conjugate(a_k(z)) * a_k(z) )]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.5 Development of SDAM Excitation Theory For SDAM Waveguides
+
+4.5.1 Generalized Reciprocity Theorem In Complex Conjugate Form
+
+In the region of exciting sources in the bulk material Maxwell's equations take this form:
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_451:[express(curl(E_1)) = -%i*ω*B_1 - J_b1_m];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_452:[express(curl( H_1_p )) = %i*ω*D_1_p + J_b1_e];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_453:[  express(div(D_1_p)) = ρ_b1_e];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_454:[express(div(B_1)) = ρ_b1_m];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The charge and current densities (electric and magnetic) are related to each other by:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_455:[
+    %i*ω*ρ_b1_e + express(div(J_b1_e)) = 0, 
+    %i*ω*ρ_b1_m + express(div(J_b1_m)) = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The field-intensity vectors E_1, H_1_p = H_1 - p_1 x v_0 are linked with the flux-density vectors D_1_p and B_1 by:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_456:[ D_1_p = ε_0 * E_1 + P_net, D_1_p =  ε_0 * E_1 + (P_1 + p_1)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_457:[B+1 = μ_0 * (H_1_p + M_net) , B_1 = μ_0 * (H_1 + M_1)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where P_1, M_1 and p_1 describe physical properties of the medium being analyzed.
+
+To obtain the conjugate reciprocity theorem it is is necessary to consider another (small-signal) system  denoted with subscript 2
+The dynamic equations of this second system all take the complex conjugate form initially used for the BAM analysis.
+
+The conventional procedure applied to combine the two systems of equations gives equation (3.5.27).
+Equation (3.5.27) is re-written here using equations  (4.5.6) and (4.5.7) as follows:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_458:[
+    express(div( express(E_1 ~ conjugate(H_2_p)) + express( conjugate(E_2) ~ H_1_p))) = 
+            -%i*ω* (P_1 . conjugate(E_2)) -  (conjugate(P_2) . E_1)
+            - %i*ω*  (   (M_1 . conjugate(H_2)) - (conjugate(M_2) . H_1) ) 
+            -%i *ω* (( p_1 . conjugate(E_2_primed)) - (conjugate(p_2) . E_1_primed))
+            - ( (J_b1_e  . conjugate(E_2))  + (conjugate(J__b2_e) . E_1) )
+            -  (J_b1_m . conjugate(H_2_p)) + (conjugate(J_b2_m) . H_1_p)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where the electric fields E_1_primed = E_1  +  v_0 x B_1 and E_2_primed  = E_2  + v_0 x B_2 acmt_re measured relative to an 
+observer moving with the non-relativistic velocity v_0
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S_12:[S_12_x, S_12_y, S_12_z];
+H_2_p:[H_2p_x,H_2p_y, H_2p_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_459:[express(div(S_12)) + q_12_b = r_12_b];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4510:[S_12 = S_12_EM  + S_12_PM];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4511:[
+S_12_EM  =  express(E_1 ~ conjugate(H_2_p)) + express(conjugate(E_2) ~ H_1_p)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4512:[
+S_12_PM = (V_1_a . conjugate(J_2_a)) + (conjugate(V_2_a)  . J_1_a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4512:[
+    S_12_PM = ( (V_bar_1_a . conjugate(J_2_a)) + (conjugate(V_bar_2_a)  . J_1_a))
+    +
+   ( ( V_bar_1_m  . conjugate(J_2_m)) + (conjugate(V_bar_2_m) . J_1_m) )
+    +
+    (( v_bar_1_e . conjugate(J_2_e)) + (conjugate(V_bar_2_e) . J_1_e))
+
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4513:[
+    q_12_b = 2  * (ω^2 * S_bar_1 .η_bar . conjugate(S_2)) + (ρ_m0 * U_1 . (1/τ) . conjugate(U_2))
+    +
+    2*ν_M * μ_0 * (ω/ω_M)^2 * (M_1 . conjugate(M_2))
+    +
+    (1/μ_0) * ( ( v_1 - G_1*v_0 ) . conjugate(J_2_e) + (conjugate(v_2) - conjugate(G_2)*v_0) . J_1_e )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4514:[
+r_12_b = - ((J_b1_e . conjugate(E_2) )  + (conjugate(J_b2_e) . E_1))
+                - 
+                ((J_b1_m . conjugate(H_2_p)) + (conjugate(J_b2_m) . H_1_p))
+    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4515:[
+    express(div( express(E_1 ~ conjugate(H_2_p) + express(conjugate(E_2) ~ H_1_p)))) 
+    = 
+    ((φ_1* conjugate(%i*ω*D_2_p)) + (conjugate(φ_2) * (%i*ω*D_1_p))) + (( ψ_1* conjugate(%i*ω*B_2)) + (conjugate(ψ_2)   * (%i*ω*B_1)))
+    +        
+    ((conjugate(J_b1_e) . express(grad(conjugate(φ_2)))) + (conjugate(J_b2_e) . express(grad(φ_1))) ) + ((J_b1_m . express(grad(conjugate(ψ_2)))) +  (conjugate(J_b2_m) . express(grad(ψ_1))) )
+    -
+    (( (%i*ω*ρ_b1_e) * conjugate(φ_2) )  + (conjugate(%i*ω*ρ_b2_e) * φ__1)) - ( (%i*ω*ρ_b1_m) * conjugate(ψ_2)) + (conjugate(%i*ω*ρ_b2_m) * ψ_1)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_c1:[E_c1_x, E_c1_y, E_c1_z];
+E_c2:[E_c2_x, E_c2_y, E_c2_z];
+H_c2_p:[H_c2p_x, H_c2p_y, H_c2p_z];
+H_c1_p:[H_c1p_x, H_c1p_y, H_c1p_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4516:[
+    S_12_EM = (express(E_c1 ~ conjugate(H_c2_p))) + express(conjugate(E_c2) ~ H_c1_p)
+    +
+   ((φ_1*conjugate(%i*ω*D_2_p)) + conjugate(φ_2) * (%i*ω*D_1_p))
+    +
+    ( ψ_1*conjugate(%i*ω*B_2)) + (conjugate(ψ_2) * (%i*ω*B_1))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4517:[
+    r_12_b =  - (J_b1_e . conjugate(E_c2)) + (conjugate(J_b2_e) . E_c1) - (J_b1_m . conjugate(H_c2_p)) + (conjugate(J_b2_m) . H_c1_p)
+                    +
+                    ((%i*ω*ρ_b1_e) * conjugate(φ_2)) + (conjugate(%i*ω*ρ_b2_e) * φ_1) 
+                    +
+                    ((%i*ω*ρ_b1_m) * conjugate(ψ_2)) + (conjugate(%i*ω*ρ_b2_m) * ψ_1) 
+    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.5.2   Quasi-Orthogonality and Orthogonality of Modes In SDAM Waveguides
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.5.2.1     Mode quasi-orthogonality relations for lossy waveguides
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4518:[
+    'diff(P_kl(z),z) + Q_kl(z) = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4519:[
+    P_kl(z) = (1/4) * 'integrate( conjugate(S_kl_EM (r_t,z)) . e_z,S, 1,N)
+                        +
+                    (1/4) * 'integrate( conjugate(S_kl_PM (r_t,z)) . e_z, S, 1, N),
+    P_kl(z) = P_kl_EM + P_kl_PM,
+    P_kl(z) = (1/4) * (N_kl_EM + N_kl_PM) * conjugate(A_k) * A_l * exp(- (conjugate(γ_k) + γ_l) * z),
+    P_kl(z) = (1/4) * N_kl* conjugate(a_k(z)) *a_l(z) 
+    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_520:[
+    Q_kl(z) = (1/4) * 'integrate( conjugate(q_kl_b(r_t,z) ) ,S, 1,N)
+                        +
+                    (1/4) * 'integrate( conjugate(q_kl_s(r_t,z)) , S, 1, N),
+    Q_kl(z) = Q_kl_b + Q_kl_s,
+    Q_kl(z) = (1/4) * (M_kl_b + M_kl_s) * conjugate(A_k) * A_l * exp(- (conjugate(γ_k) + γ_l) * z),
+    Q_kl(z) = (1/4) * M_kl* conjugate(a_k(z)) *a_l(z) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_520_A:[
+'diff(N_kl * exp(-(conjugate(γ_k) * γ_l) * z),z) + M_kl * exp(-(conjugate(γ_k) + γ_l) * z)  = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_521:[
+    (conjugate(γ_k) + γ_l) * N_kl = M_kl, (conjugate(γ_k) + γ_l) * P_kl = Q_kl
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4522:[
+    (conjugate(γ_k) + γ_l)  * (N_kl_EM + N_kl_PM) = M_kl_b + M_kl_s
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.5.2.2     Mode Orthogonality Relations For Lossless Waveguides
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4523:[
+    (conjugate(γ_k) + γ_l) * N_kl = (conjugate(γ_k) + γ_l) *  (N_kl_EM + N_kl_PM),
+    (conjugate(γ_k) + γ_l) * N_kl  = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4524:[
+(β_k - β_l) * N_kl = (β_k - β_l) * (N_kl_EM + N_kl_PM), 
+(β_k - β_l) * N_kl =  0    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4525:[
+    N_kl = n_KK * δ_kl,
+    if l != k then N_kl = 0,
+    if l = k then N_kk = N_k
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_ck_hat:[Eckh_x, Eckh_y, Eckh_z];
+H_ck_p_hat:[H_ckph_x, H_ckph_y, H_ckph_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4526:[
+    N_k = N_k_EM + N_k_PM,
+    N_k = 2 * Re(
+        integrate( 
+                (express(conjugate(E_ck_hat) ~ H_ck_p_hat) 
+             + conjugate(φ_k_hat) * (%i*ω*D_k_p_hat) 
+             + ψ_k_hat * (%i*ω*B_k_hat)) . e_z, s,1,N))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4527:[
+    V_k_a_bh = -T_k_Σ_bh,
+    J_k_a_hat = %i*ω*u_k_hat, 
+    J_k_a_hat = U_k_hat
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4528:[
+    V_k_m_hat = -λ_cx * ∇M_k_hat,
+    J_k_m_hat = %i*ω*μ_0 * M_k_hat
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4529:[
+    V_k_e_bh = (m/e) * (v_0*v_k_p_hat + (v_T^2 / o_0) * p_k_hat * I_bar),
+    J_k_e_hat = %i*ω*p_k_hat
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4530:[
+P_k = (1/4) * N_k * abs(a_k)^2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4531:[
+    P_kk = conjugate(P_kk), P_kk = (1/4) * N_kk * conjugate(a_k) * a_k
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4532:[
+    N_kl = N_kk_tilde * δ_k_tilde_l, 
+    if l ≠ k then N_kl = 0,
+    if l = k then N_kk_tilde = N_k
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ H_ck_tilde_p_hat:[H_cktph_x, H_cktph_y, H_cktph_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4533:[
+    N_k = N_kk_EM + N_kk_PM,
+    N_k = 'integrate( 
+        (
+                express(conjugate(E_ck_hat) ~ H_ck_tilde_p_hat) + express(E_ck_hat ~ conjugate(H_ck_p_hat))
+                +
+                (conjugate(φ_hat) *( %i*ω*D_k_tilde_p_hat) + φ_k_tilde_hat * conjugate(%i*ω*D_k_p_hat)) 
+                    +
+                (conjugate(ψ_k_hat) * (%i*ω*B_k_tilde_hat)  + ψ_k * conjugate(%i*ω*B_k_hat )) ). e_z, 
+                
+            S, 1, N)
+                +
+            'integrate( 
+                (
+                    (conjugate( V_k_a_bh) . J_k_tilde_a_hat  + V_k_a_bh . conjugate(J_k_a_hat))
+                        +
+                    (conjugate(V_k_m_bh) . J_k_tilde_m_hat + V_k_tilde_m_bh . conjugate(J_k_m_hat))
+                        +
+                    (conjugate(V_k_e_bh) . J_k_tilde_e_hat + V_k_tilde_e_bh . conjugate(J_k_e_hat)) 
+                )  . e_z, S, 1,N   
+            )
+]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4534:[
+    P_kk_pair = P_k_k_tilde + P_k_tilde_k , 
+    P_kk_pair = (1/2) * Re( N_k_k_tilde * conjugate(a_k) * a_k_tilde) ,
+    P_kk_pair = (1/2 ) * Re( N_k * conjugate(a_k) * a_k_tilde)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4535:[
+    Φ_k(r_t,z) = Φ_k_bar(r_t) * exp(-γ_k*z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4536:[
+    Φ_1(r_t,z) = Φ_a(r_t,z) + Φ_b(r_t,z) ,
+    Φ_1(r_t,z) = 'sum(A_l(z) * Φ_l (r_t,z) + Φ_b(r_t,z),l,1,N),
+    Φ_1(r_t,z) = A_l(z) * Φ_l_hat(r_t) * exp(-γ_k*z) + Φ_b(r_t,z), 
+    Φ_1(r_t,z)  = 'sum(a_l(z) * Φ_l_hat(r_t) + Φ_b(r_t,z), l,1,N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+n_s_plus: [n_sp_x, n_sp_y, n_sp_z];
+E_c1_plus: [E_c1p_x, E_c1p_y, E_c1p_z];
+n_s_minus: [n_sm_x, n_sm_y, n_sm_z];
+E_c1_minus: [E_c1m_x, E_c1m_y, E_c1m_z];
+ H_c1_p_plus:[H_c1pp_x, H_c1pp_y, H_c1pp_z];
+ H_c1_p_minus:[H_c1pm_x, H_c1pm_y, H_c1pm_z];
+D_1_p_plus:[D_1pp_x, D_1pp_y, D_1pp_z];
+D_1_p_minus:[D_1pm_x, D_1pm_y, D_1pm_z];
+B_1_plus:[B_1p_x, B_1p_y, B_1p_z];
+B_1_minus:[B_1m_x, B_1m_y, B_1m_z];
+φ_1_plus:[φ_1p_x, φ_1p_y, φ_1p_z]; 
+φ_1_minus:[φ_1m_x, φ_1m_y, φ_1m_z]; 
+ψ_1_plus:[ψ_1p_x, ψ_1p_y, ψ_1p_z]; 
+ψ_1_minus:[ψ_1m_x, ψ_1m_y, ψ_1m_z]; 
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the current sheet
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4537:[ express(n_s_plus ~ E_c1_plus) + express(n_s_minus ~ E_c1_minus) = -J_s_m ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4538:[ express(n_s_plus ~ H_c1_p_plus) + express(n_s_minus ~ H_c1_p_minus) = -J_s_E];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the charge sheet
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4539:[ express(n_s_plus ~ D_1_p_plus) + express(n_s_minus ~ D_1_p_minus) = ρ_s_e ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4540:[ express(n_s_plus ~ B_1_plus) + express(n_s_minus ~ B_1_minus) = ρ_s_m];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the dipole sheet
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4541:[ express(n_s_plus ~ φ_1_plus) + express(n_s_minus ~ φ_1_minus) = (1/ε_0) * η_s_e];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4542:[ express(n_s_plus ~ ψ_1_plus) + express(n_s_minus ~ ψ_1_minus) = (1/ε_0) * η_s_m];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S_lk_EM:[S_lkem_x, S_lkem_y, S_lkem_z ];
+S_lk_PM:[S_lkpm_x, S_lkpm_y, S_lkpm_z ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4543:[
+'integrate(express(div(S_lk_EM + S_lk_PM ))  , S, 1, N ) + 'integrate(q_lk_b, S ,1, N) + 'integrate(r_lk_b, S, 1, N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4544:[S_lk_EM];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4545:[
+        S_lk_PM = ((V_bar_l_a . conjugate(J_k_a) ) + (conjugate(V_bar_k_a) . J_l_a))
+                            +
+                            ((V_bar_l_m . conjugate(J_bar_k_m) ) + (conjugate(V_bar_k_m) . J_l_m))
+                            +
+                            ((V_bar_l_e . conjugate(J_k_e)) + (conjugate(V_bar_k_e) . J_l_e))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The dot product below between S_bar_l and η_bar and S_bar_k 
+should be the term by term tensor product : (colon)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4546:[
+    q_lk_b = 2 * (ω^2 *S_bar_l . η_bar . conjugate(S_bar_k) + ρ_m0 * U_1 . (1/τ_bar) . conjugate(U_k) )
+                        + 
+                        2 * ν_M * μ_0 * (ω/ω_M)^2 * (M_l . conjugate(M_k))
+                        +
+                        (1/μ_e) * ( (v_1 - j_1 * v_0) . conjugate(J_k_e) + (conjugate(v_k) - conjugate(j_k)) * v_0 ) . J_l_e
+    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4547:[
+    r_lk_b = -(J_bl_e . conjugate(E_ck) + J_bl_m . conjugate(H_ck_p) ) 
+                    +
+                    ((%i*ω*ρ_bl_e)*conjugate(φ_k) + (%i*ω*ρ_bl_m) * conjugate(ψ_k))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Apply divergence theorem (3.2.25) to the expression for S_lk_EM in Eq (4.5.44)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_cl:[E_cl_x, E_cl_y, E_cl_z];
+E_ck:[E_ck_x, E_ck_y, E_ck_z];
+H_ck_p:[H_ckp_x, H_ckp_y, H_ckp_z];
+H_cl_p:[H_clp_x, H_clp_y, H_clp_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The three line integrals in the following expression have a minus sign (-) at the end of the expression inside the integral. 
+This denotes a boundary condition where we are 'looking' toward one side of a boundary.
+One side is denoted as the + direction or side, the other is the - direction or side.
+The first section of each line integral is 'looking' toward the + side of the boundary
+The second section of each line integral is 'looking' toward the - side of the boundary
+
+NOTE: At this point I'm not sure how to represent this in maxima,but may end up using unit vectors perpendicular to the boundary.
+            Then multiplying the expressions inside the line integrals by the appropriate unit vector 
+            The other approach is to use sub-expressions named with the + and - or p and m to hold the + and - parts of the integral expressions.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4548_A:[
+    'integrate(div(S_lk_EM),S) = 
+    'diff(
+        'integrate( 
+                (
+                    (express(E_cl ~ conjugate(H_ck_p)) + express(conjugate(E_ck ~ H_cl_p)))
+                    + 
+                   (φ_l* conjugate(%i*ω*D_k_p) + conjugate(φ_k) * (%i*ω*D_l_p)) + (ψ_l * conjugate(%i*ω*B_k) + conjugate(ψ_k) * (%i*ω*B_l))
+                 )
+                * e_z,S)
+            ,z)
+            - 
+            'integrate( 
+                    n_s_p *  (express(E_cl ~ conjugate(H_ck_p)) + express(conjugate(E_ck) ~ H_cl_p)) 
+                    + 
+                    n_s_m * (express(E_cl ~ conjugate(H_ck_p)) + conjugate(E_ck) ~ H_cl_p),L,1,N)
+    
+            - 
+            'integrate( 
+                    n_s_p *  (φ_l* conjugate(%i*ω*D_k_p) + conjugate(φ_k) * (%i*ω*D_l_p))
+                    + 
+                    n_s_m * (φ_l * conjugate(%i*ω*D_k_p) + conjugate(φ_k) * (%i*ω*D_l_p)) ,L,1,N)
+            -
+            'integrate( 
+                    n_s_p *  (ψ_l* conjugate(%i*ω*B_k) + conjugate(ψ_k) * (%i*ω*B_l))
+                    + 
+                    n_s_m * (ψ_l * conjugate(%i*ω*B_k) + conjugate(ψ_k) * (%i*ω*B_l)) ,L,1,N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Using the boundary conditions (4.5.37) to (4.5.42) allows for this re-arrangement of the line integrals in cmt_ch04_4548_A
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4548_B:[
+    'integrate( express(div(S_lk_EM )) , S,1,N) 
+        = 
+    'diff( 
+        'integrate(S_lk_EM . e_z, S,1,N) - 'integrate(r_kl_s, L,1,N)
+    )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4549:[
+    τ_lk_s = -(express(J_s_e . conjugate(E_ck)) + express(J_s_m . conjugate(H_ck_p)))
+                +
+                (%i*ω*p_s_e * conjuate(φ_k) + %i*ω*p_s_m ) 
+                + 
+                ((η_s_e / ε_0) .  conjugate(%i*ω*D_k_p))  + ((η_s_m/μ_0) . conjugate(%i*ω*B_k))
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+S_lk_PM:[ S_lkpm_x, S_lkpm_y, S_lkpm_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4550:[
+    'integrate(express(div(S_lk_PM)),S),
+    'diff( 'integrate(S_lk_PM . e_z,S) ,z ) 
+    + 
+    'integrate(q_lk_s,L)
+];
+
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4551:[
+    q_lk_s = n . S_lk_PM,
+    q_lk_s = - ( (n . T_bar_l_Σ) . conjugate(U_k)  + conjugate(n . T_bar_lk_Σ) . U_l ) 
+    + 
+    λ_ex * ( (n . express(grad(M_l))) . conjugate(%i*ω*μ_0 * M_l)  + (n . conjugate(express(grad(M_k))) . (%i*ω*μ_0*M_l) ))
+     -
+    ((n . p_l) * conjugate(%i*ω*p_k) + (n-conjugate(p_k)) * (%i*ω*p_l) )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4552:[
+    'diff(P_kl(xz) ,z)  + Q_lk(z) = R_lk(z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4553:[
+    P_lk= P_lk_EM + P_lk_PM, 
+    P_lk = 'integrate( (S_lK_EM + S_lk_PM) . e_z, S)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4554:[
+    Q_lk = Q_lk_b + Q_lk__s, 
+    Q_lk = 'integrate(q_lk_b, S) + 'integrate(q_lk_s, S)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4555:[
+    R_lk = R_lk_EM + R_lk+PM,
+    R_lk = 'integrate(r_lk_b, S_b) + 'integrate(r_lk_s, L_s)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4556:[
+    P_lk = P_ak + P_bk,
+    P_lk = P_ak_EM + P_bl_PM,
+    P_lk = 'integrate((S_ak_EM + S_bk_PM) . e_z, S)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4557:[
+    Q_lk = Q_ak + Q_bk,
+    Q_lk = Q_ak_EM + Q_bk_PM,
+    Q_lk = 'integrate(q_ak_b,S) + 'integrate(q_ak_s, L)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4558:[
+    'diff(P_bk(z),z) + Q_bk(z) = 0
+]
+
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4559:[
+    'diff(P_ak(z),z) + Q_ak(z) = R_lk(z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4560:[
+
+P_ak(z) = P_ak_EM + P_ak_PM(z),
+P_ak(z) = 'integrate( (S_ak_EM(z) + S_ak_PM(z)) . e_z,s),
+P_ak(z) = 'sum(A_l(z),l, -N,N) * integrate( (S_lk_EM + S_lk_PM) . e_z,S) ,
+P_ak(z)  = 'sum(A_l(z),l, -N,N) * integrate( (conjugate(S_lk_EM) + conjugate(S_lk_PM)) . e_z,S),
+P_ak(z) = 'sum( (N_kl_EM + N_kl_PM) * A_l(z) * exp(-(conjugate(γ_k) + γ_l) * e_z), l,-N,N),
+P_ak(z) = ('sum(N_kl * A_l(z) *  exp(-γ_kl * z) , l, -N,N)) * exp(-conjugate(γ_k) * z)
+]; 
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><fn><munder altCopy="A_l"><mrow><mi>A</mi></mrow><mrow><mi>l</mi></mrow></munder><mrow><p><mi>z</mi></p></mrow></fn><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4561:[
+    Q_ak(z) = Q_ak_b(z) + Q_ak_s(z) ,
+    Q_ak(z) = 'integrate(q_ak_b(z), S,1,N) + 'integrate(q_ak_s(z), L,1,N),
+    Q_ak(z) = 'sum(A_l(z) * ( 'integrate(q_ak_b(z), S,1,N) + 'integrate(q_ak_s(z), L,1,N)) ,L,1,N),
+    Q_ak(z)='sum((M_kl_b + M_kl_s)*A_l(z)*exp(-(conjugate(γ_k)+γ_l)*z),L,1,N),
+    Q_ak(z) = 'sum( (M_kl * A_l(z)*exp(-γ_l *z) ) ,L,1,N) * exp(-conjugate(γ_k)*z ) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4562:[
+    R_lk(z) = R_lk_b(z) + R_lk_s(z),
+    R_lk(z) = (R_lk_b(z) + R_lk_s(z)) * exp(-conjugate(γ_k)*z),
+    R_lk(z) = R_lk(z) * exp(-conjugate(γ_k)*z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4563:[
+    R_k_b(z)  = 'integrate( 
+        -((J_b_e . conjugate(Eck_hat)) + (J_b_m . conjugate(H_ck_p_hat))) 
+            +
+        (%i*ω*ρ_b_e * conjugate(φ_k_hat) + %i*ω*ρ_s_m * conjugate(ψ_k_hat))
+   ,S )
+]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4564:[
+R_k_s(z) = 'integrate( 
+                    -(J_b_e . conjugate(E_hat_ck) + J_b_m . conjugate(H_hat_ck_p))
+                    + 
+                    (%i*ω*ρ_b_e * conjugate(φ_k) + %i*ω*ρ_b_m * conjugate(ψ_k))
+                    +
+                    ( (η_s_e / ε_0) . conjugate(%i*ω*D_hat_k_p) + (η_s_m/μ_0) . conjugate(%i*ω*B_hat_k) )
+                    ,L
+    )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4565:[
+'sum( N_kl * 'diff(A_l.z)  - (((conjugate(γ_k) +γ_l) * N_kl - M_kl) * A_l),L,1,N) * exp(-γ_l*z) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4566:[
+    'sum('sum(N_kl * 'diff(A_l(z),z) * exp(-γ_l*z) ,l,1,N)  , k,1,N) = R_z(z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4567:[
+    'sum('sum(N_kl * ('diff(a_l(z),z)  + γ_l*a_l(z)) ,K,1,N) ,L,1,N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_hat_ck:[E_hck_x, E_hck_y, E_hck_z];
+E_hat_cl:[E_hcl_x, E_hcl_y, E_hcl_z];
+ H_hat_cl_p:[H_hclp_x, H_hclp_y, H_hclp_z];
+ H_hat_ck_p:[H_hckp_x, H_hckp_y, H_hckp_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4568:[
+    N_kl = 'integrate( 
+            (
+                express(conjugate(E_hat_ck) ~ H_hat_cl_p) 
+                + 
+                express(E_hat_cl ~ conjugate(H_hat_ck_p))
+            )
+            +
+            (
+                conjugate(φ_hat_k) * (%i*ω*D_hat_l_p) + φ_hat_l * conjugate(%i*ω*D_hat_k_p)
+            )
+            +
+            (
+                conjugate(ψ_hat_k) * (%i*ω*B_hat_l) + ψ_hat_l * conjugate(%i*ω*B_hat_k)
+            ) . e_z
+        ,S,1,N)
+        +
+        'integrate(
+        (
+                (
+                    (conjugate(V_bar_hat_k_a) . J_hat_ll_a)
+                    + 
+                    (V_bar_hat_l_a . conjugate(J_hat_k_a))
+                ) 
+                +
+                (
+                    (conjugate(V_bar_hat_k_m) . J_hat_l_m)
+                    +
+                    (V_bar_hat_l_m . conjugate(J_hat_k_m))
+                )
+                +
+            (
+                (conjugate(V_bar_hat_k_e) . J_hat_l_e) 
+                +
+                (V_bar_hat_l_e . conjugate(J_hat_k_e))
+            )
+        ) . e_z,
+        S,1,N)    
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4569:[
+R_k(z) = 'integrate(  
+        -(J_b_e . conjugate(E_hat_ck)  + J_b_m . conjugate(H_hat_ck_p)) 
+        +
+        (%i*ω*ρ_b_e * conjugate(φ_k) +  %i*ω*ρ_b_m * conjugate(ψ_k)) 
+    ,S_b,1,N)
+    +
+    'integrate(
+         -(J_b_e . conjugate(E_hat_ck)  + J_b_m . conjugate(H_hat_ck_p)) 
+        +
+        (%i*ω*ρ_b_e * conjugate(φ_k) +  %i*ω*ρ_b_m * conjugate(ψ_k)) 
+        + 
+        ( (η_s_e/ε_0) . conjugate(%i*ω*D_hat_k_p) + (η_p_m/μ_0) * conjugate(%i*ω*B_hat_k) )
+        ,
+    L,1,N)
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_hat_k:[E_hk_x, E_hk_y, E_hk_z];
+H_hat_l_p:[H_hlp_x, H_hlp_y, H_hlp_z];
+H_hat_k_p:[H_hkp_x, H_hkp_y, H_hkp_z];
+H_hat_l:[H_hl_x, H_hl_y, H_hl_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4570:[
+
+N_kl = 'integrate( (express(conjugate(E_hat_k)  ~ H_hat_l_p) + express(H_hat_l ~ conjugate(H_hat_k_p))) . e_z, S, 1,N)
+            +
+            'integrate( 
+                ( 
+                    ((conjugate(V_hat_bar_k_a)  . J_hat_l_a) + (V_bar_hat_l_a . conjugate(J_hat_k_a)))
+                    + 
+                    ((conjugate(V_bar_hat_k_m) . J_jat_l_m) + (V_bar_hat_l_m . conjugate(J_hat_k_m)))
+                    +
+                    ((conjugate(V_bar_hat_k_e) . J_hat_l_e) + (V_bar_hat_l_e . conjugate(J_hat_k_e)))
+                )
+                 . e_z, S,1,N)
+                ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4571:[
+
+    R_kl(z) = 'integrate( (J_b_e . conjugate(E_hat_k)) + (J_b_m . conjugate(H_hat_k_p)), S_b, 1,N)
+                    -
+                    'integrate( (J_s_e . conjugate(E_hat_k)) + (J_s_m . conjugate(H_hat_k_p))  ,L_s,1,N)
+                    -
+                    'integrate( (J_s_eff_e . conjugate(E_hat_k)) + (J_s_eff_m . conjugate(H_hat_k)) , L_b_s,1,N)
+                               
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4572:[
+
+            (η_s_e/ε_0) . conjugate(%i*ω*D_hat_k_p) + (η_s_m/μ_0) * conjugate(%i*ω*B_hat_k)
+            =
+            φ_s*n_o *conjugate(%i*ω*D_hat_k_p) + ψ_s * n_o . conjugate(%i*ω*B_hat_k)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+4.5.3.2     Equations of mode excitation for lossless SDAM waveguides (Space Dispersive Active Media)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4573:[
+    'diff(A_k(z) ,z) = 
+        (1/N_k) * 'integrate( 
+                                          -(J_b_e . conjugate(E_ck) + J_b_m . conjugate(H_ck_p)) 
+                                            +
+                                            (%i*ω*ρ_b_e * conjguate(φ_k) + %i*ω*ρ_s_m * conjugate(ψ_k)) 
+                        ,S_b, 1,N)
+        +
+        (1/N_k) * 'integrate( 
+                                          -(J_b_e . conjugate(E_ck) + J_b_m . conjugate(H_ck_p)) 
+                                            +
+                                            (%i*ω*ρ_b_e * conjguate(φ_k) + %i*ω*ρ_s_m * conjugate(ψ_k)) 
+                                            (( η_s_e/ε_0)  . conjugate(%i*ω*D_k_p) + (η_s_m/μ_0) . conjugate(%i*ω*B_k))
+
+                        ,L_s, 1,N)
+        
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4574:[
+
+    'diff(a_k(z) ,z)  + %i*βk*a_k(z) = 
+        (1/N_k) * 'integrate( 
+                                          -(J_b_e . conjugate(E_ck) + J_b_m . conjugate(H_ck_p)) 
+                                            +
+                                            (%i*ω*ρ_b_e * conjguate(φ_k) + %i*ω*ρ_s_m * conjugate(ψ_k)) 
+                        ,S_b, 1,N)
+        +
+        (1/N_k) * 'integrate( 
+                                          -(J_b_e . conjugate(E_ck) + J_b_m . conjugate(H_ck_p)) 
+                                            +
+                                            (%i*ω*ρ_b_e * conjguate(φ_k) + %i*ω*ρ_s_m * conjugate(ψ_k)) 
+                                            +
+                                            (( η_s_e/ε_0)  . conjugate(%i*ω*D_hat_k_p) + (η_s_m/μ_0) . conjugate(%i*ω*B_hat_k))
+
+                        ,L_s, 1,N)
+];
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ cmt_ch04_4575:[
+    N_k = 2 * re(
+                            'integrate(            
+                                    (
+                                        express(conjugate(E_hat_ck) ~ conjugate(H_hat_ck_p))  
+                                        + 
+                                        conjugate(φ_hat_k) * (%i*ω*D_hat_k_p)  
+                                        + 
+                                        conjugate(ψ_hat_k) * (%i*ω*B_hat_k)
+                                            ) . e_z
+                            ,S,1,N)
+                       )
+                      +
+                    2 * re(
+                            'integrate(            
+                                    (
+                                        (conjugate(V_bar_hat_k_a)  . J_hat_k_a) 
+                                        + 
+                                        (conjugate(V_bar_hat_k_m) . J_hat_k_m) 
+                                        + 
+                                        (conjugate(V_bar_hat_k_e) . J_hat_l_e)
+
+                                            ) . e_z
+                            ,S,1,N)
+                       )
+    
+    
+    ];
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4576:[
+        'diff(A_k(z) ,z) = 
+            (1/N_k) * 'integrate( 
+                                          -(J_b_e . conjugate(E_ck) + J_b_m . conjugate(H_ck_p)) 
+                                            +
+                                            (%i*ω*ρ_b_e * conjguate(φ_k) + %i*ω*ρ_s_m * conjugate(ψ_k)) 
+                        ,S_b, 1,N)
+             +
+            (1/N_k) * 'integrate( 
+                                          -(J_b_e . conjugate(E_ck) + J_b_m . conjugate(H_ck_p)) 
+                                            +
+                                            (%i*ω*ρ_b_e * conjguate(φ_k) + %i*ω*ρ_s_m * conjugate(ψ_k))
+                                            +
+                                            (( η_s_e/ε_0)  . conjugate(%i*ω*D_k_p) + (η_s_m/μ_0) . conjugate(%i*ω*B_k))
+
+                        ,L_s, 1,N)
+        
+
+    
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_4577:[
+    a_k = A_k(z) * exp(-γ_k8z),
+    'diff(a_k(z) ,z)  + γ_k *a_k(z) = 
+        (1/N_k) * 'integrate( 
+                                          -(J_b_e . conjugate(E_hat_ck) + J_b_m . conjugate(H_hat_ck_p)) 
+                                            +
+                                            (%i*ω*ρ_b_e * conjguate(φ_hat_k) + %i*ω*ρ_s_m * conjugate(ψ_hat_k)) 
+                        ,S_b, 1,N)
+        +
+        (1/N_k) * 'integrate( 
+                                          -(J_s_e . conjugate(E_hat_ck) + J_s_m . conjugate(H_hat_ck_p)) 
+                                            +
+                                            (%i*ω*ρ_b_e * conjguate(φ_hat_k) + %i*ω*ρ_s_m * conjugate(ψ_hat_k)) 
+                                            +
+                                            (( η_s_e/ε_0)  . conjugate(%i*ω*D_hat_k_p) + (η_s_m/μ_0) . conjugate(%i*ω*B_hat_k))
+
+                        ,L_s, 1,N)
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_461:[
+    N_hat . Z(z) =R(z)
+]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_462:[
+    Z(k)= 'diff(a_k(z) ,z) + γ_k * a_k(z) ,
+    Z(k) = 'diff(A_k(z),z) * exp(-γ_k*z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_463:[
+    if is_active(N_kl) then N_kl = N_k * δ_kl,
+    if is_reactive(N_kl) then N_kl = R_k_bar * δ_k_bar_l,
+    if is_reactive(N_k) then N_k = N_k_k_bar,
+    if is_reactive(Z_k) then Z_k = R_k_bar/N_k_bar,
+         N_k_k_bar = conjugate(N_k_bar_k),
+        conjugate(N_kbar_k) = conjugate(N_k_bar)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch04_464:[
+    conjugate(γ_k) + γ_k_bar = 0,
+    if is_active(Z_k) then Z_k = Rk/N_k,
+    if is_reactive(Z_k) then Z_k = Rk/N_k_bar
+];
+/* [wxMaxima: input   end   ] */
+
+
 
 /* Old versions of Maxima abort on loading files that end in a comment. */
-"Created with wxMaxima 20.09.0-DevelopmentSnapshot"$
+"Created with wxMaxima 20.12.1"$
