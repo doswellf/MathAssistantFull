@@ -2,6 +2,11 @@ MathAssistant Notes:
 
 This repository is young and incomplete.
 
+These files are part of an ongoing project aimed at automating industrial-strength symbolic math and then publishing 
+those results using SageTex, TexLive, JupyterBook and supporting scripts in an organized and professional manner.Once the manual update git push to main works again, Jenkins will be used to create a continuous delivery build pipeline. The repository will also serve as a backup in case my hard drive or computer fails at some time. There is a a lot of maxima code here covering Computational Electromagnetics. Also included are 7 dense chapters of equations from the book "Modern Electrodynamics and Coupled Mode Theory: Applications To Guided Wave Optics" by Barybin and Dmitriev, Rinton Press.
+
+There are some miscellaenous files that demonstrate how to call maxima from Sage and use SageTex from TexStudio/TexMaker for automating and publishing mathetmatical derviations. I hope to clean those up and add similar examples for SymPy and some of the other more obsure CAS tied into Sage.
+
 This readme file and other supporting and tutorial documents will be added as the math and the code
 projects that feed it progress. This document will also contain tips for new users of maxima,SageMath,
 Octave, and the jupyter notebook ecosystems as I work through learning how to actually use maxima to
