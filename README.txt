@@ -1,6 +1,8 @@
 MathAssistant Notes:
 
-This repository is young and incomplete.
+This repository is young and incomplete. 
+These notes are disorganized as a result of doing a brain dump at night. 
+I will organize this readme file and add markdown later to prevent readers from getting brain fog.
 
 These files are part of an ongoing project aimed at automating industrial-strength symbolic math and then publishing 
 those results using SageTex, TexLive, JupyterBook and supporting scripts in an organized and professional manner.Once the manual update git push to main works again, Jenkins will be used to create a continuous delivery build pipeline. The repository will also serve as a backup in case my hard drive or computer fails at some time. There is a a lot of maxima code here covering Computational Electromagnetics. Also included are 7 dense chapters of equations from the book "Modern Electrodynamics and Coupled Mode Theory: Applications To Guided Wave Optics" by Barybin and Dmitriev, Rinton Press.
@@ -18,12 +20,21 @@ used to figure out how jupyter notebooks, sage notebooks and maxima-jupyter work
 Thanks to Robert Dodier for help with installation of maxima-jupyter, and for letting me know about JupyterBook.
 Thank you to Richard Fateman and the other members of the maxima discussion list for help with maxima itself.
 
+NOTE:
+
+For those who don't have an IT background: 
+
+You can avoid using sagemath you can just use wxmaxima and export tex and html files. Then use latex studio with xelatex/pdflatex or use latex2html to publish your results.
+
+For those who need sagemath and use maxima:
+
+Continue reading if you dare...
+
 A JupyterBook project is not yet part of this repository although I have built the template book and published on
 github pages as a side-effect of pushing my project from my computer to the main branch of my github repository.
 
 You get publishing to github pages automatically using JupyterBook when you push the project to github. If you aren't
-familiar with github, I recommend downloading git and using it for small projects manually first. Then you'll understand how
-to work with JupyterBook and git together. 
+familiar with github, I recommend downloading git and using it for small projects manually first. Then you'll understand how to work with JupyterBook and git together. 
 
 To run jupyter notebooks outside of SageMath I recommend the Anaconda3 installation - it is complete and runs jupyter
 out-of-the-box. I haven't checked but am hoping they also have a channel for JupyterBook, a complete publishing and 
