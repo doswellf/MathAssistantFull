@@ -1,391 +1,1539 @@
-\documentclass{article}
-\usepackage{relsize}
-\usepackage{sagetex}
+\documentclass[leqno]{article}
+
+%% Created with wxMaxima 18.02.0
+
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{luainputenc}
+\DeclareUnicodeCharacter{00B5}{\ensuremath{\mu}}
+\usepackage{graphicx}
+\usepackage{color}
 \usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
+\usepackage{ifthen}
+\newsavebox{\picturebox}
+\newlength{\pictureboxwidth}
+\newlength{\pictureboxheight}
+\newcommand{\includeimage}[1]{
+    \savebox{\picturebox}{\includegraphics{#1}}
+    \settoheight{\pictureboxheight}{\usebox{\picturebox}}
+    \settowidth{\pictureboxwidth}{\usebox{\picturebox}}
+    \ifthenelse{\lengthtest{\pictureboxwidth > .95\linewidth}}
+    {
+        \includegraphics[width=.95\linewidth,height=.80\textheight,keepaspectratio]{#1}
+    }
+    {
+        \ifthenelse{\lengthtest{\pictureboxheight>.80\textheight}}
+        {
+            \includegraphics[width=.95\linewidth,height=.80\textheight,keepaspectratio]{#1}
+            
+        }
+        {
+            \includegraphics{#1}
+        }
+    }
+}
+\newlength{\thislabelwidth}
+\DeclareMathOperator{\abs}{abs}
+\usepackage{animate} % This package is required because the wxMaxima configuration option
+                      % "Export animations to TeX" was enabled when this file was generated.
 
-% to restart equation numbering with each new section
-% \@addtoreset{equation}{part}
-
-% \@addtoreset{equation}{section} 
-
-% custom equation label to the right side - requires \ddot
-% \newcommand{\dd}[1]{\mathrm{d}#1}
-
-\graphicspath{{images/}}
+\definecolor{labelcolor}{RGB}{100,0,0}
 
 \begin{document}
-% \maketitle{Using Maxima From Sage Published With SageTex}
-% \author{J.F. Doswell, BScH}
-\input{SageTexTutorialTitlePage.tex}
-\newpage
-
-\tableofcontents
-\newpage
-
-\title{Simple Examples Calling Maxima From Sage To Generate \LaTeX{} with \textsf{Sage\TeX}}
-
-\section{Calling Maxima From Sage}
-
-\subsection{First Block Of Sage and Maxima Code}
-
-\begin{sageblock} 
-	
-	maxima('load("/home/fraser/projects/Math/maxima/cmt_struct_sage_test_102.mac")')
-	
-	
-	finfo_pvz_latex = maxima.get("finfo_Pv_z@latex")
-	fpvz_ltx_rep = finfo_pvz_latex.replace("\\\\","\\").replace('\"','')
-	le_fpvz_ltx = LatexExpr(fpvz_ltx_rep)
-	
-	finfo_pvz_name = maxima.get("finfo_Pv_z@name")
-	vinfo_ch01_name = maxima.get("vinfo_ch01@name")	
-	
-
-	vinfo_ch01_latex_math = maxima.eval("assoc('math,vinfo_ch01@latex)")	
-	vinfo_ltx_math_rep = vinfo_ch01_latex_math.replace("\\\\","\\").replace('\"','')
-	le_vc01_ltx_math = LatexExpr(vinfo_ltx_math_rep)
-
-	af_01_A_latex=maxima.get("arr_funs[E_r_t_z_t]@latex")
-	le_af_01_A_latex_rep=LatexExpr(af_01_A_latex.replace("\\\\","\\").replace('\"',''))
-
-	af_01_B_latex=maxima.get("arr_funs[H_r_t_z_t]@latex")
-	le_af_01_B_latex_rep=af_01_B_latex.replace("\\\\","\\").replace('\"','')
-	
-	af_02_A_latex=maxima.get("arr_funs[EQ_1242_A]@latex")
-	le_af_02_A_latex_rep=LatexExpr(af_02_A_latex).replace("\\\\","\\").replace('\"','')
-
-	af_02_B_latex=maxima.get("arr_funs[EQ_1242_B]@latex")
-	le_af_02_B_latex_rep=LatexExpr(af_02_B_latex).replace("\\\\","\\").replace('\"','')
-	
-	af_02_C_latex=maxima.get("arr_funs[EQ_1243_A]@latex")
-	le_af_02_C_latex_rep=LatexExpr(af_02_C_latex).replace("\\\\","\\").replace('\"','')
-			
-	af_03_A_latex=maxima.get("arr_funs[EQ_3217_A]@latex")
-	le_af_03_A_latex_rep=LatexExpr(af_03_A_latex).replace("\\\\","\\").replace('\"','').replace('~',' ')
-
-	af_03_B_latex=maxima.get("arr_funs[EQ_3217_B]@latex")
-	le_af_03_B_latex_rep=LatexExpr(af_03_B_latex).replace("\\\\","\\").replace('\"','')
-
-	af_03_C_latex=maxima.get("arr_funs[EQ_3217_C]@latex")
-	le_af_03_C_latex_rep=LatexExpr(af_03_C_latex).replace("\\\\","\\").replace('\"','')
-
-	af_03_D_latex=maxima.get("arr_funs[EQ_3217_D]@latex")
-	le_af_03_D_latex_rep=LatexExpr(af_03_D_latex).replace("\\\\","\\").replace('\"','')
-	
-	af_03_E_latex=maxima.get("arr_funs[EQ_3217_E]@latex")
-	le_af_03_E_latex_rep=LatexExpr(af_03_E_latex).replace("\\\\","\\").replace('\"','')
-
-	af_03_F_latex=maxima.get("arr_funs[EQ_3217_F]@latex")
-	le_af_03_F_latex_rep=LatexExpr(af_03_F_latex).replace("\\\\","\\").replace('\"','')
-	
-
-\end{sageblock}
-
-
-
-\paragraph{NOTE: THE LATEX OF THE VARIABLE NAMES IS NOT BEING TRANSFERRED TO SAGE}
-
-
-\subsection{Equations From First Block Of Code}
-
-\subsubsection{Direct Structure Access}
-$ \sagestr{fpvz_ltx_rep} $ \newline
-$ \sagestr{le_fpvz_ltx} $ \newline 
-\subsubsection{Using Hash Array Access} 
-CMT Chapter One \newline
-$ \sagestr{le_af_01_A_latex_rep} $ \newline
-$ \sagestr{le_af_01_B_latex_rep} $ \newline
-$ \sagestr{le_af_02_A_latex_rep} $ \newline
-$ \sagestr{le_af_02_B_latex_rep} $ \newline 
-$ \sagestr{le_af_02_C_latex_rep} $ \newline 
-CMT Chapter Three \newline
-$ \sagestr{le_af_03_A_latex_rep} $ \newline 
-$ \sagestr{le_af_03_B_latex_rep} $ \newline
-$ \sagestr{le_af_03_C_latex_rep} $ \newline
-$ \sagestr{le_af_03_D_latex_rep} $ \newline
-$ \sagestr{le_af_03_E_latex_rep} $ \newline
-$ \sagestr{le_af_03_F_latex_rep} $ \newline
-
-\newpage
-
-\subsection{Equations From CMT Book}
-
-\subsubsection{Gathering Latex Code Of Example Equations}
-
-\paragraph{Note:}These equations are not generated, they are pure latex 
-
-\paragraph{Purpose Of These Equations}
-Once enough equations are included, latex code of their component parts
-can be stored in maxima structures. Each maxima variable, expression and 
-equation will be given an elegant latex display form. This latex is stored
-in a structure containing the variable name, value/content and a nested list of
-latex strings for display. \newline
-\paragraph{Maxima Implementation Details}
-All maxima structures are stored in a hash array.The key for each variable, 
-function,expression, lemma, axiom in it's respective
-hash array is the name of that artifact \newline
-
-\paragraph{Roadmap For Development}
-A full explanation of the system internals as well as instructions for use of the system 
-will be given in an appendix as this document evolves. \newline
-
-\newpage
 
-\subsection{Combinatorics and Statistical Formulae}
-\numberwithin{equation}{subsection}{section}
 
-\subsubsection{Combinatorics}
-\begin{equation}
-_nC_k={n \choose k}=\frac{n!}{k!(n-k)!} 
-\end{equation}
-
-\begin{equation}
-y = \frac{{n!}}{{k!\left( {n - k} \right)!}}p^k q^{n - k}  = \left( {\begin{array}{*{20}c}n  \\ k  \\ \end{array}} \right)p^k q^{n - k}
-\end{equation}
-
-
-\subsubsection{Statistics}
-
-\begin{equation}
-\sigma = \sqrt{\frac{\sum{(x-\mu)^2}}{N}} \nonumber
-\end{equation}
-
-\begin{equation}
-y = \frac{1}{{\sqrt {2\pi } }}e^{ - \frac{{z^2 }}{2}}  = .3989e^{ - 5z^2 }
-\end{equation}
-
-\begin{equation}
-P(x) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {x - \mu } \right)^2 } \mathord{\left/
-			{\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right.
-			\kern-\nulldelimiterspace} {2\sigma ^2 }}}
-\end{equation}
-
-\begin{equation}
-P\left( x \right) = \frac{{e^{ - \lambda } \lambda ^x }}{{x!}}
-\end{equation}
-
-\begin{equation}
-\Gamma \left( a \right) = \int\limits_0^\infty  {s^{a - 1} } e^{ - s} ds
-\end{equation}
-
-\begin{equation}
-\Gamma \left( x \right) = \int\limits_0^\infty  {s^{x - 1} e^{ - s} ds}
-\end{equation}
-
-\begin{equation}
-\mu _n \left( a \right) = \sum {\left( {x - a} \right)^n P\left( x \right)}
-\end{equation}
-
-\begin{equation}
-\mu  = \mu _1  = \sum {xP\left( x \right)}
-\end{equation}
-
-\begin{equation}
-\sigma ^2  = \mu _2  = \sum {\left( {x - \mu _1 } \right)^2 P\left( x \right)}
-\end{equation}
-
-\begin{equation}
-\gamma _1  = \frac{{\mu _3 }}{{\mu _2 ^{{3 \mathord{\left/
-					{\vphantom {3 2}} \right.
-					\kern-\nulldelimiterspace} 2}} }} = \frac{{\mu _3 }}{{\sigma ^3 }}
-\end{equation}
-
-\begin{equation}
-\sigma  = \sqrt {\mu _2 }
-\end{equation}
-
-\begin{equation}
-s_N  = \sqrt {\frac{1}{N}\sum\limits_{i = 1}^N {\left( {x_i  - \bar x} \right)^2 } }
-\end{equation}
-
-\begin{equation}
-s_{N - 1}  = \sqrt {\frac{1}{{N - 1}}\sum\limits_{i = 1}^N {\left( {x_i  - \bar x} \right)^2 } }
-\end{equation}
-
-\begin{equation}
-{\mathop{\rm var}} \left( {\bar x} \right) = \frac{{\sigma ^2 }}{n}
-\end{equation}
-
-\begin{equation}
-	\sigma_{M_{1}-M_{2}} =  \sqrt{\frac{\sigma_{1}^{2}}{n_{1}}+
-	\frac{\sigma_{2}^{2}}{n_{2}}}=\sqrt{\frac{\sigma^2}{n}+
-	\frac{\sigma^2}{n}}=\sqrt{\frac{2 \sigma^2}{n}}
-\end{equation}
-
-\begin{equation}
-\sigma_{M} = \frac{\sigma}{\sqrt(N)}
-\end{equation}
-
-\begin{equation}
-P(x)= \frac{N!}{x!(N-x)!} pi^{x}(1-pi)^{N-x} 
-\end{equation}
-
-
-\newpage
-
-\subsection{Quantitative Finance} 
-
-\begin{equation}
-\begin{bmatrix} 1 \\ S \left( t \right) \\ C \left( t \right) \end{bmatrix} = \begin{bmatrix} \left( 1 + r \Delta \right) & \left( 1 + r \Delta \right) \\ S_1 \left( t + \Delta \right) & S_2 \left( t + \Delta \right) \\ C_1 \left( t + \Delta \right) & C_2 \left( t + \Delta \right) \\ \end{bmatrix}\begin{bmatrix} \Psi_1 \\ \Psi_2\end{bmatrix}
-\end{equation}
-
-\begin{equation}
-\sum_{i=1}^{n} \left( \frac {t_i + t_{i-1}}{2} \right) (t_i-t_{i-1}) \rightarrow \int_{0}^{T}f(s)\,ds
-\end{equation}
-
-\begin{equation}
-\int_{0}^{T} g(s)\,df(s) \approx \sum_{i=1}^{n} g \left( \frac{t_i+t_{i-1}}{2} \right) (f(t)_i)-f(t_{i-1}))
-\end{equation}
-
-\begin{equation}
-content...
-\end{equation}
-\newpage
-	
-
-\subsection{Raw Latex Code Of Typical Equations}
-
-Latex Code has been entered manually to build a library of latex code snippets. These will stored in a database. Maxima, Sage and Sympy code will be used to perform derivations dynamically, then publish the results in latex documents. The states of derivations will also be stored as reference material for larger derivations and proofs. \newline
-
-\vspace{0.25cm}
-\small{Multifrequency Power Relations Of Lossless Waveguiding Systems (1.2.2)} \newline
-
-% 
-% TRY PUTTING THIS AT THE TOP OF THE DOCUMENT 
-%
-
-% \numberwithin{equation}{section}
-
-\begin{equation}
-	\frac{\partial}{\partial{z}}\sum_{s=-\infty}^{\infty}\sum_{p=-\infty}^{\infty}P_{s,p}~=~0
-\end{equation}
-
-\begin{equation}
-	\omega_{1}\frac{\partial}{\partial{z}}\sum_{p=-\infty}^{\infty}\sum_{s=-\infty}^{\infty} 
-	\frac{s P_{s,p}}{ s\omega_1 + p\omega_2}
-	+ 
-	\omega_2 \frac{\partial}{\partial{z}}\sum_{s=-\infty}^{\infty}\sum_{p=-\infty}^{\infty}
-	\frac{p P_{s,p}}{ s\omega_1 + p\omega_2}
-\end{equation}
-
-\begin{equation}
-	\frac{\partial}{\partial{z}}\sum_{s=-\infty}^{\infty}\sum_{p=-\infty}^{\infty}P_{s,p}~=~0
-\end{equation}
-
-\begin{equation}
-\sum_{p=-\infty}^{\infty}\sum_{s=-\infty}^{\infty}\frac{s P_{s,p}}{ s\omega_1 + p\omega_2}
-~=~ 
-2~\sum_{p=-\infty}^{\infty}\sum_{s=1}^{\infty}
-\frac{s P_{s,p}}{ s\omega_1 + p\omega_2}
-\end{equation}
-
-\begin{equation}
-\omega_{1}\frac{\partial}{\partial{z}}\sum_{p=-\infty}^{\infty}\sum_{s=1}^{\infty} 
-\frac{s P_{s,p}}{ s\omega_1 + p\omega_2}
-+ 
-\omega_2 \frac{\partial}{\partial{z}}\sum_{s=-\infty}^{\infty}\sum_{p=1}^{\infty}
-\frac{p P_{s,p}}{ s\omega_1 + p\omega_2}
-~=~0
-\end{equation}
-
-\begin{equation}
-\frac{\partial}{\partial{z}}\sum_{p=-\infty}^{\infty}\sum_{s=1}^{\infty} 
-\frac{s P_{s,p}}{ s\omega_1 + p\omega_2}
-~=~0
-\end{equation}
-
-\begin{equation}
-\frac{\partial}{\partial{z}}\sum_{s=-\infty}^{\infty}\sum_{p=1}^{\infty}
-\frac{p P_{s,p}}{ s\omega_1 + p\omega_2}
-~=~0
-\end{equation}
-
-\vspace{0.5cm}
-
-Manley-Rowe Power Relations For Parametric Waveguding Systems (Textbook 1.2.3) \newline
-
-Parametric Amplitude Levels \newline 
-
-In parametric systems the amplitude of the signal input at frequency $\omega_1$ ($\omega_s$) is much less than the amplitude of the pump at frequency $\omega_2$ ($\omega_p$). The signal amplitude is so small that parametric system is linear w.r.t the signal but nonlinear w.r.t the pump. The pump modes will experience nonlinear effects while the signal modes will experience linear ones. \newline
-
-$ \mathlarger{\omega_{0,p} = p~\omega_p}$ (for s = 0) and $\mathlarger{\omega_{\pm1,p} = \pm\omega_s + p~\omega_p~}$ (for $\mathlarger{s = \pm 1}$)
-
-\newpage
-
-\paragraph{Multifrequency Parametric Systems}
-
-\begin{equation}
-\frac{\partial}{\partial{z}}\sum_{p=-\infty}^{\infty}
-\frac{P_{+1,p}}{ \omega_s + p\omega_p}
-~=~0
-\end{equation}
-
-
-\begin{equation}
-	\frac{\partial}{\partial{z}}\sum_{p=1}^{\infty}
-	p \Bigg(
-	\frac{P_{0,p}}{p\omega_p} + \frac{P_{+1,p}}{\omega_s+p\omega_p}-\frac{P_{+1,-p}}{\omega_s-p\omega_p}
-	\Bigg)
-	~=~0
-\end{equation}
-
-$ \mathlarger{s = -1, P_{-1,p} = P_{=1,-p} }$ then \newline
-
-Now the pump index p will be replaced by pump index $\nu$ \newline
-		
-$\mathlarger{\omega_s + p \omega \rightarrow \omega_s + p \omega_\nu }$ and $\mathlarger{P_{+1,p} = P_{+1,\nu} \rightarrow P^{(\nu)} }$ \newline
-
-\small{The final form of the Manley-Rowe relations for parametric systems are:}
-
-\begin{equation}
-\frac{\partial}{\partial{z}}\sum_{\nu=-\infty}^{\infty}
-\frac{P^{(\nu)}}{ \omega_{\nu}}
-~=~0
-\end{equation}
-
-\begin{equation}
-	\frac{\partial}{\partial{z}}\sum_{\nu=1}^{\infty}
-	\nu \Bigg(
-	\frac{P^{(\nu)}}{p\omega_{\nu}} + \frac{P^{-\nu}}{\omega_{-\nu}} 
-	=
-	\frac{1}{\omega_\nu}\frac{\partial{P_{pump}}}{\partial{z}}
-	\Bigg)
-\end{equation}
-
-\small{where} $P_{pump} = \sum_{p=1}^{\infty} P_{0,p} $ \small{is the total power supplied by the pump signal} \newline
-
-\paragraph{Three Frequency Parametric Systems}
-
-Where there are 3 components at frequencies $\omega_p (pump)$,$\omega_s(signal)$ and one of $ \omega_{\pm 1} = \omega_s \pm \omega_p$.The case of difference frequency $ \omega_{-1} = \omega_s - \omega_p = \omega_i $ includes the case of $\omega_{+1}= \omega_s+ \omega_p$. In order to show this re-write the general relations (1.8) and (1.9). This takes into account the presence of only three pump frequencies $\nu=0, \nu=+1, \nu=-1$. \newline
-
-\begin{equation}
-\mathlarger{\mathlarger{
-\frac{\partial}{\partial{z}}
-\Bigg(
-\frac{P^{(0)}}{\omega_0} + \frac{P^{(+)}}{\omega_{+1}} + \frac{P^{(-1)}}{\omega_{-1}}
-\Bigg)
-~=~0
-}}
-\end{equation}
-
-\begin{equation}
-\mathlarger{\mathlarger{
-\frac{\partial}{\partial{z}}
-\Bigg(
-\frac{P^{(pump)}}{\omega_p} + \frac{P^{(+1)}}{\omega_{+1}} + \frac{P^{(-1)}}{\omega_{-1}} 
-\Bigg)
-=
-\frac{1}{\omega_p}\frac{\partial{P_{pump}}}{\partial{z}}
-}}
-\end{equation}
-
-\newpage
-
-\textbf{Equation Library Parts} \newline
-
-Going forward, only the math and equations will entered - the goal is to build a large library of latex equation parts. Equations from other sources will be included here, including sources for Nonlinear Optics, Quantum Optics, Quanitative Finance, statistics and Electrodynamics. The components will be extracted and stored as above. A search of github and other sites will be made for any software that can create latex documents automatically from code meant for computer algebra systems. \newline
-
-
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i1) 
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+values;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o1} 
+[]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i3)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+usefastarrays:true; use\_fast\_arrays:true;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{usefastarrays}
+\mbox{true}\mbox{}\]
+\[\displaystyle
+\]
+\[\tag{use\_ fast\_ arrays}
+\mbox{true}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+DEFINING INFO STRUCTURES AND TABLES [HASH ARRAYS] 
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i4)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+defstruct(var\_info(name,value,latex));
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o4} 
+[\operatorname{var\_ info}\left( \mathit{name},\mathit{value},\mathit{latex}\right) ]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i5)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+defstruct(fun\_info(ftyp,name,fargs,body,latex));
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o5} 
+[\operatorname{fun\_ info}\left( \mathit{ftyp},\mathit{name},\mathit{fargs},\mathit{body},\mathit{latex}\right) ]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i6)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+usefastarrays:true;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{usefastarrays}
+\mbox{true}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i7)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+defstruct(var\_table(count,vars));
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o7} 
+[\operatorname{var\_ table}\left( \mathit{count},\mathit{vars}\right) ]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i8)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+defstruct(fun\_table(count,funs));
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o8} 
+[\operatorname{fun\_ table}\left( \mathit{count},\mathit{funs}\right) ]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+MANUAL OPERATIONS USING STRUCTURES AND HASH ARRAYS 
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i9)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+vinfo\_ch01:new(var\_info);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{vinfo\_ ch01}
+\operatorname{var\_ info}\left( \mathit{name},\mathit{value},\mathit{latex}\right) \mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i10)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+vinfo\_ch01\ensuremath{@}name:P\_p1\_s;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o10} 
+{{\mathit{P\_ p1}}_s}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i11)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+vinfo\_ch01\ensuremath{@}value:0.0531;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o11} 
+0.0531\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i12)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+vinfo\_ch01\ensuremath{@}latex:[['math,"P\_{\ensuremath{\backslash}\ensuremath{\backslash}scriptscriptstyle{[+1,s]}}"],['text,"P\_{[+1,s]}"]];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o12} 
+[[\mathit{math},\mbox{}
+\]P\_ \{\backslash scriptscriptstyle\{[+1,s]\}\}
+\[\displaystyle
+],[\mathit{text},\mbox{}
+\]P\_ \{[+1,s]\}
+\[\displaystyle
+]]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i13)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+assoc('math,vinfo\_ch01\ensuremath{@}latex);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o13} 
+\mbox{}
+\]P\_ \{\backslash scriptscriptstyle\{[+1,s]\}\}
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i14)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+assoc('text,vinfo\_ch01\ensuremath{@}latex);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o14} 
+\mbox{}
+\]P\_ \{[+1,s]\}
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i15)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+vch01\_ltx:assoc(math,vinfo\_ch01\ensuremath{@}latex);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{vch01\_ ltx}
+\mbox{}
+\]P\_ \{\backslash scriptscriptstyle\{[+1,s]\}\}
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i16)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+vch01\_ltx;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o16} 
+\mbox{}
+\]P\_ \{\backslash scriptscriptstyle\{[+1,s]\}\}
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i17)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+vtab\_ch01:new(var\_table);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{vtab\_ ch01}
+\operatorname{var\_ table}\left( \mathit{count},\mathit{vars}\right) \mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i18)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+vtab\_ch01\ensuremath{@}vars:[vinfo\_ch01];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o18} 
+[\operatorname{var\_ info}\left( \mathit{name}={{\mathit{P\_ p1}}_s},\mathit{value}=0.0531,\mathit{latex}=[[\mathit{math},P\_ \{\backslash scriptscriptstyle\{[+1,s]\}\}],[\mathit{text},P\_ \{[+1,s]\}]]\right) ]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i19)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+vtab\_ch01\ensuremath{@}count:1;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o19} 
+1\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i20)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pv\_z:new(fun\_info);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{finfo\_ Pv\_ z}
+\operatorname{fun\_ info}\left( \mathit{ftyp},\mathit{name},\mathit{fargs},\mathit{body},\mathit{latex}\right) \mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i21)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pv\_z\ensuremath{@}ftyp:"FUN";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o21} 
+\mbox{}
+\]FUN
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i22)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pv\_z\ensuremath{@}name:P\_v;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o22} 
+{P_v}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i23)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pv\_z\ensuremath{@}fargs:[z];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o23} 
+[z]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i24)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pv\_z\ensuremath{@}body:"abs(w\_v)*sum(p\_m*abs(a\_vm(z))\^{}2,m,minf,inf)";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o24} 
+\mbox{}
+\]abs(w\_ v)\cdot sum(p\_ m\cdot abs(a\_ vm(z))\textasciicircum2,m,minf,inf)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i25)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pv\_z\ensuremath{@}latex:"P\_\ensuremath{\backslash}\ensuremath{\backslash}nu(z)\ensuremath{\sim }=\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}left| \ensuremath{\backslash}\ensuremath{\backslash}omega\_\ensuremath{\backslash}\ensuremath{\backslash}nu \ensuremath{\backslash}\ensuremath{\backslash}right|\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}sum\_{-\ensuremath{\backslash}\ensuremath{\backslash}infty}\^{}{\ensuremath{\backslash}\ensuremath{\backslash}infty}\ensuremath{\sim }p\_{m}\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}left|\ensuremath{\sim }a\_{-\ensuremath{\backslash}\ensuremath{\backslash}nu}\ensuremath{\sim }(z)\ensuremath{\backslash}\ensuremath{\backslash}right|\^{}2";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o25} 
+\mbox{}
+\]P\_ \backslash nu(z)\sim  =\sim  \backslash left| \backslash omega\_ \backslash nu \backslash right|\sim  \backslash sum\_ \{-\backslash infty\}\textasciicircum\{\backslash infty\}\sim  p\_ \{m\}\sim  \backslash left|\sim  a\_ \{-\backslash nu\}\sim  (z)\backslash right|\textasciicircum2
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i26)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+ftab\_ch01:new(fun\_table);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{ftab\_ ch01}
+\operatorname{fun\_ table}\left( \mathit{count},\mathit{funs}\right) \mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i27)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+ftab\_ch01\ensuremath{@}count:1;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o27} 
+1\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i28)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+ftab\_ch01\ensuremath{@}funs:[finfo\_Pv\_z];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o28} 
+[\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]FUN
+\[\displaystyle
+,\mathit{name}={P_v},\mathit{fargs}=[z],\mathit{body}=\mbox{}
+\]abs(w\_ v)\cdot sum(p\_ m\cdot abs(a\_ vm(z))\textasciicircum2,m,minf,inf)
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]\mbox{}\\P\_ \backslash nu(z)\sim  =\sim  \backslash left| \backslash omega\_ \backslash nu \backslash right|\sim  \backslash sum\_ \{-\backslash infty\}\textasciicircum\{\backslash infty\}\sim  p\_ \{m\}\sim  \backslash left|\sim  a\_ \{-\backslash nu\}\sim  (z)\backslash right|\textasciicircum2
+\[\displaystyle
+)]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i29)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pdz\_z:new(fun\_info);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{finfo\_ Pdz\_ z}
+\operatorname{fun\_ info}\left( \mathit{ftyp},\mathit{name},\mathit{fargs},\mathit{body},\mathit{latex}\right) \mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i30)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pdz\_z\ensuremath{@}ftyp:"FUN";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o30} 
+\mbox{}
+\]FUN
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i31)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pdz\_z\ensuremath{@}name:P\_dz;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o31} 
+{P_{\mathit{dz}}}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i32)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pdz\_z\ensuremath{@}fargs:[z];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o32} 
+[z]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i33)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pdz\_z\ensuremath{@}body:"diff(sum(q\_v*p\_m*abs(a\_vm(z))\^{}2,m,minf,inf),z)";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o33} 
+\mbox{}
+\]diff(sum(q\_ v\cdot p\_ m\cdot abs(a\_ vm(z))\textasciicircum2,m,minf,inf),z)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i34)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_Pdz\_z\ensuremath{@}latex:"P\_{dz}(z)\ensuremath{\sim }= \ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}left|\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}omega\_\ensuremath{\backslash}\ensuremath{\backslash}nu\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}right|\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}sum\_{-\ensuremath{\backslash}\ensuremath{\backslash}infty}\^{}{\ensuremath{\backslash}\ensuremath{\backslash}infty}\ensuremath{\sim }p\_{m}\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}left|\ensuremath{\sim }a\_{-\ensuremath{\backslash}\ensuremath{\backslash}nu}\ensuremath{\sim }(z)\ensuremath{\backslash}\ensuremath{\backslash}right|\^{}2";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o34} 
+\mbox{}
+\]P\_ \{dz\}(z)\sim  = \sim  \backslash left|\sim  \backslash omega\_ \backslash nu\sim  \backslash right|\sim  \backslash sum\_ \{-\backslash infty\}\textasciicircum\{\backslash infty\}\sim  p\_ \{m\}\sim  \backslash left|\sim  a\_ \{-\backslash nu\}\sim  (z)\backslash right|\textasciicircum2
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i36)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_S\_w0:new(fun\_info); finfo\_S\_w0\ensuremath{@}name:'finfo\_S\_w0;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{finfo\_ S\_ w0}
+\operatorname{fun\_ info}\left( \mathit{ftyp},\mathit{name},\mathit{fargs},\mathit{body},\mathit{latex}\right) \mbox{}\]
+\[\displaystyle
+\]
+\[\tag{\% o36} 
+\mathit{finfo\_ S\_ w0}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i37)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_S\_w0;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o37} 
+\operatorname{fun\_ info}\left( \mathit{ftyp},\mathit{name}=\mathit{finfo\_ S\_ w0},\mathit{fargs},\mathit{body},\mathit{latex}\right) \mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i38)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_S\_w0\ensuremath{@}body:"A* sin(w\_0*t+phi)";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o38} 
+\mbox{}
+\]A\cdot  sin(w\_ 0\cdot t+phi)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i39)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_S\_w0\ensuremath{@}fargs: [A,w\_0,t,phi];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o39} 
+[A,{w_0},t,phi]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i40)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_S\_w0\ensuremath{@}ftyp:"SYMBOLIC";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o40} 
+\mbox{}
+\]SYMBOLIC
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i41)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_S\_w0;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o41} 
+\operatorname{fun\_ info}\left( \mathit{ftyp}=SYMBOLIC,\mathit{name}=\mathit{finfo\_ S\_ w0},\mathit{fargs}=[A,{w_0},t,phi],\mathit{body}=A\cdot  sin(w\_ 0\cdot t+phi),\mathit{latex}\right) \mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i42)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_S\_w0\ensuremath{@}latex: "S(A, \ensuremath{\backslash}\ensuremath{\backslash}omega\_0, t, \ensuremath{\backslash}\ensuremath{\backslash}phi)=A \ensuremath{\backslash}\ensuremath{\backslash}cdot sin(\ensuremath{\backslash}\ensuremath{\backslash}omega\_0 \ensuremath{\backslash}\ensuremath{\backslash}cdot t + \ensuremath{\backslash}\ensuremath{\backslash}phi)";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o42} 
+\mbox{}
+\]S(A, \backslash omega\_ 0, t, \backslash phi)=A \backslash cdot sin(\backslash omega\_ 0 \backslash cdot t + \backslash phi)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i43)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[finfo\_S\_w0\ensuremath{@}name]:finfo\_S\_w0;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\mbox{}\\\mbox{ARRSTORE: use\_ fast\_ arrays=true; allocate a new value hash table for \$ ARR\_ FUNS}\mbox{}\]
+\[\displaystyle
+\]
+\[\tag{\% o43} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}=\mathit{finfo\_ S\_ w0},\mathit{fargs}=[A,{w_0},t,phi],\mathit{body}=\mbox{}
+\]A\cdot  sin(w\_ 0\cdot t+phi)
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]\mbox{}\\S(A, \backslash omega\_ 0, t, \backslash phi)=A \backslash cdot sin(\backslash omega\_ 0 \backslash cdot t + \backslash phi)
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i44)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs['finfo\_S\_w0]\ensuremath{@}latex;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o44} 
+\mbox{}
+\]S(A, \backslash omega\_ 0, t, \backslash phi)=A \backslash cdot sin(\backslash omega\_ 0 \backslash cdot t + \backslash phi)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i45)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+tf01\ensuremath{@}body;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o45} 
+\mathit{tf01}@ \mathit{body}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i46)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+finfo\_S\_w0\ensuremath{@}body;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o46} 
+\mbox{}
+\]A\cdot  sin(w\_ 0\cdot t+phi)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i47)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+fp:[['ftyp, "SYMBOLIC"],['name,'Ak\_A0\_kA\_z],['fargs, [A\_0,k\_A,z]],['body, "(A\_0/z)*sin(k\_a*z)*exp(-\%i*z/4*\%pi)"],['latex, "\ensuremath{\backslash}\ensuremath{\backslash}frac{A\_{0}}{z}\ensuremath{\backslash}\ensuremath{\backslash},sin(k\_a\ensuremath{\sim }z)\ensuremath{\sim }e\^{}{\ensuremath{\backslash}\ensuremath{\backslash}left( \ensuremath{\backslash}\ensuremath{\backslash}frac{-i\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}pi\ensuremath{\sim }z}{4}\ensuremath{\backslash}\ensuremath{\backslash}right)}"] ]  ;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{fp}
+[[\mathit{ftyp},\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+],[\mathit{name},{{\mathit{Ak\_ A0\_ kA}}_z}],[\mathit{fargs},[{A_0},{k_A},z]],[\mathit{body},\mbox{}
+\](A\_ 0/z)\cdot sin(k\_ a\cdot z)\cdot exp(-\% i\cdot z/4\cdot \% pi)
+\[\displaystyle
+],[\mathit{latex},\mbox{}
+\]\mbox{}\\\backslash frac\{A\_ \{0\}\}\{z\}\backslash ,sin(k\_ a\sim  z)\sim  e\textasciicircum\{\backslash left( \backslash frac\{-i\sim  \backslash pi\sim  z\}\{4\}\backslash right)\}
+\[\displaystyle
+]]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i48)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+assoc('latex,fp);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o48} 
+\mbox{}
+\]\backslash frac\{A\_ \{0\}\}\{z\}\backslash ,sin(k\_ a\sim  z)\sim  e\textasciicircum\{\backslash left( \backslash frac\{-i\sim  \backslash pi\sim  z\}\{4\}\backslash right)\}
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i49)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs['finfo\_S\_w0]\ensuremath{@}latex;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o49} 
+\mbox{}
+\]S(A, \backslash omega\_ 0, t, \backslash phi)=A \backslash cdot sin(\backslash omega\_ 0 \backslash cdot t + \backslash phi)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i50)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs['Ak\_A0\_kAz];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o50} 
+\mbox{false}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+DEFINING FUNCTIONS TO ADD STRUCTURES TO HASH ARRAYS USING FUNCTION  NAME AS HASH KEY FOR LOOKUP. WORKS WELL AND SEEMS FAST ENOUGH FOR TESTING  COMPILE ALL CODE TO LISP ONCE IT WORKS - BETTER PERFORMANCE RESULTS  ftyp FIELD - FOR NOW USE IT FOR NUMERIC OR SYMBOLIC 
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i51)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+make\_finfo(fl):=new(fun\_info(''assoc('ftyp, fl),''assoc('name,fl),''assoc('fargs,fl),''assoc('body,fl),''assoc('latex,fl))) ;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o51} 
+\operatorname{make\_ finfo}\left( \mathit{fl}\right) :=\operatorname{new}(\operatorname{fun\_ info}(\mathit{ftyp}=\operatorname{\neq \{Lisp function\}}\left( '\mathit{ftyp},\mathit{fl}\right) ,\mathit{name}=\operatorname{\neq \{Lisp function\}}\left( '\mathit{name},\mathit{fl}\right) ,\mathit{fargs}=\operatorname{\neq \{Lisp function\}}\left( '\mathit{fargs},\mathit{fl}\right) ,\mathit{body}=\operatorname{\neq \{Lisp function\}}\left( '\mathit{body},\mathit{fl}\right) ,\mathit{latex}=\operatorname{\neq \{Lisp function\}}\left( '\mathit{latex},\mathit{fl}\right) ))\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i52)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+add\_fun(fl):=arr\_funs[''assoc('name,fl)]:make\_finfo(fl);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o52} 
+\operatorname{add\_ fun}\left( \mathit{fl}\right) :={{\mathit{arr\_ funs}}_{\operatorname{\neq \{Lisp function\}}\left( '\mathit{name},\mathit{fl}\right) }}:\operatorname{make\_ finfo}\left( \mathit{fl}\right) \mbox{}
+\]
+%%%%%%%%%%%%%%%
+ADDING ITEMS WITH add\_fun 
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i53)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+add\_fun([['ftyp, "SYMBOLIC"] , ['name,'E\_r\_t\_z\_t] , ['fargs, [r\_t,z,t]] , ['body, "sum(A\_k(A\_0,k\_A,z)*E\_k(r\_t)*exp(\%i*\ensuremath{\omega}*t-\ensuremath{\gamma}\_k*z),k,minf,inf)"] , ['latex,  "E(r\_t,z,t)\ensuremath{\sim }=\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}sum\_{k=-\ensuremath{\backslash}\ensuremath{\backslash}infty}\^{}{ \ensuremath{\backslash}\ensuremath{\backslash}infty}A\_k(A\_0,k\_A,z)\ensuremath{\sim }E\_k(r\_t)\ensuremath{\sim }e\^{}{ \ensuremath{\backslash}\ensuremath{\backslash}left( i \ensuremath{\backslash}\ensuremath{\backslash}omega t-\ensuremath{\backslash}\ensuremath{\backslash}gamma\_k z\ensuremath{\backslash}\ensuremath{\backslash}right) }"]]);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o53} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{E\_ r\_ t\_ z}}_t},\mathit{fargs}=[{r_t},z,t],\mathit{body}=\mbox{}
+\]sum(A\_ k(A\_ 0,k\_ A,z)\cdot E\_ k(r\_ t)\cdot exp(\% i\cdot \omega \cdot t-\gamma \_ k\cdot z),k,minf,inf)
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]E(r\_ t,z,t)\sim  =\sim  \backslash sum\_ \{k=-\backslash infty\}\textasciicircum\{ \backslash infty\}A\_ k(A\_ 0,k\_ A,z)\sim  E\_ k(r\_ t)\sim  e\textasciicircum\{ \backslash left( i \backslash omega t-\backslash gamma\_ k z\backslash right) \}
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i54)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[E\_r\_t\_z\_t];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o54} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{E\_ r\_ t\_ z}}_t},\mathit{fargs}=[{r_t},z,t],\mathit{body}=\mbox{}
+\]sum(A\_ k(A\_ 0,k\_ A,z)\cdot E\_ k(r\_ t)\cdot exp(\% i\cdot \omega \cdot t-\gamma \_ k\cdot z),k,minf,inf)
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]E(r\_ t,z,t)\sim  =\sim  \backslash sum\_ \{k=-\backslash infty\}\textasciicircum\{ \backslash infty\}A\_ k(A\_ 0,k\_ A,z)\sim  E\_ k(r\_ t)\sim  e\textasciicircum\{ \backslash left( i \backslash omega t-\backslash gamma\_ k z\backslash right) \}
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i55)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[E\_r\_t\_z\_t]\ensuremath{@}name;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o55} 
+{{\mathit{E\_ r\_ t\_ z}}_t}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i56)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[E\_r\_t\_z\_t]\ensuremath{@}ftyp;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o56} 
+\mbox{}
+\]SYMBOLIC
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i57)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[E\_r\_t\_z\_t]\ensuremath{@}fargs;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o57} 
+[{r_t},z,t]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i58)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[E\_r\_t\_z\_t]\ensuremath{@}body;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o58} 
+\mbox{}
+\]sum(A\_ k(A\_ 0,k\_ A,z)\cdot E\_ k(r\_ t)\cdot exp(\% i\cdot \omega \cdot t-\gamma \_ k\cdot z),k,minf,inf)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i59)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[E\_r\_t\_z\_t]\ensuremath{@}latex;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o59} 
+\mbox{}
+\]E(r\_ t,z,t)\sim  =\sim  \backslash sum\_ \{k=-\backslash infty\}\textasciicircum\{ \backslash infty\}A\_ k(A\_ 0,k\_ A,z)\sim  E\_ k(r\_ t)\sim  e\textasciicircum\{ \backslash left( i \backslash omega t-\backslash gamma\_ k z\backslash right) \}
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i60)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+add\_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ\_1242\_B] , ['fargs, [z]] , ['body, "abs(w\_v)*sum(p\_m*abs(a\_vm(z))\^{}2,m,minf,inf)"] , ['latex, "P\^{}{\ensuremath{\backslash}\ensuremath{\backslash}left( \ensuremath{\backslash}\ensuremath{\backslash}nu \ensuremath{\backslash}\ensuremath{\backslash}right)}(z)=p\_m \ensuremath{\backslash}\ensuremath{\backslash}left|w\_v \ensuremath{\backslash}\ensuremath{\backslash}right| \ensuremath{\backslash}\ensuremath{\backslash}sum\_{m=-\ensuremath{\backslash}\ensuremath{\backslash}infty}\^{}{\ensuremath{\backslash}\ensuremath{\backslash}infty}p\_m\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}left|a\_m\^{}{\ensuremath{\backslash}\ensuremath{\backslash}left(\ensuremath{\backslash}\ensuremath{\backslash}nu\ensuremath{\backslash}\ensuremath{\backslash}right)}(z)\ensuremath{\backslash}\ensuremath{\backslash}right|\^{}2"]]);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o60} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{EQ\_ 1242}}_B},\mathit{fargs}=[z],\mathit{body}=\mbox{}
+\]abs(w\_ v)\cdot sum(p\_ m\cdot abs(a\_ vm(z))\textasciicircum2,m,minf,inf)
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]\mbox{}\\P\textasciicircum\{\backslash left( \backslash nu \backslash right)\}(z)=p\_ m \backslash left|w\_ v \backslash right| \backslash sum\_ \{m=-\backslash infty\}\textasciicircum\{\backslash infty\}p\_ m\sim  \backslash left|a\_ m\textasciicircum\{\backslash left(\backslash nu\backslash right)\}(z)\backslash right|\textasciicircum2
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i61)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_1242\_B];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o61} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{EQ\_ 1242}}_B},\mathit{fargs}=[z],\mathit{body}=\mbox{}
+\]abs(w\_ v)\cdot sum(p\_ m\cdot abs(a\_ vm(z))\textasciicircum2,m,minf,inf)
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]\mbox{}\\P\textasciicircum\{\backslash left( \backslash nu \backslash right)\}(z)=p\_ m \backslash left|w\_ v \backslash right| \backslash sum\_ \{m=-\backslash infty\}\textasciicircum\{\backslash infty\}p\_ m\sim  \backslash left|a\_ m\textasciicircum\{\backslash left(\backslash nu\backslash right)\}(z)\backslash right|\textasciicircum2
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i62)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_1242\_B]\ensuremath{@}ftyp;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o62} 
+\mbox{}
+\]SYMBOLIC
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i63)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_1242\_B]\ensuremath{@}name;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o63} 
+{{\mathit{EQ\_ 1242}}_B}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i64)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_1242\_B]\ensuremath{@}fargs;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o64} 
+[z]\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i65)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_1242\_B]\ensuremath{@}body;
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o65} 
+\mbox{}
+\]abs(w\_ v)\cdot sum(p\_ m\cdot abs(a\_ vm(z))\textasciicircum2,m,minf,inf)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i66)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_1242\_B]\ensuremath{@}latex:"P\^{}{\ensuremath{\backslash}\ensuremath{\backslash}left( \ensuremath{\backslash}\ensuremath{\backslash}nu \ensuremath{\backslash}\ensuremath{\backslash}right)}(z)=\ensuremath{\backslash}\ensuremath{\backslash}left|w\_v \ensuremath{\backslash}\ensuremath{\backslash}right| \ensuremath{\backslash}\ensuremath{\backslash}sum\_{m=-\ensuremath{\backslash}\ensuremath{\backslash}infty}\^{}{\ensuremath{\backslash}\ensuremath{\backslash}infty}p\_m\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}left|a\_m\^{}{\ensuremath{\backslash}\ensuremath{\backslash}left(\ensuremath{\backslash}\ensuremath{\backslash}nu\ensuremath{\backslash}\ensuremath{\backslash}right)}(z)\ensuremath{\backslash}\ensuremath{\backslash}right|\^{}2";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o66} 
+\mbox{}
+\]P\textasciicircum\{\backslash left( \backslash nu \backslash right)\}(z)=\backslash left|w\_ v \backslash right| \backslash sum\_ \{m=-\backslash infty\}\textasciicircum\{\backslash infty\}p\_ m\sim  \backslash left|a\_ m\textasciicircum\{\backslash left(\backslash nu\backslash right)\}(z)\backslash right|\textasciicircum2
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i67)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+add\_fun([['ftyp, "SYMBOLIC"] , ['name,'E\_r\_t\_z\_t] , ['fargs, [r\_t,z,t]] , ['body, "sum(A\_k(A\_0,k\_A,z)*E\_k(r\_t)*exp(\%i*\ensuremath{\omega}*t-\ensuremath{\gamma}\_k*z),k,minf,inf)"] , ['latex,  "E(r\_t,z,t)\ensuremath{\sim }=\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}sum\_{k=-\ensuremath{\backslash}\ensuremath{\backslash}infty}\^{}{ \ensuremath{\backslash}\ensuremath{\backslash}infty}A\_k(A\_0,k\_A,z)\ensuremath{\sim }E\_k(r\_t)\ensuremath{\sim }e\^{}{ \ensuremath{\backslash}\ensuremath{\backslash}left( i\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}omega\ensuremath{\sim }t-\ensuremath{\backslash}\ensuremath{\backslash}gamma\_k z\ensuremath{\backslash}\ensuremath{\backslash}right) }"]]);
+
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o67} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{E\_ r\_ t\_ z}}_t},\mathit{fargs}=[{r_t},z,t],\mathit{body}=\mbox{}
+\]sum(A\_ k(A\_ 0,k\_ A,z)\cdot E\_ k(r\_ t)\cdot exp(\% i\cdot \omega \cdot t-\gamma \_ k\cdot z),k,minf,inf)
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]E(r\_ t,z,t)\sim  =\sim  \backslash sum\_ \{k=-\backslash infty\}\textasciicircum\{ \backslash infty\}A\_ k(A\_ 0,k\_ A,z)\sim  E\_ k(r\_ t)\sim  e\textasciicircum\{ \backslash left( i\sim  \backslash omega\sim  t-\backslash gamma\_ k z\backslash right) \}
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i68)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+add\_fun([['ftyp, "SYMBOLIC"] , ['name,'H\_r\_t\_z\_t] , ['fargs, [r\_t,z,t]] , ['body, "sum(A\_k(A\_0,k\_A,z)*H\_k(r\_t)*exp(\%i*\ensuremath{\omega}*t-\ensuremath{\gamma}\_k*z),k,minf,inf)"] , ['latex,  "H(r\_t,z,t)\ensuremath{\sim }=\ensuremath{\sim }\ensuremath{\backslash}\ensuremath{\backslash}sum\_{k=-\ensuremath{\backslash}\ensuremath{\backslash}infty}\^{}{ \ensuremath{\backslash}\ensuremath{\backslash}infty}A\_k(A\_0,k\_A,z)\ensuremath{\sim }H\_k(r\_t)\ensuremath{\sim }e\^{}{ \ensuremath{\backslash}\ensuremath{\backslash}left( i \ensuremath{\backslash}\ensuremath{\backslash}omega\ensuremath{\sim }t-\ensuremath{\backslash}\ensuremath{\backslash}gamma\_k z\ensuremath{\backslash}\ensuremath{\backslash}right) }"]]);
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o68} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{H\_ r\_ t\_ z}}_t},\mathit{fargs}=[{r_t},z,t],\mathit{body}=\mbox{}
+\]sum(A\_ k(A\_ 0,k\_ A,z)\cdot H\_ k(r\_ t)\cdot exp(\% i\cdot \omega \cdot t-\gamma \_ k\cdot z),k,minf,inf)
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]H(r\_ t,z,t)\sim  =\sim  \backslash sum\_ \{k=-\backslash infty\}\textasciicircum\{ \backslash infty\}A\_ k(A\_ 0,k\_ A,z)\sim  H\_ k(r\_ t)\sim  e\textasciicircum\{ \backslash left( i \backslash omega\sim  t-\backslash gamma\_ k z\backslash right) \}
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i69)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+add\_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ\_3217\_A] , ['fargs, [I\_P,N]] , ['body, "(1/2)*avg\_t(E.'diff(P,t)"] , ['latex,  "avg\_t \ensuremath{\backslash}\ensuremath{\backslash}left( I\_P,N \ensuremath{\backslash}\ensuremath{\backslash}right) = \ensuremath{\backslash}\ensuremath{\backslash}frac{1}{2}\ensuremath{\sim }avg\_t  \ensuremath{\backslash}\ensuremath{\backslash}left( E \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}frac{\ensuremath{\backslash}\ensuremath{\backslash}partial{P}}{\ensuremath{\backslash}\ensuremath{\backslash}partial{t}} \ensuremath{\backslash}\ensuremath{\backslash}right)"]]);
+
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o69} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{EQ\_ 3217}}_A},\mathit{fargs}=[{I_P},N],\mathit{body}=\mbox{}
+\](1/2)\cdot avg\_ t(E.'diff(P,t)
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]\mbox{}\\avg\_ t \backslash left( I\_ P,N \backslash right) = \backslash frac\{1\}\{2\}\sim  avg\_ t  \backslash left( E \backslash cdot \backslash frac\{\backslash partial\{P\}\}\{\backslash partial\{t\}\} \backslash right)
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i70)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_3217\_A]\ensuremath{@}latex:  "avg\_t \ensuremath{\backslash}\ensuremath{\backslash}left( I\_P,N \ensuremath{\backslash}\ensuremath{\backslash}right) = \ensuremath{\backslash}\ensuremath{\backslash}frac{1}{2}\ensuremath{\sim }avg\_t \ensuremath{\backslash}\ensuremath{\backslash}left( E \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}frac{\ensuremath{\backslash}\ensuremath{\backslash}partial{P}}{\ensuremath{\backslash}\ensuremath{\backslash}partial{t}} - P \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}frac{\ensuremath{\backslash}\ensuremath{\backslash}partial{E}}{\ensuremath{\backslash}\ensuremath{\backslash}partial{t}}\ensuremath{\backslash}\ensuremath{\backslash},N \ensuremath{\backslash}\ensuremath{\backslash}right)";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o70} 
+\mbox{}
+\]\mbox{}\\avg\_ t \backslash left( I\_ P,N \backslash right) = \backslash frac\{1\}\{2\}\sim  avg\_ t \backslash left( E \backslash cdot \backslash frac\{\backslash partial\{P\}\}\{\backslash partial\{t\}\} - P \backslash cdot \backslash frac\{\backslash partial\{E\}\}\{\backslash partial\{t\}\}\backslash ,N \backslash right)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i71)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+add\_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ\_3217\_B] , ['fargs, [I\_P,N]] , ['body, "avg\_t(I\_P,N)=(1/2)*avg\_t(E.'diff(D,t)-D.'diff(E,t),N)"] , ['latex, "avg\_t \ensuremath{\backslash}\ensuremath{\backslash}left( I\_P,N \ensuremath{\backslash}\ensuremath{\backslash}right) = \ensuremath{\backslash}\ensuremath{\backslash}frac{1}{2}\ensuremath{\sim }avg\_t \ensuremath{\backslash}\ensuremath{\backslash}left( E \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}frac{\ensuremath{\backslash}\ensuremath{\backslash}partial{D}}{\ensuremath{\backslash}\ensuremath{\backslash}partial{t}} - D \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}frac{\ensuremath{\backslash}\ensuremath{\backslash}partial{E}}{\ensuremath{\backslash}\ensuremath{\backslash}partial{t}},N \ensuremath{\backslash}\ensuremath{\backslash}right)"]]);
+
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o71} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{EQ\_ 3217}}_B},\mathit{fargs}=[{I_P},N],\mathit{body}=\mbox{}
+\]avg\_ t(I\_ P,N)=(1/2)\cdot avg\_ t(E.'diff(D,t)-D.'diff(E,t),N)
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]\mbox{}\\avg\_ t \backslash left( I\_ P,N \backslash right) = \backslash frac\{1\}\{2\}\sim  avg\_ t \backslash left( E \backslash cdot \backslash frac\{\backslash partial\{D\}\}\{\backslash partial\{t\}\} - D \backslash cdot \backslash frac\{\backslash partial\{E\}\}\{\backslash partial\{t\}\},N \backslash right)
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i72)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+add\_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ\_3217\_C] , ['fargs, [I\_P,N]] , ['body, "avg\_t(I\_P,N)=(1/4)*'realpart('conjugate(E).(\%i*\ensuremath{\omega}*D)-'conjugate(D).(\%i*\ensuremath{\omega}*E))"] , ['latex, "avg\_t \ensuremath{\backslash}\ensuremath{\backslash}left( I\_P,N \ensuremath{\backslash}\ensuremath{\backslash}right) = \ensuremath{\backslash}\ensuremath{\backslash}frac{1}{4}\ensuremath{\sim }Re \ensuremath{\backslash}\ensuremath{\backslash}left( \ensuremath{\backslash}\ensuremath{\backslash}overline{E} \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}left(i \ensuremath{\backslash}\ensuremath{\backslash}omega D \ensuremath{\backslash}\ensuremath{\backslash}right)  - \ensuremath{\backslash}\ensuremath{\backslash}overline{D} \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}left( i \ensuremath{\backslash}\ensuremath{\backslash}omega E \ensuremath{\backslash}\ensuremath{\backslash}right) \ensuremath{\backslash}\ensuremath{\backslash}right)"]]);
+
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o72} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{EQ\_ 3217}}_C},\mathit{fargs}=[{I_P},N],\mathit{body}=\mbox{}
+\]\mbox{}\\avg\_ t(I\_ P,N)=(1/4)\cdot 'realpart('conjugate(E).(\% i\cdot \omega \cdot D)-'conjugate(D).(\% i\cdot \omega \cdot E))
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]\mbox{}\\avg\_ t \backslash left( I\_ P,N \backslash right) = \backslash frac\{1\}\{4\}\sim  Re \backslash left( \backslash overline\{E\} \backslash cdot \backslash left(i \backslash omega D \backslash right)  - \backslash overline\{D\} \backslash cdot \backslash left( i \backslash omega E \backslash right) \backslash right)
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i73)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_3217\_C\ensuremath{@}latex]:"P\_dz \ensuremath{\backslash}\ensuremath{\backslash}left( z \ensuremath{\backslash}\ensuremath{\backslash}right) = \ensuremath{\backslash}\ensuremath{\backslash}frac {\ensuremath{\backslash}\ensuremath{\backslash}partial}{\ensuremath{\backslash}\ensuremath{\backslash}partial{z}}{ \ensuremath{\backslash}\ensuremath{\backslash}sum\_{m=-\ensuremath{\backslash}\ensuremath{\backslash}infty}\^{}{\ensuremath{\backslash}\ensuremath{\backslash}infty}q\_vp\_m\ensuremath{\backslash}\ensuremath{\backslash}left|\ensuremath{\sim }a\_m\^{}{\ensuremath{\backslash}\ensuremath{\backslash}left( \ensuremath{\backslash}\ensuremath{\backslash}nu \ensuremath{\backslash}\ensuremath{\backslash}right)}(z)\ensuremath{\backslash}\ensuremath{\backslash}right|\^{}2}";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o73} 
+\mbox{}
+\]P\_ dz \backslash left( z \backslash right) = \backslash frac \{\backslash partial\}\{\backslash partial\{z\}\}\{ \backslash sum\_ \{m=-\backslash infty\}\textasciicircum\{\backslash infty\}q\_ vp\_ m\backslash left|\sim  a\_ m\textasciicircum\{\backslash left( \backslash nu \backslash right)\}(z)\backslash right|\textasciicircum2\}
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i74)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_3217\_C\ensuremath{@}latex]:"avg\_t \ensuremath{\backslash}\ensuremath{\backslash}left( I\_P,N \ensuremath{\backslash}\ensuremath{\backslash}right) = \ensuremath{\backslash}\ensuremath{\backslash}frac{1}{4}\ensuremath{\sim }Re \ensuremath{\backslash}\ensuremath{\backslash}left( \ensuremath{\backslash}\ensuremath{\backslash}overline{E} \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}left(i \ensuremath{\backslash}\ensuremath{\backslash}omega D \ensuremath{\backslash}\ensuremath{\backslash}right)  - \ensuremath{\backslash}\ensuremath{\backslash}overline{D} \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}left( i \ensuremath{\backslash}\ensuremath{\backslash}omega E \ensuremath{\backslash}\ensuremath{\backslash}right) \ensuremath{\backslash}\ensuremath{\backslash}right)";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o74} 
+\mbox{}
+\]\mbox{}\\avg\_ t \backslash left( I\_ P,N \backslash right) = \backslash frac\{1\}\{4\}\sim  Re \backslash left( \backslash overline\{E\} \backslash cdot \backslash left(i \backslash omega D \backslash right)  - \backslash overline\{D\} \backslash cdot \backslash left( i \backslash omega E \backslash right) \backslash right)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i75)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+add\_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ\_3217\_D] , ['fargs, [I\_P,N]] , ['body, "avg\_t(I\_P,N)=(1/4)*'realpart(\%i*'\ensuremath{\omega}*('conjugate(E).\ensuremath{\epsilon}\_bar.E+'conjugate(E)*\ensuremath{\xi}\_bar.H-E.'conjugate(\ensuremath{\epsilon}\_bar).'conjugate(E)-E.'conjugate(\ensuremath{\xi}\_bar).'conjugate(H)))"] , ['latex, "avg\_t \ensuremath{\backslash}\ensuremath{\backslash}left( I\_P,N \ensuremath{\backslash}\ensuremath{\backslash}right) = \ensuremath{\backslash}\ensuremath{\backslash}frac{1}{4}\ensuremath{\sim }Re \ensuremath{\backslash}\ensuremath{\backslash}left( \ensuremath{\backslash}\ensuremath{\backslash}overline{E} \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}left(i \ensuremath{\backslash}\ensuremath{\backslash}omega D \ensuremath{\backslash}\ensuremath{\backslash}right)  - \ensuremath{\backslash}\ensuremath{\backslash}overline{D} \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}left( i \ensuremath{\backslash}\ensuremath{\backslash}omega E \ensuremath{\backslash}\ensuremath{\backslash}right) \ensuremath{\backslash}\ensuremath{\backslash}right)"]]);
+
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o75} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{EQ\_ 3217}}_D},\mathit{fargs}=[{I_P},N],\mathit{body}=\mbox{}
+\]\mbox{}\\avg\_ t(I\_ P,N)=(1/4)\cdot 'realpart(\% i\cdot '\omega \cdot ('conjugate(E).\epsilon \_ bar.E+'conjugate(E)\cdot \xi \_ bar.H-E.'conjugate(\epsilon \_ bar).'conjugate(E)-E.'conjugate(\xi \_ bar).'conjugate(H)))
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]\mbox{}\\avg\_ t \backslash left( I\_ P,N \backslash right) = \backslash frac\{1\}\{4\}\sim  Re \backslash left( \backslash overline\{E\} \backslash cdot \backslash left(i \backslash omega D \backslash right)  - \backslash overline\{D\} \backslash cdot \backslash left( i \backslash omega E \backslash right) \backslash right)
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i76)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_3217\_D\ensuremath{@}latex]:"avg\_t \ensuremath{\backslash}\ensuremath{\backslash}left( I\_P,N \ensuremath{\backslash}right) = \ensuremath{\backslash}\ensuremath{\backslash}frac{1}{4}\ensuremath{\sim }Re \ensuremath{\backslash}\ensuremath{\backslash}left( i \ensuremath{\backslash}\ensuremath{\backslash}omega E\^{}{*} \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}left( \ensuremath{\backslash}\ensuremath{\backslash}bar{\ensuremath{\backslash}\ensuremath{\backslash}epsilon} - \ensuremath{\backslash}\ensuremath{\backslash}bar{\ensuremath{\backslash}\ensuremath{\backslash}epsilon}\^{}{\ensuremath{\backslash}\ensuremath{\backslash}dagger} \ensuremath{\backslash}\ensuremath{\backslash}right) \ensuremath{\backslash}\ensuremath{\backslash}cdot E + 2 E\^{}{*} - E \ensuremath{\backslash}\ensuremath{\backslash}cdot \ensuremath{\backslash}\ensuremath{\backslash}bar{\ensuremath{\backslash}\ensuremath{\backslash}xi} \ensuremath{\backslash}\ensuremath{\backslash}cdot H \ensuremath{\backslash}\ensuremath{\backslash}right) \ensuremath{\backslash}\ensuremath{\backslash}right)";
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o76} 
+\mbox{}
+\]\mbox{}\\avg\_ t \backslash left( I\_ P,N right) = \backslash frac\{1\}\{4\}\sim  Re \backslash left( i \backslash omega E\textasciicircum\{\cdot \} \backslash cdot \backslash left( \backslash bar\{\backslash epsilon\} - \backslash bar\{\backslash epsilon\}\textasciicircum\{\backslash dagger\} \backslash right) \backslash cdot E + 2 E\textasciicircum\{\cdot \} - E \backslash cdot \backslash bar\{\backslash xi\} \backslash cdot H \backslash right) \backslash right)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i77)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+add\_fun([['ftyp, "SYMBOLIC"] , ['name,'EQ\_3217\_F] , ['fargs, [I\_P,N]] , ['body, "avg\_t(I\_P,N)=(1/2)*'realpart(\%i*\ensuremath{\omega}*('conjugate(\ensuremath{\epsilon}\_bar).E.'conjugate(E))+\ensuremath{\epsilon}\_bar.H.'conjugate(E))"] , ['latex, "avg\_t \ensuremath{\backslash}\ensuremath{\backslash}left( I\_P,N \ensuremath{\backslash}\ensuremath{\backslash}right) = \ensuremath{\backslash}\ensuremath{\backslash}frac{1}{2} Re \ensuremath{\backslash}\ensuremath{\backslash}big\ensuremath{\backslash}\ensuremath{\backslash}{ i \ensuremath{\backslash}\ensuremath{\backslash}omega \ensuremath{\backslash}\ensuremath{\backslash}left( \ensuremath{\backslash}\ensuremath{\backslash}bar{\ensuremath{\backslash}\ensuremath{\backslash}epsilon}\^{}{\ensuremath{\sim }a} : EE\^{}{*} + \ensuremath{\backslash}\ensuremath{\backslash}xi : HE\^{}{*} \ensuremath{\backslash}\ensuremath{\backslash}right)  \ensuremath{\backslash}\ensuremath{\backslash}big\ensuremath{\backslash}\ensuremath{\backslash}}" ]]);
+
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o77} 
+\operatorname{fun\_ info}(\mathit{ftyp}=\mbox{}
+\]SYMBOLIC
+\[\displaystyle
+,\mathit{name}={{\mathit{EQ\_ 3217}}_F},\mathit{fargs}=[{I_P},N],\mathit{body}=\mbox{}
+\]\mbox{}\\avg\_ t(I\_ P,N)=(1/2)\cdot 'realpart(\% i\cdot \omega \cdot ('conjugate(\epsilon \_ bar).E.'conjugate(E))+\epsilon \_ bar.H.'conjugate(E))
+\[\displaystyle
+,\mathit{latex}=\mbox{}
+\]\mbox{}\\avg\_ t \backslash left( I\_ P,N \backslash right) = \backslash frac\{1\}\{2\} Re \backslash big\backslash \{ i \backslash omega \backslash left( \backslash bar\{\backslash epsilon\}\textasciicircum\{\sim  a\} : EE\textasciicircum\{\cdot \} + \backslash xi : HE\textasciicircum\{\cdot \} \backslash right)  \backslash big\backslash \}
+\[\displaystyle
+)\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i79)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+ arr\_funs[EQ\_3217\_C\ensuremath{@}latex];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o79} 
+\mbox{}
+\]\mbox{}\\avg\_ t \backslash left( I\_ P,N \backslash right) = \backslash frac\{1\}\{4\}\sim  Re \backslash left( \backslash overline\{E\} \backslash cdot \backslash left(i \backslash omega D \backslash right)  - \backslash overline\{D\} \backslash cdot \backslash left( i \backslash omega E \backslash right) \backslash right)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i78)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_3217\_D\ensuremath{@}latex];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o78} 
+\mbox{}
+\]\mbox{}\\avg\_ t \backslash left( I\_ P,N right) = \backslash frac\{1\}\{4\}\sim  Re \backslash left( i \backslash omega E\textasciicircum\{\cdot \} \backslash cdot \backslash left( \backslash bar\{\backslash epsilon\} - \backslash bar\{\backslash epsilon\}\textasciicircum\{\backslash dagger\} \backslash right) \backslash cdot E + 2 E\textasciicircum\{\cdot \} - E \backslash cdot \backslash bar\{\backslash xi\} \backslash cdot H \backslash right) \backslash right)
+
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i80)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_3217\_E\ensuremath{@}latex];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o80} 
+\mbox{false}\mbox{}
+\]
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+(\% i81)
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+arr\_funs[EQ\_3217\_F\ensuremath{@}latex];
+\end{minipage}
+%%% OUTPUT:
+\[\displaystyle
+\tag{\% o81} 
+\mbox{false}\mbox{}
+\]
+%%%%%%%%%%%%%%%
 \end{document}

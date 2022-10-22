@@ -1,0 +1,30 @@
+%
+%  Simple Examples Using Sage/Python and Maxima From Sage 
+%
+
+\documentclass{article}
+\usepackage{sagetex}
+
+\begin{document}
+	
+\title{Simple Examples Calling Maxima From Sage To Generate \LaTeX{} with \textsf{Sage\TeX}}
+
+
+Code block which uses a variable \texttt{s} to store the solutions:
+\begin{sageblock}
+	1+1
+	var('a,b,c')
+	eqn = [a+b*c==1, b-a*c==0, a+b==5]
+	s = solve(eqn, a,b,c)
+\end{sageblock}
+
+Solutions of $\mbox{eqn}=\sage{eqn}$:
+\[
+\sage{s[0]}
+\]
+\[
+\sage{s[1]}
+\]
+
+
+\end{document}
