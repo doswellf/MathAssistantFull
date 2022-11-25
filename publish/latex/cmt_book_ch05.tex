@@ -1,0 +1,2202 @@
+\documentclass[fleqn]{article}
+
+%% Created with wxMaxima 20.12.1
+
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+\usepackage{iftex}
+\ifPDFTeX
+  % PDFLaTeX or LaTeX 
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \DeclareUnicodeCharacter{00B5}{\ensuremath{\mu}}
+\else
+  %  XeLaTeX or LuaLaTeX
+  \usepackage{fontspec}
+\fi
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{grffile}
+\usepackage{ifthen}
+\newsavebox{\picturebox}
+\newlength{\pictureboxwidth}
+\newlength{\pictureboxheight}
+\newcommand{\includeimage}[1]{
+    \savebox{\picturebox}{\includegraphics{#1}}
+    \settoheight{\pictureboxheight}{\usebox{\picturebox}}
+    \settowidth{\pictureboxwidth}{\usebox{\picturebox}}
+    \ifthenelse{\lengthtest{\pictureboxwidth > .95\linewidth}}
+    {
+        \includegraphics[width=.95\linewidth,height=.80\textheight,keepaspectratio]{#1}
+    }
+    {
+        \ifthenelse{\lengthtest{\pictureboxheight>.80\textheight}}
+        {
+            \includegraphics[width=.95\linewidth,height=.80\textheight,keepaspectratio]{#1}
+            
+        }
+        {
+            \includegraphics{#1}
+        }
+    }
+}
+\newlength{\thislabelwidth}
+\DeclareMathOperator{\abs}{abs}
+
+\definecolor{labelcolor}{RGB}{100,0,0}
+
+\begin{document}
+Modern Electromagnetics and Coupled Mode Theory Book
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i2)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+load(vect);\ load(eigen);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o1} 
+\mbox{}
+\]"/usr/share/maxima/5.45.1/share/vector/vect.mac"
+
+
+\[\tag{\% o2} 
+\mbox{}
+\]"/usr/share/maxima/5.45.1/share/matrix/eigen.mac"
+
+Modern Electrodynamics and Coupled Mode TheoryChapter 5Planar 3 Layer Dielectric StructureDetermine Complete Eigenfield DistributionsDerive Eigenvalue (Dispersion) EquationsDealing with guided and radiative modes5.2 Closed Waveguide Without Losses and\ensuremath{\sim }Perfect Conducting Metallic BoundaryCental Arbitrary Waveguiding MediumSurrounding Isotropic Homogenous Medium with constant permittivity and permeability \ensuremath{\epsilon} and \ensuremath{\mu}Outer Perfectly Conducting Boundaryk\_z = k\_long = k[z]      longitudinal wave numberk\_t = trns = k[t]\ensuremath{\sim }         transverse wave numberThe isotropic waveguiding medium satisfies this characteristic equation
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i3)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_101:[\ k[t]=(k[x]\^\ 2+k[y]\^\ 2)/2,k\^\ 2=2*\ensuremath{\epsilon}*\ensuremath{\mu},\ k\^\ 2=k[t]\^\ 2+k[z]\^\ 2\ \ \ \ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o3} 
+\left[ {k_t}=\frac{{{k}_{y}^{2}}+{{k}_{x}^{2}}}{2}\operatorname{,}{{k}^{2}}=2 \epsilon  \mu \operatorname{,}{{k}^{2}}={{k}_{z}^{2}}+{{k}_{t}^{2}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The laplacian here acts on the radius vector r[t] of points in the cross-section of the outer mediumcmt\_ch05\_101results from substituting the phase exp(i(\ensuremath{\omega}t-(k . r)) into the ordinary wave equationthe substitution converts it into the Helmholtz for the transverse fieldsIn fact r[t] is a vector but when using cylindrical/spherical coordinates x,y,z are parametric equations, not just scalar coordinates
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i4)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_102:[r[t]:[x,y,z],express(laplacian(f(r[t])))\ensuremath{\sim\ }+\ensuremath{\sim\ }k[t]\^\ 2*f(r\_t)=0];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o4} 
+\left[ \left[ x\operatorname{,}y\operatorname{,}z\right] \operatorname{,}\frac{{{d}^{2}}}{d {{z}^{2}}} \operatorname{f}\left( \left[ x\operatorname{,}y\operatorname{,}z\right] \right) +\frac{{{d}^{2}}}{d {{y}^{2}}} \operatorname{f}\left( \left[ x\operatorname{,}y\operatorname{,}z\right] \right) +\frac{{{d}^{2}}}{d {{x}^{2}}} \operatorname{f}\left( \left[ x\operatorname{,}y\operatorname{,}z\right] \right) +\operatorname{f}\left( {r_t}\right)  {{k}_{t}^{2}}=0\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+f\_hat(r[t])\ensuremath{\sim }corresponds to any component of the EM fielddetermines the total wave dependence of that component as follows:
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i5)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_103:[f(r[t],z,t)=f(r[t])*exp(\%i*(\ensuremath{\omega}*t-k[z]*z))];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o5} 
+\left[ \operatorname{f}\left( \left[ x\operatorname{,}y\operatorname{,}z\right] \operatorname{,}z\operatorname{,}t\right) =\operatorname{f}\left( \left[ x\operatorname{,}y\operatorname{,}z\right] \right)  {{\% e}^{\% i \left( t \omega -z {k_z}\right) }}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The modes in the outer medium (isotropic) is a function of the transverse wave number k[t]if k[t]\^ 2 is real and positive, the outer fields are components of volume modesif k[t]\^ 2 is real and negative, the outer fiels are compoents of surface modesif k[t]\^ 2 is complex the outer fields are components of complex\ensuremath{\sim }(evanescent) modesThe system under study is now simplifiedThe waveguide structure is now planar with \ensuremath{\partial}/\ensuremath{\partial}x =iik[x] = 0 and k[t] = k[y]At fixed frequency \ensuremath{\omega} the nth eigenmode has the wavenumber
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i6)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+k[z,n](\ensuremath{\omega})=sqrt(\ensuremath{\omega}\^\ 2*\ensuremath{\epsilon}*\ensuremath{\mu}\ -\ k[y,n](\ensuremath{\omega})\^\ 2\ );
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o6} 
+{k_{z,n}}\left( \omega \right) =\sqrt{\epsilon  \mu  {{\omega }^{2}}-{{{k_{y,n}}\left( \omega \right) }^{2}}}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The frequency dependence of k[z,n](\ensuremath{\omega}) for the outer medium results from the dispersionproperties of the waveguide. These dispersion properties result from contributions from all mediawithin the total waveguide structure.The Helmholtz equation for the nth mode of a planar system has the following form:
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i7)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_104:['diff(f\_hat[n](y),y,2)+k[y,n](\ensuremath{\omega})\^\ 2*f\_hat[n](y)=0];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o7} 
+\left[ {{{f_{\ensuremath{\mathrm{hat}}}}}_n}(y) {{{k_{y,n}}\left( \omega \right) }^{2}}+\frac{{{d}^{2}}}{d {{y}^{2}}} {{{f_{\ensuremath{\mathrm{hat}}}}}_n}(y)=0\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The solution of cmt\_ch05\_104 gives the transverse function
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i8)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_105:[f\_hat[n](y,z,t)=A*exp(-\%i*k[y,n]*y)+B[n]*exp(-\%i*k[y,n]*y)];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o8} 
+\left[ {{{f_{\ensuremath{\mathrm{hat}}}}}_n}\left( y\operatorname{,}z\operatorname{,}t\right) ={B_n} {{\% e}^{-\% i y {k_{y,n}}}}+A {{\% e}^{-\% i y {k_{y,n}}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+5.2.1 Volume Modesk[y,n](\ensuremath{\omega})\^ 2 \ensuremath{>}\ensuremath{\sim }0Real values of k[y,n](\ensuremath{\omega}) onlyTransverse distribution of the fields at constant z (z=C\_real) consists of 2 wavesThe 2 waves are travelling in opposite directions along the y axisThis describes the "transverse wave resonance" within the volume of the isotropic material.This resonance is a result of the interference between the transverse forward and reverse wavesThe transverse waves are reflected from 2 boundaries1) The outer perfectly conducting surface2) A boundary of the inner waveguide layerA transverse standing wave pattern is typical for spatial resonance of this type.
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i9)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_106:[f\_hat[n](y,z,t)=An*exp(-\%i*k[z,n]*z)*exp(\%i*(\ensuremath{\omega}*t-k[y,n]*y))\ +\ B[n]*exp(-\%i*(k[z,n]*z))*exp(\%i*(\ensuremath{\omega}*t-k[y,n]*y)\ )\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o9} 
+\left[ {{{f_{\ensuremath{\mathrm{hat}}}}}_n}\left( y\operatorname{,}z\operatorname{,}t\right) ={B_n} {{\% e}^{\% i \left( t \omega -y {k_{y,n}}\right) -\% i z {k_{z,n}}}}+\ensuremath{\mathrm{An}} {{\% e}^{\% i \left( t \omega -y {k_{y,n}}\right) -\% i z {k_{z,n}}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+When \ensuremath{\omega}\^ 2*\ensuremath{\epsilon}*\ensuremath{\mu}\ensuremath{>}\ensuremath{\sim }k[y,n](\ensuremath{\omega})\^ 2 the value of k[z,n] is real and takes on the role of the phase constant \ensuremath{\beta}[n](\ensuremath{\omega})
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i10)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_107:[k[z,n]=sqrt(\ensuremath{\omega}\^\ 2*\ensuremath{\epsilon}*\ensuremath{\mu}-k[y,n](\ensuremath{\omega})\^\ 2),\ k[z,n]=\ensuremath{\beta}[n](\ensuremath{\omega})];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o10} 
+\left[ {k_{z,n}}=\sqrt{\epsilon  \mu  {{\omega }^{2}}-{{{k_{y,n}}\left( \omega \right) }^{2}}}\operatorname{,}{k_{z,n}}={{\beta }_n}\left( \omega \right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Then equation cmt\_ch05\_106 takes the form
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i11)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_106:[f\_hat[n](y,z,t)=f\_hat[n](y)*exp(\%i*(\ensuremath{\omega}*t-\ensuremath{\beta}[n]*z)),\ f\_hat[n](y)=(A[n]*exp(-\%i*k[y,n]*y)\ +\ensuremath{\sim\ }B[n]*exp(-\%i*(k[y,n]*y)))*exp(\%i*(\ensuremath{\omega}*t-\ensuremath{\beta}[n]*z))\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o11} 
+\left[ {{{f_{\ensuremath{\mathrm{hat}}}}}_n}\left( y\operatorname{,}z\operatorname{,}t\right) ={{{f_{\ensuremath{\mathrm{hat}}}}}_n}(y) {{\% e}^{\% i \left( t \omega -{{\beta }_n} z\right) }}\operatorname{,}{{{f_{\ensuremath{\mathrm{hat}}}}}_n}(y)=\left( {B_n} {{\% e}^{-\% i y {k_{y,n}}}}+{A_n} {{\% e}^{-\% i y {k_{y,n}}}}\right)  {{\% e}^{\% i \left( t \omega -{{\beta }_n} z\right) }}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The wave factor at the end of cmt\_ch05\_106 is the volume mode propagating with phase velocity given by
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i12)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_107:[v[ph,n](\ensuremath{\omega})\ =\ensuremath{\omega}/\ensuremath{\beta}[n](\ensuremath{\omega}),\ v[ph,n](\ensuremath{\omega})=c/sqrt(1-(k[y,n](\ensuremath{\omega})*c/\ensuremath{\omega})\^\ 2)];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o12} 
+\left[ {v_{\ensuremath{\mathrm{ph}},n}}\left( \omega \right) =\frac{\omega }{{{\beta }_n}\left( \omega \right) }\operatorname{,}{v_{\ensuremath{\mathrm{ph}},n}}\left( \omega \right) =\frac{c}{\sqrt{1-\frac{{{c}^{2}} {{{k_{y,n}}\left( \omega \right) }^{2}}}{{{\omega }^{2}}}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The equation in cmt\_ch05\_107 indicates that the moving volume modes are always fast, meaning that:
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i13)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_108:[v[ph,n]\ensuremath{>}c,\ v[ph,n]\ =1/sqrt(\ensuremath{\epsilon}*\ensuremath{\mu})];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o13} 
+\left[ {v_{\ensuremath{\mathrm{ph}},n}}\operatorname{>  }c\operatorname{,}{v_{\ensuremath{\mathrm{ph}},n}}=\frac{1}{\sqrt{\epsilon  \mu }}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The group velocity of the nth volume mode is given by:
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i14)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_109:[v[gr,n](\ensuremath{\omega})=1/('diff(\ensuremath{\beta}[n](\ensuremath{\omega}),\ensuremath{\omega})),\ v[gr,n]=c*(\ensuremath{\beta}[n](\ensuremath{\omega})/((\ensuremath{\omega}/c)-k[y,n](\ensuremath{\omega})\ *c*\ 'diff(k[y,n](\ensuremath{\omega}),\ensuremath{\omega})))\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o14} 
+\left[ {v_{\ensuremath{\mathrm{gr}},n}}\left( \omega \right) =\frac{1}{\frac{d}{d \omega } {{\beta }_n}\left( \omega \right) }\operatorname{,}{v_{\ensuremath{\mathrm{gr}},n}}=\frac{c {{\beta }_n}\left( \omega \right) }{\frac{\omega }{c}-c {k_{y,n}}\left( \omega \right)  \left( \frac{d}{d \omega } {k_{y,n}}\left( \omega \right) \right) }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The condition v[gr,n] \ensuremath{<}=c results in the following restriction on the frequency dependence ofthe transverse wave number in the outer (isotropic)\ensuremath{\sim }medium
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i15)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5212:['diff(k[y,n](\ensuremath{\omega}),\ensuremath{\omega})\ensuremath{<}=\ (\ ((\ensuremath{\omega}/c)-\ensuremath{\beta}[n](\ensuremath{\omega}))\ /(k[y,n](\ensuremath{\omega})*c))];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o15} 
+\left[ \frac{d}{d \omega } {k_{y,n}}\left( \omega \right) \operatorname{<  =}\frac{\frac{\omega }{c}-{{\beta }_n}\left( \omega \right) }{c {k_{y,n}}\left( \omega \right) }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+When \ensuremath{\omega}\^ 2*\ensuremath{\epsilon}*\ensuremath{\mu}\ensuremath{\sim }\ensuremath{<}\ensuremath{\sim }k[y,n](\ensuremath{\omega})\^ 2 k[z,n](\ensuremath{\omega}) is purely imaginary.This transforms the phase constant \ensuremath{\beta}[n] into an amplitude decay constant \ensuremath{\alpha}[n]:
+
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i16)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5213:[k[z,n](\ensuremath{\omega})\ =\ -\%i*sqrt(k[y,n](\ensuremath{\omega})\^\ 2-\ensuremath{\omega}\^\ 2*\ensuremath{\epsilon}*\ensuremath{\mu}),\ k[z,n](\ensuremath{\omega})=-\%i*\ensuremath{\alpha}[n](\ensuremath{\omega})];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o16} 
+\left[ {k_{z,n}}\left( \omega \right) =-\% i \sqrt{{{{k_{y,n}}\left( \omega \right) }^{2}}-\epsilon  \mu  {{\omega }^{2}}}\operatorname{,}{k_{z,n}}\left( \omega \right) =-\% i {{\alpha }_n}\left( \omega \right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+This causes amplitude decay in the previous  direction of phase propagation.The amplitude decay is denoted by a minus sign\ensuremath{\alpha}[n] \ensuremath{>}\ensuremath{\sim }0 for \ensuremath{\beta}[n] \ensuremath{>}\ensuremath{\sim }0, giving:Given purely real values of \ensuremath{\alpha}[N] the equation below describes the evanescent mode
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i17)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5214:[f\_hat[n](y,z,t)=A[n]*exp(-\ensuremath{\alpha}[n])*exp(\%i*(\ensuremath{\omega}*t-k[y,n]*y))+B[n]*exp(-\ensuremath{\alpha}[n]*z)*exp(\%i*(\ensuremath{\omega}*t+k[y,n]*y))\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o17} 
+\left[ {{{f_{\ensuremath{\mathrm{hat}}}}}_n}\left( y\operatorname{,}z\operatorname{,}t\right) ={B_n} {{\% e}^{\% i \left( t \omega +y {k_{y,n}}\right) -{{\alpha }_n} z}}+{A_n} {{\% e}^{\% i \left( t \omega -y {k_{y,n}}\right) -{{\alpha }_n}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Any volume mode turning into an evanescent mode stops propagating it's phaseThe mode decays in amplitude as it travels in the z direction: exp(-\ensuremath{\alpha}[n]*z)The evanescent modes correspond to the cutoff or stop band of a screened waveguide.The passband corresponds to the locations where active modes with real-valued \ensuremath{\beta}[n] existAny volume mode turning into an evanescent mode stops propagating it's phaseThe mode decays in amplitude as it travels in the z direction: exp(-\ensuremath{\alpha}[n]*z)The evanescent modes correspond to the cutoff or stop band of a screened waveguide.The passband corresponds to the locations where active modes with real-valued \ensuremath{\beta}[n] existThe transition between pass and stop bands matches the cutoff frequency \ensuremath{\omega}[n,c].The following constraints are imposed on the longitudinal and transverse wave numbers
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i18)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5215:[\ensuremath{\beta}[n](\ensuremath{\omega}[n,c])=0,\ k[y,n](\ensuremath{\omega}[n,c])=\ensuremath{\omega}[n,c]/c];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o18} 
+\left[ {{\beta }_n}\left( {{\omega }_{n,c}}\right) =0\operatorname{,}{k_{y,n}}\left( {{\omega }_{n,c}}\right) =\frac{{{\omega }_{n,c}}}{c}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i19)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5216:[v[ph,n,c]\ =\ v[ph,n](\ensuremath{\omega}[n,c],v[ph,n,c]=inf\ )];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o19} 
+\left[ {v_{\ensuremath{\mathrm{ph}},n,c}}={v_{\ensuremath{\mathrm{ph}},n}}\left( {{\omega }_{n,c}}\operatorname{,}{v_{\ensuremath{\mathrm{ph}},n,c}}=\infty \right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+On the \ensuremath{\omega}-\ensuremath{\beta} graph (Fig 5.2) the cutoff points are located along the \ensuremath{\omega} axisThe  cutoff points are \ensuremath{\omega}=\ensuremath{\omega}[c,n] and \ensuremath{\beta}[n]=0These are the extreme ends of the mode dispersion curve.At these points \ensuremath{\partial}\ensuremath{\omega}/\ensuremath{\partial}\ensuremath{\beta}[n] = 0 because v[gr,n,c] = 0v[gr,n,c] = 0 only if
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i20)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5217:[\ \ensuremath{\omega}=\ensuremath{\omega}[n,c],\ 'diff(k[y,n](\ensuremath{\omega}),\ensuremath{\omega})\ \ensuremath{\neq}\ 1/c\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o20} 
+\left[ \omega ={{\omega }_{n,c}}\operatorname{,}\frac{d}{d \omega } {k_{y,n}}\left( \omega \right) \operatorname{\neq }\frac{1}{c}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Or else  v[gr,n,c] is indeterminate (0/0) at the cutoff frequency given by (5.2.15)\ensuremath{\sim }so that v[grn,ln,c] \ensuremath{\neq} 0The fields of the nth mode in the outer medium at it's cutoff frequency \ensuremath{\omega}[n,c] propagate along the y axis (transverse)as a plane wave with dispersion relation k[y,c]\^ 2 = -abs(k[y,n](\ensuremath{\omega}))\^ 2 \ensuremath{<}\ensuremath{\sim }0When the reflecting metallic screen is moved out to x=\ensuremath{\infty} and y = \ensuremath{\infty} the volume modes turn into radiating modes in an openwaveguide system.\ensuremath{\sim }Propagating and evanescent modes become radiating modes when the metal screen is removed.Further details will be added later - only equations will be entered for now.
+5.2.2 Surface Modes
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i21)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5218:[\ k[y,n](\ensuremath{\omega})\ \^\ 2\ \ \ \ =-abs(k[y,n](\ensuremath{\omega}))\^\ 2,\ k[y,n](\ensuremath{\omega})\ensuremath{\sim\ }\ensuremath{<}\ensuremath{\sim\ }0,\ k[y,n](\ensuremath{\omega})=-\%i*abs(k[y,n](\ensuremath{\omega}))\ ,k[z,n](\ensuremath{\omega})=sqrt(\ensuremath{\omega}\^\ 2*\ensuremath{\epsilon}*\ensuremath{\mu}+'abs(k[y,n](\ensuremath{\omega}))\^\ 2),\ k[z,n](\ensuremath{\omega})=\ensuremath{\beta}[n](\ensuremath{\omega})\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o21} 
+\left[ {{{k_{y,n}}\left( \omega \right) }^{2}}=-{{{k_{y,n}}\left( \omega \right) }^{2}}\operatorname{,}{k_{y,n}}\left( \omega \right) \operatorname{<  }0\operatorname{,}{k_{y,n}}\left( \omega \right) =-\% i \left| {k_{y,n}}\left( \omega \right) \right| \operatorname{,}{k_{z,n}}\left( \omega \right) =\sqrt{{{{k_{y,n}}\left( \omega \right) }^{2}}+\epsilon  \mu  {{\omega }^{2}}}\operatorname{,}{k_{z,n}}\left( \omega \right) ={{\beta }_n}\left( \omega \right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Equation (5.2.18)\ensuremath{\sim }gives these equations for the phase and group velocities of the nth surface mode (5.2.10 and 5.2.11)Equation\ensuremath{\sim }(5.2.19)\ensuremath{\sim }shows that the surface modes are always slow (v[ph,n]  \ensuremath{<}\ensuremath{\sim }c). The volume modes are fast\ensuremath{\sim }v[ph,n]\ensuremath{>}c
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i22)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5219:[v[ph,n](\ensuremath{\omega})=\ensuremath{\omega}/\ensuremath{\beta}[n](\ensuremath{\omega}),\ v[ph,n](\ensuremath{\omega})=c/sqrt(1+('abs(k[y,n](\ensuremath{\omega}))\ *c/\ensuremath{\omega})\^\ 2)];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o22} 
+\left[ {v_{\ensuremath{\mathrm{ph}},n}}\left( \omega \right) =\frac{\omega }{{{\beta }_n}\left( \omega \right) }\operatorname{,}{v_{\ensuremath{\mathrm{ph}},n}}\left( \omega \right) =\frac{c}{\sqrt{\frac{{{c}^{2}} {{{k_{y,n}}\left( \omega \right) }^{2}}}{{{\omega }^{2}}}+1}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i23)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5220:[\ v[ph,n]\ \ensuremath{<}\ensuremath{\sim\ }c,\ v[ph,n]\ \ensuremath{<}\ensuremath{\sim\ }1/sqrt(\ensuremath{\epsilon}*\ensuremath{\mu}),v[gr,n](\ensuremath{\omega})=1/'diff(\ensuremath{\beta}[n](\ensuremath{\omega}),\ensuremath{\omega}),\ v[gr,n](\ensuremath{\omega})=c*(\ensuremath{\beta}[n]/((\ensuremath{\omega}/c)\ +abs(k[y,n](\ensuremath{\omega}))*c\ *\ensuremath{\sim\ }'diff(abs(k[y,n](\ensuremath{\omega}))\ ,\ensuremath{\omega})))\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o23} 
+\left[ {v_{\ensuremath{\mathrm{ph}},n}}\operatorname{<  }c\operatorname{,}{v_{\ensuremath{\mathrm{ph}},n}}\operatorname{<  }\frac{1}{\sqrt{\epsilon  \mu }}\operatorname{,}{v_{\ensuremath{\mathrm{gr}},n}}\left( \omega \right) =\frac{1}{\frac{d}{d \omega } {{\beta }_n}\left( \omega \right) }\operatorname{,}{v_{\ensuremath{\mathrm{gr}},n}}\left( \omega \right) =\frac{c {{\beta }_n}}{c \left| {k_{y,n}}\left( \omega \right) \right|  \left( \frac{d}{d \omega } \left| {k_{y,n}}\left( \omega \right) \right| \right) +\frac{\omega }{c}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i24)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5221:[v[ph,n]\ \ensuremath{\leq}\ c,\ 'diff(abs(k[y,n](\ensuremath{\omega})),\ensuremath{\omega})\ \ensuremath{\geq}\ensuremath{\sim\ }((\ensuremath{\beta}[n](\ensuremath{\omega})\ -\ (\ensuremath{\omega}/c))/(abs(k[y,n](\ensuremath{\omega}))*c))\ ,\ 'diff(abs(k[y,n](\ensuremath{\omega})),\ensuremath{\omega})\ \ensuremath{>}\ensuremath{\sim\ }0\ensuremath{\sim\ }\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o24} 
+\left[ {v_{\ensuremath{\mathrm{ph}},n}}\operatorname{<  =}c\operatorname{,}\frac{d}{d \omega } \left| {k_{y,n}}\left( \omega \right) \right| \operatorname{>  =}\frac{{{\beta }_n}\left( \omega \right) -\frac{\omega }{c}}{c \left| {k_{y,n}}\left( \omega \right) \right| }\operatorname{,}\frac{d}{d \omega } \left| {k_{y,n}}\left( \omega \right) \right| \operatorname{>  }0\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+For surface modes (5.2.3) and (5.2.6)\ensuremath{\sim }give the following formulae for any part of the EM field
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i25)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5222:[f[n](y,z,t)=f[n](y)*exp(\%i*(\ensuremath{\omega}*t-\ensuremath{\beta}[n]*z)),f[n](y,z,t)=(A[n]*exp(-abs(k[y,n])*y)\ +B[n]*exp(abs(k[y,n])*y))*exp(\%i*(\ensuremath{\omega}*t-\ensuremath{\beta}[n]*z))\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o25} 
+\left[ {f_n}\left( y\operatorname{,}z\operatorname{,}t\right) ={f_n}(y) {{\% e}^{\% i \left( t \omega -{{\beta }_n} z\right) }}\operatorname{,}{f_n}\left( y\operatorname{,}z\operatorname{,}t\right) =\left( {B_n} {{\% e}^{y \left| {k_{y,n}}\right| }}+{A_n} {{\% e}^{-y \left| {k_{y,n}}\right| }}\right)  {{\% e}^{\% i \left( t \omega -{{\beta }_n} z\right) }}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Transition occurs between surface and volume mode regimes at cutoff frequency \ensuremath{\omega}[n,c]The transverse and longitudinal wave numbers have the following contraints
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i26)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5223:[k[y,n](\ensuremath{\omega}[n,c])\ =\ 0,\ \ensuremath{\beta}[n](\ensuremath{\omega}[n,c])=\ensuremath{\omega}[n,c]/c];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o26} 
+\left[ {k_{y,n}}\left( {{\omega }_{n,c}}\right) =0\operatorname{,}{{\beta }_n}\left( {{\omega }_{n,c}}\right) =\frac{{{\omega }_{n,c}}}{c}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The group and phase velocities are always equal to c in the outer isotropic materialThe phase and group velocities at the cutoff frequency are always
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i27)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5224:[v[ph,n,c]=v[ph,n](\ensuremath{\omega}[n,c]),\ v[ph,n,c]\ =\ c,\ v[gr,n,c]\ =\ v[gr,n](\ensuremath{\omega}[n,c]),v[gr,n,c]\ =c\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o27} 
+\left[ {v_{\ensuremath{\mathrm{ph}},n,c}}={v_{\ensuremath{\mathrm{ph}},n}}\left( {{\omega }_{n,c}}\right) \operatorname{,}{v_{\ensuremath{\mathrm{ph}},n,c}}=c\operatorname{,}{v_{\ensuremath{\mathrm{gr}},n,c}}={v_{\ensuremath{\mathrm{gr}},n}}\left( {{\omega }_{n,c}}\right) \operatorname{,}{v_{\ensuremath{\mathrm{gr}},n,c}}=c\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Complex ModesComplex modes occur when k[y](\ensuremath{\omega})\^ 2 becomes complex, making transverse and longitudinal modes complex as well.
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i29)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+Re(n):=realpart(n);\ Im(n):=imagpart(n);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o28} 
+\operatorname{Re}(n)\operatorname{:=}\operatorname{realpart}(n)\mbox{}\]
+
+\[\tag{\% o29} 
+\operatorname{Im}(n)\operatorname{:=}\operatorname{imagpart}(n)\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i30)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5225:[k[y]='Re(k[y])\ +\ensuremath{\sim\ }\%i*im(k[y])\ \ ,\ k[x]='Re(k[x])\ensuremath{\sim\ }+\ensuremath{\sim\ }\%i*'Im(k[x])];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o30} 
+\left[ {k_y}=\operatorname{Re}\left( {k_y}\right) +\% i \operatorname{im}\left( {k_y}\right) \operatorname{,}{k_x}=\operatorname{Re}\left( {k_x}\right) +\% i \operatorname{Im}\left( {k_x}\right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Modal fields are localized near the surface according to exp(-Im(k[y,n]*y))The fields decrease in amplitude with distance from the surfaceThe transverse propagation differs from that of surface modes according to exp(\%i*(\ensuremath{\omega}*t-Re(k[n,y]*y)))Wavenumbers are interdependent.Substitution of them into (5.2.1) gives equations for Re(k[y])\ensuremath{\sim }and Im(k[y])
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i31)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5226:[('Re(k[y])\^\ 2-'Im(k[y])\^\ 2=K\^\ 2)\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o31} 
+\left[ {{\operatorname{Re}\left( {k_y}\right) }^{2}}-{{\operatorname{Im}\left( {k_y}\right) }^{2}}={{K}^{2}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i32)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5227:['Re(k[y])*'im(k[y])=\ensuremath{\alpha}*\ensuremath{\beta}];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o32} 
+\left[ \operatorname{Re}\left( {k_y}\right)  \operatorname{im}\left( {k_y}\right) =\alpha  \beta \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Phase constant \ensuremath{\alpha} and \ensuremath{\beta} are defined in order to define the longitudinal propagation constant
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i33)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5228:[\ensuremath{\alpha}=-'Im(k[z]),\ \ensuremath{\beta}='Re(k[z]),\ \ensuremath{\gamma}=\ensuremath{\alpha}+\%i*\ensuremath{\beta},\ \ensuremath{\gamma}=-'Im(k[z])+\%i*'Re(k[z]),\ \ensuremath{\gamma}=\%i*k[z]];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o33} 
+\left[ \alpha =-\operatorname{Im}\left( {k_z}\right) \operatorname{,}\beta =\operatorname{Re}\left( {k_z}\right) \operatorname{,}\gamma =\% i \beta +\alpha \operatorname{,}\gamma =\% i \operatorname{Re}\left( {k_z}\right) -\operatorname{Im}\left( {k_z}\right) \operatorname{,}\gamma =\% i {k_z}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i34)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5229:[K\^\ 2=k\^\ 2+\ensuremath{\alpha}\^\ 2-\ensuremath{\beta}\^\ 2];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o34} 
+\left[ {{K}^{2}}=-{{\beta }^{2}}+{{\alpha }^{2}}+{{k}^{2}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Equations (5.2.26) and (5.2.27)\ensuremath{\sim }define hyperbolic functions plotted in Fig 5.3There are 2 cases shown by 5.3 (a) and 5.3 (b)
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i35)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5230:[K\^\ 2\ensuremath{>}0,\ \ensuremath{\beta}\^\ 2\ensuremath{\sim\ }\ensuremath{<}\ensuremath{\sim\ }k\^\ 2\ +\ensuremath{\sim\ }\ensuremath{\alpha}\^\ 2,(v[ph]/c)\^\ 2\ \ensuremath{>}\ensuremath{\sim\ }1/(1\ensuremath{\sim\ }+\ensuremath{\sim\ }(\ensuremath{\alpha}/k)\^\ 2)];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o35} 
+\left[ {{K}^{2}}\operatorname{>  }0\operatorname{,}{{\beta }^{2}}\operatorname{<  }{{\alpha }^{2}}+{{k}^{2}}\operatorname{,}\frac{{{v}_{\ensuremath{\mathrm{ph}}}^{2}}}{{{c}^{2}}}\operatorname{>  }\frac{1}{\frac{{{\alpha }^{2}}}{{{k}^{2}}}+1}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i36)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5231:[K\^\ 2\ensuremath{>}0,\ \ensuremath{\beta}\^\ 2\ \ensuremath{>}\ensuremath{\sim\ }k\^\ 2\ +\ensuremath{\sim\ }\ensuremath{\alpha}\^\ 2,\ (v[ph]/c)\^\ 2=1/(1+(\ensuremath{\alpha}/k)\^\ 2)\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o36} 
+\left[ {{K}^{2}}\operatorname{>  }0\operatorname{,}{{\beta }^{2}}\operatorname{>  }{{\alpha }^{2}}+{{k}^{2}}\operatorname{,}\frac{{{v}_{\ensuremath{\mathrm{ph}}}^{2}}}{{{c}^{2}}}=\frac{1}{\frac{{{\alpha }^{2}}}{{{k}^{2}}}+1}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+TODO: GENERATE OR INCLUDE FIGURE 5.3 IN THIS DOCUMENTFig 5.3(a) gives 2 solutions at points K and -K that correspond to the fast volume modes.For maxima the 2 cases are given as separate list entries because \ensuremath{\pm} was not accepted.
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i37)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5232:[\ensuremath{\beta}\^\ 2\ensuremath{<}k\^\ 2,\ensuremath{\alpha}=0,\ k[y]='Re(k[y]),\ k[y]=K(\ensuremath{\alpha}lpha),\ k[y]=-K(\ensuremath{\alpha}lpha),k[y]=-sqrt(k\^\ 2-\ensuremath{\beta}\^\ 2),k[y]=sqrt(k\^\ 2-\ensuremath{\beta}\^\ 2)\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o37} 
+\left[ {{\beta }^{2}}\operatorname{<  }{{k}^{2}}\operatorname{,}\alpha =0\operatorname{,}{k_y}=\operatorname{Re}\left( {k_y}\right) \operatorname{,}{k_y}=\operatorname{K}\left( \ensuremath{\mathrm{\alpha lpha}}\right) \operatorname{,}{k_y}=-\operatorname{K}\left( \ensuremath{\mathrm{\alpha lpha}}\right) \operatorname{,}{k_y}=-\sqrt{{{k}^{2}}-{{\beta }^{2}}}\operatorname{,}{k_y}=\sqrt{{{k}^{2}}-{{\beta }^{2}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Fig 5.3(b) gives 2 solutions at points |K| and -|K| that correspond to the slow surface modes
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i38)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5232:[\ensuremath{\beta}\^\ 2\ensuremath{>}k\^\ 2,\ensuremath{\alpha}=0,\ k[y]=\%i*'Im(k[y]),\ k[y]=\%i*K(\ensuremath{\alpha}lpha),\ k[y]=-\%i*K(\ensuremath{\alpha}lpha),k[y]=\%i*sqrt(k\^\ 2-\ensuremath{\beta}\^\ 2),k[y]=-\%i*sqrt(k\^\ 2-\ensuremath{\beta}\^\ 2)\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o38} 
+\left[ {{\beta }^{2}}\operatorname{>  }{{k}^{2}}\operatorname{,}\alpha =0\operatorname{,}{k_y}=\% i \operatorname{Im}\left( {k_y}\right) \operatorname{,}{k_y}=\% i \operatorname{K}\left( \ensuremath{\mathrm{\alpha lpha}}\right) \operatorname{,}{k_y}=-\% i \operatorname{K}\left( \ensuremath{\mathrm{\alpha lpha}}\right) \operatorname{,}{k_y}=\% i \sqrt{{{k}^{2}}-{{\beta }^{2}}}\operatorname{,}{k_y}=-\% i \sqrt{{{k}^{2}}-{{\beta }^{2}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The 4 roots of (5.2.26) and\ensuremath{\sim }(5.2.27) combine to give 2 pairs 1-1\_bar and 2-2\_bar.These root pairs correspond to the twin-conjugate modes\ensuremath{\sim }(Section 3.3.2)Twin conjugate modes do not have self-power (P[n]=P[n\_hat]=0 )but together carry the pair-cross power P\_pair[n,n\_hat] defined by equation (3.3.23)To arrange these system properties use the following relationshipbetween the longitudinal propagation constants typical of the twin-conjugate modes
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i39)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_34:[\ensuremath{\gamma}[n\_bar]=-'conjugate(\ensuremath{\gamma}[n]),\ k[z,n\_bar]='conjugate(k[z,n])];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o39} 
+\left[ {{\gamma }_{{n_{\ensuremath{\mathrm{bar}}}}}}=-\overline{{{\gamma }_n}}\operatorname{,}{k_{z,{n_{\ensuremath{\mathrm{bar}}}}}}=\overline{{k_{z,n}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+This implies that
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i40)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5235:[\ensuremath{\alpha}[n\_bar]=-'Im(k[z,n\_bar]),a[n\_bar]='Im(k[z,n\_nar]),\ \ensuremath{\alpha}[n\_bar]=-\ensuremath{\alpha}[n],\ \ensuremath{\beta}[n\_bar]='Re(k[z,n\_bar]),\ \ensuremath{\beta}[n\_bar]='Re(k[z,n]),\ \ensuremath{\beta}[n\_bar]=\ensuremath{\beta}[n]\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o40} 
+\left[ {{\alpha }_{{n_{\ensuremath{\mathrm{bar}}}}}}=-\operatorname{Im}\left( {k_{z,{n_{\ensuremath{\mathrm{bar}}}}}}\right) \operatorname{,}{a_{{n_{\ensuremath{\mathrm{bar}}}}}}=\operatorname{Im}\left( {k_{z,{n_{\ensuremath{\mathrm{nar}}}}}}\right) \operatorname{,}{{\alpha }_{{n_{\ensuremath{\mathrm{bar}}}}}}=-{{\alpha }_n}\operatorname{,}{{\beta }_{{n_{\ensuremath{\mathrm{bar}}}}}}=\operatorname{Re}\left( {k_{z,{n_{\ensuremath{\mathrm{bar}}}}}}\right) \operatorname{,}{{\beta }_{{n_{\ensuremath{\mathrm{bar}}}}}}=\operatorname{Re}\left( {k_{z,n}}\right) \operatorname{,}{{\beta }_{{n_{\ensuremath{\mathrm{bar}}}}}}={{\beta }_n}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+If point 1 or 2 (where \ensuremath{\alpha}\ensuremath{\beta}\ensuremath{>}0)\ensuremath{\sim }is identified with mode n then point 1\_bar or 2\_bar (\ensuremath{\alpha}\ensuremath{\beta}\ensuremath{<}0) will be identified with the twin mode n\_bar where:
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i41)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5236:['Re(k[y,n\_bar])=-'Re(K[y,n]),'Im(k[y,n\_bar])='Im(k[y,n])\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o41} 
+\left[ \operatorname{Re}\left( {k_{y,{n_{\ensuremath{\mathrm{bar}}}}}}\right) =-\operatorname{Re}\left( {K_{y,n}}\right) \operatorname{,}\operatorname{Im}\left( {k_{y,{n_{\ensuremath{\mathrm{bar}}}}}}\right) =\operatorname{Im}\left( {k_{y,n}}\right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+which implies that
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i42)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5237:[k[y,n\_bar]=-'conjugate(k[y,n])];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o42} 
+\left[ {k_{y,{n_{\ensuremath{\mathrm{bar}}}}}}=-\overline{{k_{y,n}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Both modes of a twin pair have the same\ensuremath{\sim }Im(k[y]) following from (5.2.36).Both modes have the same propagation constant (\ensuremath{\beta}[n\_bar]=\ensuremath{\beta}[n] but the amplitude (decay) constants have opposite signs\ensuremath{\sim }(\ensuremath{\alpha}[n]=-\ensuremath{\alpha}[n\_bar])Evanescent modes have no propagation of phase (\ensuremath{\beta}[n]=0) but \ensuremath{\alpha}[n]=-\ensuremath{\alpha}[n\_bar]The complex and evanescent modes are reactive modes due to reactive decay in space.The complex and evanescent modes store reactive energy without an active self-power flowThis guarantees that the 2 modes belong to a common sheet of Rieman surface for the function k[y](k[z])=sqrt(k\^ 2-k[z])\^ 2)For further details see Appendix H)(5.2.4)\ensuremath{\sim }Mode Excitation By External SourcesSource region centered about z=0, width -z0 \ensuremath{\longrightarrow} z0Active modes propagate left and right out of the source region without decaying in amplitude.Reactive modes (complex and evanescent)\ensuremath{\sim }decay according to exp(|\ensuremath{\alpha}[-m]|(z+z\_0))The distribution of the mode excitations in the source region by external sources gives the following equations forthe excitation amplitudes A[m] and A[-m] of the forward and backward active and reactive modesFor the forward modes
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i43)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5238:[+m\ \ensuremath{>}\ 0,\ if\ z\ \ensuremath{<}\ -z[0]\ then\ A[+m](z)=0,if\ -z[0]\ensuremath{<}\ z\ and\ z\ \ensuremath{<}\ z[0]\ then\ A[+m](z)\ \ensuremath{\neq}\ 0,\ if\ z\ \ensuremath{>}\ z[0]\ then\ A[+m](z)=C];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o43} 
+\left[ m\operatorname{>  }0\operatorname{,}\operatorname{if}\operatorname{ }z\operatorname{<  }-{z_0}\operatorname{ }\operatorname{then}\operatorname{ }{A_m}(z)=0\operatorname{ }\operatorname{,}\operatorname{if}\operatorname{ }-{z_0}\operatorname{<  }z\ensuremath{\mathrm{ and }}z\operatorname{<  }{z_0}\operatorname{ }\operatorname{then}\operatorname{ }{A_m}(z)\operatorname{\neq }0\operatorname{ }\operatorname{,}\operatorname{if}\operatorname{ }z\operatorname{>  }{z_0}\operatorname{ }\operatorname{then}\operatorname{ }{A_m}(z)=C\operatorname{ }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+For the backward modes
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i44)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5239:[-m\ \ensuremath{<}\ 0,\ if\ z\ \ensuremath{>}z[0]\ then\ A[-m](z)=0,if\ -z[0]\ensuremath{<}\ z\ and\ z\ \ensuremath{<}\ z[0]\ then\ A[-m](z)\ \ensuremath{\neq}\ 0,\ if\ z\ \ensuremath{<}-z[0]\ then\ A[-m](z)=C];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o44} 
+\left[ -m\operatorname{<  }0\operatorname{,}\operatorname{if}\operatorname{ }z\operatorname{>  }{z_0}\operatorname{ }\operatorname{then}\operatorname{ }{A_{-m}}(z)=0\operatorname{ }\operatorname{,}\operatorname{if}\operatorname{ }-{z_0}\operatorname{<  }z\ensuremath{\mathrm{ and }}z\operatorname{<  }{z_0}\operatorname{ }\operatorname{then}\operatorname{ }{A_{-m}}(z)\operatorname{\neq }0\operatorname{ }\operatorname{,}\operatorname{if}\operatorname{ }z\operatorname{<  }-{z_0}\operatorname{ }\operatorname{then}\operatorname{ }{A_{-m}}(z)=C\operatorname{ }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The restrictions A[+m](z\ensuremath{<}-z[0]) = 0 or A[-m](z\ensuremath{>}z[0])\ensuremath{\sim }= 0 implies that:The forward modes can be excited and driven only to the right of the source regionThe backward modes can be excited and driven only to the left of the source regionThe input amplitude A[+m](-z[0]) at the left end of the source regionandThe input amplitude A[-m](z[0])\ensuremath{\sim }at the right end of the source regionare given as the boundary conditions, written in the following form:(i) at the left end z = -z[0] for the forward mode, active with v[gr,+m] \ensuremath{>}0 and reactive with \ensuremath{\alpha}[+m] \ensuremath{>}\ensuremath{\sim }0Driven Mode:\ensuremath{\sim }       A[+m](-z[0]) \ensuremath{\neq} 0Undriven Mode:\ensuremath{\sim }   A[+m](-z[0]) = 0
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i45)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5240:[A[+m](-z[0])\ \ensuremath{\neq}\ 0\ or\ A[+m](-z[0])\ =\ 0];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o45} 
+\left[ \mbox{%default
+true}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+(ii) z = z[0] at the right end for the backward mode, active with v[gr,-m] \ensuremath{<}\ensuremath{\sim }0, reactive with \ensuremath{\alpha}[-m]\ensuremath{<}0Driven Mode:         A[-m](z[0] \ensuremath{\neq} 0Undriven Mode:     A[-m](z[0]) = 0
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i46)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch105\_5241:[A[-m](z[0])\ \ensuremath{\neq}\ 0\ or\ A[-m](z[0])\ =\ 0];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o46} 
+\left[ \mbox{%default
+true}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+Use equation (3.5.13) to find the excitation Amplitude A[n](z)Re-write (3.5.13)\ensuremath{\sim }for the source region with bulk exciting currents J[b,e,m]and effective surface currents J[s,eff,e,m]  = J[s,e,m]L[b] is the a contour bounding Surface S[b] that is occupied by the bulk currentsFor the active modes (forward and backward with subscript n = \ensuremath{\pm}m)
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i47)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5242:['diff(A[n](z),z)=(1/N[n])\ *\ 'integrate(((J[b,e]\ .\ 'conjugate(E[n]))\ +\ensuremath{\sim\ }(J[b,m]\ .\ 'conjugate(H[n])))\ ,S[b],1,N)\ -\ (1/N[n])*'integrate(((J[s,e]\ .\ 'conjugate(E[n]))+(J[s,m]*'conugate(H[n]))),L[b],1,N)];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o47} 
+\left[ \frac{d}{d z} {A_n}(z)=\frac{\left( N-1\right) \, \left( {J_{b,m}}\ensuremath{\mathrm{ . }}\overline{{H_n}}+{J_{b,e}}\ensuremath{\mathrm{ . }}\overline{{E_n}}\right) }{{N_n}}-\frac{\left( N-1\right) \, \left( {J_{s,e}}\ensuremath{\mathrm{ . }}\overline{{E_n}}+\operatorname{conugate}\left( {H_n}\right)  {J_{s,m}}\right) }{{N_n}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+For the reactive modes (forward and backward with subscript n = \ensuremath{\pm} m and n[bar]=-/+m)
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i48)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5343:['diff(A[n](z),z)=1/N[n[bar]]*'integrate((\ (J[b,e]\ .\ 'conjugate(E[n[bar]]))\ +\ (J[b,m]\ .\ 'conjugate(H[n[bar]])))\ ,S[b],1,N)-\ (1/N[n[bar]])*'integrate(((J[s,e]\ .\ 'conjugate(E[n[bar]]))+(J[s,m]*'conugate(H[n[bar]]))),L[b],1,N)\ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o48} 
+\left[ \frac{d}{d z} {A_n}(z)=\frac{\left( N-1\right) \, \left( {J_{b,m}}\ensuremath{\mathrm{ . }}\overline{{H_{{n_{\ensuremath{\mathrm{bar}}}}}}}+{J_{b,e}}\ensuremath{\mathrm{ . }}\overline{{E_{{n_{\ensuremath{\mathrm{bar}}}}}}}\right) }{{N_{{n_{\ensuremath{\mathrm{bar}}}}}}}-\frac{\left( N-1\right) \, \left( {J_{s,e}}\ensuremath{\mathrm{ . }}\overline{{E_{{n_{\ensuremath{\mathrm{bar}}}}}}}+\operatorname{conugate}\left( {H_{{n_{\ensuremath{\mathrm{bar}}}}}}\right)  {J_{s,m}}\right) }{{N_{{n_{\ensuremath{\mathrm{bar}}}}}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The morns of the active and reactive modes are defined in using the form of Eqs (3.3.15) and (3.3.20)TODO: EDIT 44 AND 45 AND CONTINUE
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i49)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5244[N[n]];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o49} 
+{{{{\ensuremath{\mathrm{cmt\_ ch05}}}_{\ensuremath{\mathrm{5244}}}}}_{{N_n}}}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i50)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5245:[N[n[bar]]];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o50} 
+\left[ {N_{{n_{\ensuremath{\mathrm{bar}}}}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i51)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5246:[\\
+\ \ \ \ \ \ \ \ E\_n(r\_t,z)\ensuremath{\sim\ }=\ E\_hat\_n(r\_t)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\ensuremath{\gamma}\_n*\ensuremath{\sim\ }z),\\
+\ \ \ \ \ \ \ \ H\_n(r\_t,z)\ =\ H\_hat\_n(r\_t)\ *\ exp(-\ensuremath{\gamma}\_n*\ z)\\
+\ \ \ \ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o51} 
+\left[ {E_n}\left( {r_t}\operatorname{,}z\right) ={{\ensuremath{\mathrm{E\_ hat}}}_n}\left( {r_t}\right)  {{\% e}^{-z {{\gamma }_n}}}\operatorname{,}{H_n}\left( {r_t}\operatorname{,}z\right) ={{\ensuremath{\mathrm{H\_ hat}}}_n}\left( {r_t}\right)  {{\% e}^{-z {{\gamma }_n}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+For the active modes (forward and backward with subscript n = \ensuremath{\pm}m):
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i52)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5247:[\\
+\\
+A\_plus\_m(z\_0)\ensuremath{\sim\ }=\ A\_plus\_m\ (-z\_0)\ -\ (1/N\_plus\_m)\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(J\_b\_e\ .\ conjugate(E\_plus\_m)\ensuremath{\sim\ }+\ensuremath{\sim\ }(J\_b\_m\ .\ conjugate(H\_plus\_m)),V\_b,1,N)\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\ (1/N\_plus\_m)\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(\ (J\_s\_e\ .\ conjugate(E\_plus\_m))\ensuremath{\sim\ }+\ensuremath{\sim\ }(J\_s\_m\ .\ conjugate(H\_plus\_m))\ensuremath{\sim\ },\ S\_b\_i,\ 1,N\ )\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o52} 
+\left[ {{\ensuremath{\mathrm{A\_ plus}}}_m}\left( {z_0}\right) ={{\ensuremath{\mathrm{A\_ plus}}}_m}\left( -{z_0}\right) -\frac{\left( {{\ensuremath{\mathrm{J\_ s}}}_m}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{H\_ plus}}}_m}+{{\ensuremath{\mathrm{J\_ s}}}_e}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{E\_ plus}}}_m}\right)  \left( N-1\right) }{{{\ensuremath{\mathrm{N\_ plus}}}_m}}-\frac{\left( {{\ensuremath{\mathrm{J\_ b}}}_m}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{H\_ plus}}}_m}+{{\ensuremath{\mathrm{J\_ b}}}_e}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{E\_ plus}}}_m}\right)  \left( N-1\right) }{{{\ensuremath{\mathrm{N\_ plus}}}_m}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+For the reactive modes (forward and backware with subscript n = \ensuremath{\pm}m and n\_bar = minus/plus m):
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i53)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5248:[\\
+\ \ \ \ A\_minus\_m(-z\_0)\ =\ A\_minus\_m\ (z\_0)\ -\ (1/N\_minus\_m)\ *\ 'integrate(J\_b\_e\ .\ conjugate(E\_minus\_m)\ +\ (J\_b\_m\ .\ conjugate(H\_minus\_m)),V\_b,1,N)\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\ (1/M\_minus\_m)\ *\ 'integrate(\ (J\_s\_e\ .\ conjugate(E\_minus\_m))\ +\ (J\_s\_m\ .\ conjugate(H\_minus\_m))\ ,\ S\_b\_i,\ 1,N\ )\\
+\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o53} 
+\left[ {{\ensuremath{\mathrm{A\_ minus}}}_m}\left( -{z_0}\right) ={{\ensuremath{\mathrm{A\_ minus}}}_m}\left( {z_0}\right) -\frac{\left( {{\ensuremath{\mathrm{J\_ b}}}_m}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{H\_ minus}}}_m}+{{\ensuremath{\mathrm{J\_ b}}}_e}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{E\_ minus}}}_m}\right)  \left( N-1\right) }{{{\ensuremath{\mathrm{N\_ minus}}}_m}}-\frac{\left( {{\ensuremath{\mathrm{J\_ s}}}_m}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{H\_ minus}}}_m}+{{\ensuremath{\mathrm{J\_ s}}}_e}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{E\_ minus}}}_m}\right)  \left( N-1\right) }{{{\ensuremath{\mathrm{M\_ minus}}}_m}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i54)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5249:[\\
+\ \ \ \ A\_plus\_m(z\_0)\ =\ A\_plus\_m\ (-z\_0)\ -\ (1/N\_minus\_m)\ *\ 'integrate(J\_b\_e\ .\ conjugate(E\_minus\_m)\ +\ (J\_b\_m\ .\ conjugate(H\_minus\_m)),V\_b,1,N)\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\ (1/M\_minus\_m)\ *\ 'integrate(\ (J\_s\_e\ .\ conjugate(E\_minus\_m))\ +\ (J\_s\_m\ .\ conjugate(H\_minus\_m))\ ,\ S\_b\_i,\ 1,N\ )\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o54} 
+\left[ {{\ensuremath{\mathrm{A\_ plus}}}_m}\left( {z_0}\right) ={{\ensuremath{\mathrm{A\_ plus}}}_m}\left( -{z_0}\right) -\frac{\left( {{\ensuremath{\mathrm{J\_ b}}}_m}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{H\_ minus}}}_m}+{{\ensuremath{\mathrm{J\_ b}}}_e}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{E\_ minus}}}_m}\right)  \left( N-1\right) }{{{\ensuremath{\mathrm{N\_ minus}}}_m}}-\frac{\left( {{\ensuremath{\mathrm{J\_ s}}}_m}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{H\_ minus}}}_m}+{{\ensuremath{\mathrm{J\_ s}}}_e}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{E\_ minus}}}_m}\right)  \left( N-1\right) }{{{\ensuremath{\mathrm{M\_ minus}}}_m}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i55)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5250:[\\
+\ \ \ \ A\_minus\_m(-z\_0)\ =\ A\_minus\_m\ (z\_0)\ -\ (1/N\_plus\_m)\ *\ 'integrate(J\_b\_e\ .\ conjugate(E\_plus\_m)\ +\ (J\_b\_m\ .\ conjugate(H\_plus\_m)),V\_b,1,N)\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\ (1/M\_plus\_m)\ *\ 'integrate(\ (J\_s\_e\ .\ conjugate(E\_plus\_m))\ +\ (J\_s\_m\ .\ conjugate(H\_plus\_m))\ ,\ S\_b\_i,\ 1,N\ )\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o55} 
+\left[ {{\ensuremath{\mathrm{A\_ minus}}}_m}\left( -{z_0}\right) ={{\ensuremath{\mathrm{A\_ minus}}}_m}\left( {z_0}\right) -\frac{\left( {{\ensuremath{\mathrm{J\_ b}}}_m}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{H\_ plus}}}_m}+{{\ensuremath{\mathrm{J\_ b}}}_e}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{E\_ plus}}}_m}\right)  \left( N-1\right) }{{{\ensuremath{\mathrm{N\_ plus}}}_m}}-\frac{\left( {{\ensuremath{\mathrm{J\_ s}}}_m}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{H\_ plus}}}_m}+{{\ensuremath{\mathrm{J\_ s}}}_e}\ensuremath{\mathrm{ . }}{{\ensuremath{\mathrm{E\_ plus}}}_m}\right)  \left( N-1\right) }{{{\ensuremath{\mathrm{M\_ plus}}}_m}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+cmt\_ch05\_5251:[ \ensuremath{\int}\_Vs (...)\ensuremath{\sim }\ensuremath{\partial}V = \ensuremath{\int}\_{-z0,z0}\ensuremath{\sim }\ensuremath{\partial}z *\ensuremath{\sim }\ensuremath{\int}\_Sb (..)\ensuremath{\partial}S]cmt\_ch05\_5251:[ \ensuremath{\int}\_S\_bi (...)\ensuremath{\sim }\ensuremath{\partial}S = \ensuremath{\int}\_{-z0,z0}\ensuremath{\sim }\ensuremath{\partial}z *\ensuremath{\sim }\ensuremath{\int}\_Lb (..)\ensuremath{\partial}l]
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i56)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5253:[\\
+\ \ \ \ f\_plus\_m(y,z,t)\ensuremath{\sim\ }=\ A\_plus\_m(z\_0)\ensuremath{\sim\ }*\ensuremath{\sim\ }f\_hat(y)\ensuremath{\sim\ }\ *\ensuremath{\sim\ }exp(-\%i*\ensuremath{\omega}*t\ \ -\ (\ensuremath{\gamma}\_\_plus\_m*(z-z\_0)))\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o56} 
+\left[ {{\ensuremath{\mathrm{f\_ plus}}}_m}\left( y\operatorname{,}z\operatorname{,}t\right) ={f_{\ensuremath{\mathrm{hat}}}}(y) {{\ensuremath{\mathrm{A\_ plus}}}_m}\left( {z_0}\right)  {{\% e}^{-\% i t \omega -\left( z-{z_0}\right)  {{\ensuremath{\mathrm{\gamma \_ \_ plus}}}_m}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i58)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+E\_hat\_n(y)\ensuremath{\sim\ }:=\ [E\_hn\_x,\ E\_hn\_y,\ E\_hn\_z];\\
+A\_n(z)\ :=\ \ [A\_n\_x,\ A\_n\_y,\ A\_n\_z];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o57} 
+\operatorname{E\_ hat\_ n}(y)\operatorname{:=}\left[ {{\ensuremath{\mathrm{E\_ hn}}}_x}\operatorname{,}{{\ensuremath{\mathrm{E\_ hn}}}_y}\operatorname{,}{{\ensuremath{\mathrm{E\_ hn}}}_z}\right] \mbox{}\]
+
+\[\tag{\% o58} 
+\operatorname{A\_ n}(z)\operatorname{:=}\left[ {{\ensuremath{\mathrm{A\_ n}}}_x}\operatorname{,}{{\ensuremath{\mathrm{A\_ n}}}_y}\operatorname{,}{{\ensuremath{\mathrm{A\_ n}}}_z}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i59)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5254:[\\
+\ \ \ \ E(y,z)\ensuremath{\sim\ }=\ E\_a(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }E\_b(y,z),\ \\
+\ \ \ \ E(y,z)\ensuremath{\sim\ }=\ 'sum(A\_n(z)*E\_hat\_n(y)*exp(-\ensuremath{\gamma}\_n\ *\ensuremath{\sim\ }z)-(e\_z/(\%i*\ensuremath{\omega}*\ensuremath{\epsilon}))*J\_bz\_e(y,z)\ ,n,1,N\ )\ \\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o59} 
+\operatorname{[}\operatorname{E}\left( y\operatorname{,}z\right) ={E_b}\left( y\operatorname{,}z\right) +{E_a}\left( y\operatorname{,}z\right) \operatorname{,}\operatorname{E}\left( y\operatorname{,}z\right) =
+\left[ N\, \left( \frac{\% i {e_z} {{\ensuremath{\mathrm{J\_ bz}}}_e}\left( y\operatorname{,}z\right) }{\epsilon  \omega }+{{\ensuremath{\mathrm{A\_ n}}}_x} {{\ensuremath{\mathrm{E\_ hn}}}_x} {{\% e}^{-z {{\gamma }_n}}}\right) \operatorname{,}N\, \left( \frac{\% i {e_z} {{\ensuremath{\mathrm{J\_ bz}}}_e}\left( y\operatorname{,}z\right) }{\epsilon  \omega }+{{\ensuremath{\mathrm{A\_ n}}}_y} {{\ensuremath{\mathrm{E\_ hn}}}_y} {{\% e}^{-z {{\gamma }_n}}}\right) \operatorname{,}N\, \left( \frac{\% i {e_z} {{\ensuremath{\mathrm{J\_ bz}}}_e}\left( y\operatorname{,}z\right) }{\epsilon  \omega }+{{\ensuremath{\mathrm{A\_ n}}}_z} {{\ensuremath{\mathrm{E\_ hn}}}_z} {{\% e}^{-z {{\gamma }_n}}}\right) \right] \operatorname{]}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i60)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5255:[\\
+\ \ \ \ H(y,z)\ensuremath{\sim\ }=\ H\_a(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }H\_b(y,z),\\
+\ \ \ \ H(y,z)\ensuremath{\sim\ }=\ 'sum(A\_n(z)\ *\ensuremath{\sim\ }H\_hat\_n(y)\ *\ensuremath{\sim\ }exp(-\ensuremath{\gamma}\_n*z)\ -\ (e\_z/(\%i*\ensuremath{\omega}*\ensuremath{\mu}))\ensuremath{\sim\ }*\ensuremath{\sim\ }J\_bz\_m(y,z),n,1,N)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o60} 
+\operatorname{[}\operatorname{H}\left( y\operatorname{,}z\right) ={H_b}\left( y\operatorname{,}z\right) +{H_a}\left( y\operatorname{,}z\right) \operatorname{,}\operatorname{H}\left( y\operatorname{,}z\right) =\operatorname{[}N\, \left( \frac{\% i {e_z} {{\ensuremath{\mathrm{J\_ bz}}}_m}\left( y\operatorname{,}z\right) }{\mu  \omega }+{{\ensuremath{\mathrm{A\_ n}}}_x} {{\ensuremath{\mathrm{H\_ hat}}}_n}(y) {{\% e}^{-z {{\gamma }_n}}}\right) \operatorname{,}N\, \left( \frac{\% i {e_z} {{\ensuremath{\mathrm{J\_ bz}}}_m}\left( y\operatorname{,}z\right) }{\mu  \omega }+{{\ensuremath{\mathrm{A\_ n}}}_y} {{\ensuremath{\mathrm{H\_ hat}}}_n}(y) {{\% e}^{-z {{\gamma }_n}}}\right) \operatorname{,}N\left( \frac{\% i {e_z} {{\ensuremath{\mathrm{J\_ bz}}}_m}\left( y\operatorname{,}z\right) }{\mu  \omega }+{{\ensuremath{\mathrm{A\_ n}}}_z} {{\ensuremath{\mathrm{H\_ hat}}}_n}(y) {{\% e}^{-z {{\gamma }_n}}}\right) \operatorname{]}\operatorname{]}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i61)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5256:[\\
+\\
+E\_b\ =\ (1/(\%i*\ensuremath{\omega}*\ensuremath{\epsilon}))\ensuremath{\sim\ }*\ensuremath{\sim\ }J\_bz\_e\ ,\ H\_b\ =\ (1/(\%i*\ensuremath{\omega}*\ensuremath{\mu}))*\ensuremath{\sim\ }J\_bz\_m];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o61} 
+\left[ {E_b}=-\frac{\% i {{\ensuremath{\mathrm{J\_ bz}}}_e}}{\epsilon  \omega }\operatorname{,}{H_b}=-\frac{\% i {{\ensuremath{\mathrm{J\_ bz}}}_m}}{\mu  \omega }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i62)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_531:[\\
+\ \ \ \ limit('integrate(abs(f\_guid(x,y,z))\^\ 2,S,1,N)\ ,\ N,\ inf)\ensuremath{\sim\ }\ensuremath{<}=\ C,\\
+\ \ \ \ \ \ \ C\ \ensuremath{<}\ensuremath{\sim\ }inf\\
+];\\
+
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o62} 
+\left[ \ensuremath{\mathrm{infinity}}\operatorname{<  =}C\operatorname{,}C\operatorname{<  }\infty \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+|f\_guid(x,y,z)\ensuremath{\sim }\ensuremath{\longrightarrow} 0 as |y|\ensuremath{\sim }\ensuremath{\longrightarrow} \ensuremath{\infty}TODO:\ensuremath{\sim }express this in actual maxima codeTODO: check limits of integration where the book uses S, or C, or V instead of dxdy, etc
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i63)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_532:[\\
+\ \ \ \ limit(abs(f\_guid(x,y,z)),\ N,\ 0)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o63} 
+\left[ \left| {f_{\ensuremath{\mathrm{guid}}}}\left( x\operatorname{,}y\operatorname{,}z\right) \right| \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i64)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_533:[\\
+\ \ \ \ f\_rad(y,z)\ensuremath{\sim\ }=\ (1/(2*\%pi))\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(f\_bar\_y(k\_y,z)*exp(-\%i*k\_y*y)\ ,k\_y,\ 1,N\ )\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o64} 
+\left[ {f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\frac{\int_{1}^{N}{\left. {{\ensuremath{\mathrm{f\_ bar}}}_y}\left( {k_y}\operatorname{,}z\right)  {{\% e}^{-\% i {k_y} y}}d{k_y}\right.}}{2 \ensuremath{\pi} }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i65)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_534:[\\
+\ \ \ \ f\_y(y,z,k\_y)\ensuremath{\sim\ }=\ (1/(2*\%pi)\ensuremath{\sim\ })\ensuremath{\sim\ }*\ensuremath{\sim\ }f\_bar\_y(k\_y,z)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k\_y*y)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o65} 
+\left[ {f_y}\left( y\operatorname{,}z\operatorname{,}{k_y}\right) =\frac{{{\ensuremath{\mathrm{f\_ bar}}}_y}\left( {k_y}\operatorname{,}z\right)  {{\% e}^{-\% i {k_y} y}}}{2 \ensuremath{\pi} }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The limit of |y|\ensuremath{\sim }as y \ensuremath{\longrightarrow} \ensuremath{\infty} is \ensuremath{\infty} but maxima syntax won't allow an explicit notation for this
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i66)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_535:[\\
+\ \ \ \ if\ 'limit(abs(y),\ y,\ 0)\ensuremath{\sim\ }then\ (abs(f\_y(y,z,k\_y)\ensuremath{\sim\ })\ \ensuremath{<}=\ C,\ C\ensuremath{<}\ensuremath{\sim\ }inf,\ abs(y))\ensuremath{\sim\ }\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o66} 
+\left[ \operatorname{if}\operatorname{ }\lim_{\to y\operatorname{\backslash -\backslash >  }0}{\left| y\right| }\operatorname{ }\operatorname{then}\operatorname{ }\left( \left| {f_y}\left( y\operatorname{,}z\operatorname{,}{k_y}\right) \right| \operatorname{<  =}C\operatorname{,}C\operatorname{<  }\infty \operatorname{,}\left| y\right| \right) \operatorname{ }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i67)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_536:[\\
+\ \ \ if\ 'limit('abs(y),\ y,\ 0)\ then\ 'limit(abs(f\_rad(y,z)),\ y,0)\ =\ 0\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o67} 
+\left[ \operatorname{if}\operatorname{ }\lim_{\to y\operatorname{\backslash -\backslash >  }0}{\left| y\right| }\operatorname{ }\operatorname{then}\operatorname{ }\lim_{\to y\operatorname{\backslash -\backslash >  }0}{\left| {f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) \right| }=0\operatorname{ }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i68)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_537:[\\
+\ \ \ \ abs(f(y,z))\ensuremath{\sim\ }=\ abs(f\_guid(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }f\_rad(y,z)),\\
+\ \ \ \ if\ 'limit(abs(y),y,inf)\ \ then\ \ensuremath{\sim\ }'limit(abs(f(y,z))\ =\ abs(f\_guid(y,z)\ +\ f\_rad(y,z)),y,inf)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o68} 
+\left[ \left| \operatorname{f}\left( y\operatorname{,}z\right) \right| =\left| {f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) +{f_{\ensuremath{\mathrm{guid}}}}\left( y\operatorname{,}z\right) \right| \operatorname{,}\operatorname{if}\operatorname{ }\lim_{\to y\operatorname{\backslash -\backslash >  }\infty }{\left| y\right| }\operatorname{ }\operatorname{then}\operatorname{ }\lim_{\to y\operatorname{\backslash -\backslash >  }\infty }{\left| \operatorname{f}\left( y\operatorname{,}z\right) \right| =\left| {f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) +{f_{\ensuremath{\mathrm{guid}}}}\left( y\operatorname{,}z\right) \right| }\operatorname{ }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+5.3.2   Spectral Representation of Fields In Open Waveguiding Structures
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i69)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_538:[\\
+\ \ \ \ f(x,y)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o69} 
+\left[ \operatorname{f}\left( x\operatorname{,}y\right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i70)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_539:[\\
+\ \ \ \ f\_z(y,z,k\_z)\ensuremath{\sim\ }=\ (1/(2*\%pi))\ensuremath{\sim\ }\ *\ensuremath{\sim\ }f\_bar\_z(y,k\_z)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k\_z\ *\ensuremath{\sim\ }z)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o70} 
+\left[ {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) =\frac{{{\ensuremath{\mathrm{f\_ bar}}}_z}\left( y\operatorname{,}{k_z}\right)  {{\% e}^{-\% i {k_z} z}}}{2 \ensuremath{\pi} }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i71)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5310:[\\
+\\
+\ \ \ \ f(y,z)\ensuremath{\sim\ }=\ (1/(2*\%pi))\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(\ ((s(\_k\_z)\ *\ensuremath{\sim\ }exp(-\%i*k\_z*z\_0))/D(\ensuremath{\omega},k\_z))\ *\ensuremath{\sim\ }exp(-\%i*k\_y*y)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k\_z*(z-z\_0)),\ C\_v,\ 1,N)\\
+\ \ \ \ \\
+\ \ \ \ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o71} 
+\left[ \operatorname{f}\left( y\operatorname{,}z\right) =\frac{\left( N-1\right)  \operatorname{s}\left( {{\_ k}_z}\right)  {{\% e}^{-\% i {k_z} {z_0}-\% i {k_z} \left( z-{z_0}\right) -\% i {k_y} y}}}{2 \ensuremath{\pi}  \operatorname{D}\left( \omega \operatorname{,}{k_z}\right) }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i72)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5311:[\\
+f\_bar\_z(y,k\_z)\ =\ (s(\ensuremath{\omega},k\_z)\ /\ D(\ensuremath{\omega},k\_z))\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k\_y*y)\ensuremath{\sim\ }];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o72} 
+\left[ {{\ensuremath{\mathrm{f\_ bar}}}_z}\left( y\operatorname{,}{k_z}\right) =\frac{{{\% e}^{-\% i {k_y} y}} \operatorname{s}\left( \omega \operatorname{,}{k_z}\right) }{\operatorname{D}\left( \omega \operatorname{,}{k_z}\right) }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i73)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5312:[\ \\
+\ \ \ \ \ \ \ \ \ \ \ \ f\_z(y,z,k\_z)\ =\ (1/(2*\%pi))\ensuremath{\sim\ }*\ (s(\ensuremath{\omega},k\_z)\ /\ D(\ensuremath{\omega},k\_z))\ *\ exp(-\%i*k\_y*y\ +\ensuremath{\sim\ }k\_z*z)\ \\
+\ \ \ \ \ensuremath{\sim\ }];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o73} 
+\left[ {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) =\frac{{{\% e}^{{k_z} z-\% i {k_y} y}} \operatorname{s}\left( \omega \operatorname{,}{k_z}\right) }{2 \ensuremath{\pi}  \operatorname{D}\left( \omega \operatorname{,}{k_z}\right) }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+D(\ensuremath{\omega},k\_z) is a dispersion function of the source-free (homogenous)\ensuremath{\sim }boundary value problemIt's zeros are roots of the dispersion equation
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i74)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5313:[\\
+\ \ \ \ D(\ensuremath{\omega},k\_z)\ensuremath{\sim\ }=\ 0\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o74} 
+\left[ \operatorname{D}\left( \omega \operatorname{,}{k_z}\right) =0\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i75)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5314:[\\
+\ \ \ \ k\_y(k\_z)\ensuremath{\sim\ }:=\ sqrt(k\^\ 2\ -\ k\_z\^\ 2),\\
+\ \ \ \ k\_y(k\_z)\ensuremath{\sim\ }:=\ sqrt(\ensuremath{\omega}\^\ 2\ *\ensuremath{\epsilon}*\ensuremath{\mu}\ -\ k\_z\^\ 2)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o75} 
+\left[ \operatorname{k\_ y}\left( {k_z}\right) \operatorname{:=}\sqrt{{{k}^{2}}-{{{k_z}}^{2}}}\operatorname{,}\operatorname{k\_ y}\left( {k_z}\right) \operatorname{:=}\sqrt{{{\omega }^{2}} \epsilon  \mu -{{{k_z}}^{2}}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i76)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5315:(\\
+\ \ \ \ declare(k\_y,\ complex),\\
+\ \ \ \ k\_y:5\ +\ensuremath{\sim\ }\%i*7,\\
+\ \ \ \ carg(k\_y),\\
+imagpart(k\_y)\ensuremath{\sim\ }\ensuremath{<}\ensuremath{\sim\ }0);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o76} 
+7\operatorname{<  }0\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+Fill in math for Fourier contour over a Rieman surface as given on page 292 of"Modern Electrodynamics and Coupled Mode Theory" by Barybin and Dmitriev
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i77)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5316:[\\
+\ \ \ \ k\ =\ k\_d1\ -\ \%i\ *\ensuremath{\sim\ }k\_d2,\\
+\ \ \ \ C\_1\ =C\_d1\_1\ +\ensuremath{\sim\ }C\_d2\_1,\\
+\ \ \ \ C\_2\ =\ C\_d1\_2\ +\ensuremath{\sim\ }C\_d2\_2,\\
+\ \ \ \ C\_\ensuremath{\Sigma}\ =\ C\_d1\_J\ \ensuremath{\sim\ }-\ C\_d2\_1\ -\ C\_d1\_1\ -\ C\_\ensuremath{\epsilon}\ \ -\ C\_d\_2\ -\ C\_d2\_2\ -\ C\_d2\_J,\\
+\ \ \ \ 'integrate(\ C\_F,k\_z,1,N)\ +\ensuremath{\sim\ }'integrate(C\_K,\ k\_z,1,N)\ +\ensuremath{\sim\ }'integrate(C\_\ensuremath{\epsilon},\ k\_z,0,2*\%pi)\\
+\ \ \ \ \ \ \ \ +\ensuremath{\sim\ }'integrate(\ C\_1,k\_z,1,N)\ +\ensuremath{\sim\ }'integrate(\ C\_2,k\_z,1,N)\ \\
+\ \ \ \ \ \ \ \ +\ensuremath{\sim\ }sum('integrate(C\_k,z\_k,0,2*\%pi),n,1,N)\\
+\ \ \ \ \ \ \ \ =\ 0\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o77} 
+\operatorname{[}k={k_{\ensuremath{\mathrm{d1}}}}-\% i {k_{\ensuremath{\mathrm{d2}}}}\operatorname{,}{C_1}={{\ensuremath{\mathrm{C\_ d2}}}_1}+{{\ensuremath{\mathrm{C\_ d1}}}_1}\operatorname{,}{C_2}={{\ensuremath{\mathrm{C\_ d2}}}_2}+{{\ensuremath{\mathrm{C\_ d1}}}_2}\operatorname{,}{C_{\Sigma }}=-{C_{\epsilon }}-{{\ensuremath{\mathrm{C\_ d}}}_2}-{{\ensuremath{\mathrm{C\_ d2}}}_J}-{{\ensuremath{\mathrm{C\_ d2}}}_2}-{{\ensuremath{\mathrm{C\_ d2}}}_1}+{{\ensuremath{\mathrm{C\_ d1}}}_J}-{{\ensuremath{\mathrm{C\_ d1}}}_1}\operatorname{,}2 \ensuremath{\pi}  {C_k} N+{C_K} \left( N-1\right) +{C_F} \left( N-1\right) +{C_2} \left( N-1\right) +{C_1}\left( N-1\right) +2 \ensuremath{\pi}  {C_{\epsilon }}=0\operatorname{]}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i78)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5317:[\\
+limit('integrate(f\_z(y,z,k\_z)\ensuremath{\sim\ }\ ,k\_z,\ 1,N)\ensuremath{\sim\ },C\_J,0)\ =\ 0\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o78} 
+\left[ \int_{1}^{N}{\left. {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) d{k_z}\right.}=0\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i79)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5318:[\\
+\ \ \ \ \ \ \ \ limit('integrate(f\_z(y,z,k\_z)\ \ ,k\_z,\ 1,N)\ ,C\_\ensuremath{\epsilon},0)\ \ \ \ \\
+\ \ \ \ ]\\
+;
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o79} 
+\left[ \int_{1}^{N}{\left. {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) d{k_z}\right.}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i80)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5319:[\\
+\ \ \ \ f(y,z)\ensuremath{\sim\ }=\ (1/(2*\%pi))\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(\ (s\_minus(\ensuremath{\omega},k\_z)/D(\ensuremath{\omega},k\_z))\ *\ensuremath{\sim\ }exp(-\%i*k\_y)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*(z-z\_0)),\ k\_z,\ 1,N),\\
+\ \ \ \ f(y,z)\ =\ \ \ \ 2*\%pi\ *\ensuremath{\sim\ }\%i*\ 'sum(Res(f\_z(y,z,k\_z\_a))\ ,\ k\_z\_a,1,N)\ \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2*\%pi*\%i*'sum(Res(f\_z(y,z,k\_z\_r)),\ k\_z\_r,1,N)\ \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 'integrate(f\_z(y,z,k\_z),\ k\_z,1,N)\ -\ 'integrate(f\_z(y,z,k\_z),\ k\_z,1,N)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o80} 
+\operatorname{[}\operatorname{f}\left( y\operatorname{,}z\right) =\frac{{{\% e}^{-\% i \left( z-{z_0}\right) -\% i \left( 7 \% i+5\right) }} \int_{1}^{N}{\left. \frac{{s_{\ensuremath{\mathrm{minus}}}}\left( \omega \operatorname{,}{k_z}\right) }{\operatorname{D}\left( \omega \operatorname{,}{k_z}\right) }d{k_z}\right.}}{2 \ensuremath{\pi} }\operatorname{,}\operatorname{f}\left( y\operatorname{,}z\right) =-2 \% i \ensuremath{\pi}  \left( \sum_{{{\ensuremath{\mathrm{k\_ z}}}_r}=1}^{N}{\left. \operatorname{Res}\left( {f_z}\left( y\operatorname{,}z\operatorname{,}{{\ensuremath{\mathrm{k\_ z}}}_r}\right) \right) \right.}\right) +2 \% i \ensuremath{\pi}  \left( \sum_{{{\ensuremath{\mathrm{k\_ z}}}_a}=1}^{N}{\left. \operatorname{Res}\left( {f_z}\left( y\operatorname{,}z\operatorname{,}{{\ensuremath{\mathrm{k\_ z}}}_a}\right) \right) \right.}\right) -2 \int_{1}^{N}{\left. {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) d{k_z}\right.}\operatorname{]}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i81)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\ \ \ \ kill(k\_y);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o81} 
+\ensuremath{\mathrm{done}}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i82)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5320:[\\
+\ \ \ \ -'integrate(f\_z(y,z,k\_z),k\_z,1,C\_1\ )\ =\ -'integrate(f\_z(y,z,k\_z)*(k\_y/k\_z),\ k\_z,\ minf,0),\\
+\ \ \ \ -'integrate(f\_z(y,z,k\_z),k\_z,1,C\_1\ )\ =\ \ 'integrate(f\_y(\ y,z,k\_y)\ensuremath{\sim\ },\ k\_y,\ minf,0)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o82} 
+\left[ -\int_{1}^{{C_1}}{\left. {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) d{k_z}\right.}=-{k_y} \int_{\operatorname{-}\infty }^{0}{\left. \frac{{f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) }{{k_z}}d{k_z}\right.}\operatorname{,}-\int_{1}^{{C_1}}{\left. {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) d{k_z}\right.}=\int_{\operatorname{-}\infty }^{0}{\left. {f_y}\left( y\operatorname{,}z\operatorname{,}{k_y}\right) d{k_y}\right.}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i83)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5321:[\\
+\ \ \ \ -integrate(f\_z(y,z,k\_z),C\_2,1,N)\ \ =\ 'integrate(f\_z(y,z,k\_z)\ *\ensuremath{\sim\ }(k\_y/k\_z)\ensuremath{\sim\ },\ k\_y,0,minf),\\
+\ \ \ \ -integrate(f\_z(y,z,k\_z),C\_2,1,N)\ \ =\ 'integrate(f\_y(y,z,k\_y),d\_k,0,inf)\\
+\ \ \ \ \\
+\ \ \ \ ];
+\end{minipage}
+%%%% OUTPUT:
+\mbox{}\\"Is "
+\[\displaystyle {f_y}\left( y\operatorname{,}z\operatorname{,}{k_y}\right) \mbox{}
+\]" positive, negative or zero?"
+\[\displaystyle positive;\mbox{}\]
+
+\[\tag{\% o83} 
+\left[ -\left( N-1\right)  {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) =-\frac{\int_{\operatorname{-}\infty }^{0}{\left. {k_y}d{k_y}\right.} {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) }{{k_z}}\operatorname{,}-\left( N-1\right)  {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) =\infty \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i84)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5322:[\\
+\ \ \ \ f\_y(y,z,k\_y)\ensuremath{\sim\ }=\ f\_z(y,z,k\_z)\ensuremath{\sim\ }*\ensuremath{\sim\ }(k\_y/k\_z)\\
+\ \ \ \ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o84} 
+\left[ {f_y}\left( y\operatorname{,}z\operatorname{,}{k_y}\right) =\frac{{k_y} {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) }{{k_z}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i85)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5323:[\\
+\ \ \ \ f(y,z)\ensuremath{\sim\ }=\ fguide\_a(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }f\_guide\_r(y,z)\ensuremath{\sim\ }\ensuremath{\sim\ }+\ f\_rad(y,z)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o85} 
+\left[ \operatorname{f}\left( y\operatorname{,}z\right) ={{\ensuremath{\mathrm{fguide}}}_a}\left( y\operatorname{,}z\right) +{f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) +{{\ensuremath{\mathrm{f\_ guide}}}_r}\left( y\operatorname{,}z\right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i86)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5324:[\\
+\ \ \ \ f\_guide\_a(y,z)\ensuremath{\sim\ }=\ -2\ *\ensuremath{\sim\ }\%pi*\%i\ *\ensuremath{\sim\ }'sum(Res(f\_z(y,z,k\_z\_a)),k\_z\_a,\ 1,N)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o86} 
+\left[ {{\ensuremath{\mathrm{f\_ guide}}}_a}\left( y\operatorname{,}z\right) =-2 \% i \ensuremath{\pi}  \sum_{{{\ensuremath{\mathrm{k\_ z}}}_a}=1}^{N}{\left. \operatorname{Res}\left( {f_z}\left( y\operatorname{,}z\operatorname{,}{{\ensuremath{\mathrm{k\_ z}}}_a}\right) \right) \right.}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i87)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5324:[\\
+\ \ \ \ f\_guide\_a(y,z)\ensuremath{\sim\ }=\ -2*\%pi*\%i\ensuremath{\sim\ }*\ensuremath{\sim\ }'sum(Res(F\_z(y,z,k\_z\_a)),k\_z\_r,1,N\ )\\
+]\\
+;
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o87} 
+\left[ {{\ensuremath{\mathrm{f\_ guide}}}_a}\left( y\operatorname{,}z\right) =-2 \% i \ensuremath{\pi}  N \operatorname{Res}\left( {F_z}\left( y\operatorname{,}z\operatorname{,}{{\ensuremath{\mathrm{k\_ z}}}_a}\right) \right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i88)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5325:[\\
+\ \ \ \ f\_guide\_r(y,z)\ensuremath{\sim\ }=\ -2\ *\ensuremath{\sim\ }\%pi*\%i\ *'sum(Res(f\_z(y,z,k\_z\_r)),k\_z\_r,1,N\ )\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o88} 
+\left[ {{\ensuremath{\mathrm{f\_ guide}}}_r}\left( y\operatorname{,}z\right) =-2 \% i \ensuremath{\pi}  \sum_{{{\ensuremath{\mathrm{k\_ z}}}_r}=1}^{N}{\left. \operatorname{Res}\left( {f_z}\left( y\operatorname{,}z\operatorname{,}{{\ensuremath{\mathrm{k\_ z}}}_r}\right) \right) \right.}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i89)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5326:[\\
+\ \ \ \ f\_rad(y,z)\ensuremath{\sim\ }=\ 'integrate(f\_y(y,z,k\_y)\ensuremath{\sim\ },\ k\_y,\ minf,inf),\\
+\ \ \ \ f\_rad(y,z)\ =\ (1/(2*\%pi))\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(f\_hat\_y(k\_y,z)\ *exp(-\%i*k\_y\ *\ensuremath{\sim\ }y),\ k\_y,\ minf,inf)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o89} 
+\left[ {f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\int_{\operatorname{-}\infty }^{\infty }{\left. {f_y}\left( y\operatorname{,}z\operatorname{,}{k_y}\right) d{k_y}\right.}\operatorname{,}{f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\frac{\int_{\operatorname{-}\infty }^{\infty }{\left. {{\ensuremath{\mathrm{f\_ hat}}}_y}\left( {k_y}\operatorname{,}z\right)  {{\% e}^{-\% i {k_y} y}}d{k_y}\right.}}{2 \ensuremath{\pi} }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i90)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5327:[\\
+\ \ \ \ f\_hat\_y(k\_y,z)\ensuremath{\sim\ }\ *\ensuremath{\sim\ }exp(-\%i*k\_y*y)\ensuremath{\sim\ }=\ f\_hat\_z(y,k\_z)\ensuremath{\sim\ }*\ensuremath{\sim\ }(k\_y/k\_z)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k\_z\ *\ensuremath{\sim\ }z)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o90} 
+\left[ {{\ensuremath{\mathrm{f\_ hat}}}_y}\left( {k_y}\operatorname{,}z\right)  {{\% e}^{-\% i {k_y} y}}=\frac{{k_y} {{\ensuremath{\mathrm{f\_ hat}}}_z}\left( y\operatorname{,}{k_z}\right)  {{\% e}^{-\% i {k_z} z}}}{{k_z}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+5.3.3   Radiation field of open waveguiding structures
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i91)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5328:[\\
+\\
+\ \ \ \ f\_rad(y,z)\ensuremath{\sim\ }=\ (1/(2*pi))\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(\ f\_hat\_y(k\_y,z)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k\_*y)\ensuremath{\sim\ },k\_y\ ,\ minf,inf),\\
+\ \ \ \ f\_rad(y,z)\ =\ (1/(2*pi))\ *\ 'integrate(F\_k\_z*\ensuremath{\sim\ }(k\_y/k\_z)\ *\ensuremath{\sim\ }exp(-\%i*(k\_y*y\ +\ensuremath{\sim\ }k\_z*z)),\ k\_y,minf,inf)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o91} 
+\left[ {f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\frac{\int_{\operatorname{-}\infty }^{\infty }{\left. {{\ensuremath{\mathrm{f\_ hat}}}_y}\left( {k_y}\operatorname{,}z\right) d{k_y}\right.} {{\% e}^{-\% i {k_} y}}}{2 pi}\operatorname{,}{f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\frac{{{\ensuremath{\mathrm{F\_ k}}}_z} \int_{\operatorname{-}\infty }^{\infty }{\left. {k_y} {{\% e}^{-\% i \left( {k_z} z+{k_y} y\right) }}d{k_y}\right.}}{2 {k_z} pi}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i92)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5329:[\\
+\ \ \ \ F(k\_z)\ =\ f\_hat\_z(y,k\_z)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(\%i*k\_y*y)\ensuremath{\sim\ },\\
+\ \ \ \ \ F(k\_z)\ =\ s(\ensuremath{\omega},k\_z)\ /\ D(m,k\_z)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o92} 
+\left[ \operatorname{F}\left( {k_z}\right) ={{\% e}^{\% i {k_y} y}} {{\ensuremath{\mathrm{f\_ hat}}}_z}\left( y\operatorname{,}{k_z}\right) \operatorname{,}\operatorname{F}\left( {k_z}\right) =\frac{\operatorname{s}\left( \omega \operatorname{,}{k_z}\right) }{\operatorname{D}\left( m\operatorname{,}{k_z}\right) }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i93)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5330:[\\
+\ \ \ \ k\_z\ =\ sqrt(k\^\ 2\ -\ k\_y\^\ 2)\ensuremath{\sim\ },\\
+\ \ \ \ k\_z\ =\ sqrt(\ensuremath{\omega}\^\ 2*\ensuremath{\epsilon}*\ensuremath{\mu}\ -\ k\_y\^\ 2)\ ,\\
+\ \ \ \ k\_z=\ \ensuremath{\beta}\\
+\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o93} 
+\left[ {k_z}=\sqrt{{{k}^{2}}-{{{k_y}}^{2}}}\operatorname{,}{k_z}=\sqrt{\epsilon  \mu  {{\omega }^{2}}-{{{k_y}}^{2}}}\operatorname{,}{k_z}=\beta \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i94)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5331:[\\
+\ \ \ \ k\_z\ =\ -\%i*\ sqrt(k\_y\^\ 2\ -\ k\^\ 2)\ ,\\
+\ \ \ \ k\_z\ =\ -\%i\ *\ensuremath{\sim\ }sqrt(k\_y\_2\ -\ \ensuremath{\omega}\^\ 2\ *\ensuremath{\sim\ }\ensuremath{\epsilon}*\ensuremath{\mu}),\\
+\ \ \ \ \ k\_z\ =\ -\%i*\ \ensuremath{\alpha}\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o94} 
+\left[ {k_z}=-\% i \sqrt{{{{k_y}}^{2}}-{{k}^{2}}}\operatorname{,}{k_z}=-\% i \sqrt{{{\ensuremath{\mathrm{k\_ y}}}_2}-\epsilon  \mu  {{\omega }^{2}}}\operatorname{,}{k_z}=-\% i \alpha \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i95)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5332:[\\
+f\_rad(y,z)\ensuremath{\sim\ }=\ f\_rad\_a(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }f\_rad\_R(y,z)\ensuremath{\sim\ },\\
+\ \ \ \ r\_rad(y,z)\ =\ f\_rad\_pr(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }f\_rad\_ev(y,z)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o95} 
+\left[ {f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) ={{\ensuremath{\mathrm{f\_ rad}}}_a}\left( y\operatorname{,}z\right) +{{\ensuremath{\mathrm{f\_ rad}}}_R}\left( y\operatorname{,}z\right) \operatorname{,}{r_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\operatorname{f\_ rad\_ pr}\left( y\operatorname{,}z\right) +\operatorname{f\_ rad\_ ev}\left( y\operatorname{,}z\right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i96)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5333:[\\
+\ \ \ \ f\_rad\_a(y,z)\ensuremath{\sim\ }=\ f\_rad\_pr(y,z)\ensuremath{\sim\ },\\
+\ \ \ \ f\_rad(y,z)\ensuremath{\sim\ }=\ (1/(2*\%pi))\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(f\_bar\_y(k\_y,z)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k\_y*y),\ k\_y,-k,k),\\
+\ \ \ \ f\_rad(y,z)\ =\ 'integrate(f\_y(y,z\ensuremath{\sim\ },k\_y)\ ,\ k\_y,-k,k)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o96} 
+\left[ {{\ensuremath{\mathrm{f\_ rad}}}_a}\left( y\operatorname{,}z\right) =\operatorname{f\_ rad\_ pr}\left( y\operatorname{,}z\right) \operatorname{,}{f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\frac{\int_{-k}^{k}{\left. {{\ensuremath{\mathrm{f\_ bar}}}_y}\left( {k_y}\operatorname{,}z\right)  {{\% e}^{-\% i {k_y} y}}d{k_y}\right.}}{2 \ensuremath{\pi} }\operatorname{,}{f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\int_{-k}^{k}{\left. {f_y}\left( y\operatorname{,}z\operatorname{,}{k_y}\right) d{k_y}\right.}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i97)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5334:[\\
+\ \ \ \ f\_rad\_r(y,z)\ensuremath{\sim\ }=\ f\_rad\_c\ensuremath{\nu}(y,z)\ensuremath{\sim\ },\\
+\ \ \ \ f\_rad\_r(y,z)\ =\ (1/(2*\%pi))\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(f\_bar\_y(k\_y,z)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k\_y*y)\ensuremath{\sim\ },\ k\_y,\ minf,-k)\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ensuremath{\sim\ }\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1/(2*\%pi))*\ensuremath{\sim\ }'integrate(f\_bar\_y(k\_y,z)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k\_y*y),\ k\_y,\ k,inf),\\
+\ \ \ \ f\_rad\_r(y,z)\ =\ 'integrate(f\_y(y,z,k\_y),k\_y,minf,-k)\ +\ensuremath{\sim\ }'integrate(f\_y(y,z,k\_y),k\_y,k,inf)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o97} 
+\operatorname{[}{{\ensuremath{\mathrm{f\_ rad}}}_r}\left( y\operatorname{,}z\right) =\operatorname{f\_ rad\_ c\nu }\left( y\operatorname{,}z\right) \operatorname{,}{{\ensuremath{\mathrm{f\_ rad}}}_r}\left( y\operatorname{,}z\right) =\frac{\int_{k}^{\infty }{\left. {{\ensuremath{\mathrm{f\_ bar}}}_y}\left( {k_y}\operatorname{,}z\right)  {{\% e}^{-\% i {k_y} y}}d{k_y}\right.}}{2 \ensuremath{\pi} }+\frac{\int_{\operatorname{-}\infty }^{-k}{\left. {{\ensuremath{\mathrm{f\_ bar}}}_y}\left( {k_y}\operatorname{,}z\right)  {{\% e}^{-\% i {k_y} y}}d{k_y}\right.}}{2 \ensuremath{\pi} }\operatorname{,}{{\ensuremath{\mathrm{f\_ rad}}}_r}\left( y\operatorname{,}z\right) =\int_{k}^{\infty }{\left. {f_y}\left( y\operatorname{,}z\operatorname{,}{k_y}\right) d{k_y}\right.}+\int_{\operatorname{-}\infty }^{-k}{\left. {f_y}\left( y\operatorname{,}z\operatorname{,}{k_y}\right) d{k_y}\right.}\operatorname{]}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i118)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5335:[\\
+\ \ \ \ f\_rad\_a(y,z)\ensuremath{\sim\ }=\ f\_rad\_pr(y,z),\\
+\ \ \ \ f\_rad\_a(y,z)\ =\ 'integrate(\ f\_y(y,z,k\_y)\ensuremath{\sim\ },k\_y,\ -k,0)\ \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 'integrate(f\_y(y,z,k\_y),k\_y,0,k),\\
+\ \ \ \ f\_rad\_a(y,z)\ =\ -1\ *\ensuremath{\sim\ }'integrate(\ f\_z(y,z,k\_z)\ensuremath{\sim\ },\ k\_z,\ 0,\ C\_1)\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 'integrate(f\_z(y,z,k\_z)\ensuremath{\sim\ },k\_z,\ 0,C\_2)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o118} 
+\operatorname{[}{{\ensuremath{\mathrm{f\_ rad}}}_a}\left( y\operatorname{,}z\right) =\operatorname{f\_ rad\_ pr}\left( y\operatorname{,}z\right) \operatorname{,}{{\ensuremath{\mathrm{f\_ rad}}}_a}\left( y\operatorname{,}z\right) =\int_{-k}^{0}{\left. {f_y}\left( y\operatorname{,}z\operatorname{,}\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \right) d\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \right.}+\int_{0}^{k}{\left. {f_y}\left( y\operatorname{,}z\operatorname{,}\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \right) d\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \right.}\operatorname{,}{{\ensuremath{\mathrm{f\_ rad}}}_a}\left( y\operatorname{,}z\right) =-\int_{0}^{{C_2}}{\left. {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) d{k_z}\right.}-
+\int_{0}^{{C_1}}{\left. {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) d{k_z}\right.}\operatorname{]}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i122)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5336:[\ \ \ \ \\
+\ \ \ \ f\_rad\_r(y,z)\ =\ f\_rad\_e\ensuremath{\nu}(y,z),\\
+\ \ \ \ f\_rad\_r(y,z)\ =\ 'integrate(\ f\_y(y,z,k\_y)\ ,k\_y,\ minf,-k)\ \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 'integrate(f\_y(y,z,k\_y),k\_y,k,inf),\\
+\ \ \ \ f\_rad\_a(y,z)\ =\ -1\ *\ 'integrate(\ f\_z(y,z,k\_z)\ ,\ k\_z,\ 0,\ C\_dbl\_primed\_1)\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 'integrate(f\_z(y,z,k\_z)\ ,k\_z,\ 0,C\_dbl\_primed\_2)\\
+\ \ \ \ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o122} 
+\operatorname{[}{{\ensuremath{\mathrm{f\_ rad}}}_r}\left( y\operatorname{,}z\right) =\operatorname{f\_ rad\_ e\nu }\left( y\operatorname{,}z\right) \operatorname{,}{{\ensuremath{\mathrm{f\_ rad}}}_r}\left( y\operatorname{,}z\right) =\int_{k}^{\infty }{\left. {f_y}\left( y\operatorname{,}z\operatorname{,}\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \right) d\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \right.}+\int_{\operatorname{-}\infty }^{-k}{\left. {f_y}\left( y\operatorname{,}z\operatorname{,}\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \right) d\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \right.}\operatorname{,}{{\ensuremath{\mathrm{f\_ rad}}}_a}\left( y\operatorname{,}z\right) =-\int_{0}^{{{\ensuremath{\mathrm{C\_ dbl\_ primed}}}_2}}{\left. {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) d{k_z}\right.}-
+\int_{0}^{{{\ensuremath{\mathrm{C\_ dbl\_ primed}}}_1}}{\left. {f_z}\left( y\operatorname{,}z\operatorname{,}{k_z}\right) d{k_z}\right.}\operatorname{]}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i125)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5337:[\\
+\ \ \ \ f\_rad(y,z)\ensuremath{\sim\ }=\ f\_rad\_pr(y,z),\\
+\ \ \ \ f\_rad(y,z)\ensuremath{\sim\ }=\ (1/(2*\%pi))\ *\ensuremath{\sim\ }'integrate(f\_bar\_y(k\_y,z)\ *\ensuremath{\sim\ }exp(-\%i*k\_y*y),\ k\_y,-k,k),\\
+\ \ \ \ f\_rad(y,z)\ =\ (1/(2*\%pi))\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(F(k\_z)\ensuremath{\sim\ }*\ensuremath{\sim\ }(k\_y/k\_z)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*(k\_y*y\ +\ensuremath{\sim\ }k\_z+z))\ensuremath{\sim\ },\ k\_y,\ -k,k)\\
+\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o125} 
+\operatorname{[}{f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\operatorname{f\_ rad\_ pr}\left( y\operatorname{,}z\right) \operatorname{,}{f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\frac{\int_{-k}^{k}{\left. {{\ensuremath{\mathrm{f\_ bar}}}_y}\left( \left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \operatorname{,}z\right)  \left[ 1\operatorname{,}{{\% e}^{-\% i \ensuremath{\mathrm{k\_ y}} y}}\operatorname{,}1\right] d\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \right.}}{2 \ensuremath{\pi} }\operatorname{,}{f_{\ensuremath{\mathrm{rad}}}}\left( y\operatorname{,}z\right) =\frac{\int_{-k}^{k}{\left. \left[ 0\operatorname{,}\frac{\ensuremath{\mathrm{k\_ y}} \operatorname{F}\left( {k_z}\right)  {{\% e}^{-\% i \left( z+\ensuremath{\mathrm{k\_ y}} y+{k_z}\right) }}}{{k_z}}\operatorname{,}0\right] d\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \right.}}{2 \ensuremath{\pi} }\operatorname{]}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i128)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5338:[\\
+\ \ \ \ y\ =\ r*\ensuremath{\sim\ }cos(\ensuremath{\theta})\ensuremath{\sim\ },\ z\ =\ r\ *\ensuremath{\sim\ }sin(\ensuremath{\theta})\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o128} 
+\left[ y=r \cos{\left( \theta \right) }\operatorname{,}z=r \sin{\left( \theta \right) }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i129)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5339:[\\
+\ \ \ \ k\_y\ =\ k\ *\ensuremath{\sim\ }cos(w)\ensuremath{\sim\ },\ k\_z\ =\ k\ensuremath{\sim\ }*\ensuremath{\sim\ }sin(w)\ \\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o129} 
+\left[ \left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] =k \cos{(w)}\operatorname{,}{k_z}=k \sin{(w)}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+NOTE:\ensuremath{\sim }O(n\^ N)\ensuremath{\sim }means there is a finite series after the (w-\ensuremath{\theta})\^ 2/2 term
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i132)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5340:[\\
+\ \ \ \ f\_rad\_pr(r,\ensuremath{\theta})\ensuremath{\sim\ }=\ (1/(2*\%pi))*'integrate(\ F(k*sin(w))\ensuremath{\sim\ }*\ensuremath{\sim\ }k*cos(w)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k*r*cos(w-\ensuremath{\theta}))\ ,w,\ 0,\ensuremath{\pi}\ \ )\ \ ,\\
+\ \ \ \ cos(w-\ensuremath{\theta})\ensuremath{\sim\ }=\ 1\ -\ (1/2)\ensuremath{\sim\ }*\ensuremath{\sim\ }\ensuremath{\sim\ }(w-\ensuremath{\theta})\^\ 2\ +\ensuremath{\sim\ }O(n\^\ N)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o132} 
+\left[ \operatorname{f\_ rad\_ pr}\left( r\operatorname{,}\theta \right) =\frac{k \int_{0}^{\ensuremath{\pi} }{\left. \cos{(w)} \operatorname{F}\left( k \sin{(w)}\right)  {{\% e}^{-\% i k r \cos{\left( \theta -w\right) }}}dw\right.}}{2 \ensuremath{\pi} }\operatorname{,}\cos{\left( \theta -w\right) }=-\frac{{{\left( w-\theta \right) }^{2}}}{2}+\operatorname{O}\left( {{n}^{N}}\right) +1\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+ --\ensuremath{\ensuremath{>}}	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+
+\end{minipage}
+
+\noindent%
+
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i139)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5341:[\\
+\ \ \ \ \ \ \ \ \ f\_rad\_pr(r,\ensuremath{\theta})\ensuremath{\sim\ }=\ (\ (k*cos(\ensuremath{\theta}))\ /\ (2*\%pi))\ensuremath{\sim\ }*\ensuremath{\sim\ }F(k*sin(\ensuremath{\theta}))\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*k*r)\ensuremath{\sim\ }*\ensuremath{\sim\ }'integrate(\ exp(\%i*k*r\ *\ensuremath{\sim\ }(w-\ensuremath{\theta})\^\ 2/2)\ ,w,0,\%pi)\ \ ,\\
+\ \ \ \ \ \ \ \ f\_rad\_pr(r,\ensuremath{\theta})\ =\ ((k*cos(\ensuremath{\theta}))\ /\ (2*sqrt(\%pi)))\ *\ F(k*sin(\ensuremath{\theta}))\ *\ (\\
+\ \ \ \ \ \ \ \ 'integrate(exp(\%i*\%pi*t\^\ 2/2)\ ,\ t,\ 0\ ,\ u\_1)\ +\ 'integrate(exp(\%i*\%pi*t\^\ 2),\ t,\ 0,\ u\_2)\\
+\ \ \ \ )\\
+\\
+]\ \ ;
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o139} 
+\operatorname{[}\operatorname{f\_ rad\_ pr}\left( r\operatorname{,}\theta \right) =\frac{k {{\% e}^{-\% i k r}} \cos{\left( \theta \right) } \int_{0}^{\ensuremath{\pi} }{\left. {{\% e}^{\frac{\% i k r {{\left( w-\theta \right) }^{2}}}{2}}}dw\right.} \operatorname{F}\left( k \sin{\left( \theta \right) }\right) }{2 \ensuremath{\pi} }\operatorname{,}\operatorname{f\_ rad\_ pr}\left( r\operatorname{,}\theta \right) =\frac{k\, \left( \int_{0}^{{u_2}}{\left. {{\% e}^{\% i \ensuremath{\pi}  {{t}^{2}}}}dt\right.}+\int_{0}^{{u_1}}{\left. {{\% e}^{\frac{\% i \ensuremath{\pi}  {{t}^{2}}}{2}}}dt\right.}\right)  \cos{\left( \theta \right) } \operatorname{F}\left( k \sin{\left( \theta \right) }\right) }{2 \sqrt{\ensuremath{\pi} }}\operatorname{]}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+where
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+ --\ensuremath{\ensuremath{>}}	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5342:[\\
+\ \ \ \ u\_1\ =\ sqrt((k*r)/\%pi)\ensuremath{\sim\ }*\ensuremath{\sim\ }\ensuremath{\theta},\ u\_2\ =\ sqrt((k*r)\ensuremath{\sim\ }/\ \%pi)\ensuremath{\sim\ }*\ensuremath{\sim\ }(\%pi-\ensuremath{\theta}),\\
+\ \ \ \ C(u)\ensuremath{\sim\ }=\ 'integrate(cos(\%pi/2)\ensuremath{\sim\ }*\ensuremath{\sim\ }t\^\ 2\ ,\ t,\ 0,\ u),\\
+\ \ \ \ S(u)\ensuremath{\sim\ }=\ 'integrate(sin(\%pi/2)\ensuremath{\sim\ }*\ensuremath{\sim\ }t\^\ 2,t,0,u)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o144} 
+\left[ {u_1}=\frac{\sqrt{k r} \theta }{\sqrt{\ensuremath{\pi} }}\operatorname{,}{u_2}=\frac{\sqrt{k r} \left( \ensuremath{\pi} -\theta \right) }{\sqrt{\ensuremath{\pi} }}\operatorname{,}\operatorname{C}(u)=0\operatorname{,}\operatorname{S}(u)=\int_{0}^{u}{\left. {{t}^{2}}dt\right.}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i154)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5343:[\\
+\ \ \ \ f\_rad\_pr(r,\ensuremath{\theta})\ensuremath{\sim\ }=\ ((k*cos(\ensuremath{\theta}))/(2*\%pi))\ *\ensuremath{\sim\ }(exp(-\%i*k*r)/sqrt(k*r))\ *\ensuremath{\sim\ }F(k*sin(\ensuremath{\theta}))\ *\ensuremath{\sim\ }(C(u\_1)\ensuremath{\sim\ }+\ensuremath{\sim\ }C(u\_2)\ +\ensuremath{\sim\ }\%i*(S(u\_1)\ensuremath{\sim\ }+\ensuremath{\sim\ }S(u\_2)))\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o154} 
+\left[ \operatorname{f\_ rad\_ pr}\left( r\operatorname{,}\theta \right) =\frac{k {{\% e}^{-\% i k r}} \left( \% i \left( \operatorname{S}\left( {u_2}\right) +\operatorname{S}\left( {u_1}\right) \right) +\operatorname{C}\left( {u_2}\right) +\operatorname{C}\left( {u_1}\right) \right)  \cos{\left( \theta \right) } \operatorname{F}\left( k \sin{\left( \theta \right) }\right) }{2 \ensuremath{\pi}  \sqrt{k r}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+The following is true as k*r \ensuremath{\longrightarrow} \ensuremath{\infty}
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i156)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5344:[\\
+\ \ \ \ f\_rad\_a(r,\ensuremath{\theta})\ensuremath{\sim\ }=\ f\_rad\_pr(r,\ensuremath{\theta})\ensuremath{\sim\ },\ \\
+\ \ \ \ f\_rad\_a(r,\ensuremath{\theta})\ =\ '((k*cos(\ensuremath{\theta}))\ensuremath{\sim\ }/sqrt(2*\%pi*k*r))\ *\ensuremath{\sim\ }F(k*sin(\ensuremath{\theta})\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\%i*(k*r-\%pi/4)))\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o156} 
+\left[ {{\ensuremath{\mathrm{f\_ rad}}}_a}\left( r\operatorname{,}\theta \right) =\operatorname{f\_ rad\_ pr}\left( r\operatorname{,}\theta \right) \operatorname{,}{{\ensuremath{\mathrm{f\_ rad}}}_a}\left( r\operatorname{,}\theta \right) =\frac{k \cos{\left( \theta \right) } \operatorname{F}\left( \left( \frac{\% i}{\sqrt{2}}+\frac{1}{\sqrt{2}}\right)  k {{\% e}^{-\% i k r}} \sin{\left( \theta \right) }\right) }{\sqrt{2} \sqrt{\ensuremath{\pi} } \sqrt{k r}}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i157)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5345:[\\
+\ \ \ \ F(k*sin(\ensuremath{\theta}))\ *\ensuremath{\sim\ }k*cos(\ensuremath{\theta})\ =\ (s(\ensuremath{\omega},k*sin(\ensuremath{\theta}))\ /\ D(\ensuremath{\omega},k*sin(\ensuremath{\theta}))\ *\ensuremath{\sim\ }k*\ cos(\ensuremath{\theta}))\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o157} 
+\left[ k \cos{\left( \theta \right) } \operatorname{F}\left( k \sin{\left( \theta \right) }\right) =\frac{k \cos{\left( \theta \right) } \operatorname{s}\left( \omega \operatorname{,}k \sin{\left( \theta \right) }\right) }{\operatorname{D}\left( \omega \operatorname{,}k \sin{\left( \theta \right) }\right) }\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i158)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5346:[\\
+\ \ \ \ f(y,z)\ensuremath{\sim\ }=\ f\_guid\_a(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }f\_guid\_r(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }f\_rad\_a(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }f\_rad\_r(y,z)\\
+]\\
+;
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o158} 
+\left[ \operatorname{f}\left( y\operatorname{,}z\right) ={{\ensuremath{\mathrm{f\_ rad}}}_r}\left( y\operatorname{,}z\right) +{{\ensuremath{\mathrm{f\_ rad}}}_a}\left( y\operatorname{,}z\right) +{{\ensuremath{\mathrm{f\_ guid}}}_r}\left( y\operatorname{,}z\right) +{{\ensuremath{\mathrm{f\_ guid}}}_a}\left( y\operatorname{,}z\right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+STOPPED HERE
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i99)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5346:[\\
+\ \ \ \ f(y,z)=f\_guid\_a(y,z)+f\_guid\_r(y,z)+f\_rad\_a(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }f\_rad\_r(y,z)\ensuremath{\sim\ }\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o99} 
+\left[ \operatorname{f}\left( y\operatorname{,}z\right) ={{\ensuremath{\mathrm{f\_ rad}}}_r}\left( y\operatorname{,}z\right) +{{\ensuremath{\mathrm{f\_ rad}}}_a}\left( y\operatorname{,}z\right) +{{\ensuremath{\mathrm{f\_ guid}}}_r}\left( y\operatorname{,}z\right) +{{\ensuremath{\mathrm{f\_ guid}}}_a}\left( y\operatorname{,}z\right) \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+5.3.4   Mode Excitation By External SourcesNOTE:\ensuremath{\sim }These functions are not yet correct - they provide vectors to the cross product but are incomplete
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i107)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+E\_hat(y,k\_y)\ensuremath{\sim\ }:=\ ([1,0,0]\ensuremath{\sim\ }\ensuremath{\sim\ }+\ y\ *\ [0,1,0]\ +\ensuremath{\sim\ }[0,0,1])\ *\ensuremath{\sim\ }k\_y;\\
+H\_hat(y,k\_y)\ :=\ ([1,0,0]\ \ +\ y\ *\ [0,1,0]\ +\ [0,0,1])\ *\ k\_y;\\
+E\_hat\_m(y)\ :=\ ([1,0,0]\ \ +\ y*\ [f(y,z)\ =\ 1,0]\ +\ [0,0,1])\ ;\\
+H\_hat\_n(y)\ :=\ ([1,0,0]\ \ +\ y*\ [0,1,0]\ +\ [0,0,1])\ ;\\
+H\_hat\_m(y)\ :=\ ([1,0,0]\ \ +\ y*\ [0,1,0]\ +\ [0,0,1])\ ;\\
+E\_hat\_a(y)\ \ :=\ ([1,0,0]\ \ +\ y*\ [0,1,0]\ +\ [0,0,1])\ ;\\
+k\_y:[0,\ k\_y,\ 0];\\
+k\_y\_prime:[0,\ k\_p\_y,\ 0];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o100} 
+\operatorname{E\_ hat}\left( y\operatorname{,}{k_y}\right) \operatorname{:=}\left( \left[ 1\operatorname{,}0\operatorname{,}0\right] +y \left[ 0\operatorname{,}1\operatorname{,}0\right] +\left[ 0\operatorname{,}0\operatorname{,}1\right] \right)  {k_y}\mbox{}\]
+
+\[\tag{\% o101} 
+\operatorname{H\_ hat}\left( y\operatorname{,}{k_y}\right) \operatorname{:=}\left( \left[ 1\operatorname{,}0\operatorname{,}0\right] +y \left[ 0\operatorname{,}1\operatorname{,}0\right] +\left[ 0\operatorname{,}0\operatorname{,}1\right] \right)  {k_y}\mbox{}\]
+
+\[\tag{\% o102} 
+\operatorname{E\_ hat\_ m}(y)\operatorname{:=}\left[ 1\operatorname{,}0\operatorname{,}0\right] +y \left[ \operatorname{f}\left( y\operatorname{,}z\right) =1\operatorname{,}0\right] +\left[ 0\operatorname{,}0\operatorname{,}1\right] \mbox{}\]
+
+\[\tag{\% o103} 
+\operatorname{H\_ hat\_ n}(y)\operatorname{:=}\left[ 1\operatorname{,}0\operatorname{,}0\right] +y \left[ 0\operatorname{,}1\operatorname{,}0\right] +\left[ 0\operatorname{,}0\operatorname{,}1\right] \mbox{}\]
+
+\[\tag{\% o104} 
+\operatorname{H\_ hat\_ m}(y)\operatorname{:=}\left[ 1\operatorname{,}0\operatorname{,}0\right] +y \left[ 0\operatorname{,}1\operatorname{,}0\right] +\left[ 0\operatorname{,}0\operatorname{,}1\right] \mbox{}\]
+
+\[\tag{\% o105} 
+\operatorname{E\_ hat\_ a}(y)\operatorname{:=}\left[ 1\operatorname{,}0\operatorname{,}0\right] +y \left[ 0\operatorname{,}1\operatorname{,}0\right] +\left[ 0\operatorname{,}0\operatorname{,}1\right] \mbox{}\]
+
+\[\tag{\% o106} 
+\left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \mbox{}\]
+
+\[\tag{\% o107} 
+\left[ 0\operatorname{,}{{\ensuremath{\mathrm{k\_ p}}}_y}\operatorname{,}0\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i109)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+E\_hat(y,k\_y)\ :=\ ([1,0,0]\ \ +\ y\ *\ [0,1,0]\ +\ [0,0,1])\ *\ k\_y;\\
+E\_hat(y,k\_y)\ :=\ ([1,0,0]\ \ +\ y\ *\ [0,1,0]\ +\ [0,0,1])\ *\ k\_y;
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o108} 
+\operatorname{E\_ hat}\left( y\operatorname{,}\ensuremath{\mathrm{k\_ y}}\right) \operatorname{:=}\left( \left[ 1\operatorname{,}0\operatorname{,}0\right] +y \left[ 0\operatorname{,}1\operatorname{,}0\right] +\left[ 0\operatorname{,}0\operatorname{,}1\right] \right) \, \ensuremath{\mathrm{k\_ y
+}}\mbox{}\]
+
+\[\tag{\% o109} 
+\operatorname{E\_ hat}\left( y\operatorname{,}\ensuremath{\mathrm{k\_ y}}\right) \operatorname{:=}\left( \left[ 1\operatorname{,}0\operatorname{,}0\right] +y \left[ 0\operatorname{,}1\operatorname{,}0\right] +\left[ 0\operatorname{,}0\operatorname{,}1\right] \right) \, \ensuremath{\mathrm{k\_ y}}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i110)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5347:[\\
+\ \ \ \ \ N(k\_y,k\_y\_prime)\ensuremath{\sim\ }=\ w\ *\ensuremath{\sim\ }'integrate(\\
+\ \ \ \ \ \ \ \ \ \ \ \ express(conjugate(E\_hat(y,k\_y))\ensuremath{\sim\ }H\_hat(y,k\_y\_prime))+express(E\_hat(y,k\_y\_prime)\ensuremath{\sim\ }conjugate(H\_hat(y,k\_y)))*e\_z,y,minf,inf)\ \\
+];
+\end{minipage}
+%%%% OUTPUT:
+\mbox{}\\"Is "
+\[\displaystyle \left[ 0\operatorname{,}0\operatorname{,}0\right] \mbox{}
+\]" positive, negative or zero?"
+\[\displaystyle zero;\mbox{}\]
+
+\[\tag{\% o110} 
+\left[ \operatorname{N}\left( \left[ 0\operatorname{,}\ensuremath{\mathrm{k\_ y}}\operatorname{,}0\right] \operatorname{,}\left[ 0\operatorname{,}{{\ensuremath{\mathrm{k\_ p}}}_y}\operatorname{,}0\right] \right) =0\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i111)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+E\_hat\_m(y)\ensuremath{\sim\ }:=\ [E\_hmy\_x,\ E\_hmy\_y,\ E\_hmy\_z];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o111} 
+\operatorname{E\_ hat\_ m}(y)\operatorname{:=}\left[ {{\ensuremath{\mathrm{E\_ hmy}}}_x}\operatorname{,}{{\ensuremath{\mathrm{E\_ hmy}}}_y}\operatorname{,}{{\ensuremath{\mathrm{E\_ hmy}}}_z}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i112)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5348:[\\
+\ \ \ \ N\_mn\ =\ w\ *\ensuremath{\sim\ }'integrate(\ (express(conjugate(E\_hat\_m(y))\ensuremath{\sim\ }\ensuremath{\sim\ }\ H\_hat\_n(y))\ +\ensuremath{\sim\ }express(E\_hat\_a(y)\ensuremath{\sim\ }\ensuremath{\sim\ }\ conjugate(H\_hat\_m(y)))\ )\ensuremath{\sim\ }*\ensuremath{\sim\ }e\_z,y,minf,inf)\\
+\ \ \ \ ];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o112} 
+\left[ {N_{\ensuremath{\mathrm{mn}}}}=w \int_{\operatorname{-}\infty }^{\infty }{\left. \left[ {e_z} \left( {{\ensuremath{\mathrm{E\_ hmy}}}_y}-{{\ensuremath{\mathrm{E\_ hmy}}}_z} y\right) \operatorname{,}\left( {{\ensuremath{\mathrm{E\_ hmy}}}_z}-{{\ensuremath{\mathrm{E\_ hmy}}}_x}\right)  {e_z}\operatorname{,}{e_z} \left( {{\ensuremath{\mathrm{E\_ hmy}}}_x} y-{{\ensuremath{\mathrm{E\_ hmy}}}_y}\right) \right] dy\right.}\right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i113)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5349:[\\
+\ \ \ \ E(y,z)\ensuremath{\sim\ }=\ E\_a(y,z)\ensuremath{\sim\ }+\ensuremath{\sim\ }E\_b(y,z)\ensuremath{\sim\ },\ \\
+\ \ \ \ E(y,z)\ensuremath{\sim\ }=\ 'sum(A\_n(z)\ensuremath{\sim\ }*\ensuremath{\sim\ }E\_Hat\_n(y)\ensuremath{\sim\ }*\ensuremath{\sim\ }exp(-\ensuremath{\gamma}\_n*\ensuremath{\sim\ }z),n,1,N)\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o113} 
+\left[ \operatorname{E}\left( y\operatorname{,}z\right) ={E_b}\left( y\operatorname{,}z\right) +{E_a}\left( y\operatorname{,}z\right) \operatorname{,}\operatorname{E}\left( y\operatorname{,}z\right) =\left[ {{\ensuremath{\mathrm{A\_ n}}}_x} N {{\ensuremath{\mathrm{E\_ Hat}}}_n}(y) {{\% e}^{-z {{\gamma }_n}}}\operatorname{,}{{\ensuremath{\mathrm{A\_ n}}}_y} N {{\ensuremath{\mathrm{E\_ Hat}}}_n}(y) {{\% e}^{-z {{\gamma }_n}}}\operatorname{,}{{\ensuremath{\mathrm{A\_ n}}}_z} N {{\ensuremath{\mathrm{E\_ Hat}}}_n}(y) {{\% e}^{-z {{\gamma }_n}}}\right] \right] \mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i114)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+cmt\_ch05\_5350:[\\
+];
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o114} 
+[]\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+\end{document}

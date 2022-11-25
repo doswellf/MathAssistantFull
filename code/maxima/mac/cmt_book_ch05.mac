@@ -1,5 +1,10 @@
+/* [wxMaxima: comment start ]
+Modern Electromagnetics and Coupled Mode Theory Book
+   [wxMaxima: comment end   ] */
+
+
 /* [wxMaxima: input   start ] */
-load(vect);
+load(vect); load(eigen);
 /* [wxMaxima: input   end   ] */
 
 
@@ -117,7 +122,7 @@ A transverse standing wave pattern is typical for spatial resonance of this type
 
 
 /* [wxMaxima: input   start ] */
-cmt_ch05_106:[f_hat[n](y,z,t)=An]*exp(-%i*k[z,n]*z)*exp(%i*(ω*t-k[y,n]*y)) + B[n]*exp(-%i*(k[z,n]*z))*exp(%i*(ω*t-k[y,n]*y) ) ];
+cmt_ch05_106:[f_hat[n](y,z,t)=An*exp(-%i*k[z,n]*z)*exp(%i*(ω*t-k[y,n]*y)) + B[n]*exp(-%i*(k[z,n]*z))*exp(%i*(ω*t-k[y,n]*y) ) ];
 /* [wxMaxima: input   end   ] */
 
 
@@ -299,7 +304,7 @@ cmt_ch05_5221:[v[ph,n] ≤ c, 'diff(abs(k[y,n](ω)),ω) ≥ ((β[n](ω) - (ω/c)
 
 
 /* [wxMaxima: comment start ]
-For surface moes (5.2.3) and (5.2.6) give the following formulae for any part of the EM field
+For surface modes (5.2.3) and (5.2.6) give the following formulae for any part of the EM field
    [wxMaxima: comment end   ] */
 
 
@@ -567,7 +572,7 @@ For the reactive modes (forward and backward with subscript n = +/- m and n[bar]
 
 
 /* [wxMaxima: input   start ] */
-cmt_ch05_5243:['diff(A[n](z),z)=1/N[n[bar]]*'integrate(( (J[b,e] . 'conjugate(E[n[bar]])) + (J[b,m] . 'conjugate(H[n[bar]]))) ,S[b],1,N)- (1/N[n[bar]])*'integrate(((J[s,e] . 'conjugate(E[n[bar]]))+(J[s,m]*'conugate(H[n[bar]]))),L[b],1,N) ];
+cmt_ch05_5343:['diff(A[n](z),z)=1/N[n[bar]]*'integrate(( (J[b,e] . 'conjugate(E[n[bar]])) + (J[b,m] . 'conjugate(H[n[bar]]))) ,S[b],1,N)- (1/N[n[bar]])*'integrate(((J[s,e] . 'conjugate(E[n[bar]]))+(J[s,m]*'conugate(H[n[bar]]))),L[b],1,N) ];
 /* [wxMaxima: input   end   ] */
 
 
@@ -584,6 +589,654 @@ cmt_ch05_5244[N[n]];
 
 /* [wxMaxima: input   start ] */
 cmt_ch05_5245:[N[n[bar]]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5246:[
+        E_n(r_t,z) = E_hat_n(r_t) * exp(-γ_n* z),
+        H_n(r_t,z) = H_hat_n(r_t) * exp(-γ_n* z)
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the active modes (forward and backward with subscript n = ±m):
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5247:[
+
+A_plus_m(z_0) = A_plus_m (-z_0) - (1/N_plus_m) * 'integrate(J_b_e . conjugate(E_plus_m) + (J_b_m . conjugate(H_plus_m)),V_b,1,N)
+                            - (1/N_plus_m) * 'integrate( (J_s_e . conjugate(E_plus_m)) + (J_s_m . conjugate(H_plus_m)) , S_b_i, 1,N )
+                                
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For the reactive modes (forward and backware with subscript n = ±m and n_bar = minus/plus m):
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5248:[
+    A_minus_m(-z_0) = A_minus_m (z_0) - (1/N_minus_m) * 'integrate(J_b_e . conjugate(E_minus_m) + (J_b_m . conjugate(H_minus_m)),V_b,1,N)
+                            - (1/M_minus_m) * 'integrate( (J_s_e . conjugate(E_minus_m)) + (J_s_m . conjugate(H_minus_m)) , S_b_i, 1,N )
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5249:[
+    A_plus_m(z_0) = A_plus_m (-z_0) - (1/N_minus_m) * 'integrate(J_b_e . conjugate(E_minus_m) + (J_b_m . conjugate(H_minus_m)),V_b,1,N)
+                            - (1/M_minus_m) * 'integrate( (J_s_e . conjugate(E_minus_m)) + (J_s_m . conjugate(H_minus_m)) , S_b_i, 1,N )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5250:[
+    A_minus_m(-z_0) = A_minus_m (z_0) - (1/N_plus_m) * 'integrate(J_b_e . conjugate(E_plus_m) + (J_b_m . conjugate(H_plus_m)),V_b,1,N)
+                            - (1/M_plus_m) * 'integrate( (J_s_e . conjugate(E_plus_m)) + (J_s_m . conjugate(H_plus_m)) , S_b_i, 1,N )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+cmt_ch05_5251:[ ∫_Vs (...) ∂V = ∫_{-z0,z0} ∂z * ∫_Sb (..)∂S]
+cmt_ch05_5251:[ ∫_S_bi (...) ∂S = ∫_{-z0,z0} ∂z * ∫_Lb (..)∂l]
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5253:[
+    f_plus_m(y,z,t) = A_plus_m(z_0) * f_hat(y)  * exp(-%i*ω*t  - (γ__plus_m*(z-z_0)))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_hat_n(y) := [E_hn_x, E_hn_y, E_hn_z];
+A_n(z) :=  [A_n_x, A_n_y, A_n_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5254:[
+    E(y,z) = E_a(y,z) + E_b(y,z), 
+    E(y,z) = 'sum(A_n(z)*E_hat_n(y)*exp(-γ_n * z)-(e_z/(%i*ω*ε))*J_bz_e(y,z) ,n,1,N ) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5255:[
+    H(y,z) = H_a(y,z) + H_b(y,z),
+    H(y,z) = 'sum(A_n(z) * H_hat_n(y) * exp(-γ_n*z) - (e_z/(%i*ω*μ)) * J_bz_m(y,z),n,1,N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5256:[
+
+E_b = (1/(%i*ω*ε)) * J_bz_e , H_b = (1/(%i*ω*μ))* J_bz_m];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_531:[
+    limit('integrate(abs(f_guid(x,y,z))^2,S,1,N) , N, inf) <= C,
+       C < inf
+];
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+|f_guid(x,y,z) ⟶ 0 as |y| ⟶ ∞
+
+TODO: express this in actual maxima code
+TODO: check limits of integration where the book uses S, or C, or V instead of dxdy, etc
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_532:[
+    limit(abs(f_guid(x,y,z)), N, 0)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_533:[
+    f_rad(y,z) = (1/(2*%pi)) * 'integrate(f_bar_y(k_y,z)*exp(-%i*k_y*y) ,k_y, 1,N )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_534:[
+    f_y(y,z,k_y) = (1/(2*%pi) ) * f_bar_y(k_y,z) * exp(-%i*k_y*y)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The limit of |y| as y ⟶ ∞ is ∞ but maxima syntax won't allow an explicit notation for this
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_535:[
+    if 'limit(abs(y), y, 0) then (abs(f_y(y,z,k_y) ) <= C, C< inf, abs(y)) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_536:[
+   if 'limit('abs(y), y, 0) then 'limit(abs(f_rad(y,z)), y,0) = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_537:[
+    abs(f(y,z)) = abs(f_guid(y,z) + f_rad(y,z)),
+    if 'limit(abs(y),y,inf)  then  'limit(abs(f(y,z)) = abs(f_guid(y,z) + f_rad(y,z)),y,inf)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.3.2   Spectral Representation of Fields In Open Waveguiding Structures
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_538:[
+    f(x,y)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_539:[
+    f_z(y,z,k_z) = (1/(2*%pi))  * f_bar_z(y,k_z) * exp(-%i*k_z * z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5310:[
+
+    f(y,z) = (1/(2*%pi)) * 'integrate( ((s(_k_z) * exp(-%i*k_z*z_0))/D(ω,k_z)) * exp(-%i*k_y*y) * exp(-%i*k_z*(z-z_0)), C_v, 1,N)
+    
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5311:[
+f_bar_z(y,k_z) = (s(ω,k_z) / D(ω,k_z)) * exp(-%i*k_y*y) ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5312:[ 
+            f_z(y,z,k_z) = (1/(2*%pi)) * (s(ω,k_z) / D(ω,k_z)) * exp(-%i*k_y*y + k_z*z) 
+     ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+D(ω,k_z) is a dispersion function of the source-free (homogenous) boundary value problem
+It's zeros are roots of the dispersion equation
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5313:[
+    D(ω,k_z) = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5314:[
+    k_y(k_z) := sqrt(k^2 - k_z^2),
+    k_y(k_z) := sqrt(ω^2 *ε*μ - k_z^2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5315:(
+    declare(k_y, complex),
+    k_y:5 + %i*7,
+    carg(k_y),
+imagpart(k_y) < 0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: comment start ]
+Fill in math for Fourier contour over a Rieman surface as given on page 292 of 
+"Modern Electrodynamics and Coupled Mode Theory" by Barybin and Dmitriev
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5316:[
+    k = k_d1 - %i * k_d2,
+    C_1 =C_d1_1 + C_d2_1,
+    C_2 = C_d1_2 + C_d2_2,
+    C_Σ = C_d1_J  - C_d2_1 - C_d1_1 - C_ε  - C_d_2 - C_d2_2 - C_d2_J,
+    'integrate( C_F,k_z,1,N) + 'integrate(C_K, k_z,1,N) + 'integrate(C_ε, k_z,0,2*%pi)
+        + 'integrate( C_1,k_z,1,N) + 'integrate( C_2,k_z,1,N) 
+        + sum('integrate(C_k,z_k,0,2*%pi),n,1,N)
+        = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5317:[
+limit('integrate(f_z(y,z,k_z)  ,k_z, 1,N) ,C_J,0) = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5318:[
+        limit('integrate(f_z(y,z,k_z)  ,k_z, 1,N) ,C_ε,0)    
+    ]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5319:[
+    f(y,z) = (1/(2*%pi)) * 'integrate( (s_minus(ω,k_z)/D(ω,k_z)) * exp(-%i*k_y) * exp(-%i*(z-z_0)), k_z, 1,N),
+    f(y,z) =    2*%pi * %i* 'sum(Res(f_z(y,z,k_z_a)) , k_z_a,1,N) 
+                    -
+                    2*%pi*%i*'sum(Res(f_z(y,z,k_z_r)), k_z_r,1,N) 
+                    -
+                    'integrate(f_z(y,z,k_z), k_z,1,N) - 'integrate(f_z(y,z,k_z), k_z,1,N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+    kill(k_y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5320:[
+    -'integrate(f_z(y,z,k_z),k_z,1,C_1 ) = -'integrate(f_z(y,z,k_z)*(k_y/k_z), k_z, minf,0),
+    -'integrate(f_z(y,z,k_z),k_z,1,C_1 ) =  'integrate(f_y( y,z,k_y) , k_y, minf,0)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5321:[
+    -integrate(f_z(y,z,k_z),C_2,1,N)  = 'integrate(f_z(y,z,k_z) * (k_y/k_z) , k_y,0,minf),
+    -integrate(f_z(y,z,k_z),C_2,1,N)  = 'integrate(f_y(y,z,k_y),d_k,0,inf)
+    
+    ];
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><fn><munder altCopy="f_y"><mrow><mi>f</mi></mrow><mrow><mi>y</mi></mrow></munder><mrow><p><mi>y</mi><mo>,</mo><mi>z</mi><mo>,</mo><munder altCopy="k_y"><mrow><mi>k</mi></mrow><mrow><mi>y</mi></mrow></munder></p></mrow></fn><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5322:[
+    f_y(y,z,k_y) = f_z(y,z,k_z) * (k_y/k_z)
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5323:[
+    f(y,z) = fguide_a(y,z) + f_guide_r(y,z)  + f_rad(y,z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5324:[
+    f_guide_a(y,z) = -2 * %pi*%i * 'sum(Res(f_z(y,z,k_z_a)),k_z_a, 1,N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5324:[
+    f_guide_a(y,z) = -2*%pi*%i * 'sum(Res(F_z(y,z,k_z_a)),k_z_r,1,N )
+]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5325:[
+    f_guide_r(y,z) = -2 * %pi*%i *'sum(Res(f_z(y,z,k_z_r)),k_z_r,1,N )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5326:[
+    f_rad(y,z) = 'integrate(f_y(y,z,k_y) , k_y, minf,inf),
+    f_rad(y,z) = (1/(2*%pi)) * 'integrate(f_hat_y(k_y,z) *exp(-%i*k_y * y), k_y, minf,inf)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5327:[
+    f_hat_y(k_y,z)  * exp(-%i*k_y*y) = f_hat_z(y,k_z) * (k_y/k_z) * exp(-%i*k_z * z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.3.3   Radiation field of open waveguiding structures
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5328:[
+
+    f_rad(y,z) = (1/(2*pi)) * 'integrate( f_hat_y(k_y,z) * exp(-%i*k_*y) ,k_y , minf,inf),
+    f_rad(y,z) = (1/(2*pi)) * 'integrate(F_k_z* (k_y/k_z) * exp(-%i*(k_y*y + k_z*z)), k_y,minf,inf)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5329:[
+    F(k_z) = f_hat_z(y,k_z) * exp(%i*k_y*y) ,
+     F(k_z) = s(ω,k_z) / D(m,k_z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5330:[
+    k_z = sqrt(k^2 - k_y^2) ,
+    k_z = sqrt(ω^2*ε*μ - k_y^2) ,
+    k_z= β
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5331:[
+    k_z = -%i* sqrt(k_y^2 - k^2) ,
+    k_z = -%i * sqrt(k_y_2 - ω^2 * ε*μ),
+     k_z = -%i* α
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5332:[
+f_rad(y,z) = f_rad_a(y,z) + f_rad_R(y,z) ,
+    r_rad(y,z) = f_rad_pr(y,z) + f_rad_ev(y,z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5333:[
+    f_rad_a(y,z) = f_rad_pr(y,z) ,
+    f_rad(y,z) = (1/(2*%pi)) * 'integrate(f_bar_y(k_y,z) * exp(-%i*k_y*y), k_y,-k,k),
+    f_rad(y,z) = 'integrate(f_y(y,z ,k_y) , k_y,-k,k)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5334:[
+    f_rad_r(y,z) = f_rad_cν(y,z) ,
+    f_rad_r(y,z) = (1/(2*%pi)) * 'integrate(f_bar_y(k_y,z) * exp(-%i*k_y*y) , k_y, minf,-k)
+                            + 
+                            (1/(2*%pi))* 'integrate(f_bar_y(k_y,z) * exp(-%i*k_y*y), k_y, k,inf),
+    f_rad_r(y,z) = 'integrate(f_y(y,z,k_y),k_y,minf,-k) + 'integrate(f_y(y,z,k_y),k_y,k,inf)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5335:[
+    f_rad_a(y,z) = f_rad_pr(y,z),
+    f_rad_a(y,z) = 'integrate( f_y(y,z,k_y) ,k_y, -k,0) 
+                        +
+                        'integrate(f_y(y,z,k_y),k_y,0,k),
+    f_rad_a(y,z) = -1 * 'integrate( f_z(y,z,k_z) , k_z, 0, C_1)
+                                -
+                            'integrate(f_z(y,z,k_z) ,k_z, 0,C_2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5336:[    
+    f_rad_r(y,z) = f_rad_eν(y,z),
+    f_rad_r(y,z) = 'integrate( f_y(y,z,k_y) ,k_y, minf,-k) 
+                        +
+                        'integrate(f_y(y,z,k_y),k_y,k,inf),
+    f_rad_a(y,z) = -1 * 'integrate( f_z(y,z,k_z) , k_z, 0, C_dbl_primed_1)
+                                    -
+                                    'integrate(f_z(y,z,k_z) ,k_z, 0,C_dbl_primed_2)
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5337:[
+    f_rad(y,z) = f_rad_pr(y,z),
+    f_rad(y,z) = (1/(2*%pi)) * 'integrate(f_bar_y(k_y,z) * exp(-%i*k_y*y), k_y,-k,k),
+    f_rad(y,z) = (1/(2*%pi)) * 'integrate(F(k_z) * (k_y/k_z) * exp(-%i*(k_y*y + k_z+z)) , k_y, -k,k)
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5338:[
+    y = r* cos(θ) , z = r * sin(θ)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5339:[
+    k_y = k * cos(w) , k_z = k * sin(w) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+NOTE: O(n^N) means there is a finite series after the (w-θ)^2/2 term
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5340:[
+    f_rad_pr(r,θ) = (1/(2*%pi))*'integrate( F(k*sin(w)) * k*cos(w) * exp(-%i*k*r*cos(w-θ)) ,w, 0,π  )  ,
+    cos(w-θ) = 1 - (1/2) *  (w-θ)^2 + O(n^N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5341:[
+         f_rad_pr(r,θ) = ( (k*cos(θ)) / (2*%pi)) * F(k*sin(θ)) * exp(-%i*k*r) * 'integrate( exp(%i*k*r * (w-θ)^2/2) ,w,0,%pi)  ,
+        f_rad_pr(r,θ) = ((k*cos(θ)) / (2*sqrt(%pi))) * F(k*sin(θ)) * (
+        'integrate(exp(%i*%pi*t^2/2) , t, 0 , u_1) + 'integrate(exp(%i*%pi*t^2), t, 0, u_2)
+    )
+
+]  ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5342:[
+    u_1 = sqrt((k*r)/%pi) * θ, u_2 = sqrt((k*r) / %pi) * (%pi-θ),
+    C(u) = 'integrate(cos(%pi/2) * t^2 , t, 0, u),
+    S(u) = 'integrate(sin(%pi/2) * t^2,t,0,u)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5343:[
+    f_rad_pr(r,θ) = ((k*cos(θ))/(2*%pi)) * (exp(-%i*k*r)/sqrt(k*r)) * F(k*sin(θ)) * (C(u_1) + C(u_2) + %i*(S(u_1) + S(u_2)))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The following is true as k*r ⟶ ∞
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5344:[
+    f_rad_a(r,θ) = f_rad_pr(r,θ) , 
+    f_rad_a(r,θ) = '((k*cos(θ)) /sqrt(2*%pi*k*r)) * F(k*sin(θ) * exp(-%i*(k*r-%pi/4)))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5345:[
+    F(k*sin(θ)) * k*cos(θ) = (s(ω,k*sin(θ)) / D(ω,k*sin(θ)) * k* cos(θ))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5346:[
+    f(y,z) = f_guid_a(y,z) + f_guid_r(y,z) + f_rad_a(y,z) + f_rad_r(y,z)
+]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+STOPPED HERE
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5346:[
+    f(y,z)=f_guid_a(y,z)+f_guid_r(y,z)+f_rad_a(y,z) + f_rad_r(y,z) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.3.4   Mode Excitation By External Sources
+
+NOTE: These functions are not yet correct - they provide vectors to the cross product but are incomplete
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_hat(y,k_y) := ([1,0,0]  + y * [0,1,0] + [0,0,1]) * k_y;
+H_hat(y,k_y) := ([1,0,0]  + y * [0,1,0] + [0,0,1]) * k_y;
+E_hat_m(y) := ([1,0,0]  + y* [f(y,z) = 1,0] + [0,0,1]) ;
+H_hat_n(y) := ([1,0,0]  + y* [0,1,0] + [0,0,1]) ;
+H_hat_m(y) := ([1,0,0]  + y* [0,1,0] + [0,0,1]) ;
+E_hat_a(y)  := ([1,0,0]  + y* [0,1,0] + [0,0,1]) ;
+k_y:[0, k_y, 0];
+k_y_prime:[0, k_p_y, 0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_hat(y,k_y) := ([1,0,0]  + y * [0,1,0] + [0,0,1]) * k_y;
+E_hat(y,k_y) := ([1,0,0]  + y * [0,1,0] + [0,0,1]) * k_y;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5347:[
+     N(k_y,k_y_prime) = w * 'integrate(
+            express(conjugate(E_hat(y,k_y))~H_hat(y,k_y_prime))+express(E_hat(y,k_y_prime)~conjugate(H_hat(y,k_y)))*e_z,y,minf,inf) 
+];
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><mrow list="true"><t listdelim="true">[</t><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><t listdelim="true">]</t></mrow><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+zero;
+/* [wxMaxima: answer  end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><mrow list="true"><t listdelim="true">[</t><mrow list="true"><t listdelim="true">[</t><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><t listdelim="true">]</t></mrow><mo>,</mo><mn>0</mn><mo>,</mo><mrow list="true"><t listdelim="true">[</t><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><t listdelim="true">]</t></mrow><t listdelim="true">]</t></mrow><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_hat_m(y) := [E_hmy_x, E_hmy_y, E_hmy_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5348:[
+    N_mn = w * 'integrate( (express(conjugate(E_hat_m(y)) ~ H_hat_n(y)) + express(E_hat_a(y) ~ conjugate(H_hat_m(y))) ) * e_z,y,minf,inf)
+    ];
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><mrow list="true"><t listdelim="true">[</t><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><t listdelim="true">]</t></mrow><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+zero;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5349:[
+    E(y,z) = E_a(y,z) + E_b(y,z) , 
+    E(y,z) = 'sum(A_n(z) * E_Hat_n(y) * exp(-γ_n* z),n,1,N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5350:[
+];
 /* [wxMaxima: input   end   ] */
 
 
