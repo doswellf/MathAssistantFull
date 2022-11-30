@@ -1147,19 +1147,6 @@ cmt_ch05_5345:[
 
 /* [wxMaxima: input   start ] */
 cmt_ch05_5346:[
-    f(y,z) = f_guid_a(y,z) + f_guid_r(y,z) + f_rad_a(y,z) + f_rad_r(y,z)
-]
-;
-/* [wxMaxima: input   end   ] */
-
-
-/* [wxMaxima: comment start ]
-STOPPED HERE
-   [wxMaxima: comment end   ] */
-
-
-/* [wxMaxima: input   start ] */
-cmt_ch05_5346:[
     f(y,z)=f_guid_a(y,z)+f_guid_r(y,z)+f_rad_a(y,z) + f_rad_r(y,z) 
 ];
 /* [wxMaxima: input   end   ] */
@@ -1238,7 +1225,96 @@ cmt_ch05_5349:[
 
 /* [wxMaxima: input   start ] */
 cmt_ch05_5350:[
+    H(y,z) = H_a(y,z) + H_b(y,z) ,
+    H(y,z) = 'sum(A_n(z) * H_hat_n(y) * exp(-γ_n*z), n, 1, N)
+                + 
+                'integrate(A_bar(z,k_y) *H_hat(y,k_y) * exp(-γ*(k_y)*z), k_y, minf,inf) - (e-z/(%i*ω*μ)) * J_bz_m(y,z)
 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+E_b = e_z * E_b and H_b = e_z * H_b  are the orthogonal complementary fields typical for isotropic dielectrics
+^ (hat) indicate the cross-sectional fields (slices perpendicular to the direction of wave front travel) through the medium
+Total mode eigenfields are related to the cross-sectional fields by:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+  kill(E_hat_n);   kill(H_hat_n); kill(y,z);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5351:[
+    E_n(y,z) = E_hat_n(y,z) *exp(-γ*k_y*z),
+    H_n(y,z) = H_hat_n(y,z) *exp(-γ * k_y*z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5352:[
+    E_(y,z,k_y) = E(y,k_y)  * exp(-γ_n*z),
+    H_n(y,z) = H_hat_n(y,z) *exp(-γ_n*z)
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+for the discrete guided n-mode (5.2.42)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5353:[
+ 'diff(A_n(z),z) = -(ω/N_n )* 'integrate(J_bar_b_e(y,z) . conjugate(E_n(y,z)) + J_bar_b_m(y,z) . conjugate(H_n(y,z)), y, minf,inf)    
+                            -
+                        (1/N_n) *  'integrate(J_bar_s_e(x,y,z) . conjugate(E_n(y,z)) + J_bar_s_m(y,z) . conjugate(H_n(y,z)), l, 0,L_b)    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+for the radiating mode specified by the transverse wave number k_y (3.5.56)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(k_y);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5354:[
+     'diff(A_bar(z,k_y),z)= -(ω/(N*k_y)) * 'integrate(J_bar_b_e(y,z) . conjugate(E_n(y,z,k_y)) 
+                                                                                +
+                                                                               J_bar_b_m(y,z) . conjugate(H_n(y,z,k_y)), y, minf,inf)    
+                                        -
+                                                (1/N*k_y) * 'integrate(J_bar_s_e(x,y,z) . conjugate(E_n(y,z,k_y)) 
+                                                                                    + 
+                                                                                   J_bar_s_m(x,y,z) . conjugate(H_n(y,z,k_y)), l, 0,L_b)    
+
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_53355:[
+    J_b_em(y,z)  = 1/w * 'integrate(J_b_sm(x,y,z), z, -w/2,w/2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5356:[ an(z) = A_n(z) * exp(-γ_n*z)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5357:[ a(z,k_y) = A_bar(z,k_y) * exp(-γ*k_y*z)];
 /* [wxMaxima: input   end   ] */
 
 
