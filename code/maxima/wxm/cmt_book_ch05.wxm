@@ -1318,6 +1318,176 @@ cmt_ch05_5357:[ a(z,k_y) = A_bar(z,k_y) * exp(-γ*k_y*z)];
 /* [wxMaxima: input   end   ] */
 
 
+/* [wxMaxima: comment start ]
+5.4         Radiation Fields and The Concept Of Leaky Modes
+
+5.4.1   Space-wave contribution to the radiated field
+
+NOTE: Where integrals are indefinite I have added the surface, volume or curve as the upper limit
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_541:[
+    f(y,z) = (1/(2*%pi)) * 'integrate(f_bar_z(y,k_z) * exp(-%i*k_z*z), k_z, 0,C_F),
+    f(y,z) = (1/(2*%pi)) * 'integrate(F(k_z)*exp(-%i*(k_y*y +k_z*z)) , k_z,0,C_F)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_542:[
+    F(k_z) = s(ω,k_z)/D(ω,kk_z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_543:[
+k_z = k * sin(w)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_544:[
+    w = asin(k_z/k)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_545:[
+k_y(w) = sqrt(k^2 - k_z(w)^2 ) ,
+k_y(w) = k * cos(w)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_546:[
+    Re(k_z) = k * sin(u) * cosh(v) , 
+    Im(k_z) = k * cos(u) * sinh(v)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5457:[
+    Re(k_y) = k* cos(u) * cosh(v),
+    Im(k_y) = k * sin(u) * sinh(v)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_548:[
+    f(r,θ) = (1/(2*%pi)) * 'integrate(F(k*sin(w)) * k * cos(w) * exp(-%i*k*r* cos(w-θ)) , w, 0,C_F)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_549:[
+    f(r,θ) = f_guid_a(r,θ) + f_guid_r(r,θ) + f_rad_a(r,θ) + r_rad_r(r,θ) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The guided active (propagating) modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5410:[
+    f_guid_a(r,θ) = -2*%pi *  %i *'sum(Res(f_w(r,θ,w_a)), w_a, 0, N )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The guided reactive (non-propagating) modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5411:[
+    f_guid_r(r,θ) = -2*%pi*%i*'sum(Res(f_w(r,θ,w_r)) , w_r, 0,N)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The radiating active (propagating) modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5412:[
+    f_rad_a(r,θ) = -'integrate(f_w(r,th,w), w, 0, C_primed_1)
+                            -
+                            'integrate(f_w(r,th,w), w, 0, C_primed_2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+The radiating reactive (non-propagating) modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5413:[
+        f_rad_r(r,θ) = -'integrate(f_w(r,th,w), w, 0, C_dbl_primed_1)
+                            -
+                            'integrate(f_w(r,th,w), w, 0, C_dbl_primed_2)
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+where
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5414:[
+    f_w(r,θ,w) = (1/(2*%pi)) * F(k * sin(w)) * k * cos(w) * exp(-%i * k*r*cos(w-θ))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5415:[
+    f(r,θ) = 'integrate(Q(w) * exp(k*r*q(w,θ)), w, 0,C_r)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5416:[
+    Q(w) = ((k*cos(w))/(2*%pi)) * F(k*sin(w)),
+    Q(w) = ((k*cos(w))/(2*%pi)) * s(w,k*sin(w))/ D(w, k*sin(w))
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5417:[
+    q(w,θ) = -%i*cos(w-θ)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5418:[
+    f(r,θ) = 'integrate(Q(w) * exp(k*r*q(w,θ)) , w, 0, P_s)
+];
+/* [wxMaxima: input   end   ] */
+
+
 
 /* Old versions of Maxima abort on loading files that end in a comment. */
 "Created with wxMaxima 20.12.1"$
