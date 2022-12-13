@@ -1488,6 +1488,112 @@ cmt_ch05_5418:[
 /* [wxMaxima: input   end   ] */
 
 
+/* [wxMaxima: comment start ]
+    k*r ⟶ ∞
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5419:[
+    f(R,θ) = sqrt( (2*%pi)/(k*r)) * Q(θ)  * exp(-%i*((k*r) - (%pi/4))),
+    f(r,θ) = (k*cos(θ))/(sqrt(2*%pi*k*r)) * F(k*sin(θ)) * exp(-%i*((k*r)-(%pi/4)))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5420:[
+    y = 0,
+    f(y,z) = (k/sqrt(2*%pi*abs(k*z)^3)) *  F_primed(%pi/2) * exp(%i*(k*abs(z) - ((3*%pi)/4))),
+    F_primed(-%pi/2),
+    F_primed(+%pi/2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5421:[
+    f_w_r(t,y,z) = A_ω * exp(-α*z) * exp(%i *(ω*t - k_y*y )),
+    k_y^2 - α^2 = k^2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5422:[
+    k_y = k*cos(φ) , α=k*sin(φ)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5423:[
+    f_ω_r(t,r,θ) = A_exp(%i*(t - β_s*r))
+]                                                                                                                                                                                                                                     ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5424:[
+    α_θ = k*sin(θ) * sinh(φ) , β_θ = k*cos(θ) * cosh(φ)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.4.2 Leaky mode contribution to the radiated field
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5425:[
+    f_w(r,θ,w) = Q(w) * exp(-%i*k*r*cos(w-θ))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5426;[
+    Res(f_w(r,θ,w_l)) = (Q(w) * (w-w_l) * exp(-%i*k*r*(w_l-θ))) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5426:[
+    cos(w_l-θ) = (1/cosh(v_l)),
+    cos(w_l-θ) = sec(v_l)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+%$cmt_ch05_5428:[
+Δ_l*f_rad(r,θ) = 2*%pi*%i * Res(f_w(r,θ,w_l) * U(θ - θ_l)),
+    if θ > θ_l then Δ_t*f_rad(r,θ) =   2*%pi*%i* Q(w) * (w-w_l) * exp(-%i*k*r*cos(w_l-θ)),
+    if(θ < θ_l) then Δ_t*f_rad(r,θ) = 0,
+    sin(u) * cosh(v) = 1 ,
+    sin(u) * cosh(v) = -1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5430:[
+A_l = 2*%pi*%i*(Q(w) * (w-w_l)) , w=w_l
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5431:[
+    θ >= θ_l,
+    Δ_l *f_rad(t,r,θ) = A_l * exp(%i*(ω*t - k*r * cos(w_l-θ))),
+    Δ_l *f_rad(t,r,θ) = A_l * exp(-α_s * r) * exp(%i*(ω* t - β_s*r))
+];
+/* [wxMaxima: input   end   ] */
+
+
 
 /* Old versions of Maxima abort on loading files that end in a comment. */
 "Created with wxMaxima 20.12.1"$
