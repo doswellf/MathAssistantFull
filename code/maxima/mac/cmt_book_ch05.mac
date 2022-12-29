@@ -1592,4 +1592,153 @@ cmt_ch05_5431:[
 /* [wxMaxima: input   end   ] */
 
 
+/* [wxMaxima: input   start ] */
+cmt_ch05_5432:[
+    α_θ = k*sinh(u_l-θ) * sin(u_l) , 
+    α_θ = k*sin(u_l-θ) * tan(u_l-θ)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5433:[
+    β_θ = k*cos(u_l-θ) * cosh(v_l) , 
+    β_θ = k* (cos(u_l-θ) / cos(u_l - θ_l)),
+    γ_l = α_l + %i*β_l,
+    k_yl  = Re(k_yl + %i*Im(k_yl)),
+    w_l = u_l + %i*v_l
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5434:[
+     α_θ = α_l * sin(θ) - Im(k_yl) *cos(θ) ,
+     α_θ = α_l*cos(θ_z)  - Im(k_yl),sin(θ_z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5435:[
+    β_θ = β_l * sin(θ) + Re(k_yl) * cos(θ) ,
+    β_θ = β_l * cos(θ_z) + Re(k_yl) * sin(θ_z)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5436:[
+    θ = θ_l,
+    α_θ_l = k*sinh(v_l) * tanh(v_l) , β_θ_l = k
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5437:[
+    θ=%pi/2,
+    α_pid2 = α_l,
+    β_pid2 = β_l
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Weakly leaky modes 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5438:[
+    'abs(Im(k_yl)) < 'abs(Re(k_yl)),
+    'abs(Im(kzl)) = abs(α_l) , 
+    abs(α_l) < abs(β_l), 
+    abs(β_l) = Re(k_zl)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5439:[
+    Im(k_yl) = -k * sin(u_l) * sinh(v_l),
+    Im(k_yl) = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5440:[
+    Im(k_zl) = -α_l,
+    Im(k_zl) = k*cos(u_l) * sinh(v_l),
+    Im(k_zl) = 0,
+    v_l = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt__ch05_5441:[v_l = 0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5442:[
+    Re(k_yl) = k*cos(u_l)* cosh(v_l),
+    Re(k_hl) = k*cos(u_l)  ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5443:[
+    Re(k_zl) = k*cos(u_l) *cosh(v_l),
+    Re(k_zl) = k*sin(u_l) ,
+    Re(k_zl) = β_l
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5444:[
+    α_θ = α_l * sin(θ) - Im(k_yl)  *cos(θ),
+    α_θ = 0
+ ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5445:[
+    β_θ = β_l * sin(θ) + Re(k_yl) * cos(θ) ,
+    β_θ = k*cos(u_l-θ)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5446:[
+    cos(u_l-θ) = 1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5447:[
+    θ_l = u_l ,
+    θ_l = asin(β_l/k)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5448:[
+    Δ_l *f_rad(t,r,θ) = A_l *exp(%i*(ω*t - k*r*cos(θ-θ_l)))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.5     Light Ray Interpretation of Radiating Modes In Planar Dielectric  Waveguides
+   [wxMaxima: comment end   ] */
+
+
 
