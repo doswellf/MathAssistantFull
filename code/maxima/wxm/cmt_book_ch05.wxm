@@ -1743,6 +1743,128 @@ cmt_ch05_5448:[
    [wxMaxima: comment end   ] */
 
 
+/* [wxMaxima: input   start ] */
+cmt_ch05_55a:[
+    k_z = k_1*sin(θ_1) ,
+    k_z = k_2 * sin(θ_2),
+    (sin(θ_1)/sin(θ-2)) = (k_2/k_1) ,
+    (sin(θ_1)/sin(θ-2))  = sqrt( ε_2*μ-2) / sqrt(ε-1*μ_1),
+    (sin(θ_1)/sin(θ-2))  = n_2/n_1,
+    sin(θ_1_c) = k_2/k_1,
+    if k_2 <= k_1 then sin(θ_1_c) <= 1,
+    θ_1u_c = arcsin(k_0/k_1) ,
+    arcsin(k_2/k_1) = θ_1l_c,
+    θ_1u_c < θ_1l_c
+    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+(a) θ_1 < θ_1u_c < θ_1l_c  means that
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_551:[ k_z < k_0,k_0 < k_2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+(b) θ_1u_c < θ_1, θ_1 < θ_1l_c means that
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_552:[k_0 < k_z, k_z < k_2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+(c) θ_1u_c < θ_1l_c, θ_1l_c < k_z means that
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_553:[k_0 < k_2, k_2 < k_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_553B:[
+    sin(θ_0) = k_1/k_0, sin(θ_0) > 1,
+    θ_0 = θ_0_prime + %i * θ_0_dprime,
+    sin(θ_0) = sin(θ_0_prime) * cosh(θ_0_dprime) + cos(θ_0_prime) * sinh(θ_0_dprime) , 
+    sin(θ_0) = (k_1/k_0) * sin(θ_1)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_554:[
+    θ_0_prime = %pi/2, 
+    cosh(θ_0_dprime) = (k_1/k_0) * sin(θ_1)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_555:[
+    k_y0 = k_0 * cos(θ_0) , 
+    k_y0 = k_0 * (cos(θ_0_prime) * cosh(θ_0_dprime) - %i*sin(θ_0_prime) * sinh(θ_0_dprime)),
+    k_y0 = %i*k_0 * sinh(θ_0_dprime) ,
+    k_y0 = -%i*sqrt(k_1^2 * sin(θ_1)^2 - k_0^2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_556:[
+        β_n(ω_n_c) = k_z(ω_n_c) ,
+        β_n(ω_n_c) = k_2(ω_n_c),
+        β_n(ω_n_c) = ω_n_c/c_2,
+        k_y2(ω_n_c) = 0
+] ;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_556B:[
+    v_phn_c = v_grn_c,
+    v_phn_c = c_2,
+    v_grnc = 0,
+    P_n_c = v_grn_c * W_n_c, 
+    P_n_c = 0,
+    W_n_c < 0 or W_n_c > 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.6 EM Fields and Dispersion Relations for Guided Modes In Planar Dielectric Waveguides
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_561:[
+    'diff(f_hat_i(y),y,2) + k_yi^2*f_hat_i (y) = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_562:[
+    k_yi^2 = k_i^2 - k_z^2, 
+    K_yi^2 = ω^2*ε_i*μ_i - k_z^2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.6.1   Guided TE Modes
+   [wxMaxima: comment end   ] */
+
+
 
 /* Old versions of Maxima abort on loading files that end in a comment. */
 "Created with wxMaxima 20.12.1"$
