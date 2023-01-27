@@ -1865,6 +1865,243 @@ cmt_ch05_562:[
    [wxMaxima: comment end   ] */
 
 
+/* [wxMaxima: input   start ] */
+cmt_ch05_563:[
+    H_y = (k_z/(ω*μ)) * E_z
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_564:[
+    H_z = (1/(%i*ω*μ)) * 'diff(E_x, y)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_565:[
+    if y > a then (E_xi(y) = A_0*exp(%i*k_y0*(y-a)),i=0),
+    if y< a and y > -a then (i=1, A_1 * exp(-%i*k_y1 *y) + B_1 * exp(-%i*k_y1*y)),
+    if y < -a then (B_2 * exp(%i*k_y2*(y+a)) ,i=2  ) 
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_566:[
+    A_1*exp(-%i*k_y1*a) + B_1*exp(%i*k_y1*y),
+    A_1  *exp(%i*k_y1*a) + B_1 * exp(-%i*k_y1*a) = B_2,
+    A_1 * exp(-%i*k_y1*a) - B_1 * exp(%i*k_y1*a) = (μ_1/μ_0) * (k_y0/k_y_1) * A_0,
+    A_1 * exp(-%i*k_y1*a) - B_1 * exp(%i*k_y1*a) =  (μ_1/μ_0) * (k_y2/k_y_1) * B_2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_567:[
+        A_1 = A_0 * ((k_y1 + k_y0_u)/(2*k_y1))* exp(%i*k_y1*a) ,
+        A_1 = B_2 * ((k_y1 - k_y2_u)/(2*k_y1))*exp(-%i*k_y1*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_568:[
+        B_1 = A_0*((k_y1 - k_y0_u)/(2*k_y1)) * exp(-%i*k_y1*a),
+        B_1 = A_0 * ((k_y1 - k_h0_u)/(2*k_y1)) * exp(-%i*k_y1*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_569:[
+    A_0/B_2 = ((k_y1 + k_y2_u)/(k_y1-k_y0_u)) * exp(%i*2*k_y1*a),
+    A_0/B_2 = ((k_y1 - k_y2_u)/(k_y1 + k_y0_u)) * exp(-%i*2*k_y1*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5610:[
+    k_y0_u = (μ_1/μ_0) * k_y0,
+    k_y2_u = (μ_1/μ_2) * k_y2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5611:[
+    exp(-%i**4*k_y1 * a) = ((k_y1 + k_y0_μ) * (k_h1 + k_y2_μ)) / ((k_y1 - k_y0_μ) * (k_y1 - k_y2_μ))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5612:[
+    tan(2*k_y1*a) = (k_y1*(k_y0_μ + k_y2_μ))/(k_y1^2 + (k_y0_μ*k_y2_μ))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5613:[
+
+k_y0_μ = k_y2_μ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch0_5614:[
+    tan(2*k_y1*a) = %i* ((2*k_y1*k_h2_μ)   / (k_y1^2 + k_h2_μ^2))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch06_5615:[
+    if evenp(mode)  then %i*k_y2_μ = k_y1 * tan(k_y1*a),
+    if oddp(mode)   then %i*k_y2_μ = -k_y1 * cot(k_y1*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5616:[
+    A_1 = B_1 and A_1 = -B_1 and A_0 = +B_0 and A_0 = -B_0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5617:[
+    if evenp(mode)  then E_1_s*cos(K_y1*y),
+    if oddp(mode)   then E_1_a * sin(k_y11*y)
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5618:[
+    abs(k_h2_μ) < abs(k_y0_μ)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5619:[
+    tan(2*k_y1*a) = %i*(k_y1/k_y2_μ) * (1 + (k_y1^2)/(k_y0_μ*k_y2_μ))
+        ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5620:[
+    abs(k_y1) = abs(k_y2_μ)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5621:[
+    %i*k_y2_μ = -k_y1*cot(2*k_y1*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5622:[
+    A_1 = (%i/2) * E_1_a * exp(%i*k_y1*a),
+    B_1 = -(%i/2) * E_1_a * exp(-%i*k_y1*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5623:[
+
+E_hat_z1(y) = E_1_a*sin(k_y1*y - φ_1) , φ_1 = k_y1*a];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5624:[
+    A_1 = (%i/2) * A*exp(%i*φ_1) ,
+    B_1 = +(%i/2) * A*exp(-%i*φ_1),
+    B_1 = -(%i/2) * A*exp(-%i*φ_1)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5625:[
+    E_hat_z1(y) = E_1_s*cos(k_y1**y - φ_1),
+    E_hat_z1(y) = E_1_a * sin(k_y1*y - φ_1)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.6.2   Guided TM Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5627:[
+    E_y = -(k_z/(ω*ε)) * H_z
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5628:[
+    E_z = -(1/(ω*ε)) * 'diff(H_z,y)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5629:[
+    if y > a then (i=0, H_hat_xi(y) = A_0*exp(-%i*k_y0*(y-a))),
+    if (y > -a and y < a) then (i=1, H_hat_xi(y) = A_1*exp(-%i*k_y1*y) + B_1 * exp(%i*k_y1*y)),
+    if (y < -a) then (i=2, H_hat_xi(y) = B_2*exp(%i*k_y2*(y+a)))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5630:[
+      A_1*exp(-%i*k_y1*a) +  B_1 * exp(%i*k_y1*a) = A_0,
+      A_1*exp(%i*k_y1*a) +  B_1 * exp(-%i*k_y1*a) = B_2,
+      A_1*exp(-%i*k_y1*a) -  B_1 * exp(%i*k_y1*a) = (ε_1/ε_0) * (k_y0/k_y1) * A_0,
+      A_1*exp(%i*k_y1_a) - B_1 *exp(-%i*k_y1*a) =  (ε_1/ε_2) * (k_y2/k_y1) * B_2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+                        TE                              TM
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5631:[
+    k_y0_u = (μ_1/μ_0)  * k_y0, (ε_1/ε_0) * k_y0 = k_y0_ε,
+    k_y2_u = (μ_1/μ_2)  * k_y2, (ε_1/ε_0) * k_y2 = k_y2_ε
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5632:[
+    if evenp(mode) then %i* k_y2_ε = k_y1*tan(k_y1*a),
+    if oddp(mode) then %i*k_y2_ε = -k_y1*cot(k_y1*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
 
 /* Old versions of Maxima abort on loading files that end in a comment. */
 "Created with wxMaxima 20.12.1"$
