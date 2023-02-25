@@ -2100,4 +2100,350 @@ cmt_ch05_5632:[
 /* [wxMaxima: input   end   ] */
 
 
+/* [wxMaxima: input   start ] */
+cmt_ch05_5633:[
+
+%i*k_y2_ε = -k_y1*cot(2*k_y1*a)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.6.3       General Discussion - Modal Dispersion Properties
+
+For TE Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5634:[%i*k_y0_μ = k_y0, %i*k_y2 = k_y2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For TM Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5635:[%i*k_y0_ε = (ε_1/ε_0) * k_y0 , %i*k_y2_ε = (ε_1/ε_2) * k_y2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5635:[ k_y1 = abs(k_y1) , k_y0 = -%i*abs(k_y0), k_y2 = -%i*abs(k_y2)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+i = 0,2,4,6, ...
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5637:[
+    k_y1^2 + abs(k_y1)^2 = ω^2 * (ε_1 - ε_i) * μ_0 , 
+    k_y1^2 + abs(k_y1)^2 = k^2 * (n_1^2 - n_i^2) ,
+    k_y1^2 + abs(k_y1)^2 > 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5638:[
+   ε_0 <= ε_2, ε_2 < ε_1 , n_0 <= n_2, n_2 < n_1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5639:[
+    k_z = k_1, 
+    k_y1 = 0,
+    abs(k_y2) = ω * sqrt((ε_1 - ε_2)*μ_0) ,
+    abs(k_y2) = k*sqrt(n_1^2 - n_1^2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5640:[
+    k_z = k_2, 
+    k_y2 = 0,
+    k_y1 = ω*sqrt( (ε_1 - ε_2) * μ_0) ,
+    k_y1 = sqrt(n_1^2 - n_2^2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5641:[k_2 <= k_z, k_z <= k_1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5642:[k_y1_max >= k_y1,k_y1 >= 0 ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5643:[0 <= abs(k_y2), abs(k_y2) <= abs(k_y2_max)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5644:[ k_y1_max = abs(k_y1_max) , k_y1_max = k*sqrt(n_1^2 - n_2^2)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5645:[ u = a * sqrt(k_1^2 - k_2^2), u = k_y1*a];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5646:[v = a * sqrt(k_z^2 - k_2^2) , v = %i*k_y2 * a];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+V_s takes the role of a normalized frequency  defined as in (5.6.48)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5647:[u^2 + v^2 = V_s^2];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5648:[
+    V_s =  k_yl_max * a ,
+    V_s = abs(k_y2_max) * a,
+    V_s = k*a* sqrt(n_162 - n_262) , 
+    V_s  = ω*a*sqrt((ε_1 - ε_2) * μ_0)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For TE Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5649_A:[
+    if evenp(mode) then v = u * tan(u),
+    if oddp(mode) then v = -u * cot(u)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For TM Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5649_B:[
+    if evenp(mode) then v * (ε_1/ε_2) = u* tan(u) ,
+    if oddp(mode) then  v * (ε_1/ε_2) = -u* cot(u)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For TE and TM Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5650:[
+    v = -u * cot(2*u)    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5651:[
+    cos(u) / u = +(1/V),
+    cos(u) / u = -(1/V)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5652:[
+    sin(u)/u = +(1/V),
+    sin(u)/u = -(1/V)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5653:[
+    sin(2*u)/(2*u) = +(1/(2*V)),
+    sin(2*u)/(2*u) = -(1/(2*V))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5654:[
+    v = +V*sin(u),
+    v = -V*sin(u)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5655:[
+    v = +V*cos(u),
+    v = -V*cos(u)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5656:[
+    v = +V * cos(2*u),
+    v = -V * cos(2*u)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For Allowed Regions 
+where n = 1,2,...
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5657:[
+    n * (%pi/2) < u_n, u_n < (n+1)*(%pi/2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For Forbidden Regions
+where n = 1,2,...
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5658:[
+(n-1)*(%pi/2) < u_n, u_n < n * (%pi/2) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Actual expression is (1/V)_cut for n = 1,2,...
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5659:[
+    0 < (1/V_cut),
+    1/V_cut = 1/((n*%pi)/2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Actual expressions are (1/V)_cut, (1/V)_max
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5660:[
+    (1/V_cut) < 1/V, 
+    1/V < 1/V_max
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5661:[
+    u_n_m * tan(u_n_m) = -1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5662:[ v_m_m = -1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5663:[
+    v_n_m * cot(u_n_m) = 1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5664:[
+    v_n_m = -1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.6.3.2     Complex Roots of Dispersion Equations
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5665:[
+    Im(k_y2) > 0 , Re(v)< 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5666:[u = u_r + %i*u_i, v = v_r + %i*v_i];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5667:[
+    if mode = TE and evenp(mode) then (cos(u_r)/u_r)  = + ((1/V)/cosh(u_i)),
+    if mode = TE and evenp(mode) then (cos(u_r)/u_r)  = - ((1/V)/cosh(u_i)) ,   
+    if mode = TE and oddp(mode) then (sin(u_r)/u_r) = +((1/V)/cosh(u_i)),
+    if mode = TE and oddp(mode) then (sin(u_r)/u_r) = -((1/V)/cosh(u_i))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5668:[
+        if mode = TE and evenp(mode) then (sin(u_i)/u_i)  = + ((1/V)/sin(u_r)),
+        if mode = TE and evenp(mode) then (sin(u_i)/u_i)  = - ((1/V)/sin(u_r)),
+        if mode = TE and oddp(mode) then (sin(u_i)/u_i)  = + ((1/V)/cos(u_r)),
+        if mode = TE and oddp(mode) then (sin(u_i)/u_i)  = - ((1/V)/cos(u_r))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5669:[
+    if mode = TE and evenp(mode) then v_r = +V*sin(u_r)*cosh(u_1),
+    if mode = TE and evenp(mode) then v_r = -V*sin(u_r)*cosh(u_1),
+    if mode = TE and oddp(mode) then v_r = +V*cos(u_r)*cosh(u_i),
+    if mode = TE and oddp(mode) then v_r = -V*cos(u_r)*cosh(u_i)  
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5670:[
+        if mode = TE and evenp(mode) then v_r = +V*cos(u_r) * sinh(u_i),
+        if mode = TE and evenp(mode) then v_r = -V*cos(u_r) * sinh(u_i),
+        if mode = TE and evenp(mode) then v_r = +V*sin(u_r)*sinh(u_i),
+        if mode = TE and evenp(mode) then v_r = -V*sin(u_r)*sinh(u_i)
+];
+/* [wxMaxima: input   end   ] */
+
+
 
