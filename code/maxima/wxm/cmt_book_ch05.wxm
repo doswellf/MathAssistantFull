@@ -2448,6 +2448,176 @@ cmt_ch05_5670:[
 /* [wxMaxima: input   end   ] */
 
 
+/* [wxMaxima: input   start ] */
+cmt_ch05_5671:[
+    v_r = -u_i * coth(u_i),
+    v_r  < 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5672:[
+    v_r = -u_i * coth(2*u_i),
+    v_r < 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5673:[
+    β_n = Re(k_zn), 
+    β_n < k_2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5674:[
+    (v_i)^2 - (v_r)^2 = (k_2*a)^2 + (α*a)^2 - (β*a^2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5675:[
+    v_r * v_i = -(α*a)*(β*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5676:[
+    v_r = +( (k-2*a)/sqrt((k_2*a)^2 + (v_i)^2)),
+    v_r = -( (k-2*a)/sqrt((k_2*a)^2 + (v_i)^2)),
+    v_i = +((k_2*a)/sqrt((k_2*a)^2 - (v_r)^2)),
+    v_i = -((k_2*a)/sqrt((k_2*a)^2 - (v_r)^2))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5677:[
+    inf > V(ω) , V(ω) > V_n_c,
+    V_n_c = V(ω_n_c)
+]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5678:[
+    if (symmetricp(waveguide)) then V_n_c = (n*%pi)/2,
+    if (asymmetricp(waveguide)) then V_n_c = (n*%pi)/4
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5679:[
+    ω_n_c = V_n_c/(a*sqrt((ε_1 - ε_2) * μ_0)) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5680:[
+    0 < u_n, u_n < u_n_c, u_n_c = (n*%pi)/2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5681:[
+    inf > v_n, v_n > v_n_c, v_n_c = 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5682:[
+    0 = v_n_c, v_n_c < v_n, v_n < v_n_m, v_n_m = -1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5683:[
+    u_n_m = (n*%pi)/2 * (1 - x_n)    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5684:[
+    x_n^2 - x_n + (2/(n*%pi))^2 = 0, n > 2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5685:[
+    %pi/2 = u_1_c, u_1_c > u_1, u_1 > u_1_m, u_1_m = 0,
+    n = 1,
+    (n*%pi)/2 = u_n_c, u_n_c > u_n, u_n > u_n_m, u_n_m = ((n*%pi)/2)*(1-x_n),
+    n >= 2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5686:[
+    v_n_c > V(ω) , V(ω) > V_n_m
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5687:[
+    V_n_m^2 = 1 + (u_n_m)^2
+]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5688:[
+    if n = 1 then  V_n_m = 1,
+    if n >= 2 then V_n_m = x_n^(-1/2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5689:[
+    V_n_m > V(ω) ,
+    V_(ω) > 0
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.7     Normalization of Guided Modes in Planar Dielectric Waveguides
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_571:[
+    k_y0_n = -%i*abs(k_y0_n) , k_y0_n = -%i*ζ_0n
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
 
 /* Old versions of Maxima abort on loading files that end in a comment. */
 "Created with wxMaxima 20.12.1"$
