@@ -2614,7 +2614,513 @@ cmt_ch05_571:[
 
 
 /* [wxMaxima: input   start ] */
+cmt_ch05_572:[
+    k_y2_n = %i*abs(k_y2_n), k_y2_n = -%i*ζ_2n
+];
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_573:[
+    k_y1_n = abs(k_y1_n) ,k_y1_n = κ_n
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_574:[
+    k_z_n = +abs(k_z_n) , k_z_n = β_n
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+E_hat_n: [E_hn_x, E_hn_y, E_hn_z];
+H_hat_n: [H_hn_x, H_hn_y, H_hn_z];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_575:[
+    N_n = 2*Re( 'integrate( express(conjugate(E_hat_n) ~ H_hat_n) . e_z, S)) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.7.1   TE mode normalization 
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_576:[
+    if (y > a) then (E_hat_xin(y) = A_0*exp(-ζ_0n*(y-a)), i = 0),
+    if (y > -a) and (y < a) then ( E_hat_xin(y) = A_1n*exp( -%i*κ_n*y) + B_1n* exp(%i*κ_n*y),i = 1) ,
+    if (y < -a) then E_hat_xin(y) = B_2n*exp(ζ_2n*(y+a))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+(5.7.5) is the norm of the TE mode with transverse components E_hat_xn(y) and H_hat_yn(y), written as:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_577:[
+    N_n = 2*Re(w * 'integrate(conjugate(E_hat_xn(y))*H_hat_yn(y) , y, minf,inf) )
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_578:[
+    N_n = N_n_(0) + N_n_(1) + N_n(2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_579:[
+    N_n_0 = ((2*β_n*w) / (ω*μ_0))  * 'integrate(abs(E_hat_x0_n(y))^2, y, -a,a)
+    ]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5710:[
+        N_n_0 = ((2*β_n*w) / (ω*μ_0))  * 'integrate(abs(E_hat_x1_n(y))^2, y, -a,a)
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5711:[
+    N_n_0 = ((2*β_n*w) / (ω*μ_0))  * 'integrate(abs(E_hat_x2_n(y))^2, y, -a,a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5712:[
+    N_n_0 = (w/(ω*μ_0)) * (β_n/ζ_0n) * abs(A_0n)^2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5713:[
+ N_n_1= ((4*w)/(ω*μ_0)) * (β_n/κ_n) * (Re(conjugate(A_1n) * B_1n) * sin(2*κ*a) + (abs(A_1n)^2 + abs(B_1n)^2) *κ*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5714:[
+    N_n2 = (w/(ω*μ_0)) * (β_n/ζ_2n) * abs(β_2n)^2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5715:[
+    N_n = ((β_n*w)/(ω*μ_0)) * ((κ_n^2 + ζ_0n^2)/κ_n_2) * (2*a + (1/ζ_0n) + (1/ζ_2n))* abs(A_n)^2,
+    N_n = ((β_n*w)/(ω*μ_0)) * ((κ_n^2 + ζ_2n^2)/κ_n_2) *  (2*a + (1/ζ_0n) + (1/ζ_2n))* abs(B_n)^2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5716:[
+    A_0n = A_1n * ((2*κ_n)/(κ_n - %i*ζ_0n))*exp(-%i*κ_n*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5717:[
+      B_2n = B_1n * ((2*κ_n)/(κ_n - %i*ζ_2n))*exp(-%i*κ_n*a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5718:[
+    N_n = 4 * w * ((β_n*d_n)/(ω*μ_0)) * abs(A_1n)^2,
+    N_n = 4*w * ((β_n*d_n)/(ω*μ_0)) * abs(B_1n)^2
+]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5719:[
+d_n = 2*a + (1/ζ_0n) + (1/ζ_2n)
+]
+;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5720:[
+    E_hat_x1n(y) = E_n*cos(κ_n*y-Φ_n), -a < y , y < a
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5721:[
+A_1n = (1/2) * E_n * exp(%i*Φ_n), B_1n = (1/2) * E_N * EXP(-%I * Φ_n)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5722:[
+    N_n = w * ( (β_n*d_n)/(ω*μ_0)) * E_n^2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5723:[
+P_n_o = (1/4) * N_n, P_n_o = w * w * ( (β_n*d_n)/(ω*μ_0)) *E_n^2, P_n_o = ((w*d_n)/4)* ((ω*μ_0) / β_n) *H_n_^2,
+    P_n_o = (w*d_n/4) * E_n * H_n
+     ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5724:[
+    H_hat_y1n(y) = H_n*cos(κ_n*y - Φ_n)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.7.2   TM Mode Normalization
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5725:[
+    if y > a then (i=0,H_hat_x1n(y) = A_0n*exp(-ζ_0n*(y-a))),
+    if (y > -a and y < a) then (i=1,H_hat_x1n(y) =A_1n*exp(-%i*κ_n*y) + B_1n*exp(%i*κ_n*y)),
+    if (y < -a) then (i=2, H_hat_x1n(y) =B_2n*exp(ζ_2n*(y+a)))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5726:[
+    N_n = 2 * Re( 'integrate( conjugate(E_hat_yn(y)) * abs(H__hat_xn(y)),y, minf,inf))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5727:[
+    N_n_0 = ((2*β_n*w)/(ω*ε_0)) * 'integrate( abs(H_hat_x0n(y))^2, y, a, inf),
+    N_n_0 =  (w/(ω*ε_0)) * (β_n / ζ_0n) * abs(A_0n)^2,
+    N_n_1 = ((2*β_n*w)/(ω*ε_1)) * 'integrate( abs(H_hat_x1n(y))^2, y, -a, a)   
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5728:[
+    N_n_1 = ((4*w)/(ω*ε_1)) * (β_n/κ_n) * 
+                   ((conjugate(A_1n) * B_1n) ) * sin(2*κ*a)  + (abs(A_1n)^2 + ab(B_1n)^2) * κ*a
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5729:[
+    N_n_0 = ((2*β_n*w)/(ω*ε_2)) * 'integrate( abs(H_hat_x2n(y))^2, y, minf,-a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5730:[
+    N_n =  ((2*β_n*w)/(ω*ε_1)) * ((κ_n^2 + ζ_0n^2*(ε_1/ε_0)^2) / (κ_n^2))* 
+                (2*a + (1/(ζ_0n*q_0n)) + 1/(ζ_2n*q_2n)) * abs(A_0n)^2 ,
+    N_n =  ((2*β_n*w)/(ω*ε_1)) * ((κ_n^2 + ζ_2n^2*(ε_1/ε_2)^2) / (κ_n^2))* 
+                (2*a + (1/(ζ_0n*q_0n)) + 1/(ζ_2n*q_2n)) * abs(B_2n)^2 
+
+    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5731:[
+        q_0n = (β_n^2/κ_1^2) + (β_n^2/κ_0^2) - 1,
+        q_0n = (β_n^2/κ_10^2) - 1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5732:[
+      q_2n = (β_n^2/κ_1^2) + (β_n^2/κ_2^2) - 1,
+      q_2n = (β_n^2/κ_12^2) - 1
+   
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5732A:[
+        k_1i = k_1^2*(ε_i/(ε_1 + ε_i)),
+        k_1i = ω^2 * μ_0 * ((ε_1*ε_i)/(ε1 + ε_i))    
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5733:[
+    A_0n = A_1n * ((2*κ_n)/(κ_n - %i*ζ_0n * (ε_1/ε_0))) *  exp(-κ_n * a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5734:[
+    B_2n = B_1n * ((2*κ_n)/(κ_n - %i*ζ_2n * (ε_1/ε_2))) *  exp(-κ_n * a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5735:[
+    N_n  = 4*w * ((β_n *d_n)/(ω*ε_1)) * abs(A_1n)^2,
+    N_n =  4*w * ((β_n *d_n)/(ω*ε_1)) * abs(B_1n)^2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5736:[
+    d_n = 2*n + (1/(ζ_0n * q_0n)) + (1/ζ_2n*q_2n)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5737:[
+    H_hat_z1_n(y) = H_n*cos(κ_n*y - Φ_n),
+    y > -a and y < a
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5738:[
+    N_n = w*((β_n*d_n)/ω*ε_1)*H_n^2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5739:[
+    P_n_o = (1/4) * N_n,
+    P_n_o = w*((β_n*d_n) / (4*ω*ε_1)) * H_n^2,
+    P_n_o = ((w*d_n)/4)*((ω*ε_1)/β_n) *E_n^2,
+    P_n_o = ((w*d_n)/4)* E_n*H_n ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5740:[
+E_hat_y1_n(y) = E_n * cos(κ_n*y - Φ_n)
+    ];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5741:[
+    k_2 =β_n_min, k_2 <= β_n, β_n <= β_n_max, β_n_max = k_1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5742:[
+    q_0n_min = (ε_2/ε_0) + (ε_2/ε_1) - 1,
+    q_0n_max = ε_1/ε_0, q_0n_max > 1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5743:[
+    q_2n_min = (ε_2/ε_1), q_2n_min < 1,
+    q_2n_max = ε_1/ε_2, q_2n_max > 1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Some approximations are translated into equals for now 
+TODO: Create an approx function/operator that really works!
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5744:[
+    q_0n = ε_1/ε_0, q_0n >1, q_2n = 1
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5745:[
+    d_n = 2*A + (1/ζ_2n)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5746:[
+    ζ_2n = sqrt(β_n^2 - k_2^2),
+    ζ_2n = ω*sqrt((ε_1 - ε_2) * μ_0) ,
+    ζ_2n = V/a, 
+    ζ_2n > 1/a,
+    ζ_0n = sqrt(β_n^2 - k_0^2),
+    ζ_2n = ω*sqrt((ε_1 - ε_0) * μ_0) ,
+    ζ_2n = V/a, 
+    ζ_2n > 1/a  
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5747:[d_n = 2*a];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Power  values are in watts, 1W and 4W
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_4748:[P_n_o = 1 , N_n = 4];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For TE Modes
+E_n units are Volts/meter (V/m)
+H_n units are Amps/meter (A/m)
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5749:[
+    E_n = 2 * sqrt( (ω*μ_0 )/(β_n *d_n * w)),
+    H_n = 2 * sqrt( β_n/(ω*μ_0*d_n*w))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For TM Modes
+E_n units are Volts/meter (V/m)
+H_n units are Amps/meter (A/m)
+
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5750:[
+    H_n = 2 * sqrt( (ω*ε_1) / (β_n*d_n*w)),
+    E_n = 2 * sqrt( β_n/(ε_1*d_n*w))
+
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5751:[
+    P_n(z) = +abs(A_n(z))^2, 
+    P_n(z) = -abs(A_n(z))^2, 
+    P_n(z) = +abs(a_n(z))^2,
+    P_n(z) = -abs(a_n(z))^2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Unit Amplitude Normalization
+
+TE Modes ⟶ units of E_n are Volts/meter
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5752:[
+    E_n = 1
+]
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+TM Modes ⟶ units of H_n are Amps/meter
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5753:[
+    H_n = 1
+]
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Power in Watts in the following equations
+
+For TE Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5754:[
+    N_n=  w *((β_n*d_n)/(ω*μ_0)),
+    P_n_o  =  (β_n*d_n)/(4*ω*μ_0)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+For TM Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5755:[
+    N_n=  w *((β_n*d_n)/(ω*ε_1)),
+    P_n_o  =  (β_n*d_n)/(4*ω*ε_1)
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5756:[
+    P_n(z) = (1/4) * N_n * abs(A_n(z))^2,
+    P_n(z) = P_n_o * abs(A_n(z))^2
+];
 /* [wxMaxima: input   end   ] */
 
 
