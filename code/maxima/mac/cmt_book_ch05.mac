@@ -3069,7 +3069,7 @@ TE Modes ⟶ units of E_n are Volts/meter
 /* [wxMaxima: input   start ] */
 cmt_ch05_5752:[
     E_n = 1
-]
+];
 /* [wxMaxima: input   end   ] */
 
 
@@ -3081,7 +3081,7 @@ TM Modes ⟶ units of H_n are Amps/meter
 /* [wxMaxima: input   start ] */
 cmt_ch05_5753:[
     H_n = 1
-]
+];
 /* [wxMaxima: input   end   ] */
 
 
@@ -3123,7 +3123,104 @@ cmt_ch05_5756:[
 
 
 /* [wxMaxima: input   start ] */
+cmt_ch05_581_3:[
+    if (mode_type =substrate_radiative) then    k_y0 = -%i*ζ_n,
+    if (mode_type=structure_radiative) then k_y0 = κ_0,
+    k_y1 = κ_1,
+    k_y2 = κ_2,
+    ζ_0 >0,
+    κ_l > 0,
+    ε_1 != ε_2
+];
+/* [wxMaxima: input   end   ] */
 
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_584:[
+    N(κ_2, κ_2_primed) = w*'integrate( 
+        (conjugate(E_hat(y,κ_2)) ~ H_hat(y,κ_2_primed)) 
+        +
+        (E_hat(y,κ_2_primed) ~ conjugate(H_hat(y,κ_1))) . e_z, y, minf,inf),
+        N(κ_2, κ_2_primed)  = δ(κ_2 - κ_2_primed) * N_bar(κ_2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_585:[
+    'integrate(N(κ_2, κ_2_primed)*f(κ_2_primed),κ_2_primed,minf,inf)  = N_bar(κ_2) * 
+    'integrate( 
+        δ(κ_2-κ_2_primed) * f(κ_2_primed) ,κ_2_primed,minf,inf),
+    'integrate(N(κ_2, κ_2_primed)*f(κ_2_primed),κ_2_primed,minf,inf)  = N_bar(κ_2) * f(κ_2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+5.8.1   TE Mode Normalization
+
+    5.8.1.1     Substrate-radiative TE Modes
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_586:[
+    if (y > a) then (i=0,E_hat_xi(y) = A_0*exp(-%i*k_y0 * ( y-a))),
+    if (y > -a and y < a)  then (i=1,E_hat_xi(y) = A_1*exp(-%i*k_y*y) + B_1*exp(%i*k_y1*y)),
+    if (y < -a) then ( i=2, E_hat_xi(y) = _2 * exp(-%i*k_y2*(y+a)) + B_2*exp(%i*k_y2*y+a)) 
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_587:[
+
+    if y >0 then (i=0, E_hat_xi(y) = E_0*exp(-ζ_0*(y-a))),
+    if (y > -a ) and (y < a) then (i=1, E_hat_xi(y) = E_1 * cos(κ_1*y - Φ_1)),
+    if (y < -a) then (E_hat_xi(y) = E_2 * cos(κ_2*(y+a) - Φ_2))
+]; 
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_588:[E_1*cos(κ_1*a - Φ_1) = E_0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_589:[E_1*cos(κ_1*a + Φ_1) = E_2 * cos(Φ_2)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5810:[
+E_1 * sin(κ_1*a -Φ_1) = (ζ_0/κ_1) * E_0];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5811:[E_1*sin(κ_1*a+Φ_1) = (κ_2/κ_1) * E_2*sin(Φ_2)];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5812:[
+    tan(κ_1*a+Φ_1) = (κ_2/κ_1) * E_2(sin(Φ_2))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5813:[
+    E_1^2 / E_0^2 = 1 + (ζ_0^2/κ_1^2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5814:[
+    E_1^2/E_2^2 = cos(Φ_2)^2  + (κ_2^2/κ-1^2) * sin(Φ_2)^2
+];
 /* [wxMaxima: input   end   ] */
 
 
