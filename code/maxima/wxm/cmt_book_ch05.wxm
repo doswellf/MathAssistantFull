@@ -3226,6 +3226,166 @@ cmt_ch05_5814:[
 /* [wxMaxima: input   end   ] */
 
 
+/* [wxMaxima: input   start ] */
+cmt_ch05_5815:[
+    N(κ_2,κ_2_prime) = 
+        w * 'integrate( 
+            conjugate(E_hat_x(y,κ_2)) * H_hat_x(y,κ_2_prime) 
+            +
+            E_hat_x(y,κ_2_prime) * conjugate(H_hat_x(y,κ_2)), y,minf,inf
+    ) 
+    ,
+    N(κ_2,κ_2_prime) = ((2*k_z*w)/(ω*μ_0)) * 'integrate(E_hat_x(y,κ_2) * E_hat_x(y,κ_2_prime),y,minf,inf)
+    ,
+    N(κ_2,κ_2_prime) = δ(κ_2 - κ_2_prime) *N(κ_2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5816:[
+    N(κ_2,κ_2_prime) = N_0(ζ_0,ζ_0_prime) + N_1(κ_1, κ_1_prime) + N_2(κ_2,κ_2_prime)
+
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5817:[
+    ζ_0^2 = (κ-2^2 - κ_0^2) - κ_2^2 , 
+    κ_1^2 = (κ_1^2 - κ_2^2) + κ_2^2
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5818:[
+    N_0(ζ_0,ζ_0_prime) = ((2*k_z*w)/(ω*μ_0)) * 'integrate(E_hat_x0(y,ζ_0) * E_hat_x0(y,ζ_0_prime) ,y,a,inf),
+    N_0(ζ_0,ζ_0_prime) =  ((2*k_z*w)/(ω*μ_0)) **E_0_prime *  'integrate(exp(-(ζ_0+ζ_0_prime)(y-a)),y,a,inf) ,
+    N_0(ζ_0,ζ_0_prime) = ((2*k_z*w)/(ω*μ_0)) * ((E_0*E_0_prime)/(ζ_0 + ζ_0_prime))
+    
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5819:[
+    N_1(κ_1,κ_primed_1) = ((2*k_z*w)/(ω*μ_0))  * 'integrate(E_hat_z1(y,κ_1) *E_hat_z1(y,κ_primed_1),y,-a,a),
+    N_1(κ_1,κ_primed_1) = ((2*k_z*w)/(ω*μ_0)) * E_1 * E_primed_1* 'integrate( cos(κ_1*y - Φ_1) * cos(κ_primed_1*y-Φ_primed_1), y,-a,a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5820:[
+    N_2(κ_2,κ_primed_2) = ((2*k_z*w)/(ω*μ_0))  * 'integrate(E_hat_z2(y,κ_2) *E_hat_z2(y,κ_primed_2),y,minf,-a),
+    N_2(κ_1,κ_primed_1) = ((2*k_z*w)/(ω*μ_0)) * E_2 * E_primed_2* 'integrate( cos(κ_2*(y+a)-Φ_2) * cos(κ_primed_2*(y+a) -Φ_primed_2), y,minf,-a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5821:[
+    N_2(κ_2,κ_primed_2) = ((2*k_z*w)/(ω*μ_0))  * E_2*E_primed_2 * limit(N_A(κ_2,κ_primed_2),A,inf)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Where it is denoted that:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5822:[
+    N_A(κ_2, κ_primed_2) = 'integrate(cos(κ_2*(y+a)-Φ_2) * cos(κ_primed_2*(y+a) - Φ_primed_2)  ,y,-A,-a),
+    N_A(κ_2, κ_primed_2) = 
+        (cos(Φ_bar_2 - Φ_bar_primed_2)/2) * ((sin(κ_2 - κ_primed_2) * y)/(κ_2 - κ_primed_2))
+        + 
+        (cos(Φ_bar_2 + Φ_bar_primed_2)/2) * ((sin(κ_2 - κ_primed_2) * y)/(κ_2 + κ_primed_2))
+        -
+        (sin(Φ_bar_2 - Φ_bar_primed_2) /2) * (cos(κ_2 - κ_2_primed) * y) / (κ_2 - κ_primed_2)
+        -
+        (sin(Φ_bar_2 + Φ_bar_primed_2) /2) * (cos(κ_2 - κ_2_primed) * y) / (κ_2 + κ_primed_2)
+        ,
+        y >= -A and y <= -a
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5823:[
+    Φ_bar_2 = Φ_2 - κ_2 *a, Φ_bar_primed_2 = Φ_primed_2  - κ_primed_2 * a
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5824:[
+    δ(x) = (1/%pi ) * limit((sin(A*x)/x), x, inf)
+];
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><mi>A</mi><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+negative;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5825:[
+    'integrate(N_2(κ_2, κ_primed_2) * f(κ_primed_2) , k_primed_2, minf,inf) = N_bar(κ_2) * f(κ_2)
+];
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+<math><st>Is </st><fn><munder altCopy="N_2"><mrow><mi>N</mi></mrow><mrow><mi>2</mi></mrow></munder><mrow><p><munder altCopy="κ_2"><mrow><mi>κ</mi></mrow><mrow><mi>2</mi></mrow></munder><mo>,</mo><munder altCopy="κ_primed_2"><mrow><mi>κ_primed</mi></mrow><mrow><mi>2</mi></mrow></munder></p></mrow></fn><h>*</h><fn><fnm>f</fnm><mrow><p><munder altCopy="κ_primed_2"><mrow><mi>κ_primed</mi></mrow><mrow><mi>2</mi></mrow></munder></p></mrow></fn><st> positive, negative or zero?</st></math>
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+positive;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5826:[
+        limit(integrate(N_A(κ_2, κ_primed_2)(κ_2 + κ_primed_2), κ_primed_2, minf,inf) = 0,A, inf),
+        limit(integrate(N_A(κ_2, κ_primed_2)(κ_2 - κ_primed_2), κ_primed_2, minf,inf) = 0, A,inf)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5827:[
+    limit(integrate(cos(κ_2 + κ_primed_2)*a,κ_primed_2,-B,B),B,inf) = 2 * limit(sin((B*a)/a), B, inf),
+    limit(integrate(cos(κ_2 + κ_primed_2)*a,κ_primed_2,-B,B),B,inf) =  2 * %pi* δ(a),
+    limit(integrate(cos(κ_2 - κ_primed_2)*a,κ_primed_2,-B,B),B,inf) = 2 * limit(sin((B*a)/a), B, inf),
+    limit(integrate(cos(κ_2 - κ_primed_2)*a,κ_primed_2,-B,B),B,inf) =  2 * %pi* δ(a)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5828:[
+    N(κ_2, κ_primed_2) = N_2(κ_2, κ_primed_2),
+    N(κ_2, κ_primed_2) = ((%pi*k_z*w)/(ω*μ_0)) * E_2*E_primed_2 * (cos(Φ_2 - Φ_primed_2) * δ(κ_2 - κ_primed_2)  + cos(Φ_bar_2 + Φ_primed_bar_2) * δ(κ_2 + κ_primed_2))
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5829:[
+    N(κ_2, κ_primed_2) = ((%pi*k_z*w)/(ω*μ_0)) * E_2^2 * δ(κ_2 - κ_primed_2)
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cmt_ch05_5830:[
+    N_bar(κ_2) = w * (((%pi*k_z)*(κ_2))/(ω*μ_0)) * E_2^2
+];
+/* [wxMaxima: input   end   ] */
+
+
 
 /* Old versions of Maxima abort on loading files that end in a comment. */
 "Created with wxMaxima 20.12.1"$
